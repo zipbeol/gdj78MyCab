@@ -83,6 +83,10 @@
                    <li>
                     <a href="calendar-google.go">근태 관리</a>
                   </li>
+                  <li>
+                    <a href="calendar-google.go">알림</a>
+                  </li>
+                  
                 </ul>
               </li>
                <li>
@@ -99,6 +103,9 @@
                 <ul class="treeview-menu">
                   <li>
                     <a href="accordions.go">메일 작성</a>
+                  </li>
+                  <li>
+                    <a href="accordions.go">보낸 메일함</a>
                   </li>
                 </ul>
               </li>
@@ -214,6 +221,9 @@
                   </li>
                    <li>
                     <a href="morris.go">자원 예약</a>
+                  </li>
+                   <li>
+                    <a href="morris.go">나의 예약</a>
                   </li>
                 </ul>
               </li>

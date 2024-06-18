@@ -27,33 +27,31 @@
   <body>
     <!-- Container start -->
     <div class="container">
-      <div class="row justify-content-center">
+      <div class="row justify-content-center" style="position: relative;left: -6%;">
         <div class="col-xl-4 col-lg-5 col-sm-6 col-12">
-          <form action="!#" class="my-5" action="login.do" method="post">
-            <div class="border rounded-2 p-4 mt-5">
+          <form action="!#" class="my-5">
+            <div class="border rounded-2 p-4 mt-5" style="width: 550px">
               <div class="login-form">
                 <a href="!#" class="mb-4 d-flex">
                   <img src="/assets/images/logo.svg" class="img-fluid login-logo" alt="Cab Admin Dashboard">
                 </a>
-                <h5 class="fw-bold mb-5">로그인이 필요합니다.</h5>
-                <div class="mb-3">
-                  <label class="form-label">사번</label>
-                  <input type="text" class="form-control" placeholder="사번을 입력해주세요." name="emp_no">
+                <h5 class="mb-4 lh-2 fw-light">
+                 프로필에 등록된 이메일을 입력하시고 인증번호를 입력해주세요.
+                 <br/>
+                 인증이 완료되면 임시 비밀번호가 발급됩니다.
+                </h5>
+                <div class="mb-2" >
+                	<div style="position: relative;">
+                  <label class="form-label">이메일</label>
+                  <input type="text" class="form-control" placeholder="이메일을 입력해주세요.">
+                  <button style="position: relative;right: -440;margin-top: -29.5;width: 55;">확인</button>
+                  </div>
+                  <br/>
+                  <label class="form-label">인증번호</label>
+                  <input type="text" class="form-control" placeholder="인증번호를 입력해주세요.">
                 </div>
-                <div class="mb-3">
-                  <label class="form-label">비밀번호</label>
-                  <input type="password" class="form-control" placeholder="비밀번호를 입력해주세요." name="emp_password">
-                </div>
-                <div class="d-flex align-items-center justify-content-between">
-                  <a href="pwFind.go" class="text-blue text-decoration-underline">비밀번호 찾기</a>
-                </div>
-                <div class="d-grid py-3 mt-4">
-                  <button type="submit" class="btn btn-lg btn-primary">
-                    로그인 및 출근
-                  </button>
-                </div>
-                <div class="text-center pt-4">
-                  <span>등록 문의: 070-1234-1234 (인사부)</span>
+                <div class="d-grid pb-3">
+                
                 </div>
               </div>
             </div>

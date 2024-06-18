@@ -15,13 +15,13 @@
     <meta property="og:description" content="Marketplace for Bootstrap Admin Dashboards">
     <meta property="og:type" content="Website">
     <meta property="og:site_name" content="Bootstrap Gallery">
-    <link rel="shortcut icon" href="assets/images/favicon.svg">
+    <link rel="shortcut icon" href="/assets/images/favicon.svg">
 
     <!-- *************
 			************ CSS Files *************
 		************* -->
-    <link rel="stylesheet" href="assets/fonts/bootstrap/bootstrap-icons.css">
-    <link rel="stylesheet" href="assets/css/main.min.css">
+    <link rel="stylesheet" href="/assets/fonts/bootstrap/bootstrap-icons.css">
+    <link rel="stylesheet" href="/assets/css/main.min.css">
   </head>
 
   <body>
@@ -33,7 +33,7 @@
             <div class="border rounded-2 p-4 mt-5">
               <div class="login-form">
                 <a href="index.go" class="mb-4 d-flex">
-                  <img src="assets/images/logo.svg" class="img-fluid login-logo" alt="Cab Admin Dashboard">
+                  <img src="/assets/images/logo.svg" class="img-fluid login-logo" alt="Cab Admin Dashboard">
                 </a>
                 <h5 class="fw-bold mb-5">로그인이 필요합니다.</h5>
                 <div class="mb-3">

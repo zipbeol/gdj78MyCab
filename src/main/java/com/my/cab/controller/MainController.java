@@ -18,15 +18,7 @@ Logger logger = LoggerFactory.getLogger(getClass());
 	}
 	
 	
-	@RequestMapping(value="login/logout.do")
-		public String logout() {
-		
-		logger.info("로그아웃 실행");
-		
-		
-		
-		return "login/login";
-	}
+
 	
 	
 

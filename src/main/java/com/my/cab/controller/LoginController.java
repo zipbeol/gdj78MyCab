@@ -38,5 +38,13 @@ public class LoginController {
 	}
 	
 	
+	@RequestMapping(value="emp/emp/create.go")
+	public String empRegistration() {
+		logger.info("사원 등록 페이지로 이동");
+	
+		return "HR/empRegistration";
+	}
+	
+	
 
 }

@@ -28,6 +28,14 @@ Logger logger = LoggerFactory.getLogger(getClass());
 		return "login/login";
 	}
 	
+	@RequestMapping(value = "calendar/calendar.go")
+	public String calendarGo() {
+		
+		logger.info("일정관리 메인페이지 진입");
+		
+		return "calendar/calendarList";
+	}
+	
 	
 
 }

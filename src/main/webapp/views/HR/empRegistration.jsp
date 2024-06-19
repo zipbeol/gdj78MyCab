@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Main</title>
+    <title>Bootstrap Gallery - My Cab Bootstrap 5 Dashboard</title>
 
     <!-- Meta -->
     <meta name="description" content="Marketplace for Bootstrap Admin Dashboards">
@@ -15,26 +15,49 @@
     <meta property="og:description" content="Marketplace for Bootstrap Admin Dashboards">
     <meta property="og:type" content="Website">
     <meta property="og:site_name" content="Bootstrap Gallery">
-    <link rel="shortcut icon" href="assets/images/favicon.svg">
+    <link rel="shortcut icon" href="/assets/images/favicon.svg">
 
     <!-- *************
 			************ CSS Files *************
 		************* -->
-    <link rel="stylesheet" href="assets/fonts/bootstrap/bootstrap-icons.css">
-    <link rel="stylesheet" href="assets/css/main.min.css">
+    <link rel="stylesheet" href="/assets/fonts/bootstrap/bootstrap-icons.css">
+    <link rel="stylesheet" href="/assets/css/main.min.css">
 
     <!-- *************
 			************ Vendor Css Files *************
 		************ -->
 
     <!-- Scrollbar CSS -->
-    <link rel="stylesheet" href="assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
-
-    <!-- Toastify CSS -->
-    <link rel="stylesheet" href="assets/vendor/toastify/toastify.css">
-
+    <link rel="stylesheet" href="/assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
   </head>
-
+  <style>
+  .fixed-size {
+    width: 150px;
+    height: 40px;
+    flex: 1 1 auto; /* flex 속성을 이용하여 크기를 조절 */
+  }
+  .fixed-size2{
+  	width: 35px;
+  	height: 40px;
+  }
+  .fixed-size3{
+  	width: 180px;
+  	height: 40px;
+  }
+  .fixed-size4{
+  	width: 100px;
+  	height: 40px;
+  
+  }
+  .fixed-size5{
+  	width: 600px;
+  	height: 80px;
+  }
+  .fixed-size6{
+  	width: 620px;
+  }
+  
+</style>
   <body>
     <!-- Page wrapper start -->
     <div class="page-wrapper">
@@ -47,13 +70,14 @@
 
           <!-- App brand starts -->
           <div class="app-brand px-3 py-2 d-flex align-items-center">
-            <a href="index.go">
-              <img src="assets/images/logo.svg" class="logo" alt="Bootstrap Gallery">
+            <a href="/">
+              <img src="/assets/images/logo.svg" class="logo" alt="Bootstrap Gallery">
             </a>
           </div>
           <!-- App brand ends -->
 
           <!-- Sidebar menu starts -->
+           
           <div class="sidebarMenuScroll">
             <ul class="sidebar-menu">
               <li class="active current-page">
@@ -165,7 +189,7 @@
                     <a href="attendance/attendance/list.go">근태 관리</a>
                   </li>
                   <li>
-                    <a href="emp/emp/create.go">사원 등록</a>
+                    <a href="/emp/emp/create.go">사원 등록</a>
                   </li>
                   <li>
                     <a href="emp/hremp/list.go">사원 조회</a>
@@ -238,8 +262,6 @@
                   </li>
                 </ul>
               </li>
-              
-              
           <!-- Sidebar menu ends -->
 
         </nav>
@@ -265,7 +287,7 @@
             <!-- App brand sm start -->
             <div class="app-brand-sm d-lg-none d-sm-block">
               <a href="index.go">
-                <img src="assets/images/logo-sm.svg" class="logo" alt="Bootstrap Gallery">
+                <img src="/assets/images/logo-sm.svg" class="logo" alt="Bootstrap Gallery">
               </a>
             </div>
             <!-- App brand sm end -->
@@ -276,6 +298,8 @@
                 <i class="bi bi-house lh-1"></i>
                 <a href="index.go" class="text-decoration-none">메인</a>
               </li>
+              <li class="breadcrumb-item">인사 관리</li>
+              <li class="breadcrumb-item text-secondary">사원 등록</li>
             </ol>
             <!-- Breadcrumb end -->
 
@@ -429,7 +453,7 @@
               <div class="dropdown ms-2">
                 <a id="userSettings" class="dropdown-toggle d-flex py-2 align-items-center text-decoration-none"
                   href="#!" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  <img src="assets/images/user.png" class="rounded-2 img-3x" alt="Bootstrap Gallery">
+                  <img src="/assets/images/user.png" class="rounded-2 img-3x" alt="Bootstrap Gallery">
                 </a>
                 <div class="dropdown-menu dropdown-menu-end shadow-sm">
                   <div class="p-3 border-bottom mb-2">
@@ -458,63 +482,127 @@
             <div class="container-fluid">
 
               <!-- Row start -->
-              <div class="row">
-                <div class="col-xl-4 col-sm-6 col-12">
-                  <div class="card mb-4">
+              <div class="row gx-3">
+                <div class="col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12">
+                  <div class="card mb-3">
                     <div class="card-body">
-                      <div class="d-flex flex-row">
-                        <div class="icon-box lg rounded-3 bg-light mb-4">
-                          <i class="bi bi-car-front text-primary fs-2"></i>
+                      <div class="was-validated">
+                        <label for="validationCustom01" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="validationCustom01" value="Mark" required="">
+                        <div class="valid-feedback">Looks good!</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xxl-4 col-lg-6 col-sm-12 col-12 fixed-size6">
+                  <div class="card mb-3">
+                    <div class="card-body fixed-size5" >
+                    <div class="input-group">
+                        <input type="text" class="form-control fixed-size" placeholder="이메일"><span class="input-group-text fixed-size2">@</span>
+                        <div class="was-validated">
+                        <input type="text" class="form-control fixed-size3"  id="domain-input" placeholder="도메인" required="">
+                        <div class="invalid-feedback">&nbsp;올바른 도메인을 입력해주세요.</div>
+                      </div>
+                      &nbsp;&nbsp;
+                        <select id="domain-select" class="form-select fixed-size4">
+                        <option value="">직접 입력</option>
+                        <option value="naver.com">naver.com</option>
+          				<option value="gmail.com">gmail.com</option>
+          				<option value="daum.net">daum.net</option>
+          				<option value="kakao.com">kakao.com</option>
+          				<option value="nate.com">nate.com</option>
+                        </select>
                         </div>
-                        <div class="ms-4">
-                          <p class="mb-2 lh-1 d-flex align-items-center">
-                            <i class="bi bi-caret-up-fill text-success me-1 fs-3"></i><span class="text-success me-2">8%
-                            </span> from
-                            last week.
-                          </p>
-                          <h1 class="fw-bold mb-2">7,500</h1>
-                          <h6 class="m-0 fw-normal opacity-50">Trips</h6>
+                    </div>
+                  </div>
+                </div>
+                
+                
+                <div class="col-md-6 col-sm-12 col-12">
+                  <div class="card mb-3">
+                    <div class="card-body">
+                      <div class="was-validated">
+                        <label for="validationTextarea" class="form-label">Textarea</label>
+                        <textarea class="form-control is-invalid" id="validationTextarea"
+                          placeholder="Required example textarea" required=""></textarea>
+                        <div class="invalid-feedback">
+                          Please enter a message in the textarea.
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="col-xl-4 col-sm-6 col-12">
-                  <div class="card mb-4">
+                <div class="col-md-6 col-sm-12 col-12">
+                  <div class="card mb-3">
                     <div class="card-body">
-                      <div class="d-flex flex-row">
-                        <div class="icon-box lg rounded-3 bg-light mb-4">
-                          <i class="bi bi-car-front text-primary fs-2"></i>
-                        </div>
-                        <div class="ms-4">
-                          <p class="mb-2 lh-1 d-flex align-items-center">
-                            <i class="bi bi-caret-up-fill text-success me-1 fs-3"></i><span
-                              class="text-success me-2">23% </span> from
-                            last week.
-                          </p>
-                          <h1 class="fw-bold mb-2">3,900</h1>
-                          <h6 class="m-0 fw-normal opacity-50">Passengers</h6>
+                      <div class="was-validated">
+                        <label for="validationTextarea2" class="form-label">Textarea</label>
+                        <textarea class="form-control" id="validationTextarea2"
+                          placeholder="Required example textarea"></textarea>
+                        <div class="valid-feedback">Looks good!</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-12 col-12">
+                  <div class="card mb-3">
+                    <div class="card-body">
+                      <div class="was-validated">
+                        <input type="file" class="form-control" aria-label="file example" required="">
+                        <div class="invalid-feedback">
+                          Example invalid form file feedback
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12">
-                  <div class="card mb-4">
+                <div class="col-md-6 col-sm-12 col-12">
+                  <div class="card mb-3">
                     <div class="card-body">
-                      <div class="d-flex flex-row">
-                        <div class="icon-box lg rounded-3 bg-light mb-4">
-                          <i class="bi bi-car-front-fill text-primary fs-2"></i>
-                        </div>
-                        <div class="ms-4">
-                          <p class="mb-2 lh-1 d-flex align-items-center">
-                            <i class="bi bi-caret-down-fill text-danger me-1 fs-3"></i><span
-                              class="text-danger me-2">18% </span> from
-                            last week.
-                          </p>
-                          <h1 class="fw-bold mb-2">$9,300</h1>
-                          <h6 class="m-0 fw-normal opacity-50">Earnings</h6>
-                        </div>
+                      <div class="was-validated">
+                        <input type="file" class="form-control" aria-label="file example">
+                        <div class="valid-feedback">Looks good!</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-12 col-12">
+                  <div class="card mb-3">
+                    <div class="card-body">
+                      <div class="form-check was-validated">
+                        <input type="checkbox" class="form-check-input" id="validationFormCheck1" required="">
+                        <label class="form-check-label" for="validationFormCheck1">Check this checkbox</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-12 col-12">
+                  <div class="card mb-3">
+                    <div class="card-body">
+                      <div class="form-check was-validated">
+                        <input type="checkbox" class="form-check-input" id="validationFormCheck2">
+                        <label class="form-check-label" for="validationFormCheck2">Check this checkbox</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-12 col-12">
+                  <div class="card mb-3">
+                    <div class="card-body">
+                      <div class="form-check was-validated">
+                        <input type="radio" class="form-check-input" id="validationFormCheck3" name="radio-stacked"
+                          required="">
+                        <label class="form-check-label" for="validationFormCheck3">Toggle this radio</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-12 col-12">
+                  <div class="card mb-3">
+                    <div class="card-body">
+                      <div class="form-check was-validated">
+                        <input type="radio" class="form-check-input" id="validationFormCheck4" name="radio-stacked2">
+                        <label class="form-check-label" for="validationFormCheck4">Toggle this radio</label>
                       </div>
                     </div>
                   </div>
@@ -523,111 +611,145 @@
               <!-- Row end -->
 
               <!-- Row start -->
-              <div class="row">
-                <div class="col-xxl-8 col-12">
-                  <div class="card mb-4">
-                    <div class="card-header">
-                      <h4 class="card-title">Trips Overview</h4>
-                    </div>
+              <div class="row gx-3">
+                <div class="col-xxl-12">
+                  <div class="card mb-3">
                     <div class="card-body">
-                      <!-- Row start -->
-                      <div class="row">
-                        <div class="col-lg-4">
-                          <div class="text-center">
-                            <div class="text-center mb-3">
-                              <p class="text-muted mb-1">This Month</p>
-                              <div class="text-center">
-                                <h2 class="mb-0">$86,990</h2>
-                                <div class="badge bg-success mt-2">
-                                  + 21.68%
-                                </div>
-                              </div>
-                            </div>
-                            <div class="row g-0">
-                              <div class="col-sm-6">
-                                <div class="border-bottom border-end p-3">
-                                  <p class="text-muted mb-1">Booked</p>
-                                  <h5 class="m-0">3,690</h5>
-                                </div>
-                              </div>
-                              <div class="col-sm-6">
-                                <div class="border-bottom p-3">
-                                  <p class="text-muted mb-1">Trips</p>
-                                  <h5 class="m-0">6065</h5>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="row g-0">
-                              <div class="col-sm-6">
-                                <div class="border-bottom border-end p-3">
-                                  <p class="text-muted mb-1">Growth</p>
-                                  <h5 class="m-0">18.9%</h5>
-                                </div>
-                              </div>
-                              <div class="col-sm-6">
-                                <div class="border-bottom p-3">
-                                  <p class="text-muted mb-1">Signups</p>
-                                  <h5 class="m-0">560</h5>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="row g-0">
-                              <div class="col-sm-6">
-                                <div class="border-end p-3">
-                                  <p class="text-muted mb-1">Ratings</p>
-                                  <h5 class="m-0">$9,984</h5>
-                                </div>
-                              </div>
-                              <div class="col-sm-6">
-                                <div class="p-3">
-                                  <p class="text-muted mb-1">Earnings</p>
-                                  <h5 class="m-0">$6,443</h5>
-                                </div>
-                              </div>
+                      <form class="row g-3 needs-validation" novalidate>
+                        <div class="col-md-4">
+                          <label for="validationCustom01" class="form-label">First name</label>
+                          <input type="text" class="form-control" id="validationCustom01" value="Mark" required />
+                          <div class="valid-feedback">Looks good!</div>
+                        </div>
+                        <div class="col-md-4">
+                          <label for="validationCustom02" class="form-label">Last name</label>
+                          <input type="text" class="form-control" id="validationCustom02" value="Otto" required />
+                          <div class="valid-feedback">Looks good!</div>
+                        </div>
+                        <div class="col-md-4">
+                          <label for="validationCustomUsername" class="form-label">Username</label>
+                          <div class="input-group has-validation">
+                            <span class="input-group-text" id="inputGroupPrepend">@</span>
+                            <input type="text" class="form-control" id="validationCustomUsername"
+                              aria-describedby="inputGroupPrepend" required />
+                            <div class="invalid-feedback">
+                              Please choose a username.
                             </div>
                           </div>
                         </div>
-                        <div class="col-lg-8">
-                          <div id="overview"></div>
+                        <div class="col-md-6">
+                          <label for="validationCustom03" class="form-label">City</label>
+                          <input type="text" class="form-control" id="validationCustom03" required />
+                          <div class="invalid-feedback">
+                            Please provide a valid city.
+                          </div>
                         </div>
-                      </div>
-                      <!-- Row end -->
-                    </div>
-                  </div>
-                </div>
-                <div class="col-xxl-4 col-12">
-                  <div class="card mb-4">
-                    <div class="card-header">
-                      <h4 class="card-title">Passengers</h4>
-                    </div>
-                    <div class="card-body">
-                      <div class="auto-align-graph">
-                        <div id="reachedAudience"></div>
-                      </div>
-                      <div class="grid text-center">
-                        <div class="g-col-4">
-                          <i class="bi bi-caret-up-fill text-primary"></i>
-                          <h3 class="m-0 mt-1">54%</h3>
-                          <p class="text-secondary m-0">Male</p>
+                        <div class="col-md-3">
+                          <label for="validationCustom04" class="form-label">State</label>
+                          <select class="form-select" id="validationCustom04" required>
+                            <option selected disabled value="">
+                              Choose...
+                            </option>
+                            <option>...</option>
+                          </select>
+                          <div class="invalid-feedback">
+                            Please select a valid state.
+                          </div>
                         </div>
-                        <div class="g-col-4">
-                          <i class="bi bi-caret-up-fill text-primary"></i>
-                          <h3 class="m-0 mt-1">36%</h3>
-                          <p class="text-secondary m-0">Female</p>
+                        <div class="col-md-3">
+                          <label for="validationCustom05" class="form-label">Zip</label>
+                          <input type="text" class="form-control" id="validationCustom05" required />
+                          <div class="invalid-feedback">
+                            Please provide a valid zip.
+                          </div>
                         </div>
-                        <div class="g-col-4">
-                          <i class="bi bi-caret-down-fill text-danger"></i>
-                          <h3 class="m-0 mt-1">10%</h3>
-                          <p class="text-secondary m-0">Other</p>
+                        <div class="col-12">
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required />
+                            <label class="form-check-label" for="invalidCheck">
+                              Agree to terms and conditions
+                            </label>
+                            <div class="invalid-feedback">
+                              You must agree before submitting.
+                            </div>
+                          </div>
                         </div>
-                      </div>
+                        <div class="col-12">
+                          <button class="btn btn-primary" type="submit">
+                            Submit form
+                          </button>
+                        </div>
+                      </form>
                     </div>
                   </div>
                 </div>
               </div>
               <!-- Row end -->
 
-              
+              <!-- Row start -->
+              <div class="row gx-3">
+                <div class="col-xxl-12">
+                  <div class="card mb-3">
+                    <div class="card-body">
+                      <form class="row g-3 needs-validation" novalidate>
+                        <div class="col-md-4 position-relative">
+                          <label for="validationTooltip01" class="form-label">First name</label>
+                          <input type="text" class="form-control" id="validationTooltip01" value="Mark" required />
+                          <div class="valid-tooltip">Looks good!</div>
+                        </div>
+                        <div class="col-md-4 position-relative">
+                          <label for="validationTooltip02" class="form-label">Last name</label>
+                          <input type="text" class="form-control" id="validationTooltip02" value="Otto" required />
+                          <div class="valid-tooltip">Looks good!</div>
+                        </div>
+                        <div class="col-md-4 position-relative">
+                          <label for="validationTooltipUsername" class="form-label">Username</label>
+                          <div class="input-group has-validation">
+                            <span class="input-group-text" id="validationTooltipUsernamePrepend">@</span>
+                            <input type="text" class="form-control" id="validationTooltipUsername"
+                              aria-describedby="validationTooltipUsernamePrepend" required />
+                            <div class="invalid-tooltip">
+                              Please choose a unique and valid username.
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6 position-relative">
+                          <label for="validationTooltip03" class="form-label">City</label>
+                          <input type="text" class="form-control" id="validationTooltip03" required />
+                          <div class="invalid-tooltip">
+                            Please provide a valid city.
+                          </div>
+                        </div>
+                        <div class="col-md-3 position-relative">
+                          <label for="validationTooltip04" class="form-label">State</label>
+                          <select class="form-select" id="validationTooltip04" required>
+                            <option selected disabled value="">
+                              Choose...
+                            </option>
+                            <option>...</option>
+                          </select>
+                          <div class="invalid-tooltip">
+                            Please select a valid state.
+                          </div>
+                        </div>
+                        <div class="col-md-3 position-relative">
+                          <label for="validationTooltip05" class="form-label">Zip</label>
+                          <input type="text" class="form-control" id="validationTooltip05" required />
+                          <div class="invalid-tooltip">
+                            Please provide a valid zip.
+                          </div>
+                        </div>
+                        <div class="col-12">
+                          <button class="btn btn-primary" type="submit">
+                            Submit form
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Row end -->
 
             </div>
             <!-- Container ends -->
@@ -654,32 +776,31 @@
 			************ JavaScript Files *************
 		************* -->
     <!-- Required jQuery first, then Bootstrap Bundle JS -->
-    <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/bootstrap.bundle.min.js"></script>
 
     <!-- *************
 			************ Vendor Js Files *************
 		************* -->
 
     <!-- Overlay Scroll JS -->
-    <script src="assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
-    <script src="assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
-
-    <!-- Toastify JS -->
-    <script src="assets/vendor/toastify/toastify.js"></script>
-    <script src="assets/vendor/toastify/custom.js"></script>
-
-    <!-- Apex Charts -->
-    <script src="assets/vendor/apex/apexcharts.min.js"></script>
-    <script src="assets/vendor/apex/custom/home/overview.js"></script>
-    <script src="assets/vendor/apex/custom/home/reachedAudience.js"></script>
-    <script src="assets/vendor/apex/custom/home/social.js"></script>
-    <script src="assets/vendor/apex/custom/home/sparkline.js"></script>
-    <script src="assets/vendor/apex/custom/home/sparkline2.js"></script>
-    <script src="assets/vendor/apex/custom/home/visitors.js"></script>
+    <script src="/assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
+    <script src="/assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
 
     <!-- Custom JS files -->
-    <script src="assets/js/custom.js"></script>
+    <script src="/assets/js/custom.js"></script>
+    <script src="/assets/js/validations.js"></script>
   </body>
+  <script>
+  	document.getElementById('domain-select').addEventListener('change', function() {
+	    var selectedDomain = this.value;
+	    document.getElementById('domain-input').value = selectedDomain;
+	  }); //이메일 도메인 입력 스크립트
+  
+  
+  
+  
+  
+  </script>
 
 </html>

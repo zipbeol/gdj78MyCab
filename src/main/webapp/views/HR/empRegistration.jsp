@@ -35,10 +35,13 @@
     width: 150px;
     height: 40px;
     flex: 1 1 auto; /* flex 속성을 이용하여 크기를 조절 */
+    margin-right: 1px;
   }
   .fixed-size2{
   	width: 35px;
   	height: 40px;
+  	margin-left: 0.7px;
+    margin-right: 0.5px;
   }
   .fixed-size3{
   	width: 180px;
@@ -498,10 +501,14 @@
                   <div class="card mb-3">
                     <div class="card-body fixed-size5" >
                     <div class="input-group">
-                        <input type="text" class="form-control fixed-size" placeholder="이메일"><span class="input-group-text fixed-size2">@</span>
+                    	<div class="was-validated">
+                        <input type="text" class="form-control fixed-size" placeholder="이메일" required="">
+                        <div class="invalid-feedback">&nbsp;이메일을 입력해주세요.</div>
+                        </div>
+                        <span class="input-group-text fixed-size2">@</span>
                         <div class="was-validated">
                         <input type="text" class="form-control fixed-size3"  id="domain-input" placeholder="도메인" required="">
-                        <div class="invalid-feedback">&nbsp;올바른 도메인을 입력해주세요.</div>
+                        <div class="invalid-feedback">&nbsp;도메인을 입력해주세요.</div>
                       </div>
                       &nbsp;&nbsp;
                         <select id="domain-select" class="form-select fixed-size4">

@@ -457,6 +457,18 @@
 
           <!-- App body starts -->
           <div class="app-body">
+          
+          	<div class="mycab-cal-utilbox">
+          		<table>
+          			<thead>
+          				<tr>
+          					<td>
+          					
+          					</td>
+          				</tr>
+          			</thead>
+          		</table>
+          	</div>
 
             <!-- Container starts -->
             <div class="container-fluid">
@@ -531,13 +543,38 @@
   
   <script >
   	$(document).ready(function(){
-  		$('#calendar').fullCalendar();
+  		$('#calendar').fullCalendar({
+  			selectable : true,
+  			selectHelper: true,
+  			select : function(){
+  				alert("check");
+  			},
+  			events:[{
+  	  			title: '안녕',
+  	  			start: '2024-06-20T12:00',
+  	  			end: '2024-06-21T18:00'
+  	  		}]
+  			
+  		});
+  		
+  		
   	});
   </script>
   
-  	<style>
+ 	<style>
 		.calendar-main{
-			width: 800px;
+			width: 70%;
+			display: inline-block;
+			
+		}
+		.mycab-cal-utilbox {
+			position : relative;
+		    border: 1px solid black;
+		    width: 20%;
+		    float: left;
+		    height: 300px;
+		    height: 100%;
+		    top: 10%;
 		}
 	</style>
 

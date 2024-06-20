@@ -82,7 +82,8 @@
                     <li class="breadcrumb-item">
                         <a href="/"><i class="bi bi-house lh-1"></i></a>
                         <a href="/" class="text-decoration-none">메인</a>
-                        &nbsp;&nbsp;&nbsp;>&nbsp;&nbsp;&nbsp;
+                    </li>
+                    <li class="breadcrumb-item">
                         <a href="../triprecord/list.go" class="text-decoration-none">운행 기록</a>
                     </li>
                 </ol>

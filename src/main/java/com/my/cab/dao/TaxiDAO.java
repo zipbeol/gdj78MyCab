@@ -9,4 +9,10 @@ import java.util.List;
 public interface TaxiDAO {
 
     List<TaxiDTO> getTaxiList();
+
+    void registerTaxi(TaxiDTO taxiDTO);
+
+    boolean isSameTaxiLicensePlate(String taxiLicensePlate);
+
+    List<String> getTaxiModelList();
 }

@@ -1,0 +1,25 @@
+
+body {
+    font-family: "Noto Sans KR", sans-serif;
+}
+
+.menu-text {
+    font-size: 18px;
+}
+
+.treeview-menu menu-open, li {
+    font-size: 15px;
+}
+
+.card-body {
+    min-height: 600px; /* 원하는 최소 높이 설정 */
+}
+
+.sidebar-menu > li.active > a {
+    background-color: #3659cd;
+
+}
+
+.sidebar-menu > li.active > a i {
+    color: #3659cd;
+}

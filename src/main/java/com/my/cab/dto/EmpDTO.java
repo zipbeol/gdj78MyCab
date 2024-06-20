@@ -2,6 +2,10 @@ package com.my.cab.dto;
 
 import java.sql.Date;
 
+import org.apache.ibatis.type.Alias;
+
+@Alias(value="emp")
+
 public class EmpDTO {
 	
 	
@@ -19,6 +23,10 @@ public class EmpDTO {
 	private String emp_cell;
 	private String emp_bday;
 	private int emp_level; //권한
+	private String acc_no;
+	private String bank_name;
+	private String acc_name;
+	
 	public int getEmp_no() {
 		return emp_no;
 	}
@@ -102,6 +110,24 @@ public class EmpDTO {
 	}
 	public void setEmp_level(int emp_level) {
 		this.emp_level = emp_level;
+	}
+	public String getAcc_no() {
+		return acc_no;
+	}
+	public void setAcc_no(String acc_no) {
+		this.acc_no = acc_no;
+	}
+	public String getBank_name() {
+		return bank_name;
+	}
+	public void setBank_name(String bank_name) {
+		this.bank_name = bank_name;
+	}
+	public String getAcc_name() {
+		return acc_name;
+	}
+	public void setAcc_name(String acc_name) {
+		this.acc_name = acc_name;
 	}
 	
 	

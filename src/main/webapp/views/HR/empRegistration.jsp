@@ -33,23 +33,23 @@
   <style>
   .fixed-size {
     width: 150px;
-    height: 40px;
+    height: 33.8px;
     flex: 1 1 auto; /* flex 속성을 이용하여 크기를 조절 */
     margin-right: 1px;
   }
   .fixed-size2{
   	width: 35px;
-  	height: 40px;
+  	height: 33.8px;
   	margin-left: 0.7px;
     margin-right: 0.5px;
   }
   .fixed-size3{
   	width: 180px;
-  	height: 40px;
+  	height: 33.8px;
   }
   .fixed-size4{
-  	width: 100px;
-  	height: 40px;
+  	width: 120px;
+  	height: 33.8px;
   
   }
   .fixed-size5{
@@ -58,6 +58,22 @@
   }
   .fixed-size6{
   	width: 620px;
+  }
+   .fixed-size7{
+  	position: fixed;
+  	margin-top: 398px;
+  }
+   .fixed-size8{
+  	margin-left: -15px;
+  }
+  .form-size1	{
+  	width: 790px;
+  }
+  .form-size2 {
+  	left: 188px;
+  }
+  .button-size{
+  	left: 16px;
   }
   
 </style>
@@ -313,19 +329,19 @@
                 <div class="dropdown-menu dropdown-menu-end shadow-sm dropdown-menu-mini">
                   <div class="country-container">
                     <a href="index.go" class="py-2">
-                      <img src="assets/images/flags/1x1/us.svg" alt="Business Dashboard Templates">
+                      <img src="/assets/images/flags/1x1/us.svg" alt="Business Dashboard Templates">
                     </a>
                     <a href="index.go" class="py-2">
-                      <img src="assets/images/flags/1x1/in.svg" alt="Business Dashboard Templates">
+                      <img src="/assets/images/flags/1x1/in.svg" alt="Business Dashboard Templates">
                     </a>
                     <a href="index.go" class="py-2">
-                      <img src="assets/images/flags/1x1/br.svg" alt="Business Dashboard Templates">
+                      <img src="/assets/images/flags/1x1/br.svg" alt="Business Dashboard Templates">
                     </a>
                     <a href="index.go" class="py-2">
-                      <img src="assets/images/flags/1x1/tr.svg" alt="IT Dashboard Templates">
+                      <img src="/assets/images/flags/1x1/tr.svg" alt="IT Dashboard Templates">
                     </a>
                     <a href="index.go" class="py-2">
-                      <img src="assets/images/flags/1x1/id.svg" alt="IT Dashboard Templates">
+                      <img src="/assets/images/flags/1x1/id.svg" alt="IT Dashboard Templates">
                     </a>
                   </div>
                 </div>
@@ -336,16 +352,16 @@
                   <!-- Row start -->
                   <div class="d-flex gap-2 m-2 flex-wrap">
                     <a href="javascript:void(0)" class="g-col-4 p-2 border rounded-2">
-                      <img src="assets/images/brand-behance.svg" class="img-3x" alt="IT Dashboard Templates">
+                      <img src="/assets/images/brand-behance.svg" class="img-3x" alt="IT Dashboard Templates">
                     </a>
                     <a href="javascript:void(0)" class="g-col-4 p-2 border rounded-2">
-                      <img src="assets/images/brand-google.svg" class="img-3x" alt="IT Dashboard Templates">
+                      <img src="/assets/images/brand-google.svg" class="img-3x" alt="IT Dashboard Templates">
                     </a>
                     <a href="javascript:void(0)" class="g-col-4 p-2 border rounded-2">
-                      <img src="assets/images/brand-bitcoin.svg" class="img-3x" alt="IT Dashboard Templates">
+                      <img src="/assets/images/brand-bitcoin.svg" class="img-3x" alt="IT Dashboard Templates">
                     </a>
                     <a href="javascript:void(0)" class="g-col-4 p-2 border rounded-2">
-                      <img src="assets/images/brand-dribbble.svg" class="img-3x" alt="IT Dashboard Templates">
+                      <img src="/assets/images/brand-dribbble.svg" class="img-3x" alt="IT Dashboard Templates">
                     </a>
                   </div>
                   <!-- Row end -->
@@ -414,7 +430,7 @@
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-md shadow-sm">
                   <a href="javascript:void(0)" class="dropdown-item">
                     <div class="d-flex py-2">
-                      <img src="assets/images/user.png" class="img-3x me-3 rounded-3" alt="Admin Templates">
+                      <img src="/assets/images/user.png" class="img-3x me-3 rounded-3" alt="Admin Templates">
                       <div class="m-0">
                         <h5 class="mb-1">Stacy Macdonald</h5>
                         <p class="mb-1 text-secondary">
@@ -426,7 +442,7 @@
                   </a>
                   <a href="javascript:void(0)" class="dropdown-item">
                     <div class="d-flex py-2">
-                      <img src="assets/images/user2.png" class="img-3x me-3 rounded-3" alt="Admin Templates">
+                      <img src="/assets/images/user2.png" class="img-3x me-3 rounded-3" alt="Admin Templates">
                       <div class="m-0">
                         <h5 class="mb-1">Harriet Orozco</h5>
                         <p class="mb-1 text-secondary">
@@ -438,7 +454,7 @@
                   </a>
                   <a href="javascript:void(0)" class="dropdown-item">
                     <div class="d-flex py-2">
-                      <img src="assets/images/user1.png" class="img-3x me-3 rounded-3" alt="Admin Templates">
+                      <img src="/assets/images/user1.png" class="img-3x me-3 rounded-3" alt="Admin Templates">
                       <div class="m-0">
                         <h5 class="mb-1">Grady Baxter</h5>
                         <p class="mb-1 text-secondary">
@@ -483,33 +499,126 @@
 
             <!-- Container starts -->
             <div class="container-fluid">
-
+			
               <!-- Row start -->
+              
               <div class="row gx-3">
-                <div class="col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12">
+              
+                <div class="col-xxl-12">
                   <div class="card mb-3">
+                  
                     <div class="card-body">
-                      <div class="was-validated">
-                        <label for="validationCustom01" class="form-label">First Name</label>
-                        <input type="text" class="form-control" id="validationCustom01" value="Mark" required="">
-                        <div class="valid-feedback">Looks good!</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-xxl-4 col-lg-6 col-sm-12 col-12 fixed-size6">
-                  <div class="card mb-3">
-                    <div class="card-body fixed-size5" >
-                    <div class="input-group">
-                    	<div class="was-validated">
-                        <input type="text" class="form-control fixed-size" placeholder="이메일" required="">
+                      <form class="row g-3 needs-validation" action="/emp/join.do" method="post" onsubmit="return validateForm()" novalidate>
+                      <h2>사원 정보</h2>
+                        <div class="col-6 position-relative">
+                          <label for="validationTooltip01" class="form-label">사번</label>
+                          <input type="text" class="form-control" name="emp_no" id="emp_no" value="" required readonly />
+ 
+                        </div>
+                       
+                        <div class="col-6 position-relative">
+                          <label for="validationTooltip04" class="form-label">은행명</label>
+                          <select class="form-select" id="validationTooltip04" name="bank_name" required>
+                            <option selected disabled value="">
+                              은행 선택
+                            </option>
+                            <option value="국민은행">국민은행</option>
+                            <option value="신한은행">신한은행</option>
+                            <option value="우리은행">우리은행</option>
+                            <option value="하나은행">하나은행</option>
+                            <option value="카카오뱅크">카카오뱅크</option>
+                            <option value="토스뱅크">토스뱅크</option>
+                            <option value="케이뱅크">케이뱅크</option>
+                          </select>
+                          <div class="invalid-feedback">
+                            은행을 선택 해주세요.
+                          </div>
+                        </div>
+                        
+                        <div class="col-6 position-relative">
+                          <label for="validationTooltip02" class="form-label">이름</label>
+                          <input type="text" class="form-control" id="validationTooltip02" name="emp_name" value="" required />
+                          <div class="invalid-feedback">이름을 입력해주세요.</div>
+                        </div>
+                        
+                         <div class="col-6 position-relative">
+                          <label for="validationTooltip02" class="form-label">예금주</label>
+                          <input type="text" class="form-control" id="validationTooltip02" name="acc_name" value="" required />
+                          <div class="invalid-feedback">예금주를 입력해주세요.</div>
+                        </div>
+                        
+                        <div class="col-6 position-relative">
+                          <label for="validationTooltip04" class="form-label">부서</label>
+                          <select class="form-select" id="validationTooltip04" name="dept_no" required>
+                            <option selected disabled value="">
+                              부서 선택
+                            </option>
+                            <option value="1">인사부</option>
+                            <option value="2">영업부</option>
+                            <option value="3">영업지원부</option>
+                            <option value="4">택시관리부</option>
+                          </select>
+                          <div class="invalid-feedback">
+                            부서를 선택 해주세요.
+                          </div>
+                        </div>
+                        
+                        
+                        <div class="col-6 position-relative">
+                          <label for="validationTooltip02" class="form-label">계좌번호</label>
+                          <input type="text" class="form-control" id="validationTooltip02" name="acc_no" value="" required />
+                          <div class="invalid-feedback">계좌번호를 입력해주세요.</div>
+                        </div>
+                        
+                        
+                        <div class="col-6 position-relative">
+                          <label for="validationTooltip04" class="form-label">직급</label>
+                          <select class="form-select" id="validationTooltip04" name="title_no" required>
+                            <option selected disabled value="">
+                              직급 선택
+                            </option>
+                            <option value="1">대표이사</option>
+                            <option value="2">부장</option>
+                            <option value="3">과장</option>
+                            <option value="4">대리</option>
+                            <option value="5">사원</option>
+                          </select>
+                          <div class="invalid-feedback">
+                            직급을 선택 해주세요.
+                          </div>
+                        </div>
+                        
+                        <div class="col-6 position-relative">
+                          <label for="validationTooltip04" class="form-label">권한</label>
+                          <select class="form-select" id="validationTooltip04" name="emp_level" required>
+                            <option selected disabled value="">
+                              권한 레벨 선택
+                            </option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                          </select>
+                          <div class="invalid-feedback">
+                            레벨을 선택 해주세요.
+                          </div>
+                        </div>
+                   
+                  <div class="fixed-size8">
+                   
+                    <div class="col-6 card-body fixed-size5" >
+                    <label for="validationTooltip04" class="form-label">이메일</label>
+                    <div class="input-group form-size2">
+                    	<div>
+                        <input type="text" class="form-control fixed-size" placeholder="이메일" name="email_id" required="">
                         <div class="invalid-feedback">&nbsp;이메일을 입력해주세요.</div>
                         </div>
                         <span class="input-group-text fixed-size2">@</span>
-                        <div class="was-validated">
-                        <input type="text" class="form-control fixed-size3"  id="domain-input" placeholder="도메인" required="">
+                        <div>
+                        <input type="text" class="form-control fixed-size3"  id="domain-input" placeholder="도메인" name="domain" required="">
                         <div class="invalid-feedback">&nbsp;도메인을 입력해주세요.</div>
                       </div>
+                      
                       &nbsp;&nbsp;
                         <select id="domain-select" class="form-select fixed-size4">
                         <option value="">직접 입력</option>
@@ -519,238 +628,54 @@
           				<option value="kakao.com">kakao.com</option>
           				<option value="nate.com">nate.com</option>
                         </select>
+                        <div>
+                        <button type="button" class="btn btn-primary button-size" onclick="overlay()">중복확인</button>
                         </div>
+                       
                     </div>
                   </div>
                 </div>
-                
-                
-                <div class="col-md-6 col-sm-12 col-12">
-                  <div class="card mb-3">
-                    <div class="card-body">
-                      <div class="was-validated">
-                        <label for="validationTextarea" class="form-label">Textarea</label>
-                        <textarea class="form-control is-invalid" id="validationTextarea"
-                          placeholder="Required example textarea" required=""></textarea>
-                        <div class="invalid-feedback">
-                          Please enter a message in the textarea.
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6 col-sm-12 col-12">
-                  <div class="card mb-3">
-                    <div class="card-body">
-                      <div class="was-validated">
-                        <label for="validationTextarea2" class="form-label">Textarea</label>
-                        <textarea class="form-control" id="validationTextarea2"
-                          placeholder="Required example textarea"></textarea>
-                        <div class="valid-feedback">Looks good!</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6 col-sm-12 col-12">
-                  <div class="card mb-3">
-                    <div class="card-body">
-                      <div class="was-validated">
-                        <input type="file" class="form-control" aria-label="file example" required="">
-                        <div class="invalid-feedback">
-                          Example invalid form file feedback
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6 col-sm-12 col-12">
-                  <div class="card mb-3">
-                    <div class="card-body">
-                      <div class="was-validated">
-                        <input type="file" class="form-control" aria-label="file example">
-                        <div class="valid-feedback">Looks good!</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6 col-sm-12 col-12">
-                  <div class="card mb-3">
-                    <div class="card-body">
-                      <div class="form-check was-validated">
-                        <input type="checkbox" class="form-check-input" id="validationFormCheck1" required="">
-                        <label class="form-check-label" for="validationFormCheck1">Check this checkbox</label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6 col-sm-12 col-12">
-                  <div class="card mb-3">
-                    <div class="card-body">
-                      <div class="form-check was-validated">
-                        <input type="checkbox" class="form-check-input" id="validationFormCheck2">
-                        <label class="form-check-label" for="validationFormCheck2">Check this checkbox</label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6 col-sm-12 col-12">
-                  <div class="card mb-3">
-                    <div class="card-body">
-                      <div class="form-check was-validated">
-                        <input type="radio" class="form-check-input" id="validationFormCheck3" name="radio-stacked"
-                          required="">
-                        <label class="form-check-label" for="validationFormCheck3">Toggle this radio</label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6 col-sm-12 col-12">
-                  <div class="card mb-3">
-                    <div class="card-body">
-                      <div class="form-check was-validated">
-                        <input type="radio" class="form-check-input" id="validationFormCheck4" name="radio-stacked2">
-                        <label class="form-check-label" for="validationFormCheck4">Toggle this radio</label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- Row end -->
-
-              <!-- Row start -->
-              <div class="row gx-3">
-                <div class="col-xxl-12">
-                  <div class="card mb-3">
-                    <div class="card-body">
-                      <form class="row g-3 needs-validation" novalidate>
-                        <div class="col-md-4">
-                          <label for="validationCustom01" class="form-label">First name</label>
-                          <input type="text" class="form-control" id="validationCustom01" value="Mark" required />
-                          <div class="valid-feedback">Looks good!</div>
-                        </div>
-                        <div class="col-md-4">
-                          <label for="validationCustom02" class="form-label">Last name</label>
-                          <input type="text" class="form-control" id="validationCustom02" value="Otto" required />
-                          <div class="valid-feedback">Looks good!</div>
-                        </div>
-                        <div class="col-md-4">
-                          <label for="validationCustomUsername" class="form-label">Username</label>
+                      <div class="mt-2"></div>
+                        <div class="position-relative form-size1">
+                          <label for="validationTooltipUsername" class="form-label">주소</label>
                           <div class="input-group has-validation">
-                            <span class="input-group-text" id="inputGroupPrepend">@</span>
-                            <input type="text" class="form-control" id="validationCustomUsername"
-                              aria-describedby="inputGroupPrepend" required />
-                            <div class="invalid-feedback">
-                              Please choose a username.
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <label for="validationCustom03" class="form-label">City</label>
-                          <input type="text" class="form-control" id="validationCustom03" required />
-                          <div class="invalid-feedback">
-                            Please provide a valid city.
-                          </div>
-                        </div>
-                        <div class="col-md-3">
-                          <label for="validationCustom04" class="form-label">State</label>
-                          <select class="form-select" id="validationCustom04" required>
-                            <option selected disabled value="">
-                              Choose...
-                            </option>
-                            <option>...</option>
-                          </select>
-                          <div class="invalid-feedback">
-                            Please select a valid state.
-                          </div>
-                        </div>
-                        <div class="col-md-3">
-                          <label for="validationCustom05" class="form-label">Zip</label>
-                          <input type="text" class="form-control" id="validationCustom05" required />
-                          <div class="invalid-feedback">
-                            Please provide a valid zip.
-                          </div>
-                        </div>
-                        <div class="col-12">
-                          <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required />
-                            <label class="form-check-label" for="invalidCheck">
-                              Agree to terms and conditions
-                            </label>
-                            <div class="invalid-feedback">
-                              You must agree before submitting.
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-12">
-                          <button class="btn btn-primary" type="submit">
-                            Submit form
-                          </button>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- Row end -->
-
-              <!-- Row start -->
-              <div class="row gx-3">
-                <div class="col-xxl-12">
-                  <div class="card mb-3">
-                    <div class="card-body">
-                      <form class="row g-3 needs-validation" novalidate>
-                        <div class="col-md-4 position-relative">
-                          <label for="validationTooltip01" class="form-label">First name</label>
-                          <input type="text" class="form-control" id="validationTooltip01" value="Mark" required />
-                          <div class="valid-tooltip">Looks good!</div>
-                        </div>
-                        <div class="col-md-4 position-relative">
-                          <label for="validationTooltip02" class="form-label">Last name</label>
-                          <input type="text" class="form-control" id="validationTooltip02" value="Otto" required />
-                          <div class="valid-tooltip">Looks good!</div>
-                        </div>
-                        <div class="col-md-4 position-relative">
-                          <label for="validationTooltipUsername" class="form-label">Username</label>
-                          <div class="input-group has-validation">
-                            <span class="input-group-text" id="validationTooltipUsernamePrepend">@</span>
                             <input type="text" class="form-control" id="validationTooltipUsername"
-                              aria-describedby="validationTooltipUsernamePrepend" required />
-                            <div class="invalid-tooltip">
-                              Please choose a unique and valid username.
+                              aria-describedby="validationTooltipUsernamePrepend" name="emp_add" required />
+                            <div class="invalid-feedback">
+                              주소를 입력해주세요.
                             </div>
                           </div>
                         </div>
-                        <div class="col-md-6 position-relative">
-                          <label for="validationTooltip03" class="form-label">City</label>
-                          <input type="text" class="form-control" id="validationTooltip03" required />
-                          <div class="invalid-tooltip">
-                            Please provide a valid city.
+                         <div class="mt-2"></div>
+                        <div class="position-relative form-size1">
+                          <label for="validationTooltipUsername" class="form-label">생일</label>
+                          <div class="input-group has-validation">
+                            <input type="date" class="form-control" id="validationTooltipUsername"
+                              aria-describedby="validationTooltipUsernamePrepend" name="emp_bday" required />
+                            <div class="invalid-feedback">
+                              생일을 입력해주세요.
+                            </div>
                           </div>
                         </div>
-                        <div class="col-md-3 position-relative">
-                          <label for="validationTooltip04" class="form-label">State</label>
-                          <select class="form-select" id="validationTooltip04" required>
-                            <option selected disabled value="">
-                              Choose...
-                            </option>
-                            <option>...</option>
-                          </select>
-                          <div class="invalid-tooltip">
-                            Please select a valid state.
+                         <div class="position-relative form-size1">
+                          <label for="validationTooltipUsername" class="form-label">내선번호</label>
+                          <div class="input-group has-validation">
+                            <input type="text" class="form-control" id="validationTooltipUsername"
+                              aria-describedby="validationTooltipUsernamePrepend" name="emp_extension_number" required />
+                            <div class="invalid-feedback">
+                              내선번호를 입력해주세요.
+                            </div>
                           </div>
                         </div>
-                        <div class="col-md-3 position-relative">
-                          <label for="validationTooltip05" class="form-label">Zip</label>
-                          <input type="text" class="form-control" id="validationTooltip05" required />
-                          <div class="invalid-tooltip">
-                            Please provide a valid zip.
-                          </div>
-                        </div>
-                        <div class="col-12">
+                        <div class="mt-2"></div>
+                        
+                        <div class="col-12 ">
+                        <div class="position-absolute bottom-0 end-0 mb-3 mx-3">
                           <button class="btn btn-primary" type="submit">
-                            Submit form
+                            사원 등록
                           </button>
                         </div>
+               			</div>
                       </form>
                     </div>
                   </div>
@@ -765,9 +690,9 @@
           <!-- App body ends -->
 
           <!-- App footer start -->
-          <div class="app-footer">
-            <span>Â© Bootstrap Gallery 2024</span>
-          </div>
+           <div class="app-footer">
+                <span>GDJ78FINALPROJECTMYCAB</span>
+            </div>
           <!-- App footer end -->
 
         </div>
@@ -799,13 +724,97 @@
     <script src="/assets/js/validations.js"></script>
   </body>
   <script>
-  	document.getElementById('domain-select').addEventListener('change', function() {
-	    var selectedDomain = this.value;
-	    document.getElementById('domain-input').value = selectedDomain;
-	  }); //이메일 도메인 입력 스크립트
+  document.getElementById('domain-select').addEventListener('change', function() {
+      var selectedDomain = this.value;
+      var domainInput = document.getElementById('domain-input');
+      domainInput.value = selectedDomain;
+      validateDomain();
+    });//이메일 입력 스크립트
   
-  
-  
+    var message = "${message}";
+    if (message) {
+        alert(message);
+    }
+    
+    $(document).ready(function(){
+    	
+    	$('select[name="dept_no"]').change(function(){
+    		var deptNo = $(this).val();
+    		
+    		
+    		$.ajax({
+    			type:'post', // method 방식
+    			url:'getNextEmpNo.ajax', // 요청한 주소
+    			data:{'deptNo':deptNo}, // 파라메터
+    			success:function(data){ // 통신 성공했을경우
+    			//ajax에서 XmlhttpRequest 객체를 통해 대신 받아와서
+    			//여기에 뿌려준다
+    				console.log(data);
+    				console.log(data.nextEmpNo);
+    				$('#emp_no').val(data.nextEmpNo);
+    			}, 
+    			error:function(error){ // 통신 실패 시
+    				console.log(error);
+    			} 
+    		});
+    		
+    		
+    	});
+    		
+    });
+    
+    
+    var overChk = false;
+    
+    function overlay() {
+		console.log('click');
+		
+		var email_id = $('input[name="email_id"]').val();
+		var domain = $('input[name="domain"]').val();
+		
+		if (email_id === '' || domain === '') {
+			
+			alert('이메일 또는 도메인 입력을 해주세요.');
+			
+		}else{
+			
+			var email = email_id +'@'+ domain;
+			
+		$.ajax({
+			type:'post', // method 방식
+			url:'emailOverlay.ajax', // 요청한 주소
+			data:{'email':email}, // 파라메터
+			success:function(data){ // 통신 성공했을경우
+			//ajax에서 XmlhttpRequest 객체를 통해 대신 받아와서
+			//여기에 뿌려준다
+				console.log(data);
+				if(data.use > 0){
+					alert('이미 사용중인 이메일 입니다.');
+					$('input[name="email_id"]').val('');
+					$('input[name="domain"]').val('');
+				}else{
+					alert('사용 가능한 이메일 입니다.');
+					overChk = true;
+				}
+			}, 
+			error:function(error){ // 통신 실패 시
+				console.log(error);
+			} 
+		});
+			
+		}
+		
+		
+	}
+    
+ // 폼 전송 시 overChk 확인
+    function validateForm() {
+        if (!overChk) {
+            alert('이메일 중복을 확인해주세요.');
+            return false; // 폼 전송 취소
+        }
+        return true; // 폼 전송 허용
+    }
   
   
   </script>

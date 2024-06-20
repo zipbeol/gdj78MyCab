@@ -310,19 +310,19 @@
                 <div class="dropdown-menu dropdown-menu-end shadow-sm dropdown-menu-mini">
                   <div class="country-container">
                     <a href="index.go" class="py-2">
-                      <img src="assets/images/flags/1x1/us.svg" alt="Business Dashboard Templates">
+                      <img src="/assets/images/flags/1x1/us.svg" alt="Business Dashboard Templates">
                     </a>
                     <a href="index.go" class="py-2">
-                      <img src="assets/images/flags/1x1/in.svg" alt="Business Dashboard Templates">
+                      <img src="/assets/images/flags/1x1/in.svg" alt="Business Dashboard Templates">
                     </a>
                     <a href="index.go" class="py-2">
-                      <img src="assets/images/flags/1x1/br.svg" alt="Business Dashboard Templates">
+                      <img src="/assets/images/flags/1x1/br.svg" alt="Business Dashboard Templates">
                     </a>
                     <a href="index.go" class="py-2">
-                      <img src="assets/images/flags/1x1/tr.svg" alt="IT Dashboard Templates">
+                      <img src="/assets/images/flags/1x1/tr.svg" alt="IT Dashboard Templates">
                     </a>
                     <a href="index.go" class="py-2">
-                      <img src="assets/images/flags/1x1/id.svg" alt="IT Dashboard Templates">
+                      <img src="/assets/images/flags/1x1/id.svg" alt="IT Dashboard Templates">
                     </a>
                   </div>
                 </div>
@@ -333,16 +333,16 @@
                   <!-- Row start -->
                   <div class="d-flex gap-2 m-2 flex-wrap">
                     <a href="javascript:void(0)" class="g-col-4 p-2 border rounded-2">
-                      <img src="assets/images/brand-behance.svg" class="img-3x" alt="IT Dashboard Templates">
+                      <img src="/assets/images/brand-behance.svg" class="img-3x" alt="IT Dashboard Templates">
                     </a>
                     <a href="javascript:void(0)" class="g-col-4 p-2 border rounded-2">
-                      <img src="assets/images/brand-google.svg" class="img-3x" alt="IT Dashboard Templates">
+                      <img src="/assets/images/brand-google.svg" class="img-3x" alt="IT Dashboard Templates">
                     </a>
                     <a href="javascript:void(0)" class="g-col-4 p-2 border rounded-2">
-                      <img src="assets/images/brand-bitcoin.svg" class="img-3x" alt="IT Dashboard Templates">
+                      <img src="/assets/images/brand-bitcoin.svg" class="img-3x" alt="IT Dashboard Templates">
                     </a>
                     <a href="javascript:void(0)" class="g-col-4 p-2 border rounded-2">
-                      <img src="assets/images/brand-dribbble.svg" class="img-3x" alt="IT Dashboard Templates">
+                      <img src="/assets/images/brand-dribbble.svg" class="img-3x" alt="IT Dashboard Templates">
                     </a>
                   </div>
                   <!-- Row end -->
@@ -411,7 +411,7 @@
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-md shadow-sm">
                   <a href="javascript:void(0)" class="dropdown-item">
                     <div class="d-flex py-2">
-                      <img src="assets/images/user.png" class="img-3x me-3 rounded-3" alt="Admin Templates">
+                      <img src="/assets/images/user.png" class="img-3x me-3 rounded-3" alt="Admin Templates">
                       <div class="m-0">
                         <h5 class="mb-1">Stacy Macdonald</h5>
                         <p class="mb-1 text-secondary">
@@ -423,7 +423,7 @@
                   </a>
                   <a href="javascript:void(0)" class="dropdown-item">
                     <div class="d-flex py-2">
-                      <img src="assets/images/user2.png" class="img-3x me-3 rounded-3" alt="Admin Templates">
+                      <img src="/assets/images/user2.png" class="img-3x me-3 rounded-3" alt="Admin Templates">
                       <div class="m-0">
                         <h5 class="mb-1">Harriet Orozco</h5>
                         <p class="mb-1 text-secondary">
@@ -435,7 +435,7 @@
                   </a>
                   <a href="javascript:void(0)" class="dropdown-item">
                     <div class="d-flex py-2">
-                      <img src="assets/images/user1.png" class="img-3x me-3 rounded-3" alt="Admin Templates">
+                      <img src="/assets/images/user1.png" class="img-3x me-3 rounded-3" alt="Admin Templates">
                       <div class="m-0">
                         <h5 class="mb-1">Grady Baxter</h5>
                         <p class="mb-1 text-secondary">

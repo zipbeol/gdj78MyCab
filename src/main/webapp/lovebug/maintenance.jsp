@@ -15,13 +15,13 @@
     <meta property="og:description" content="Marketplace for Bootstrap Admin Dashboards">
     <meta property="og:type" content="Website">
     <meta property="og:site_name" content="Bootstrap Gallery">
-    <link rel="shortcut icon" href="assets/images/favicon.svg">
+    <link rel="shortcut icon" href="/assets/images/favicon.svg">
 
     <!-- *************
 			************ CSS Files *************
 		************* -->
-    <link rel="stylesheet" href="assets/fonts/bootstrap/bootstrap-icons.css">
-    <link rel="stylesheet" href="assets/css/main.min.css">
+    <link rel="stylesheet" href="/assets/fonts/bootstrap/bootstrap-icons.css">
+    <link rel="stylesheet" href="/assets/css/main.min.css">
 
     <!-- *************
 			************ Vendor Css Files *************

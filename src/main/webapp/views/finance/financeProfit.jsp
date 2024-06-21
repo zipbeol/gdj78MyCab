@@ -38,6 +38,28 @@
     .detail-row.active {
         display: table-row;
     }
+    .filter-btn {
+            background-color: #f8f9fa;
+            color: #6c757d;
+            border: 1px solid #ced4da;
+            padding: 8px 16px;
+            margin-right: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        /* 호버 효과 */
+        .filter-btn:hover {
+            background-color: #e9ecef;
+        }
+
+        /* 액티브(선택된) 상태 */
+        .filter-btn.active {
+            background-color: #0d6efd;
+            color: #fff;
+            border-color: #0d6efd;
+        }
     </style>
 </head>
 
@@ -107,6 +129,12 @@
                                         <h4 class="card-title">수익</h4>
                                     </div>
                                     <div class="card-body">
+                                    	<!-- 카테고리 필터링 버튼 -->
+                                        <div class="mt-3">
+                                            <button class="btn btn-secondary filter-btn" data-category="택시">택시 수익</button>
+                                            <button class="btn btn-secondary filter-btn" data-category="광고">광고 수익</button>
+                                            <button class="btn btn-secondary filter-btn" data-category="기타">기타 수익</button>
+                                        </div>
                                         <!-- 수익 등록 버튼 -->
                                         <div class="text-end">
                                             <button id="myBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">수익 등록</button>
@@ -172,7 +200,6 @@
                                             </div>
                                         </div>
                                         <!-- 모달 창 끝 -->
-
                                     </div>
                                 </div>
                             </div>
@@ -214,46 +241,31 @@
 
     <!-- AJAX 및 모달 스크립트 -->
     <script>
+ // 모든 버튼 요소를 선택합니다.
+    const buttons = document.querySelectorAll('.filter-btn');
+
+    // 각 버튼에 클릭 이벤트 리스너를 추가합니다.
+    buttons.forEach(button => {
+        button.addEventListener('click', function() {
+            // 클릭된 버튼에만 active 클래스를 추가하고, 다른 버튼들은 active 클래스를 제거합니다.
+            buttons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+
+            // 여기서 필요한 추가 작업을 수행할 수 있습니다.
+            // 예를 들어, 클릭된 버튼의 데이터를 기반으로 필터링된 결과를 표시할 수 있습니다.
+        });
+    });
+    
         // AJAX로 수익 리스트 불러오기
         $.ajax({
             url: '/finance/profit/list.ajax',
             method: 'POST',
             success: function(data) {
-                var tbody = $('#profitTableBody');
-                console.log(data.profit);
-                tbody.empty(); // 테이블 본문을 비웁니다.
-                var row = '';
-                for (item of data.profit) {
-                    row += '<tr class="clickable-row">' +
-                        '<td>' + item.pro_actual_date + '</td>' +
-                        '<td>' + item.pro_who + '</td>' +
-                        '<td>' + formatNumberWithCommas(item.pro_cash) + '</td>' +
-                        '</tr>'+
-                       '<tr class="detail-row">'+
-                       '<td colspan="3" class="detail-content">'+
-                        '<strong>수익 발생일:</strong> ' + item.pro_actual_date +
-                        '<strong>수익 등록일:</strong> ' + item.pro_date +
-                        '<strong>수익 종류:</strong> ' + item.pro_category +
-                        '<strong>수익 내용:</strong> ' + item.pro_content +
-                        '<strong>수익 금액:</strong> ' + formatNumberWithCommas(item.pro_cash) +
-                        '<strong>원</strong> ' +
-                        '</td>'+
-                     	'</tr>';
-                }
-                $('#profitTableBody').html(row);
-                // 각 행에 클릭 이벤트 추가
-                $('.clickable-row').on('click', function() {
-                    $(this).next('.detail-row').toggleClass('active');
-                });
+                displayProfitList(data.profit); // 초기 수익 리스트 표시
             },
             error: function(error) {
                 console.error("AJAX 요청 실패:", error);
             }
-        });
-
-        // 모달이 닫힐 때 폼 초기화
-        $('#exampleModal').on('hidden.bs.modal', function (e) {
-            $('#profitForm')[0].reset();
         });
 
         // 등록 버튼 클릭 이벤트 처리
@@ -262,20 +274,19 @@
                 url: '/finance/profit/add.ajax', // 서버의 폼 처리 엔드포인트
                 method: 'POST',
                 data: {
-                	pro_category: $('#pro_category').val(),
+                    pro_category: $('#pro_category').val(),
                     pro_date: $('#pro_date').val(),
                     pro_actual_date: $('#pro_actual_date').val(),
                     pro_who: $('#pro_who').val(),
                     pro_cash: $('#pro_cash').val().replace(/,/g, ''),
                     pro_content: $('#pro_content').val()
                 },
-
                 success: function(response) {
                     // 성공적으로 저장되었음을 사용자에게 알리고 모달을 닫음
                     alert('수익이 등록되었습니다.');
                     $('#exampleModal').modal('hide');
                     // 수익 리스트를 다시 불러옵니다
-                    location.reload();
+                    refreshProfitList();
                 },
                 error: function(error) {
                     console.error("AJAX 요청 실패:", error);
@@ -298,6 +309,70 @@
                 var formattedValue = formatNumberWithCommas(number); // 포맷 함수 호출
                 $(this).val(formattedValue); // 포맷된 값으로 입력 필드 업데이트
             }
+        });
+
+        // 카테고리 필터링 버튼 클릭 이벤트 처리
+        $('.filter-btn').click(function() {
+            var category = $(this).data('category');
+            $.ajax({
+                url: '/finance/profit/category.ajax',
+                method: 'POST',
+                data: { category: category },
+                success: function(data) {
+                    displayProfitList(data.profit); // 필터링된 수익 리스트 표시
+                },
+                error: function(error) {
+                    console.error("AJAX 요청 실패:", error);
+                }
+            });
+        });
+
+        // AJAX로 받은 수익 리스트를 테이블에 표시하는 함수
+        function displayProfitList(profitList) {
+            var tbody = $('#profitTableBody');
+            tbody.empty(); // 테이블 본문을 비웁니다.
+            var row = '';
+            for (item of profitList) {
+                row += '<tr class="clickable-row">' +
+                    '<td>' + item.pro_actual_date + '</td>' +
+                    '<td>' + item.pro_who + '</td>' +
+                    '<td>' + formatNumberWithCommas(item.pro_cash) + '</td>' +
+                    '</tr>'+
+                    '<tr class="detail-row">'+
+                    '<td colspan="3" class="detail-content">'+
+                    '<strong>수익 발생일:</strong> ' + item.pro_actual_date +
+                    '<strong>수익 등록일:</strong> ' + item.pro_date +
+                    '<strong>수익 종류:</strong> ' + item.pro_category +
+                    '<strong>수익 내용:</strong> ' + item.pro_content +
+                    '<strong>수익 금액:</strong> ' + formatNumberWithCommas(item.pro_cash) +
+                    '<strong>원</strong> ' +
+                    '</td>'+
+                    '</tr>';
+            }
+            tbody.html(row);
+            // 각 행에 클릭 이벤트 추가
+            $('.clickable-row').on('click', function() {
+                $(this).next('.detail-row').toggleClass('active');
+            });
+        }
+
+        // 수익 리스트 갱신 함수
+        function refreshProfitList() {
+            $.ajax({
+                url: '/finance/profit/list.ajax',
+                method: 'POST',
+                success: function(data) {
+                    displayProfitList(data.profit); // 갱신된 수익 리스트 표시
+                },
+                error: function(error) {
+                    console.error("AJAX 요청 실패:", error);
+                }
+            });
+        }
+
+        // 모달이 닫힐 때 폼 초기화
+        $('#exampleModal').on('hidden.bs.modal', function (e) {
+            $('#profitForm')[0].reset();
         });
     </script>
 </body>

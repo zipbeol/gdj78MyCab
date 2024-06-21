@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html lang="ko">
@@ -39,27 +40,27 @@
         display: table-row;
     }
     .filter-btn {
-            background-color: #f8f9fa;
-            color: #6c757d;
-            border: 1px solid #ced4da;
-            padding: 8px 16px;
-            margin-right: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-        }
+        background-color: #f8f9fa;
+        color: #6c757d;
+        border: 1px solid #ced4da;
+        padding: 8px 16px;
+        margin-right: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
 
-        /* 호버 효과 */
-        .filter-btn:hover {
-            background-color: #e9ecef;
-        }
+    /* 호버 효과 */
+    .filter-btn:hover {
+        background-color: #e9ecef;
+    }
 
-        /* 액티브(선택된) 상태 */
-        .filter-btn.active {
-            background-color: #0d6efd;
-            color: #fff;
-            border-color: #0d6efd;
-        }
+    /* 액티브(선택된) 상태 */
+    .filter-btn.active {
+        background-color: #0d6efd;
+        color: #fff;
+        border-color: #0d6efd;
+    }
     </style>
 </head>
 
@@ -135,6 +136,25 @@
                                             <button class="btn btn-secondary filter-btn" data-category="광고">광고 수익</button>
                                             <button class="btn btn-secondary filter-btn" data-category="기타">기타 수익</button>
                                         </div>
+                                        <!-- 날짜 필터링 입력 -->
+										<div class="mt-3">
+										    <label for="startDate">시작 날짜:</label>
+										    <input type="date" id="startDate">
+										    <label for="endDate"> &nbsp - 종료 날짜:</label>
+										    <input type="date" id="endDate">
+										</div>
+										<!-- 필터링 버튼 -->
+										 <select id="filter" name="filter" class="form-select" required>
+                                            <option value="" selected disabled>필터 선택</option>
+                                            <option value="이름 순">이름 순</option>
+                                            <option value="많은 수익 순">많은 수익 순</option>
+                                            <option value="적은 수익 순">적은 수익 순</option>
+                                        </select>
+                                        <div class="mt-3">
+										    <!-- 검색 입력 필드 -->
+										    <label for="searchQuery">검색:</label>
+										    <input type="text" id="searchQuery" placeholder="검색어 입력">
+										</div>
                                         <!-- 수익 등록 버튼 -->
                                         <div class="text-end">
                                             <button id="myBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">수익 등록</button>
@@ -241,38 +261,34 @@
 
     <!-- AJAX 및 모달 스크립트 -->
     <script>
- // 모든 버튼 요소를 선택합니다.
-    const buttons = document.querySelectorAll('.filter-btn');
-
-    // 각 버튼에 클릭 이벤트 리스너를 추가합니다.
-    buttons.forEach(button => {
-        button.addEventListener('click', function() {
-            // 클릭된 버튼에만 active 클래스를 추가하고, 다른 버튼들은 active 클래스를 제거합니다.
-            buttons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
-
-            // 여기서 필요한 추가 작업을 수행할 수 있습니다.
-            // 예를 들어, 클릭된 버튼의 데이터를 기반으로 필터링된 결과를 표시할 수 있습니다.
-        });
-    });
     
-        // AJAX로 수익 리스트 불러오기
-        $.ajax({
-            url: '/finance/profit/list.ajax',
-            method: 'POST',
-            success: function(data) {
-                displayProfitList(data.profit); // 초기 수익 리스트 표시
-            },
-            error: function(error) {
-                console.error("AJAX 요청 실패:", error);
-            }
+    	var searchFlag = false;
+        // 모든 버튼 요소를 선택합니다.
+        const buttons = document.querySelectorAll('.filter-btn');
+
+        // 각 버튼에 클릭 이벤트 리스너를 추가합니다.
+        buttons.forEach(button => {
+            button.addEventListener('click', function() {
+                // 클릭된 버튼에만 active 클래스를 추가하고, 다른 버튼들은 active 클래스를 제거합니다.
+                buttons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+
+                // 클릭된 버튼의 데이터를 기반으로 필터링된 결과를 표시
+                var category = this.getAttribute('data-category');
+                categoryName(category); // categoryName 함수 호출
+            });
         });
 
+        // 카테고리 이름을 출력하는 함수
+        function categoryName(category) {
+            console.log('Selected category:', category);
+        }
+        
         // 등록 버튼 클릭 이벤트 처리
         $('#submitBtn').click(function(event) {
             $.ajax({
                 url: '/finance/profit/add.ajax', // 서버의 폼 처리 엔드포인트
-                method: 'POST',
+                type: 'POST',
                 data: {
                     pro_category: $('#pro_category').val(),
                     pro_date: $('#pro_date').val(),
@@ -311,25 +327,10 @@
             }
         });
 
-        // 카테고리 필터링 버튼 클릭 이벤트 처리
-        $('.filter-btn').click(function() {
-            var category = $(this).data('category');
-            $.ajax({
-                url: '/finance/profit/category.ajax',
-                method: 'POST',
-                data: { category: category },
-                success: function(data) {
-                    displayProfitList(data.profit); // 필터링된 수익 리스트 표시
-                },
-                error: function(error) {
-                    console.error("AJAX 요청 실패:", error);
-                }
-            });
-        });
-
         // AJAX로 받은 수익 리스트를 테이블에 표시하는 함수
         function displayProfitList(profitList) {
             var tbody = $('#profitTableBody');
+            console.log(profitList);
             tbody.empty(); // 테이블 본문을 비웁니다.
             var row = '';
             for (item of profitList) {
@@ -355,12 +356,18 @@
                 $(this).next('.detail-row').toggleClass('active');
             });
         }
-
+        
         // 수익 리스트 갱신 함수
         function refreshProfitList() {
             $.ajax({
+                type: 'POST',
                 url: '/finance/profit/list.ajax',
-                method: 'POST',
+                data : {
+                	'actual_profit_start_date' : $('#startDate').val(),
+                	'actual_profit_end_date' : $('#endDate').val(),
+                	'category' : category
+                },
+                dataType : 'json',
                 success: function(data) {
                     displayProfitList(data.profit); // 갱신된 수익 리스트 표시
                 },
@@ -370,10 +377,17 @@
             });
         }
 
+        // 초기 수익 리스트 불러오기
+        $(document).ready(function() {
+            refreshProfitList();
+        });
+
         // 모달이 닫힐 때 폼 초기화
         $('#exampleModal').on('hidden.bs.modal', function (e) {
             $('#profitForm')[0].reset();
         });
+        
+        
     </script>
 </body>
 </html>

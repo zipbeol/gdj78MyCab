@@ -58,4 +58,5 @@ public class FinanceController {
 		logger.info("pro_actual_date = " + profit.getPro_actual_date());
 		return financeService.addProfit(profit);
 	}
+	
 }

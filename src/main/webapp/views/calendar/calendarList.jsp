@@ -542,7 +542,54 @@
   </body>
   
   <script >
-  	$(document).ready(function(){
+  
+  $(document).ready(selectCallList())
+  
+  function selectCallList(){
+	  $.ajax({
+		  url : '/calendar/listCall.ajax',
+		  type : 'GET',
+		  date :{},
+		  success: function(response){
+			  alert('캘린더 리스트 통신 정상');
+			  var events=[];
+			  
+			  for (var i = 0; i < response.length; i++) {
+				var res = response[i];
+				var event = {
+						title : res.schedule_name,
+						start : res.schedule_start_date
+				};
+				
+				events.push(event);
+			}
+			  console.log('Events:',events);
+			  showFullCalendar(events);
+			  
+		  },
+		  error : function(data){
+			  console.log(data)
+		  }
+	  })
+  };
+  
+  function showFullCalendar(getEvent){
+	  $('#calendar').fullCalendar({
+			selectable : true,
+			selectHelper: true,
+			locale:'ko',
+			select : function(){
+				alert("check");
+			},
+			events:getEvent	
+			
+			
+		});
+  }
+  
+  
+  
+ /*  	$(document).ready(function(){
   		$('#calendar').fullCalendar({
   			selectable : true,
   			selectHelper: true,
@@ -558,7 +605,7 @@
   		});
   		
   		
-  	});
+  	}); */
   </script>
   
  	<style>

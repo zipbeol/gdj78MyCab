@@ -3,7 +3,11 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd"
 >
 
-<mapper namespace="com.my.cab.dao.">
+<mapper namespace="com.my.cab.dao.CalendarDAO">
 
+	<select id="calListCall" resultType="map">
+		SELECT * FROM schedule
+	</select>
+	
 
 </mapper>

@@ -1,13 +1,13 @@
 package com.my.cab.service;
 
 import com.my.cab.dao.TaxiDAO;
+import com.my.cab.dto.SearchDTO;
 import com.my.cab.dto.TaxiDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,14 +21,31 @@ public class TaxiService {
     @Autowired
     TaxiDAO taxiDAO;
 
-    public Map<String, Object> listAjax() {
+    public Map<String, Object> listAjax(SearchDTO searchDTO) {
         Map<String, Object> result = new HashMap<>();
-        result.put("taxiList", getTaxiList());
+
+        result.put("taxiList", getSearchedTaxiList(searchDTO));
+        result.put("result", true);
+
         return result;
     }
 
+    private boolean isTaxiLicensePlateExists(SearchDTO searchDTO) {
+        logger.info(searchDTO.getSearchText());
+        return taxiDAO.isSameTaxiLicensePlate(searchDTO.getSearchText());
+    }
+
+    /**
+     * {@code TaxiDTO}리스트 리턴해주는 메서드
+     *
+     * @return List<TaxiDTO>
+     */
     public List<TaxiDTO> getTaxiList() {
         return taxiDAO.getTaxiList();
+    }
+
+    public List<TaxiDTO> getSearchedTaxiList(SearchDTO searchDTO) {
+        return taxiDAO.getSearchedTaxiList(searchDTO.getSearchText());
     }
 
     public List<String> getTaxiModelList() {
@@ -43,7 +60,7 @@ public class TaxiService {
      */
     public Map<String, Object> registerTaxi(TaxiDTO taxiDTO) {
         Map<String, Object> result = new HashMap<>();
-        String message = taxiDTO.getTaxi_license_plate() + " 택시 등록에 성공하였습니다..";
+        String message = taxiDTO.getTaxi_license_plate() + " 택시 등록에 성공하였습니다.";
         boolean isSuccess = false;
         if (isSameTaxiLicensePlate(taxiDTO.getTaxi_license_plate())) {
             message = taxiDTO.getTaxi_license_plate() + " 택시는 이미 등록된 번호판 입니다.";

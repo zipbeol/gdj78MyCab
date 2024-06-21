@@ -1,6 +1,7 @@
 package com.my.cab.controller;
 
 
+import com.my.cab.dto.SearchDTO;
 import com.my.cab.dto.TaxiDTO;
 import com.my.cab.service.TaxiService;
 import org.slf4j.Logger;
@@ -26,14 +27,16 @@ public class TaxiController {
     public String listGo(Model model) {
         logger.info("listGo 호출");
         model.addAttribute("taxiModelList",taxiService.getTaxiModelList());
+        model.addAttribute("taxiList",taxiService.getTaxiList());
         return "taxi/taxiList";
     }
 
     @GetMapping("/list.ajax")
     @ResponseBody
-    public Map<String, Object> listAjax() {
+    public Map<String, Object> listAjax(SearchDTO searchDTO) {
         logger.info("listAjax 호출");
-        return taxiService.listAjax();
+        logger.info("searchDTO SearchText:{}", searchDTO.getSearchText());
+        return taxiService.listAjax(searchDTO);
     }
 
     @PostMapping("/create.ajax")

@@ -1,32 +1,55 @@
 <!-- <?xml version="1.0" encoding="UTF-8"?> -->
-<!DOCTYPE mapper PUBLIC	"-//mybatis.org//DTD Mapper 3.0//EN"
-	"http://mybatis.org/dtd/mybatis-3-mapper.dtd"
->
+<!DOCTYPE mapper PUBLIC    "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
+        >
 
 <mapper namespace="com.my.cab.dao.TaxiDAO">
 
-	<select id="getTaxiList" resultType="taxi">
-		SELECT taxi_license_plate, taxi_model, taxi_registration_date, taxi_is_active
-		FROM taxi
-		ORDER BY taxi_registration_date
-	</select>
+    <select id="getTaxiList" resultType="taxi">
+        SELECT taxi_license_plate, taxi_model, taxi_registration_date, taxi_is_active
+        FROM taxi
+        ORDER BY taxi_registration_date ASC, taxi_license_plate ASC
+    </select>
 
-	<insert id="registerTaxi" parameterType="taxi">
-		INSERT INTO taxi(taxi_license_plate, taxi_model, taxi_fuel_type, taxi_is_active)
-		VALUES(#{taxi_license_plate}, #{taxi_model}, #{taxi_fuel_type}, 1)
-	</insert>
+    <select id="getSearchedTaxiList" resultType="taxi" parameterType="search">
+        SELECT taxi_license_plate, taxi_model, taxi_registration_date, taxi_is_active
+        FROM taxi
+        <where>
+            <if test="searchText != null and searchText != ''">
+                taxi_license_plate LIKE CONCAT('%', #{searchText}, '%')
+            </if>
+        </where>
+        ORDER BY taxi_registration_date
+    </select>
 
-	<select id="isSameTaxiLicensePlate" resultType="boolean">
-		SELECT CASE
-				   WHEN COUNT(taxi_license_plate) > 0 THEN 1
-				   ELSE 0
-				   END AS is_same
-		FROM taxi
-		WHERE taxi_license_plate = #{param1}
-	</select>
+    <insert id="registerTaxi" parameterType="taxi">
+        INSERT INTO taxi(taxi_license_plate, taxi_model, taxi_fuel_type, taxi_is_active)
+        VALUES (#{taxi_license_plate}, #{taxi_model}, #{taxi_fuel_type}, 1)
+    </insert>
 
-	<select id="getTaxiModelList" resultType="String">
-		SELECT taxi_model FROM taxi GROUP BY taxi_model ORDER BY taxi_model
-	</select>
+    <select id="isSameTaxiLicensePlate" resultType="boolean">
+        SELECT CASE
+                   WHEN COUNT(taxi_license_plate) > 0 THEN 1
+                   ELSE 0
+                   END AS is_same
+        FROM taxi
+        WHERE taxi_license_plate = #{param1}
+    </select>
+
+    <select id="getTaxiModelList" resultType="String">
+        SELECT taxi_model
+        FROM taxi
+        GROUP BY taxi_model
+        ORDER BY taxi_model
+    </select>
+
+    <select id="isTaxiLicensePlateExists" resultType="boolean">
+        SELECT CASE
+                   WHEN COUNT(taxi_license_plate) > 0 THEN true
+                   ELSE false
+                   END AS isExists
+        FROM taxi
+        WHERE taxi_license_plate LIKE CONCAT('%', #{param1}, '%')
+    </select>
 
 </mapper>

@@ -119,48 +119,20 @@
                                     </div>
                                     <!-- 검색창 시작 -->
                                     <div class="search-filter-container border border-2 p-3 rounded mb-3">
-                                        <div class="row">
-                                            <div class="col-3">
-
-                                                <label for="search-start-date" class="form-label">시작 날짜</label>
-                                            </div>
-                                            <div class="col-1">
-
-                                            </div>
-                                            <div class="col-3">
-
-                                                <label for="search-end-date" class="form-label">종료 날짜</label>
-                                            </div>
-                                            <div class="col-5 text-end">
-
-                                                <input type="button" class="btn btn-primary" value="검색">
-                                            </div>
-                                        </div>
                                         <div class="row mb-3">
-                                            <div class="col-md-3 align-items-center" id="search-datepicker">
-                                                <div class="input-group me-3">
-                                                    <input type="text" class="form-control custom-daterange"
-                                                           id="search-start-date">
-                                                    <span class="input-group-text"><i
-                                                            class="bi bi-calendar4"></i></span>
-                                                </div>'
-
+                                            <div class="col-10">
                                             </div>
-                                            <span class="col text-center" style="font-size: large; font-weight: bold;">~</span>
-                                            <div class="col-md-3 align-items-center">
-
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control datepicker"
-                                                           id="search-end-date">
-                                                    <span class="input-group-text"><i
-                                                            class="bi bi-calendar4"></i></span>
-                                                </div>
-                                            </div>
-                                            <div class="col-5 text-end">
-
+                                            <div class="col-2 text-end d-md-flex justify-content-md-end gap-2">
+                                                <input type="button" class="btn btn-secondary" onclick="filterReset()"
+                                                       value="초기화">
+                                                <input type="button" class="btn btn-primary"
+                                                       value="검색">
                                             </div>
                                         </div>
                                         <div class="row">
+                                            <div class="col-4">
+                                                <label for="filter-taxi-reg-date" class="form-label">등록일 필터</label>
+                                            </div>
                                             <div class="col-2">
                                                 <label for="filter-taxi-model" class="form-label">차종 필터</label>
                                             </div>
@@ -168,15 +140,20 @@
 
                                                 <label for="filter-taxi-is-active" class="form-label">폐차여부 필터</label>
                                             </div>
-                                            <div class="col-5">
-
-                                            </div>
+                                            <div class="col-1"></div>
                                             <div class="col-3">
 
                                                 <label for="search-taxi-license-plate" class="form-label">번호판 검색</label>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
+                                            <div class="col-4">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control datepicker-range"
+                                                           id="filter-taxi-reg-date">
+                                                    <span class="input-group-text"><i class="bi bi-calendar2-range"></i></span>
+                                                </div>
+                                            </div>
                                             <div class="col-2">
                                                 <select id="filter-taxi-model" class="form-select">
                                                     <option value="">차종</option>
@@ -192,20 +169,10 @@
                                                     <option value="0">true</option>
                                                 </select>
                                             </div>
-                                            <div class="col-5"></div>
+                                            <div class="col-1"></div>
                                             <div class="col-3 text-end">
                                                 <input type="text" class="form-control" id="search-taxi-license-plate"
-                                                       placeholder="번호판을 입력해 주세요">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-
-                                            <div class="col-2">
-
-                                            </div>
-                                            <div class="col-8">
-                                            </div>
-                                            <div class="col-2 text-end">
+                                                       oninput="search()" placeholder="번호판을 입력해 주세요">
                                             </div>
                                         </div>
                                     </div>
@@ -215,13 +182,38 @@
                                         <table class="table table-hover table-bordered align-middle custom-table m-0">
                                             <thead>
                                             <tr class="">
-                                                <th class="text-center" id="th-taxi-license-plate" onclick="getThSpanId(this)">번호판 <span id="table-th-taxi-license-plate"></span></th>
-                                                <th class="text-center" id="th-taxi-model" onclick="getThSpanId(this)">차종 <span id="table-th-taxi-model"></span></th>
-                                                <th class="text-center" id="th-taxi-reg-date" onclick="getThSpanId(this)">등록일 <span id="table-th-taxi-reg-date"></span></th>
-                                                <th class="text-center" id="th-taxi-is-active" onclick="getThSpanId(this)">폐차 여부 <span id="table-th-taxi-is-active"></span></th>
+                                                <th class="text-center" id="th-taxi-license-plate"
+                                                    onclick="getThSpanId(this)">번호판 <span
+                                                        id="table-th-taxi-license-plate"></span></th>
+                                                <th class="text-center" id="th-taxi-model" onclick="getThSpanId(this)">
+                                                    차종 <span id="table-th-taxi-model"></span></th>
+                                                <th class="text-center" id="th-taxi-reg-date"
+                                                    onclick="getThSpanId(this)">등록일 <span
+                                                        id="table-th-taxi-reg-date"></span></th>
+                                                <th class="text-center" id="th-taxi-is-active"
+                                                    onclick="getThSpanId(this)">폐차 여부 <span
+                                                        id="table-th-taxi-is-active"></span></th>
                                             </tr>
                                             </thead>
                                             <tbody id="taxi-list">
+                                            <c:forEach items="${taxiList}" var="taxi">
+                                                <tr>
+                                                    <td class="text-center">${taxi.taxi_license_plate}</td>
+                                                    <td class="text-center">${taxi.taxi_model}</td>
+                                                    <td class="text-center">${taxi.taxi_registration_date}</td>
+                                                    <td class="text-center">
+                                                        <c:choose>
+                                                            <c:when test="${taxi.taxi_is_active == 1}">
+                                                                false
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                true
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </td>
+                                                </tr>
+                                            </c:forEach>
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -324,13 +316,25 @@
 
 <script>
     // 스크립트
-    getTaxiList();
+    var firstDate = $('#filter-taxi-reg-date').val();
+    var searchText = $('#search-taxi-license-plate').val();
 
-    function getThSpanId(){
-
+    function filterReset() {
+        getTaxiList(); // Refresh the list
+        $('#filter-taxi-is-active').val('');
+        $('#filter-taxi-model').val('');
+        $('#filter-taxi-reg-date').val(firstDate);
+        $('#search-taxi-license-plate').val('');
     }
+
+    function search() {
+        searchText = $('#search-taxi-license-plate').val();
+        console.log('searchText = ', searchText);
+        getTaxiList();
+    }
+
     function isNumbers(input) {
-        const value = input.value;
+        var value = input.value;
         if (isNaN(value) || value < 0 || value > 9999) {
             input.value = input.value.slice(0, -1);
         }
@@ -340,7 +344,9 @@
         $.ajax({
             url: './list.ajax',
             type: 'GET',
-            data: {},
+            data: {
+                'searchText': searchText
+            },
             dataType: 'JSON',
             success: function (data) {
                 console.log(data);
@@ -422,34 +428,6 @@
             error: function (error) {
                 console.log(error);
                 alert('택시 등록 중 오류가 발생했습니다.');
-            }
-        });
-    }
-
-    function filterResults() {
-        const startDate = $('#start-date').val();
-        const endDate = $('#end-date').val();
-        const isActive = $('#is-active-filter').val();
-        const carModel = $('#car-model-filter').val();
-        const licensePlate = $('#license-plate-search').val();
-
-        $.ajax({
-            url: './list.ajax',
-            type: 'GET',
-            data: {
-                startDate: startDate,
-                endDate: endDate,
-                isActive: isActive,
-                carModel: carModel,
-                licensePlate: licensePlate
-            },
-            dataType: 'JSON',
-            success: function (data) {
-                console.log(data);
-                drawTaxiList(data.taxiList);
-            },
-            error: function (error) {
-                console.log(error);
             }
         });
     }

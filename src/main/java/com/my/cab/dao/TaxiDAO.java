@@ -15,4 +15,6 @@ public interface TaxiDAO {
     boolean isSameTaxiLicensePlate(String taxiLicensePlate);
 
     List<String> getTaxiModelList();
+
+    List<TaxiDTO> getSearchedTaxiList(String searchText);
 }

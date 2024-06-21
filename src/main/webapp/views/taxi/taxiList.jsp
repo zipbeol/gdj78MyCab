@@ -115,38 +115,21 @@
                                         <input type="button" class="btn btn-primary" data-bs-toggle="modal"
                                                data-bs-target="#exampleModal" value="택시 등록"/>
                                     </div>
-                                    <div class="">
-                                        <!-- 검색 관련 필터 -->
-                                        <label for="date-filter" class="form-label">날짜 선택</label>
-                                        <div id="date-filter" class="date-filter-container d-flex">
-                                            <input type="date" id="start-date" class="form-control"
-                                                   placeholder="시작 날짜"/>
-                                            <span> ~ </span>
-                                            <input type="date" id="end-date" class="form-control" placeholder="종료 날짜"/>
+
+                                    <div class="search-filter-container border border-2 p-3 rounded mb-3">
+                                        <div class="row">
+                                            <label for="search-date" class="form-label">날짜 선택</label>
+                                            <div class="col-2" id="search-date">
+                                                <input type="date" class="">
+                                            </div>
+                                            ~
+                                            <div class="col-2">
+                                                <input type="date" class="start-date">
+                                            </div>
                                         </div>
+                                        <div class="row">
 
-
-                                        <select id="car-model-filter" class="form-select">
-                                            <option value="">차종 선택</option>
-                                            <c:forEach items="${taxiModelList}" var="taxiModel">
-                                                <option value="${taxiModel}">${taxiModel}</option>
-                                            </c:forEach>
-                                        </select>
-
-                                        <select id="is-active-filter" class="form-select">
-                                            <option value="">폐차 여부 선택</option>
-                                            <option value="true">폐차 아님</option>
-                                            <option value="false">폐차</option>
-                                        </select>
-
-                                        <input type="text" id="license-plate-search" class="form-control"
-                                               placeholder="번호판 입력"/>
-
-                                        <button type="button" class="btn btn-primary" onclick="filterResults()">검색
-                                        </button>
-
-                                        </tr>
-                                        </table>
+                                        </div>
                                     </div>
                                     <div class="table-outer">
                                         <table class="table table-hover table-bordered align-middle custom-table m-0">

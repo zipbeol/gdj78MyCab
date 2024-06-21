@@ -48,7 +48,7 @@
     <div class="main-container">
 
         <!-- Sidebar wrapper start -->
-        <jsp:include page="../sidebar.jsp"/>
+        <jsp:include page="/views/sidebar.jsp"/>
         <!-- Sidebar wrapper end -->
 
         <!-- App container starts -->
@@ -85,10 +85,9 @@
                         <!-- 여기에 경로 추가 -->
                     </li>
                 </ol>
-                <!-- Breadcrumb end -->
-
+                <!-- Bread
                 <!-- App header actions start -->
-                <jsp:include page="../appHeader.jsp"/>
+                <jsp:include page="/views/appHeader.jsp"/>
                 <!-- App header actions end -->
 
             </div>
@@ -117,7 +116,7 @@
 
                 </div>
                 <!-- Container ends -->
-
+                
             </div>
             <!-- App body ends -->
 
@@ -158,5 +157,10 @@
 </body>
 <script>
     // 스크립트
+    
+     var message = "${message}";
+        if (message) {
+            alert(message);
+        }
 </script>
 </html>

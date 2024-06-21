@@ -40,7 +40,10 @@ public class EmpService {
 		String emp_email = param.get("email_id") + "@" + param.get("domain");
 		logger.info(emp_email);
 		
-		String emp_add = (String) param.get("emp_add");
+		
+		String emp_add = param.get("emp_roadAdd") +", "+  param.get("emp_addDetail");
+		
+		
 		String emp_extension_number = (String) param.get("emp_extension_number");
 		int emp_level = Integer.parseInt(String.valueOf(param.get("emp_level"))) ;;
 		

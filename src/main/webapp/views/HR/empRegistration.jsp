@@ -31,6 +31,9 @@
     <link rel="stylesheet" href="/assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
   </head>
   <style>
+  .input-size{
+  	width: 755px;
+  }
   .fixed-size {
     width: 150px;
     height: 33.8px;
@@ -70,7 +73,8 @@
   	width: 790px;
   }
   .form-size2 {
-  	left: 188px;
+  	left: 152px;
+  	width: 600;
   }
   .button-size{
   	left: 16px;
@@ -511,7 +515,7 @@
                       <form class="row g-3 needs-validation" action="/emp/join.do" method="post" onsubmit="return validateForm()" novalidate>
                       <h2>사원 정보</h2>
                         <div class="col-6 position-relative">
-                          <label for="validationTooltip01" class="form-label">사번</label>
+                          <label for="validationTooltip01" class="form-label">사번 (부서를 선택하면 자동 생성됩니다.)</label>
                           <input type="text" class="form-control" name="emp_no" id="emp_no" value="" required readonly />
  
                         </div>
@@ -537,14 +541,13 @@
                         
                         <div class="col-6 position-relative">
                           <label for="validationTooltip02" class="form-label">이름</label>
-                          <input type="text" class="form-control" id="validationTooltip02" name="emp_name" value="" required />
-                          <div class="invalid-feedback">이름을 입력해주세요.</div>
+                          <input type="text" class="form-control" id="emp_name" name="emp_name" value="" required pattern="^[가-힣]+$" minlength="2" />
+                          <div class="invalid-feedback" id="name_check">이름은 한글로만 최소 2자 이상 입력해주세요.</div>
                         </div>
                         
                          <div class="col-6 position-relative">
-                          <label for="validationTooltip02" class="form-label">예금주</label>
-                          <input type="text" class="form-control" id="validationTooltip02" name="acc_name" value="" required />
-                          <div class="invalid-feedback">예금주를 입력해주세요.</div>
+                          <label for="validationTooltip02" class="form-label">예금주 (이름과 동일하게 입력됩니다.)</label>
+                          <input type="text" class="form-control" id="acc_name" name="acc_name" value="" required readonly/>
                         </div>
                         
                         <div class="col-6 position-relative">
@@ -566,8 +569,8 @@
                         
                         <div class="col-6 position-relative">
                           <label for="validationTooltip02" class="form-label">계좌번호</label>
-                          <input type="text" class="form-control" id="validationTooltip02" name="acc_no" value="" required />
-                          <div class="invalid-feedback">계좌번호를 입력해주세요.</div>
+                          <input type="text" class="form-control" id="validationTooltip02" name="acc_no" value="" required pattern="^[0-9]{12,14}$" minlength="12" maxlength="14" />
+                          <div class="invalid-feedback">숫자로만 최소 12자 이상, 최대 14자 미만 입력해주세요. </div>
                         </div>
                         
                         
@@ -610,13 +613,13 @@
                     <label for="validationTooltip04" class="form-label">이메일</label>
                     <div class="input-group form-size2">
                     	<div>
-                        <input type="text" class="form-control fixed-size" placeholder="이메일" name="email_id" required="">
+                        <input type="text" class="form-control fixed-size" placeholder="이메일" name="email_id" required pattern="^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*$" minlength="2">
                         <div class="invalid-feedback">&nbsp;이메일을 입력해주세요.</div>
                         </div>
                         <span class="input-group-text fixed-size2">@</span>
                         <div>
-                        <input type="text" class="form-control fixed-size3"  id="domain-input" placeholder="도메인" name="domain" required="">
-                        <div class="invalid-feedback">&nbsp;도메인을 입력해주세요.</div>
+                        <input type="text" class="form-control fixed-size3"  id="domain-input" placeholder="도메인" name="domain" required pattern="^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$" minlength="2">
+                        <div class="invalid-feedback">&nbsp;도메인을 올바른 형식으로 입력해주세요.</div>
                       </div>
                       
                       &nbsp;&nbsp;
@@ -635,17 +638,23 @@
                     </div>
                   </div>
                 </div>
+                
                       <div class="mt-2"></div>
                         <div class="position-relative form-size1">
                           <label for="validationTooltipUsername" class="form-label">주소</label>
-                          <div class="input-group has-validation">
-                            <input type="text" class="form-control" id="validationTooltipUsername"
-                              aria-describedby="validationTooltipUsernamePrepend" name="emp_add" required />
+                          <div class="input-size input-group has-validation">
+                            <input type="text" class="form-control" id="emp_roadAdd"
+                              aria-describedby="validationTooltipUsernamePrepend" name="emp_roadAdd" required readonly/>
+                              &nbsp;&nbsp;
+                              <input type="text" class="form-control" id="emp_addDetail"
+                              aria-describedby="validationTooltipUsernamePrepend" name="emp_addDetail" placeholder="상세주소"/>
+                              <button type="button" class="btn btn-primary button-size" onclick="searchAdd()">주소 검색</button>
                             <div class="invalid-feedback">
                               주소를 입력해주세요.
                             </div>
                           </div>
                         </div>
+                        
                          <div class="mt-2"></div>
                         <div class="position-relative form-size1">
                           <label for="validationTooltipUsername" class="form-label">생일</label>
@@ -657,16 +666,18 @@
                             </div>
                           </div>
                         </div>
+                        
                          <div class="position-relative form-size1">
                           <label for="validationTooltipUsername" class="form-label">내선번호</label>
                           <div class="input-group has-validation">
                             <input type="text" class="form-control" id="validationTooltipUsername"
-                              aria-describedby="validationTooltipUsernamePrepend" name="emp_extension_number" required />
+                              aria-describedby="validationTooltipUsernamePrepend" name="emp_extension_number" required pattern="^070([0-9]{7,8})$">
                             <div class="invalid-feedback">
-                              내선번호를 입력해주세요.
+                              내선번호는 070으로 시작하는 숫자로만 입력해주세요.
                             </div>
                           </div>
                         </div>
+                        
                         <div class="mt-2"></div>
                         
                         <div class="col-12 ">
@@ -711,6 +722,10 @@
     <script src="/assets/js/jquery.min.js"></script>
     <script src="/assets/js/bootstrap.bundle.min.js"></script>
 
+	<!-- 다음 주소 api  -->
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	
+	
     <!-- *************
 			************ Vendor Js Files *************
 		************* -->
@@ -728,7 +743,7 @@
       var selectedDomain = this.value;
       var domainInput = document.getElementById('domain-input');
       domainInput.value = selectedDomain;
-      validateDomain();
+      
     });//이메일 입력 스크립트
   
     var message = "${message}";
@@ -740,7 +755,6 @@
     	
     	$('select[name="dept_no"]').change(function(){
     		var deptNo = $(this).val();
-    		
     		
     		$.ajax({
     			type:'post', // method 방식
@@ -766,7 +780,7 @@
     
     var overChk = false;
     
-    function overlay() {
+    function overlay() {//이메일 중복 체크
 		console.log('click');
 		
 		var email_id = $('input[name="email_id"]').val();
@@ -803,18 +817,73 @@
 		});
 			
 		}
-		
-		
 	}
     
+ //이름을 예금주명에 넣기
+ 
+ var emp_name = $('input[name="emp_name"]').val();
+ var acc_name = 
+ 
+ document.getElementById('emp_name').addEventListener('keyup', function() {
+	 console.log(this.value);
+     var emp_name = this.value;
+     var acc_name = document.getElementById('acc_name');
+     acc_name.value = emp_name;
+     
+   });
+ 
+ 
+ //우편검색
+ 
+ function searchAdd(){
+	 new daum.Postcode({
+         oncomplete: function(data) {
+             // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+             // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
+             // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+             var roadAddr = data.roadAddress; // 도로명 주소 변수
+             var extraRoadAddr = ''; // 참고 항목 변수
+
+             // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+             // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+             if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                 extraRoadAddr += data.bname;
+             }
+             // 건물명이 있고, 공동주택일 경우 추가한다.
+             if(data.buildingName !== '' && data.apartment === 'Y'){
+                extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+             }
+             // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+             if(extraRoadAddr !== ''){
+                 extraRoadAddr = ' (' + extraRoadAddr + ')';
+             }
+
+             // 우편번호와 주소 정보를 해당 필드에 넣는다.
+             document.getElementById("emp_roadAdd").value = roadAddr;
+            
+             
+         }
+     }).open();
+	 
+ }
+ 
+ 
+ 
+ 
+ 
  // 폼 전송 시 overChk 확인
-    function validateForm() {
-        if (!overChk) {
-            alert('이메일 중복을 확인해주세요.');
-            return false; // 폼 전송 취소
-        }
-        return true; // 폼 전송 허용
-    }
+ function validateForm() {
+     if (!overChk) {
+         alert('이메일 중복을 확인해주세요.');
+         return false; // 폼 전송 취소
+     }
+     return true; // 폼 전송 허용
+ }
+ 
+ 
+ 
+ 
   
   
   </script>

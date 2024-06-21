@@ -37,7 +37,7 @@ public class EmpController {
 	@RequestMapping(value="emp/emp/emailOverlay.ajax")
 	@ResponseBody
 	public Map<String, Object> overlay(String email){
-		logger.info("email : "+email);
+		logger.info("중복 확인 요청 email : "+email);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("use", service.overlay(email));
 		
@@ -48,7 +48,7 @@ public class EmpController {
 	@RequestMapping(value="emp/emp/getNextEmpNo.ajax")
 	@ResponseBody
 	public Map<String, Object> getNextEmpNo(int deptNo){
-		logger.info("부서번호 : "+deptNo);
+		logger.info("생성 할 사원 부서번호 : "+deptNo);
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		int nextEmpNo = service.getNextEmpNo(deptNo);

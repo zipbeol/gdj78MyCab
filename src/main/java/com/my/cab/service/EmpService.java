@@ -15,11 +15,11 @@ import com.my.cab.dto.EmpDTO;
 @Service
 public class EmpService {
 	
+	private String password = "";
+	
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired EmpDAO dao;
 	@Autowired PasswordEncoder encoder;
-	
-	private String password = "";
 	
 
 	public int empRegistration(Map<String, Object> param) {
@@ -29,7 +29,7 @@ public class EmpService {
 		logger.info("생일 : "+emp_bday);
 		
 		int emp_no =Integer.parseInt(String.valueOf(param.get("emp_no"))) ;
-		password = encoder.encode(emp_bday);
+		password =  encoder.encode(emp_bday);
 		String emp_name = (String) param.get("emp_name");
 		String acc_name = (String) param.get("acc_name");
 		int dept_no = Integer.parseInt(String.valueOf(param.get("dept_no"))) ;

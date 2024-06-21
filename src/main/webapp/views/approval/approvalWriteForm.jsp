@@ -215,27 +215,27 @@
                                                 <label for="approverline">결재라인:</label>
                                                 <input type="text" id="approverline" name="approverline" class="form-control">
                                             </div>
-<div class="form-group approver-container">
-    <label class="approver-label">중간결재자:</label>
-    <div class="d-flex justify-content-between align-items-center">
-        <div class="d-flex align-items-center">
-            <button type="button" class="btn btn-secondary approver-select-btn" id="midApproverButton" data-toggle="modal" data-target="#approverSelectModal" onclick="setApproverType('mid')">중간결재자 선택</button>
-            <span id="midApproverName" class="ml-3"></span>
-            <input type="hidden" id="midApprover" name="midApprover">
-        </div>
-    </div>
-</div>
-
-<div class="form-group approver-container">
-    <label class="approver-label">최종결재자:</label>
-    <div class="d-flex justify-content-between align-items-center">
-        <div class="d-flex align-items-center">
-            <button type="button" class="btn btn-secondary approver-select-btn" id="finalApproverButton" data-toggle="modal" data-target="#approverSelectModal" onclick="setApproverType('final')">최종결재자 선택</button>
-            <span id="finalApproverName" class="ml-3"></span>
-            <input type="hidden" id="finalApprover" name="finalApprover">
-        </div>
-    </div>
-</div>
+											<div class="form-group approver-container">
+											    <label class="approver-label">중간결재자:</label>
+											    <div class="d-flex justify-content-between align-items-center">
+											        <div class="d-flex align-items-center">
+											            <button type="button" class="btn btn-secondary approver-select-btn" id="midApproverButton" data-toggle="modal" data-target="#approverSelectModal" onclick="setApproverType('mid')">중간결재자 선택</button>
+											            <span id="midApproverName" class="ml-3"></span>
+											            <input type="hidden" id="midApprover" name="midApprover">
+											        </div>
+											    </div>
+											</div>
+											
+											<div class="form-group approver-container">
+											    <label class="approver-label">최종결재자:</label>
+											    <div class="d-flex justify-content-between align-items-center">
+											        <div class="d-flex align-items-center">
+											            <button type="button" class="btn btn-secondary approver-select-btn" id="finalApproverButton" data-toggle="modal" data-target="#approverSelectModal" onclick="setApproverType('final')">최종결재자 선택</button>
+											            <span id="finalApproverName" class="ml-3"></span>
+											            <input type="hidden" id="finalApprover" name="finalApprover">
+											        </div>
+											    </div>
+											</div>
                                             <div class="form-group">
                                                 <label for="participator">참조자:</label>
                                                 <input type="text" id="participator" name="participator" class="form-control">
@@ -259,7 +259,7 @@
                                         </form>
                                         <h2>연차 신청서</h2>
                                         <!-- 연차신청서.html을 불러오는 iframe -->
-                                        <iframe src="/연차신청서.html" style="width:100%; height:400px; border:none;"></iframe>
+                                        <iframe id="leaveApplicationIframe" src="/연차신청서.html" style="width:100%; height:400px; border:none;"></iframe>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-primary">저장/결재</button>
@@ -371,7 +371,44 @@
 <!-- 결재자 선택 모달창 종료 -->
 </body>
 <script>
+    $(document).ready(function() {
+        // 저장 버튼 클릭 시 실행될 이벤트 리스너
+        $('#saveButton').on('click', function() {
+            // 메인 폼 데이터 추출
+            var mainFormData = new FormData(document.getElementById('mainForm'));
+
+            // iframe 내의 연차 신청서 폼 데이터 추출
+            var iframeDocument = document.getElementById('leaveApplicationIframe').contentDocument;
+            var leaveApplicationForm = iframeDocument.getElementById('leaveApplicationForm');
+            var leaveApplicationData = new FormData(leaveApplicationForm);
+
+            // 폼 데이터를 JSON 객체로 변환
+            var mainFormObject = {};
+            mainFormData.forEach((value, key) => mainFormObject[key] = value);
+
+            var leaveApplicationObject = {};
+            leaveApplicationData.forEach((value, key) => leaveApplicationObject[key] = value);
+
+            var combinedData = {
+                mainForm: mainFormObject,
+                leaveApplication: leaveApplicationObject
+            };
+
+            // 서버로 데이터 전송
+            $.ajax({
+                type: 'POST',
+                url: '/saveData',
+                contentType: 'application/json',
+                data: JSON.stringify(combinedData),
+                success: function(response) {
+                    alert('저장되었습니다.');
+                    $('#approvalModal').modal('hide');
+                },
+                error: function(xhr, status, error) {
+                    alert('저장에 실패했습니다.');
+                }
+            });
+        });
+    });
 </script>
-
-
 </html>

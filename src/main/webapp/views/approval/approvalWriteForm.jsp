@@ -1,38 +1,45 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%><%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="ko">
-
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Main</title>
-
     <!-- Meta -->
     <meta name="description" content="Marketplace for Bootstrap Admin Dashboards">
     <meta name="author" content="Bootstrap Gallery">
     <link rel="canonical" href="https://www.bootstrap.gallery/">
+     <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery and Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <meta property="og:url" content="https://www.bootstrap.gallery">
     <meta property="og:title" content="Admin Templates - Dashboard Templates | Bootstrap Gallery">
     <meta property="og:description" content="Marketplace for Bootstrap Admin Dashboards">
     <meta property="og:type" content="Website">
     <meta property="og:site_name" content="Bootstrap Gallery">
     <link rel="shortcut icon" href="/assets/images/favicon.svg">
-
     <!-- *************
-			************ CSS Files *************
-		************* -->
+            ************ CSS Files *************
+        ************* -->
     <link rel="stylesheet" href="/assets/fonts/bootstrap/bootstrap-icons.css">
     <link rel="stylesheet" href="/assets/css/main.min.css">
 
     <!-- *************
-			************ Vendor Css Files *************
-		************ -->
+            ************ Vendor Css Files *************
+        ************ -->
 
     <!-- Scrollbar CSS -->
     <link rel="stylesheet" href="/assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
 
-    <!-- Toastify CSS -->
-    <link rel="stylesheet" href="/assets/vendor/toastify/toastify.css">
-    
+    <!-- 폰트 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+
+    <!-- 따로 적용한 CSS -->
+    <link rel="stylesheet" href="/assets/css/default.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -84,420 +91,73 @@
             text-decoration: underline;
         }
     </style>
+</head>
 
-  </head>
+<body>
+<!-- Page wrapper start -->
+<div class="page-wrapper">
 
-  <body>
-    <!-- Page wrapper start -->
-    <div class="page-wrapper">
-
-      <!-- Main container start -->
-      <div class="main-container">
+    <!-- Main container start -->
+    <div class="main-container">
 
         <!-- Sidebar wrapper start -->
-        <nav id="sidebar" class="sidebar-wrapper">
-
-          <!-- App brand starts -->
-          <div class="app-brand px-3 py-2 d-flex align-items-center">
-            <a href="index.go">
-              <img src="/assets/images/logo.svg" class="logo" alt="Bootstrap Gallery">
-            </a>
-          </div>
-          <!-- App brand ends -->
-
-          <!-- Sidebar menu starts -->
-          <div class="sidebarMenuScroll">
-            <ul class="sidebar-menu">
-              <li class="active current-page">
-              </li>
-              <li>
-                <a href="notice/list.go">
-                  <i class="fs-3 bi bi-pin-angle"></i>
-                  <span class="menu-text">공지사항</span>
-                </a>
-              </li>
-              
-              <li class="treeview">
-                <a href="#!">
-                  <i class="bi bi-postcard"></i>
-                  <span class="menu-text">마이페이지</span>
-                </a>
-                <ul class="treeview-menu">
-                  <li>
-                    <a href="mypage/detail.go">프로필</a>
-                  </li>
-                  <li>
-                    <a href="mypage/vac/list.go">연차 관리</a>
-                  </li>
-                  <li>
-                    <a href="mypage/vacApply/list.go">연차 승인 및 반려</a>
-                  </li>
-                   <li>
-                    <a href="attendance/myAttendance/list.go">근태 관리</a>
-                  </li>
-                  <li>
-                    <a href="mypage/alarm/list.go">알림</a>
-                  </li>
-                  
-                </ul>
-              </li>
-               <li>
-                <a href="chat/chat.go">
-                  <i class="fs-3 bi bi-chat"></i>
-                  <span class="menu-text">채팅</span>
-                </a>
-              </li>
-              <li class="treeview">
-                <a href="#!">
-                  <i class="fs-3 bi bi-envelope"></i>
-                  <span class="menu-text">메일</span>
-                </a>
-                <ul class="treeview-menu">
-                  <li>
-                    <a href="mail/write.go">메일 작성</a>
-                  </li>
-                   <li>
-                    <a href="mail/list.go">내가 보낸 메일함</a>
-                  </li>
-                </ul>
-              </li>
-              
-              <li>
-                <a href="calendar/calendar.go">
-                  <i class="bi bi-calendar2"></i>
-                  <span class="menu-text">일정 관리</span>
-                </a>
-              </li>
-              
-              <li class="treeview">
-                <a href="#!">
-                  <i class="bi bi-car-front"></i>
-                  <span class="menu-text">택시 관리</span>
-                </a>
-                <ul class="treeview-menu">
-                  <li>
-                    <a href="taxi/list.go">차량 관리</a>
-                  </li>
-                  <li>
-                    <a href="driver/list.go">기사 관리</a>
-                  </li>
-                  <li>
-                    <a href="triprecord/list.go">운행 기록 관리</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="treeview">
-                <a href="#!">
-                  <i class="bi bi-layout-text-window-reverse"></i>
-                  <span class="menu-text">전자결재</span>
-                </a>
-                <ul class="treeview-menu">
-                  <li>
-                    <a href="approval/approvalWriteForm.go">기안서 작성</a>
-                  </li>
-                    <li>
-                    <a href="approval/list.go">내 결재 관리</a>
-                  </li>
-                  <li>
-                    <a href="approval/list.go">결재 통합 관리</a>
-                  </li>
-                  <li>
-                    <a href="approval/create.go">공통 양식 등록</a>
-                  </li>
-                </ul>
-              </li>
-              
-              <li class="treeview">
-                <a href="#!">
-                  <i class="bi bi-person"></i>
-                  <span class="menu-text">인사 관리</span>
-                </a>
-                <ul class="treeview-menu">
-                  <li>
-                    <a href="attendance/attendance/list.go">근태 관리</a>
-                  </li>
-                  <li>
-                    <a href="emp/emp/create.go">사원 등록</a>
-                  </li>
-                  <li>
-                    <a href="emp/hremp/list.go">사원 조회</a>
-                  </li>
-                  <li>
-                    <a href="emp/vac/list.go">연차 관리</a>
-                  </li>
-                  <li>
-                    <a href="emp/dept/list.go">부서 관리</a>
-                  </li>
-                  <li>
-                    <a href="emp/sal/list.go">급여 관리</a>
-                  </li>
-                  <li>
-                    <a href="emp/driver/list.go">기사 정산 관리</a>
-                  </li>
-                  <li>
-                    <a href="emp/orgchart/list.go">조직도</a>
-                  </li>
-                  <li>
-                    <a href="emp/emp/list.go">사원 조회</a>
-                  </li>
-                </ul>
-              </li>
-               <li class="treeview">
-                <a href="#!">
-                  <i class="bi bi-pie-chart"></i>
-                  <span class="menu-text">재무 관리</span>
-                </a>
-                <ul class="treeview-menu">
-                  <li>
-                    <a href="finance/profit/list.go">수익</a>
-                  </li>
-                  <li>
-                    <a href="finance/expenses/list.go">지출</a>
-                  </li>
-                  <li>
-                    <a href="finance/deal/list.go">거래 내역</a>
-                  </li>
-                   <li>
-                    <a href="finance/dash.go">대쉬 보드</a>
-                  </li>
-                </ul>
-              </li>
-               <li class="treeview">
-                <a href="#!">
-                  <i class="bi bi-box"></i>
-                  <span class="menu-text">자원 관리</span>
-                </a>
-                <ul class="treeview-menu">
-                   <li>
-                    <a href="resource/create.go">자원 등록</a>
-                  </li>
-                   <li>
-                    <a href="resource/list.go">자원 예약</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="treeview">
-                <a href="#!">
-                  <i class="bi bi-terminal"></i>
-                  <span class="menu-text">로그 관리</span>
-                </a>
-                <ul class="treeview-menu">
-                   <li>
-                    <a href="mail/admin/list.go">메일 로그</a>
-                  </li>
-                   <li>
-                    <a href="chat/admin/list.go">채팅 로그</a>
-                  </li>
-                </ul>
-              </li>
-              
-              
-          <!-- Sidebar menu ends -->
-
-        </nav>
+        <jsp:include page="../sidebar.jsp"/>
         <!-- Sidebar wrapper end -->
 
         <!-- App container starts -->
         <div class="app-container">
 
-          <!-- App header starts -->
-          <div class="app-header d-flex align-items-center">
+            <!-- App header starts -->
 
-            <!-- Toggle buttons start -->
-            <div class="d-flex">
-              <button class="btn btn-outline-primary me-2 toggle-sidebar" id="toggle-sidebar">
-                <i class="bi bi-list fs-5"></i>
-              </button>
-              <button class="btn btn-outline-primary me-2 pin-sidebar" id="pin-sidebar">
-                <i class="bi bi-list fs-5"></i>
-              </button>
+            <div class="app-header d-flex align-items-center">
+
+                <!-- Toggle buttons start -->
+                <div class="d-flex">
+                    <button class="btn btn-outline-primary me-2 toggle-sidebar" id="toggle-sidebar">
+                        <i class="bi bi-list fs-5"></i>
+                    </button>
+                    <button class="btn btn-outline-primary me-2 pin-sidebar" id="pin-sidebar">
+                        <i class="bi bi-list fs-5"></i>
+                    </button>
+                </div>
+                <!-- Toggle buttons end -->
+
+                <!-- App brand sm start -->
+                <div class="app-brand-sm d-lg-none d-sm-block">
+                    <a href="/">
+                        <img src="/assets/images/logo-sm.svg" class="logo" alt="Bootstrap Gallery">
+                    </a>
+                </div>
+                <!-- App brand sm end -->
+
+                <!-- Breadcrumb start -->
+                <ol class="breadcrumb d-none d-lg-flex ms-3">
+                    <li class="breadcrumb-item">
+                        <a href="/"><i class="bi bi-house lh-1"></i></a>
+                        <a href="/" class="text-decoration-none">메인</a>
+                        <!-- 여기에 경로 추가 -->
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/approval/approvalWriteForm" class="approvalWriteForm">기안서 작성</a>
+                        <!-- 여기에 경로 추가 -->
+                    </li>
+                </ol>
+                <!-- Breadcrumb end -->
+
+                <!-- App header actions start -->
+                <jsp:include page="../appHeader.jsp"/>
+                <!-- App header actions end -->
+
             </div>
-            <!-- Toggle buttons end -->
 
-            <!-- App brand sm start -->
-            <div class="app-brand-sm d-lg-none d-sm-block">
-              <a href="index.go">
-                <img src="/assets/images/logo-sm.svg" class="logo" alt="Bootstrap Gallery">
-              </a>
-            </div>
-            <!-- App brand sm end -->
+            <!-- App header ends -->
 
-            <!-- Breadcrumb start -->
-            <ol class="breadcrumb d-none d-lg-flex ms-3">
-              <li class="breadcrumb-item">
-                <i class="bi bi-house lh-1"></i>
-                <a href="index.go" class="text-decoration-none">메인</a>
-              </li>
-            </ol>
-            <!-- Breadcrumb end -->
+            <!-- App body starts -->
+            <div class="app-body">
 
-            <!-- App header actions start -->
-            <div class="header-actions">
-              <div class="dropdown">
-                
-                <div class="dropdown-menu dropdown-menu-end shadow-sm dropdown-menu-mini">
-                  <div class="country-container">
-                    <a href="index.go" class="py-2">
-                      <img src="/assets/images/flags/1x1/us.svg" alt="Business Dashboard Templates">
-                    </a>
-                    <a href="index.go" class="py-2">
-                      <img src="/assets/images/flags/1x1/in.svg" alt="Business Dashboard Templates">
-                    </a>
-                    <a href="index.go" class="py-2">
-                      <img src="/assets/images/flags/1x1/br.svg" alt="Business Dashboard Templates">
-                    </a>
-                    <a href="index.go" class="py-2">
-                      <img src="/assets/images/flags/1x1/tr.svg" alt="IT Dashboard Templates">
-                    </a>
-                    <a href="index.go" class="py-2">
-                      <img src="/assets/images/flags/1x1/id.svg" alt="IT Dashboard Templates">
-                    </a>
-                  </div>
-                </div>
-              </div>
-              <div class="dropdown border-start">
-                
-                <div class="dropdown-menu dropdown-menu-end shadow-sm dropdown-menu-md">
-                  <!-- Row start -->
-                 
-                  <!-- Row end -->
-                  <div class="d-grid">
-                    <a href="javascript:void(0)" class="btn btn-primary m-2">View All</a>
-                  </div>
-                </div>
-              </div>
-              <div class="dropdown border-start">
-                <a class="dropdown-toggle d-flex px-3 py-4 position-relative" href="#!" role="button"
-                  data-bs-toggle="dropdown" aria-expanded="false">
-                  <i class="fs-3 bi bi-bell"></i>
-                  <span class="count-label info"></span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-end dropdown-menu-md shadow-sm">
-                  <div class="d-flex flex-column p-3 mx-3 my-2 border">
-                    <a href="javascript:void(0)" class="text-decoration-none">
-                      <h3 class="mb-1">$35,000</h3>
-                      <div class="mb-1 d-flex justify-content-between">
-                        <span class="text-secondary">Revenue</span>
-                        <span class="text-primary">+2%</span>
-                      </div>
-                      <div class="progress small">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 25%" aria-valuenow="25"
-                          aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                    </a>
-                  </div>
-                  <div class="d-flex flex-column p-3 mx-3 my-2 border">
-                    <a href="javascript:void(0)" class="text-decoration-none">
-                      <h3 class="mb-1">$48,000</h3>
-                      <div class="mb-1 d-flex justify-content-between">
-                        <span class="text-secondary">Income</span>
-                        <span class="text-primary">+7%</span>
-                      </div>
-                      <div class="progress small">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 50%" aria-valuenow="50"
-                          aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                    </a>
-                  </div>
-                  <div class="d-flex flex-column p-3 mx-3 my-2 border">
-                    <a href="javascript:void(0)" class="text-decoration-none">
-                      <h3 class="mb-1">3400</h3>
-                      <div class="mb-1 d-flex justify-content-between">
-                        <span class="text-secondary">Sales</span>
-                        <span class="text-danger">+3%</span>
-                      </div>
-                      <div class="progress small">
-                        <div class="progress-bar bg-danger" role="progressbar" style="width: 75%" aria-valuenow="75"
-                          aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                    </a>
-                  </div>
-                  <div class="d-grid mx-3 my-3">
-                    <a href="javascript:void(0)" class="btn btn-primary">View all</a>
-                  </div>
-                </div>
-              </div>
-              <div class="dropdown border-start">
-                <a class="dropdown-toggle d-flex px-3 py-4 position-relative" href="#!" role="button"
-                  data-bs-toggle="dropdown" aria-expanded="false">
-                  <i class="fs-3 bi bi-chat"></i>
-                  <span class="count-label"></span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-end dropdown-menu-md shadow-sm">
-                  <a href="javascript:void(0)" class="dropdown-item">
-                    <div class="d-flex py-2">
-                      <img src="/assets/images/user.png" class="img-3x me-3 rounded-3" alt="Admin Templates">
-                      <div class="m-0">
-                        <h5 class="mb-1">Stacy Macdonald</h5>
-                        <p class="mb-1 text-secondary">
-                          Got a new review. Congratulations!
-                        </p>
-                        <p class="small m-0 text-secondary">Today, 07:30pm</p>
-                      </div>
-                    </div>
-                  </a>
-                  <a href="javascript:void(0)" class="dropdown-item">
-                    <div class="d-flex py-2">
-                      <img src="/assets/images/user2.png" class="img-3x me-3 rounded-3" alt="Admin Templates">
-                      <div class="m-0">
-                        <h5 class="mb-1">Harriet Orozco</h5>
-                        <p class="mb-1 text-secondary">
-                          Happy Customer.
-                        </p>
-                        <p class="small m-0 text-secondary">Today, 08:00pm</p>
-                      </div>
-                    </div>
-                  </a>
-                  <a href="javascript:void(0)" class="dropdown-item">
-                    <div class="d-flex py-2">
-                      <img src="/assets/images/user1.png" class="img-3x me-3 rounded-3" alt="Admin Templates">
-                      <div class="m-0">
-                        <h5 class="mb-1">Grady Baxter</h5>
-                        <p class="mb-1 text-secondary">
-                          Grady wrote a new comment!
-                        </p>
-                        <p class="small m-0 text-secondary">Today, 09:30pm</p>
-                      </div>
-                    </div>
-                  </a>
-                  <div class="d-grid mx-3 my-3">
-                    <a href="javascript:void(0)" class="btn btn-primary">View all</a>
-                  </div>
-                </div>
-              </div>
-              <div class="dropdown ms-2">
-                <a id="userSettings" class="dropdown-toggle d-flex py-2 align-items-center text-decoration-none"
-                  href="#!" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  <img src="/assets/images/user.png" class="rounded-2 img-3x" alt="Bootstrap Gallery">
-                </a>
-                <div class="dropdown-menu dropdown-menu-end shadow-sm">
-                  <div class="p-3 border-bottom mb-2">
-                    <h6 class="mb-1">Ella Lindsey</h6>
-                    <p class="m-0 small opacity-50">info@testing.com</p>
-                  </div>
-                  <a class="dropdown-item d-flex align-items-center" href="profile.go"><i
-                      class="bi bi-person fs-4 me-2"></i>Profile</a>
-                  <a class="dropdown-item d-flex align-items-center" href="settings.go"><i
-                      class="bi bi-gear fs-4 me-2"></i>Settings</a>
-                  <div class="d-grid p-3 py-2">
-                    <a class="btn btn-danger" href="login/logout.do">Logout</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- App header actions end -->
-
-          </div>
-          <!-- App header ends -->
-
-          <!-- App body starts -->
-          <!-- App body starts -->
-          <div class="app-body">
-
-            <!-- Container starts -->
-            <div class="container-fluid">
-
-              <!-- Row start -->
+                <!-- Container starts -->
+                <div class="container-fluid">
+                    <!-- Row start -->
               <div class="row">
                 <div class="col-12">
                   <div class="card mb-3">
@@ -518,19 +178,99 @@
                               </tr>
                             </thead>
                             <tbody>
-								<c:forEach var="form" items="${formList}">
-								    <tr>
-								        <td>${form.order}</td>
-								        <td><a href="${form.link}">${form.name}</a></td>
-								        <td>${form.category}</td>
-								        <td>${form.type}</td>
-									    <td>
-		                                  <button class="btn btn-outline-danger btn-sm">
-		                                    Book Now
-		                                  </button>
-		                                </td>
-								    </tr>
-								</c:forEach>
+                                <c:forEach var="list" items="${approvalWriteList}">
+                                    <tr>
+                                        <td></td>
+                                        <td>${list.approval_doc_type_item_idx}</td>
+                                        <td><a href="#" data-toggle="modal" data-target="#approvalModal">${list.approval_doc_type_item_name}</a></td>
+                                        <td>${list.approval_doc_type_item_idx}</td>
+                                        <td>
+                                          <button class="btn btn-outline-danger btn-sm">
+                                            전자결재문서
+                                          </button>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            <!-- 양식 모달창 -->
+                            <div class="modal fade" id="approvalModal" tabindex="-1" role="dialog" aria-labelledby="approvalModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="approvalModalLabel">기안서 작성</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form>
+                                            <div class="form-group">
+                                                <label for="date">일자:</label>
+                                                <input type="date" id="date" name="date" class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="title">제목:</label>    
+                                                <input type="text" id="title" name="title" class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="approverline">결재라인:</label>
+                                                <input type="text" id="approverline" name="approverline" class="form-control">
+                                            </div>
+<div class="form-group approver-container">
+    <label class="approver-label">중간결재자:</label>
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+            <button type="button" class="btn btn-secondary approver-select-btn" id="midApproverButton" data-toggle="modal" data-target="#approverSelectModal" onclick="setApproverType('mid')">중간결재자 선택</button>
+            <span id="midApproverName" class="ml-3"></span>
+            <input type="hidden" id="midApprover" name="midApprover">
+        </div>
+    </div>
+</div>
+
+<div class="form-group approver-container">
+    <label class="approver-label">최종결재자:</label>
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+            <button type="button" class="btn btn-secondary approver-select-btn" id="finalApproverButton" data-toggle="modal" data-target="#approverSelectModal" onclick="setApproverType('final')">최종결재자 선택</button>
+            <span id="finalApproverName" class="ml-3"></span>
+            <input type="hidden" id="finalApprover" name="finalApprover">
+        </div>
+    </div>
+</div>
+                                            <div class="form-group">
+                                                <label for="participator">참조자:</label>
+                                                <input type="text" id="participator" name="participator" class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="category">구분:</label>
+                                                <select id="category" name="category" class="form-control">
+                                                    <option value="02">1</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="format">출력 양식:</label>
+                                                <select id="format" name="format" class="form-control">
+                                                    <option value="default">기본 양식</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="file">첨부:</label>
+                                                <input type="file" id="file" name="file" class="form-control">
+                                            </div>
+                                        </form>
+                                        <h2>연차 신청서</h2>
+                                        <!-- 연차신청서.html을 불러오는 iframe -->
+                                        <iframe src="/연차신청서.html" style="width:100%; height:400px; border:none;"></iframe>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary">저장/결재</button>
+                                        <button type="button" class="btn btn-secondary">임시 저장</button>
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">닫기</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--  양식 모달창 종료 -->  
+                                        
                             </tbody>
                           </table>
                         </div>
@@ -541,64 +281,97 @@
               </div>
               <!-- Row end -->
 
+                </div>
+                <!-- Container ends -->
+
             </div>
-            <!-- Container ends -->
+            <!-- App body ends -->
 
-          </div>
+            <!-- App footer start -->
+            <div class="app-footer">
+                <span>GDJ78FINALPROJECTMYCAB</span>
+            </div>
+            <!-- App footer end -->
 
-              <!-- Row start -->
-            
-              <!-- Row end -->
-
-              <!-- Row start -->
-            
-              <!-- Row end -->
-                   
-              <!-- Row end -->
-
-              
-
-            
-            <!-- Container ends -->
-
+        </div>
         <!-- App container ends -->
 
-      </div>
-      <!-- Main container end -->
-
     </div>
-    <!-- Page wrapper end -->
+    <!-- Main container end -->
 
-    <!-- *************
-			************ JavaScript Files *************
-		************* -->
-    <!-- Required jQuery first, then Bootstrap Bundle JS -->
-    <script src="/assets/js/jquery.min.js"></script>
-    <script src="/assets/js/bootstrap.bundle.min.js"></script>
+</div>
+<!-- Page wrapper end -->
 
-    <!-- *************
-			************ Vendor Js Files *************
-		************* -->
+<!-- *************
+        ************ JavaScript Files *************
+    ************* -->
+<!-- Required jQuery first, then Bootstrap Bundle JS -->
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Overlay Scroll JS -->
-    <script src="/assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
-    <script src="/assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
+<!-- *************
+        ************ Vendor Js Files *************
+    ************* -->
 
-    <!-- Toastify JS -->
-    <script src="/assets/vendor/toastify/toastify.js"></script>
-    <script src="/assets/vendor/toastify/custom.js"></script>
+<!-- Overlay Scroll JS -->
+<script src="/assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
+<script src="/assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
 
-    <!-- Apex Charts -->
-    <script src="/assets/vendor/apex/apexcharts.min.js"></script>
-    <script src="/assets/vendor/apex/custom/home/overview.js"></script>
-    <script src="/assets/vendor/apex/custom/home/reachedAudience.js"></script>
-    <script src="/assets/vendor/apex/custom/home/social.js"></script>
-    <script src="/assets/vendor/apex/custom/home/sparkline.js"></script>
-    <script src="/assets/vendor/apex/custom/home/sparkline2.js"></script>
-    <script src="/assets/vendor/apex/custom/home/visitors.js"></script>
 
-    <!-- Custom JS files -->
-    <script src="/assets/js/custom.js"></script>
-  </body>
+<!-- Custom JS files -->
+<script src="/assets/js/custom.js"></script>
+<script src="/assets/js/LocalStorage.js"></script>
+<!-- 결재자 선택 모달창 -->
+<div class="modal fade" id="approverSelectModal" tabindex="-1" role="dialog" aria-labelledby="approverSelectModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="approverSelectModalLabel">결재자 선택</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <h2>사용자 검색</h2>
+                    <div class="form-group">
+                        <label for="search">검색:</label>
+                        <input type="text" id="search" name="search" class="form-control" placeholder="검색">
+                    </div>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>소속부서</th>
+                                <th>성명</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>고객팀</td>
+                                <td><a href="#" onclick="selectApprover('고객팀', '고개발')">고개발</a></td>
+                            </tr>
+                            <tr>
+                                <td>개발팀</td>
+                                <td><a href="#" onclick="selectApprover('개발팀', '사용자1')">사용자1</a></td>
+                            </tr>
+                            <tr>
+                                <td>영업팀</td>
+                                <td><a href="#" onclick="selectApprover('영업팀', '양개발')">양개발</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 결재자 선택 모달창 종료 -->
+</body>
+<script>
+</script>
+
 
 </html>

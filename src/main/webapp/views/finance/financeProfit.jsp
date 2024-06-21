@@ -155,6 +155,8 @@
 										    <label for="searchQuery">검색:</label>
 										    <input type="text" id="searchQuery" placeholder="검색어 입력">
 										</div>
+										<!-- 검색 버튼 -->
+										<button id="go" onclick="refreshProfitList()">검색</button>
                                         <!-- 수익 등록 버튼 -->
                                         <div class="text-end">
                                             <button id="myBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">수익 등록</button>
@@ -263,6 +265,7 @@
     <script>
     
     	var searchFlag = false;
+    	var category = '';
         // 모든 버튼 요소를 선택합니다.
         const buttons = document.querySelectorAll('.filter-btn');
 
@@ -274,7 +277,7 @@
                 this.classList.add('active');
 
                 // 클릭된 버튼의 데이터를 기반으로 필터링된 결과를 표시
-                var category = this.getAttribute('data-category');
+                category = this.getAttribute('data-category');
                 categoryName(category); // categoryName 함수 호출
             });
         });
@@ -282,6 +285,7 @@
         // 카테고리 이름을 출력하는 함수
         function categoryName(category) {
             console.log('Selected category:', category);
+            refreshProfitList();
         }
         
         // 등록 버튼 클릭 이벤트 처리
@@ -356,7 +360,7 @@
                 $(this).next('.detail-row').toggleClass('active');
             });
         }
-        
+        refreshProfitList();
         // 수익 리스트 갱신 함수
         function refreshProfitList() {
             $.ajax({

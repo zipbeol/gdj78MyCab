@@ -5,19 +5,36 @@
 
 <mapper namespace="com.my.cab.dao.FinanceDAO">
 
-    <!-- 수익 리스트 조회 쿼리 -->
-    <select id="getProfitList" resultType="finance">
-        SELECT pro_who, pro_cash, pro_actual_date,pro_date,pro_category,pro_content,pro_cash
-        FROM profit
-    </select>
-    
-    <!-- 수익 등록 쿼리 -->
-    <!-- 나중에 수정 필요 -->
-    <insert id="addProfit" parameterType="finance">
-        INSERT INTO profit (pro_trip_id, pro_category, pro_content, pro_who, pro_cash, pro_actual_date)
-        VALUES (1, #{pro_category}, #{pro_content}, #{pro_who}, #{pro_cash}, #{pro_actual_date})
-    </insert>
-    
-    
-    
+	<!-- 수익 리스트 조회 쿼리 -->
+	<select id="getProfitList" resultType="finance"
+		parameterType="map">
+		SELECT pro_who, pro_cash, pro_actual_date, pro_date, pro_category,
+		pro_content, pro_cash
+		FROM profit
+		<where>
+			<if test="category != null and category != ''">
+				AND pro_category = #{category}
+			</if>
+			<if
+				test="actual_profit_start_date != null and actual_profit_end_date != null and actual_profit_end_date !='' and actual_profit_start_date !=''">
+				AND pro_actual_date BETWEEN #{actual_profit_start_date} AND
+				#{actual_profit_end_date}
+			</if>
+		</where>
+	</select>
+
+
+	<!-- 수익 등록 쿼리 -->
+	<!-- 나중에 수정 필요 -->
+	<insert id="addProfit" parameterType="finance">
+		INSERT INTO profit
+		(pro_trip_id, pro_category, pro_content, pro_who,
+		pro_cash,
+		pro_actual_date)
+		VALUES (1, #{pro_category}, #{pro_content},
+		#{pro_who}, #{pro_cash},
+		#{pro_actual_date})
+	</insert>
+
+
 </mapper>

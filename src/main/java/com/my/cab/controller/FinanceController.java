@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.my.cab.dto.FinanceDTO;
@@ -40,16 +41,16 @@ public class FinanceController {
 
 	@PostMapping("/profit/list.ajax")
 	@ResponseBody
-	public Map<String, Object> getProfitList(HttpSession session) {
+	public Map<String, Object> getProfitList(HttpSession session, @RequestParam Map<String, Object> param) {
 		logger.info("재무관리 수익리스트 - AJAX 요청");
-
+		logger.info("param{}", param);
 		// 세션 체크
 		// if(session.getAttribute("loginId") == null) {
 		// return new ArrayList<>(); // 비어 있는 리스트 반환
 		// }
 
 		// 서비스 호출하여 리스트 데이터 가져오기
-		return financeService.getProfitList();
+		return financeService.getProfitList(param);
 	}
 
 	@PostMapping("/profit/add.ajax")
@@ -58,5 +59,5 @@ public class FinanceController {
 		logger.info("pro_actual_date = " + profit.getPro_actual_date());
 		return financeService.addProfit(profit);
 	}
-	
+
 }

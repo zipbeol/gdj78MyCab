@@ -31,16 +31,13 @@
     <!-- 따로 적용한 CSS -->
     <link rel="stylesheet" href="/assets/css/default.css">
     <style>
-        .detail-row {
-            display: none;
-        }
-        .detail-row.active {
-            display: table-row;
-        }
-        .detail-content {
-            background-color: #f9f9f9;
-            padding: 10px;
-        }
+    .detail-row {
+        display: none;
+        transition: all 0.3s ease;
+    }
+    .detail-row.active {
+        display: table-row;
+    }
     </style>
 </head>
 
@@ -112,7 +109,7 @@
                                     <div class="card-body">
                                         <!-- 수익 등록 버튼 -->
                                         <div class="text-end">
-                                        <button id="myBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">수익 등록</button>
+                                            <button id="myBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">수익 등록</button>
                                         </div>
                                         <!-- 수익 리스트 테이블 -->
                                         <div class="table-outer mt-3">
@@ -141,17 +138,17 @@
                                                     <div class="modal-body">
                                                         <form id="profitForm">
                                                            <div class="mb-3">
-                                                  <label for="pro_type" class="form-label">수익 종류:</label>
-                                                  <select id="pro_type" name="pro_type" class="form-select" required>
-                                                      <option value="" selected disabled>수익 종류 선택</option>
-                                                      <option value="택시">택시 수익</option>
-                                                      <option value="광고">광고 수익</option>
-                                                      <option value="기타">기타 수익</option>
-                                                  </select>
-                                              </div>
+                                                              <label for="pro_category" class="form-label">수익 종류:</label>
+                                                              <select id="pro_category" name="pro_category" class="form-select" required>
+                                                                  <option value="" selected disabled>수익 종류 선택</option>
+                                                                  <option value="택시">택시 수익</option>
+                                                                  <option value="광고">광고 수익</option>
+                                                                  <option value="기타">기타 수익</option>
+                                                              </select>
+                                                          </div>
                                                             <div class="mb-3">
-                                                                <label for="pro_date" class="form-label">수익 발생일:</label>
-                                                                <input type="date" id="pro_date" name="pro_date" class="form-control" required>
+                                                                <label for="pro_actual_date" class="form-label">수익 발생일:</label>
+                                                                <input type="date" id="pro_actual_date" name="pro_actual_date" class="form-control" required>
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="pro_who" class="form-label">수익자:</label>
@@ -162,9 +159,9 @@
                                                                 <input type="text" id="pro_cash" name="pro_cash" class="form-control" maxlength="10" required>
                                                             </div>
                                                             <div class="mb-3">
-                                                  <label for="pro_description" class="form-label">수익 내용:</label>
-                                                  <textarea id="pro_description" name="pro_description" class="form-control" rows="3"></textarea>
-                                              </div>
+                                                              <label for="pro_content" class="form-label">수익 내용:</label>
+                                                              <textarea id="pro_content" name="pro_content" class="form-control" rows="3"></textarea>
+                                                          </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
                                                                 <button type="button" class="btn btn-primary" id="submitBtn">등록</button>
@@ -217,90 +214,90 @@
 
     <!-- AJAX 및 모달 스크립트 -->
     <script>
-    function slideDetail(){
-        $(this).next('.detail-row').toggleClass('active');
-    }
-       $(document).ready(function() {
-            // 수익 테이블의 각 행을 클릭하면 상세 내용이 토글됩니다.
+        // AJAX로 수익 리스트 불러오기
+        $.ajax({
+            url: '/finance/profit/list.ajax',
+            method: 'POST',
+            success: function(data) {
+                var tbody = $('#profitTableBody');
+                console.log(data.profit);
+                tbody.empty(); // 테이블 본문을 비웁니다.
+                var row = '';
+                for (item of data.profit) {
+                    row += '<tr class="clickable-row">' +
+                        '<td>' + item.pro_actual_date + '</td>' +
+                        '<td>' + item.pro_who + '</td>' +
+                        '<td>' + formatNumberWithCommas(item.pro_cash) + '</td>' +
+                        '</tr>'+
+                       '<tr class="detail-row">'+
+                       '<td colspan="3" class="detail-content">'+
+                        '<strong>수익 발생일:</strong> ' + item.pro_actual_date +
+                        '<strong>수익 등록일:</strong> ' + item.pro_date +
+                        '<strong>수익 종류:</strong> ' + item.pro_category +
+                        '<strong>수익 내용:</strong> ' + item.pro_content +
+                        '<strong>수익 금액:</strong> ' + formatNumberWithCommas(item.pro_cash) +
+                        '<strong>원</strong> ' +
+                        '</td>'+
+                     	'</tr>';
+                }
+                $('#profitTableBody').html(row);
+                // 각 행에 클릭 이벤트 추가
+                $('.clickable-row').on('click', function() {
+                    $(this).next('.detail-row').toggleClass('active');
+                });
+            },
+            error: function(error) {
+                console.error("AJAX 요청 실패:", error);
+            }
+        });
 
+        // 모달이 닫힐 때 폼 초기화
+        $('#exampleModal').on('hidden.bs.modal', function (e) {
+            $('#profitForm')[0].reset();
+        });
 
-            // AJAX로 수익 리스트 불러오기
+        // 등록 버튼 클릭 이벤트 처리
+        $('#submitBtn').click(function(event) {
             $.ajax({
-                url: '/finance/profit/list.ajax',
+                url: '/finance/profit/add.ajax', // 서버의 폼 처리 엔드포인트
                 method: 'POST',
-                success: function(data) {
-                    var tbody = $('#profitTableBody');
-                    console.log(data);
-                    tbody.empty(); // 테이블 본문을 비웁니다.
-                    var row = '';
-                    for (item of data.profit) {
-                        row += '<tr class="clickable-row" onclick="slideDetail()" data-toggle="modal" data-target="#exampleModal">' +
-                            '<td>' + item.pro_date + '</td>' +
-                            '<td>' + item.pro_who + '</td>' +
-                            '<td>' + formatNumberWithCommas(item.pro_cash) + '</td>' +
-                            '</tr>'+
-                           '<tr class="detail-row">'+
-                           '<td colspan="3" class="detail-content">'+
-                            '<strong>수익 내용:</strong> ' + item.pro_description +
-                             '</td>'+
-                          '</tr>';
-                    }
-                    $('#profitTableBody').html(row);
+                data: {
+                	pro_category: $('#pro_category').val(),
+                    pro_date: $('#pro_date').val(),
+                    pro_actual_date: $('#pro_actual_date').val(),
+                    pro_who: $('#pro_who').val(),
+                    pro_cash: $('#pro_cash').val().replace(/,/g, ''),
+                    pro_content: $('#pro_content').val()
+                },
+
+                success: function(response) {
+                    // 성공적으로 저장되었음을 사용자에게 알리고 모달을 닫음
+                    alert('수익이 등록되었습니다.');
+                    $('#exampleModal').modal('hide');
+                    // 수익 리스트를 다시 불러옵니다
+                    location.reload();
                 },
                 error: function(error) {
                     console.error("AJAX 요청 실패:", error);
+                    alert('수익 등록 중 오류가 발생했습니다.');
                 }
             });
-            $('.clickable-row').click(function() {
-                $(this).next('.detail-row').toggleClass('active');
-                console.log('슬라이드바');
-            });
-            // 모달이 닫힐 때 폼 초기화
-            $('#exampleModal').on('hidden.bs.modal', function (e) {
-                $('#profitForm')[0].reset();
-            });
+        });
 
-            // 등록 버튼 클릭 이벤트 처리
-            $('#submitBtn').click(function(event) {
-                $.ajax({
-                    url: '/finance/profit/add.ajax', // 서버의 폼 처리 엔드포인트
-                    method: 'POST',
-                    data: {
-                        pro_type: $('#pro_type').val(),
-                        pro_date: $('#pro_date').val(),
-                        pro_who: $('#pro_who').val(),
-                        pro_cash: $('#pro_cash').val().replace(/,/g, ''),
-                        pro_description: $('#pro_description').val()
-                    },
-                    success: function(response) {
-                        // 성공적으로 저장되었음을 사용자에게 알리고 모달을 닫음
-                        alert('수익이 등록되었습니다.');
-                        $('#exampleModal').modal('hide');
-                        // 수익 리스트를 다시 불러옵니다
-                        location.reload();
-                    },
-                    error: function(error) {
-                        console.error("AJAX 요청 실패:", error);
-                        alert('수익 등록 중 오류가 발생했습니다.');
-                    }
-                });
-            });
+        // 숫자를 세 자리마다 쉼표가 포함된 형식으로 포맷하는 함수
+        function formatNumberWithCommas(number) {
+            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
 
-            // 숫자를 세 자리마다 쉼표가 포함된 형식으로 포맷하는 함수
-            function formatNumberWithCommas(number) {
-                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        // 수익 금액 입력 필드에서 키 입력 시 호출되는 함수
+        $('#pro_cash').on('input', function() {
+            var value = $(this).val(); // 입력된 값 가져오기
+            var number = parseInt(value.replace(/[^\d]/g, '')); // 숫자만 추출하여 정수로 변환
+
+            if (!isNaN(number)) {
+                var formattedValue = formatNumberWithCommas(number); // 포맷 함수 호출
+                $(this).val(formattedValue); // 포맷된 값으로 입력 필드 업데이트
             }
-
-            // 수익 금액 입력 필드에서 키 입력 시 호출되는 함수
-            $('#pro_cash').on('input', function() {
-                var value = $(this).val(); // 입력된 값 가져오기
-                var number = parseInt(value.replace(/[^\d]/g, '')); // 숫자만 추출하여 정수로 변환
-
-                if (!isNaN(number)) {
-                    var formattedValue = formatNumberWithCommas(number); // 포맷 함수 호출
-                    $(this).val(formattedValue); // 포맷된 값으로 입력 필드 업데이트
-                }
-            });
         });
     </script>
 </body>

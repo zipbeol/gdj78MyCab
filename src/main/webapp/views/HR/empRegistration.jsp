@@ -106,7 +106,7 @@
               <li class="active current-page">
               </li>
               <li>
-                <a href="notice/list.go">
+                <a href="/notice/list.go">
                   <i class="fs-3 bi bi-pin-angle"></i>
                   <span class="menu-text">공지사항</span>
                 </a>
@@ -119,25 +119,25 @@
                 </a>
                 <ul class="treeview-menu">
                   <li>
-                    <a href="mypage/detail.go">프로필</a>
+                    <a href="/mypage/detail.go">프로필</a>
                   </li>
                   <li>
-                    <a href="mypage/vac/list.go">연차 관리</a>
+                    <a href="/mypage/vac/list.go">연차 관리</a>
                   </li>
                   <li>
-                    <a href="mypage/vacApply/list.go">연차 승인 및 반려</a>
+                    <a href="/mypage/vacApply/list.go">연차 승인 및 반려</a>
                   </li>
                    <li>
-                    <a href="attendance/myAttendance/list.go">근태 관리</a>
+                    <a href="/attendance/myAttendance/list.go">근태 관리</a>
                   </li>
                   <li>
-                    <a href="mypage/alarm/list.go">알림</a>
+                    <a href="/mypage/alarm/list.go">알림</a>
                   </li>
                   
                 </ul>
               </li>
                <li>
-                <a href="chat/chat.go">
+                <a href="/chat/chat.go">
                   <i class="fs-3 bi bi-chat"></i>
                   <span class="menu-text">채팅</span>
                 </a>
@@ -149,16 +149,16 @@
                 </a>
                 <ul class="treeview-menu">
                   <li>
-                    <a href="mail/write.go">메일 작성</a>
+                    <a href="/mail/write.go">메일 작성</a>
                   </li>
                    <li>
-                    <a href="mail/list.go">내가 보낸 메일함</a>
+                    <a href="/mail/list.go">내가 보낸 메일함</a>
                   </li>
                 </ul>
               </li>
               
               <li>
-                <a href="calendar/calendar.go">
+                <a href="/calendar/calendar.go">
                   <i class="bi bi-calendar2"></i>
                   <span class="menu-text">일정 관리</span>
                 </a>
@@ -171,13 +171,13 @@
                 </a>
                 <ul class="treeview-menu">
                   <li>
-                    <a href="taxi/list.go">차량 관리</a>
+                    <a href="/taxi/list.go">차량 관리</a>
                   </li>
                   <li>
-                    <a href="driver/list.go">기사 관리</a>
+                    <a href="/driver/list.go">기사 관리</a>
                   </li>
                   <li>
-                    <a href="triprecord/list.go">운행 기록 관리</a>
+                    <a href="/triprecord/list.go">운행 기록 관리</a>
                   </li>
                 </ul>
               </li>
@@ -188,16 +188,16 @@
                 </a>
                 <ul class="treeview-menu">
                   <li>
-                    <a href="approval/write.go">기안서 작성</a>
+                    <a href="/approval/write.go">기안서 작성</a>
                   </li>
                     <li>
-                    <a href="approval/list.go">내 결재 관리</a>
+                    <a href="/approval/list.go">내 결재 관리</a>
                   </li>
                   <li>
-                    <a href="approval/list.go">결재 통합 관리</a>
+                    <a href="/approval/list.go">결재 통합 관리</a>
                   </li>
                   <li>
-                    <a href="approval/create.go">공통 양식 등록</a>
+                    <a href="/approval/create.go">공통 양식 등록</a>
                   </li>
                 </ul>
               </li>
@@ -209,31 +209,31 @@
                 </a>
                 <ul class="treeview-menu">
                   <li>
-                    <a href="attendance/attendance/list.go">근태 관리</a>
+                    <a href="/attendance/attendance/list.go">근태 관리</a>
                   </li>
                   <li>
                     <a href="/emp/emp/create.go">사원 등록</a>
                   </li>
                   <li>
-                    <a href="emp/hremp/list.go">사원 조회</a>
+                    <a href="/emp/hremp/list.go">사원 조회</a>
                   </li>
                   <li>
-                    <a href="emp/vac/list.go">연차 관리</a>
+                    <a href="/emp/vac/list.go">연차 관리</a>
                   </li>
                   <li>
-                    <a href="emp/dept/list.go">부서 관리</a>
+                    <a href="/emp/dept/list.go">부서 관리</a>
                   </li>
                   <li>
-                    <a href="emp/sal/list.go">급여 관리</a>
+                    <a href="/emp/sal/list.go">급여 관리</a>
                   </li>
                   <li>
-                    <a href="emp/driver/list.go">기사 정산 관리</a>
+                    <a href="/emp/driver/list.go">기사 정산 관리</a>
                   </li>
                   <li>
-                    <a href="emp/orgchart/list.go">조직도</a>
+                    <a href="/emp/orgchart/list.go">조직도</a>
                   </li>
                   <li>
-                    <a href="emp/emp/list.go">사원 조회</a>
+                    <a href="/emp/emp/list.go">사원 조회</a>
                   </li>
                 </ul>
               </li>
@@ -244,16 +244,16 @@
                 </a>
                 <ul class="treeview-menu">
                   <li>
-                    <a href="finance/profit/list.go">수익</a>
+                    <a href="/finance/profit/list.go">수익</a>
                   </li>
                   <li>
-                    <a href="finance/expenses/list.go">지출</a>
+                    <a href="/finance/expenses/list.go">지출</a>
                   </li>
                   <li>
-                    <a href="finance/deal/list.go">거래 내역</a>
+                    <a href="/finance/deal/list.go">거래 내역</a>
                   </li>
                    <li>
-                    <a href="finance/dash.go">대쉬 보드</a>
+                    <a href="/finance/dash.go">대쉬 보드</a>
                   </li>
                 </ul>
               </li>
@@ -264,10 +264,10 @@
                 </a>
                 <ul class="treeview-menu">
                    <li>
-                    <a href="resource/create.go">자원 등록</a>
+                    <a href="/resource/create.go">자원 등록</a>
                   </li>
                    <li>
-                    <a href="resource/list.go">자원 예약</a>
+                    <a href="/resource/list.go">자원 예약</a>
                   </li>
                 </ul>
               </li>
@@ -278,10 +278,10 @@
                 </a>
                 <ul class="treeview-menu">
                    <li>
-                    <a href="mail/admin/list.go">메일 로그</a>
+                    <a href="/mail/admin/list.go">메일 로그</a>
                   </li>
                    <li>
-                    <a href="chat/admin/list.go">채팅 로그</a>
+                    <a href="/chat/admin/list.go">채팅 로그</a>
                   </li>
                 </ul>
               </li>
@@ -309,7 +309,7 @@
 
             <!-- App brand sm start -->
             <div class="app-brand-sm d-lg-none d-sm-block">
-              <a href="index.go">
+              <a href="/">
                 <img src="/assets/images/logo-sm.svg" class="logo" alt="Bootstrap Gallery">
               </a>
             </div>
@@ -319,7 +319,7 @@
             <ol class="breadcrumb d-none d-lg-flex ms-3">
               <li class="breadcrumb-item">
                 <i class="bi bi-house lh-1"></i>
-                <a href="index.go" class="text-decoration-none">메인</a>
+                <a href="/" class="text-decoration-none">메인</a>
               </li>
               <li class="breadcrumb-item">인사 관리</li>
               <li class="breadcrumb-item text-secondary">사원 등록</li>
@@ -332,19 +332,19 @@
                 
                 <div class="dropdown-menu dropdown-menu-end shadow-sm dropdown-menu-mini">
                   <div class="country-container">
-                    <a href="index.go" class="py-2">
+                    <a href="/" class="py-2">
                       <img src="/assets/images/flags/1x1/us.svg" alt="Business Dashboard Templates">
                     </a>
-                    <a href="index.go" class="py-2">
+                    <a href="/" class="py-2">
                       <img src="/assets/images/flags/1x1/in.svg" alt="Business Dashboard Templates">
                     </a>
-                    <a href="index.go" class="py-2">
+                    <a href="/" class="py-2">
                       <img src="/assets/images/flags/1x1/br.svg" alt="Business Dashboard Templates">
                     </a>
-                    <a href="index.go" class="py-2">
+                    <a href="/" class="py-2">
                       <img src="/assets/images/flags/1x1/tr.svg" alt="IT Dashboard Templates">
                     </a>
-                    <a href="index.go" class="py-2">
+                    <a href="/" class="py-2">
                       <img src="/assets/images/flags/1x1/id.svg" alt="IT Dashboard Templates">
                     </a>
                   </div>
@@ -488,7 +488,7 @@
                   <a class="dropdown-item d-flex align-items-center" href="settings.go"><i
                       class="bi bi-gear fs-4 me-2"></i>Settings</a>
                   <div class="d-grid p-3 py-2">
-                    <a class="btn btn-danger" href="login/logout.do">Logout</a>
+                    <a class="btn btn-danger" href="/login/logout.do">Logout</a>
                   </div>
                 </div>
               </div>
@@ -877,8 +877,13 @@
      if (!overChk) {
          alert('이메일 중복을 확인해주세요.');
          return false; // 폼 전송 취소
+     }else{
+    	 if (confirm("사원을 등록하시겠습니까?")) {
+     		return true; // 폼 전송 허용
+		}else{
+				alert("사원 등록을 취소하였습니다.");
+		}
      }
-     return true; // 폼 전송 허용
  }
  
  

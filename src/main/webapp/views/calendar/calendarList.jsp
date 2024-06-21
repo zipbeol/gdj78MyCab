@@ -36,13 +36,24 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.css" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script> 
+	<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.14/index.global.min.js"></script>
 	
-
+	<style>
+	   #scheduleModal {
+            display: none;
+            position: absolute;
+            z-index: 1000;
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+	</style>
 
   </head>
 
   <body>
+  <div id="scheduleModal"></div>
     <!-- Page wrapper start -->
     <div class="page-wrapper">
 
@@ -574,17 +585,45 @@
   };
   
   function showFullCalendar(getEvent){
-	  $('#calendar').fullCalendar({
-			selectable : true,
-			selectHelper: true,
-			locale:'ko',
-			select : function(){
-				alert("check");
-			},
-			events:getEvent	
-			
-			
-		});
+	  var calendarEl = document.getElementById('calendar');
+	  var calendar = new FullCalendar.Calendar(calendarEl, {
+		    selectable: true,
+		    headerToolbar: {
+		      left: 'prev,next today',
+		      center: 'title',
+		      right: 'dayGridMonth,timeGridWeek,timeGridDay'
+		    },
+		    events: getEvent,
+		    
+		    dateClick: function(info) {
+		      alert('clicked ' + info.dateStr);
+		    },
+		    select: function(info) {
+                // 모달 창에 내용을 채우기
+                $('#scheduleModal').html('<p>Loading...</p>');
+                
+                // 모달 창 위치 설정
+                $('#scheduleModal').css({
+                    display: 'block',
+                    left: info.jsEvent.pageX + 'px',
+                    top: info.jsEvent.pageY + 'px'
+                });
+
+
+                // 일정 데이터를 모달 창에 추가
+                var content = '<ul>';
+                info.
+                content += '</ul>';
+
+                $('#scheduleModal').html(content);
+            },
+            // 클릭한 다른 부분에서 모달 창 숨기기
+            viewRender: function() {
+                $('#scheduleModal').hide();
+            }
+		  });
+
+		  calendar.render();
   }
   
   

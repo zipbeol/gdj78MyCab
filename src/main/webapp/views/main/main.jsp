@@ -85,8 +85,7 @@
                         <!-- 여기에 경로 추가 -->
                     </li>
                 </ol>
-                <!-- Breadcrumb end -->
-
+                <!-- Bread
                 <!-- App header actions start -->
                 <jsp:include page="/views/appHeader.jsp"/>
                 <!-- App header actions end -->
@@ -115,9 +114,10 @@
                     </div>
                     <!-- Row end -->
 
+
                 </div>
                 <!-- Container ends -->
-
+                
             </div>
             <!-- App body ends -->
 
@@ -158,5 +158,11 @@
 </body>
 <script>
     // 스크립트
+
+    
+     var message = "${message}";
+        if (message) {
+            alert(message);
+        }
 </script>
 </html>

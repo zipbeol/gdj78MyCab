@@ -78,14 +78,12 @@
                 <!-- App brand sm end -->
 
                 <!-- Breadcrumb start -->
-                <ol class="breadcrumb d-none d-lg-flex ms-3">
-                    <li class="breadcrumb-item">
-                        <a href="/"><i class="bi bi-house lh-1"></i></a>
-                        <a href="/" class="text-decoration-none">메인</a>
-                        <!-- 여기에 경로 추가 -->
-                    </li>
-                </ol>
-                <!-- Breadcrumb end -->
+					<ol class="breadcrumb d-none d-lg-flex ms-3">
+						<li class="breadcrumb-item"><i class="bi bi-house lh-1"></i>
+							<a href="index.go" class="text-decoration-none">메인</a></li>
+						
+					</ol>
+					<!-- Breadcrumb end -->
 
                 <!-- App header actions start -->
                 <jsp:include page="/views/appHeader.jsp"/>

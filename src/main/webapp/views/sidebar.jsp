@@ -104,7 +104,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li>
-                        <a id="menu-approval-1" href="/approval/write.go">기안서 작성</a>
+                        <a id="menu-approval-1" href="/approval/approvalWriteForm.go">기안서 작성</a>
                     </li>
                     <li>
                         <a id="menu-approval-2" href="/approval/list.go">내 결재 관리</a>

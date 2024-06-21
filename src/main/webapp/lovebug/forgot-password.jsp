@@ -15,13 +15,13 @@
     <meta property="og:description" content="Marketplace for Bootstrap Admin Dashboards">
     <meta property="og:type" content="Website">
     <meta property="og:site_name" content="Bootstrap Gallery">
-    <link rel="shortcut icon" href="assets/images/favicon.svg">
+    <link rel="shortcut icon" href="/assets/images/favicon.svg">
 
     <!-- *************
 			************ CSS Files *************
 		************* -->
-    <link rel="stylesheet" href="assets/fonts/bootstrap/bootstrap-icons.css">
-    <link rel="stylesheet" href="assets/css/main.min.css">
+    <link rel="stylesheet" href="/assets/fonts/bootstrap/bootstrap-icons.css">
+    <link rel="stylesheet" href="/assets/css/main.min.css">
   </head>
 
   <body>
@@ -33,7 +33,7 @@
             <div class="border rounded-2 p-4 mt-5" style="width: 550px">
               <div class="login-form">
                 <a href="login.go" class="mb-4 d-flex">
-                  <img src="assets/images/logo.svg" class="img-fluid login-logo" alt="Cab Admin Dashboard">
+                  <img src="/assets/images/logo.svg" class="img-fluid login-logo" alt="Cab Admin Dashboard">
                 </a>
                 <h5 class="mb-4 lh-2 fw-light">
                  프로필에 등록된 이메일을 입력하시고 인증번호를 입력해주세요.

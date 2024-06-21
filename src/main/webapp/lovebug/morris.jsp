@@ -15,23 +15,23 @@
     <meta property="og:description" content="Marketplace for Bootstrap Admin Dashboards">
     <meta property="og:type" content="Website">
     <meta property="og:site_name" content="Bootstrap Gallery">
-    <link rel="shortcut icon" href="assets/images/favicon.svg">
+    <link rel="shortcut icon" href="/assets/images/favicon.svg">
 
     <!-- *************
 			************ CSS Files *************
 		************* -->
-    <link rel="stylesheet" href="assets/fonts/bootstrap/bootstrap-icons.css">
-    <link rel="stylesheet" href="assets/css/main.min.css">
+    <link rel="stylesheet" href="/assets/fonts/bootstrap/bootstrap-icons.css">
+    <link rel="stylesheet" href="/assets/css/main.min.css">
 
     <!-- *************
 			************ Vendor Css Files *************
 		************ -->
 
     <!-- Scrollbar CSS -->
-    <link rel="stylesheet" href="assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
+    <link rel="stylesheet" href="/assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
 
     <!-- Morris CSS -->
-    <link rel="stylesheet" href="assets/vendor/morris/morris.css">
+    <link rel="stylesheet" href="/assets/vendor/morris/morris.css">
   </head>
 
   <body>
@@ -47,7 +47,7 @@
           <!-- App brand starts -->
           <div class="app-brand px-3 py-2 d-flex align-items-center">
             <a href="index.go">
-              <img src="assets/images/logo.svg" class="logo" alt="Bootstrap Gallery">
+              <img src="/assets/images/logo.svg" class="logo" alt="Bootstrap Gallery">
             </a>
           </div>
           <!-- App brand ends -->
@@ -368,7 +368,7 @@
             <!-- App brand sm start -->
             <div class="app-brand-sm d-lg-none d-sm-block">
               <a href="index.go">
-                <img src="assets/images/logo-sm.svg" class="logo" alt="Bootstrap Gallery">
+                <img src="/assets/images/logo-sm.svg" class="logo" alt="Bootstrap Gallery">
               </a>
             </div>
             <!-- App brand sm end -->
@@ -389,24 +389,24 @@
               <div class="dropdown">
                 <a class="dropdown-toggle d-flex px-3 py-4 position-relative" href="#!" role="button"
                   data-bs-toggle="dropdown" aria-expanded="false">
-                  <img src="assets/images/flags/1x1/gb.svg" class="flag-img" alt="Cab Admin Template">
+                  <img src="/assets/images/flags/1x1/gb.svg" class="flag-img" alt="Cab Admin Template">
                 </a>
                 <div class="dropdown-menu dropdown-menu-end shadow-sm dropdown-menu-mini">
                   <div class="country-container">
                     <a href="index.go" class="py-2">
-                      <img src="assets/images/flags/1x1/us.svg" alt="Business Dashboard Templates">
+                      <img src="/assets/images/flags/1x1/us.svg" alt="Business Dashboard Templates">
                     </a>
                     <a href="index.go" class="py-2">
-                      <img src="assets/images/flags/1x1/in.svg" alt="Business Dashboard Templates">
+                      <img src="/assets/images/flags/1x1/in.svg" alt="Business Dashboard Templates">
                     </a>
                     <a href="index.go" class="py-2">
-                      <img src="assets/images/flags/1x1/br.svg" alt="Business Dashboard Templates">
+                      <img src="/assets/images/flags/1x1/br.svg" alt="Business Dashboard Templates">
                     </a>
                     <a href="index.go" class="py-2">
-                      <img src="assets/images/flags/1x1/tr.svg" alt="IT Dashboard Templates">
+                      <img src="/assets/images/flags/1x1/tr.svg" alt="IT Dashboard Templates">
                     </a>
                     <a href="index.go" class="py-2">
-                      <img src="assets/images/flags/1x1/id.svg" alt="IT Dashboard Templates">
+                      <img src="/assets/images/flags/1x1/id.svg" alt="IT Dashboard Templates">
                     </a>
                   </div>
                 </div>
@@ -420,16 +420,16 @@
                   <!-- Row start -->
                   <div class="d-flex gap-2 m-2 flex-wrap">
                     <a href="javascript:void(0)" class="g-col-4 p-2 border rounded-2">
-                      <img src="assets/images/brand-behance.svg" class="img-3x" alt="IT Dashboard Templates">
+                      <img src="/assets/images/brand-behance.svg" class="img-3x" alt="IT Dashboard Templates">
                     </a>
                     <a href="javascript:void(0)" class="g-col-4 p-2 border rounded-2">
-                      <img src="assets/images/brand-google.svg" class="img-3x" alt="IT Dashboard Templates">
+                      <img src="/assets/images/brand-google.svg" class="img-3x" alt="IT Dashboard Templates">
                     </a>
                     <a href="javascript:void(0)" class="g-col-4 p-2 border rounded-2">
-                      <img src="assets/images/brand-bitcoin.svg" class="img-3x" alt="IT Dashboard Templates">
+                      <img src="/assets/images/brand-bitcoin.svg" class="img-3x" alt="IT Dashboard Templates">
                     </a>
                     <a href="javascript:void(0)" class="g-col-4 p-2 border rounded-2">
-                      <img src="assets/images/brand-dribbble.svg" class="img-3x" alt="IT Dashboard Templates">
+                      <img src="/assets/images/brand-dribbble.svg" class="img-3x" alt="IT Dashboard Templates">
                     </a>
                   </div>
                   <!-- Row end -->
@@ -498,7 +498,7 @@
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-md shadow-sm">
                   <a href="javascript:void(0)" class="dropdown-item">
                     <div class="d-flex py-2">
-                      <img src="assets/images/user.png" class="img-3x me-3 rounded-3" alt="Admin Templates">
+                      <img src="/assets/images/user.png" class="img-3x me-3 rounded-3" alt="Admin Templates">
                       <div class="m-0">
                         <h5 class="mb-1">Stacy Macdonald</h5>
                         <p class="mb-1 text-secondary">
@@ -510,7 +510,7 @@
                   </a>
                   <a href="javascript:void(0)" class="dropdown-item">
                     <div class="d-flex py-2">
-                      <img src="assets/images/user2.png" class="img-3x me-3 rounded-3" alt="Admin Templates">
+                      <img src="/assets/images/user2.png" class="img-3x me-3 rounded-3" alt="Admin Templates">
                       <div class="m-0">
                         <h5 class="mb-1">Harriet Orozco</h5>
                         <p class="mb-1 text-secondary">
@@ -522,7 +522,7 @@
                   </a>
                   <a href="javascript:void(0)" class="dropdown-item">
                     <div class="d-flex py-2">
-                      <img src="assets/images/user1.png" class="img-3x me-3 rounded-3" alt="Admin Templates">
+                      <img src="/assets/images/user1.png" class="img-3x me-3 rounded-3" alt="Admin Templates">
                       <div class="m-0">
                         <h5 class="mb-1">Grady Baxter</h5>
                         <p class="mb-1 text-secondary">
@@ -540,7 +540,7 @@
               <div class="dropdown ms-2">
                 <a id="userSettings" class="dropdown-toggle d-flex py-2 align-items-center text-decoration-none"
                   href="#!" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  <img src="assets/images/user.png" class="rounded-2 img-3x" alt="Bootstrap Gallery">
+                  <img src="/assets/images/user.png" class="rounded-2 img-3x" alt="Bootstrap Gallery">
                 </a>
                 <div class="dropdown-menu dropdown-menu-end shadow-sm">
                   <div class="p-3 border-bottom mb-2">
@@ -678,31 +678,31 @@
 			************ JavaScript Files *************
 		************* -->
     <!-- Required jQuery first, then Bootstrap Bundle JS -->
-    <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/bootstrap.bundle.min.js"></script>
 
     <!-- *************
 			************ Vendor Js Files *************
 		************* -->
 
     <!-- Overlay Scroll JS -->
-    <script src="assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
-    <script src="assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
+    <script src="/assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
+    <script src="/assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
 
     <!-- Morris Graphs -->
-    <script src="assets/vendor/morris/raphael-min.js"></script>
-    <script src="assets/vendor/morris/morris.min.js"></script>
-    <script src="assets/vendor/morris/custom/area.js"></script>
-    <script src="assets/vendor/morris/custom/barColors.js"></script>
-    <script src="assets/vendor/morris/custom/dayData.js"></script>
-    <script src="assets/vendor/morris/custom/donutColors.js"></script>
-    <script src="assets/vendor/morris/custom/donutFormatter.js"></script>
-    <script src="assets/vendor/morris/custom/morrisBar.js"></script>
-    <script src="assets/vendor/morris/custom/negativeValues.js"></script>
-    <script src="assets/vendor/morris/custom/stackedBar.js"></script>
+    <script src="/assets/vendor/morris/raphael-min.js"></script>
+    <script src="/assets/vendor/morris/morris.min.js"></script>
+    <script src="/assets/vendor/morris/custom/area.js"></script>
+    <script src="/assets/vendor/morris/custom/barColors.js"></script>
+    <script src="/assets/vendor/morris/custom/dayData.js"></script>
+    <script src="/assets/vendor/morris/custom/donutColors.js"></script>
+    <script src="/assets/vendor/morris/custom/donutFormatter.js"></script>
+    <script src="/assets/vendor/morris/custom/morrisBar.js"></script>
+    <script src="/assets/vendor/morris/custom/negativeValues.js"></script>
+    <script src="/assets/vendor/morris/custom/stackedBar.js"></script>
 
     <!-- Custom JS files -->
-    <script src="assets/js/custom.js"></script>
+    <script src="/assets/js/custom.js"></script>
   </body>
 
 </html>

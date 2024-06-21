@@ -48,7 +48,7 @@
     <div class="main-container">
 
         <!-- Sidebar wrapper start -->
-        <jsp:include page="../sidebar.jsp"/>
+        <jsp:include page="/views/sidebar.jsp"/>
         <!-- Sidebar wrapper end -->
 
         <!-- App container starts -->
@@ -86,7 +86,7 @@
 					<!-- Breadcrumb end -->
 
                 <!-- App header actions start -->
-                <jsp:include page="../appHeader.jsp"/>
+                <jsp:include page="/views/appHeader.jsp"/>
                 <!-- App header actions end -->
 
             </div>

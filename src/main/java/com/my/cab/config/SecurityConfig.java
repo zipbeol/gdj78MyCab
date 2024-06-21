@@ -34,6 +34,9 @@ public class SecurityConfig {
       
       http.httpBasic().disable().csrf().disable();
       
+      // 전자결재기안서 작성 간 .html 파일 불러오기 위한 보안벽 해제 (대현)
+      http.headers().frameOptions().sameOrigin();
+      
       return http.build();
    }
    

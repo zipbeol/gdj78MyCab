@@ -1,5 +1,7 @@
 package com.my.cab.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,26 @@ public class LoginController {
 		this.service = service;
 	}
 
+	
+	@RequestMapping(value="emp/login.do")
+	public String login(String emp_no, String emp_password, HttpSession session) {
+		logger.info("로그인 실행");
+		logger.info("사번 : "+emp_no+"비밀번호 : "+emp_password);
+		
+		String page = "login/login";
+		
+		int row = service.login(emp_no, emp_password);
+		
+		if (row == 1) {//로그인 성공, 최초 로그인이 아닐시
+			page = "redirect:/";
+			session.setAttribute("loginId", emp_no);
+		} else if (row == 2) {//로그인 성공, 최초 로그인시
+			page = "login/pwFind";
+			session.setAttribute("loginId", emp_no);
+		}
+		
+		return page;
+	}
 	
 	
 	

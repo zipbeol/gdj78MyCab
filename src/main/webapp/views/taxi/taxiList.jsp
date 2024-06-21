@@ -28,6 +28,8 @@
     <!-- Scrollbar CSS -->
     <link rel="stylesheet" href="/assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
 
+    <!-- Date Range CSS -->
+    <link rel="stylesheet" href="/assets/vendor/daterange/daterange.css">
     <!-- 폰트 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -111,40 +113,119 @@
                                 </div>
                                 <div class="card-body">
                                     <!-- 여기에 코딩 -->
-                                    <div class="text-end mb-2">
+                                    <div class="text-end mb-3">
                                         <input type="button" class="btn btn-primary" data-bs-toggle="modal"
                                                data-bs-target="#exampleModal" value="택시 등록"/>
                                     </div>
-
+                                    <!-- 검색창 시작 -->
                                     <div class="search-filter-container border border-2 p-3 rounded mb-3">
                                         <div class="row">
-                                            <label for="search-date" class="form-label">날짜 선택</label>
-                                            <div class="col-2" id="search-date">
-                                                <input type="date" class="">
+                                            <div class="col-3">
+
+                                                <label for="search-start-date" class="form-label">시작 날짜</label>
                                             </div>
-                                            ~
+                                            <div class="col-1">
+
+                                            </div>
+                                            <div class="col-3">
+
+                                                <label for="search-end-date" class="form-label">종료 날짜</label>
+                                            </div>
+                                            <div class="col-5 text-end">
+
+                                                <input type="button" class="btn btn-primary" value="검색">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 align-items-center" id="search-datepicker">
+                                                <div class="input-group me-3">
+                                                    <input type="text" class="form-control custom-daterange"
+                                                           id="search-start-date">
+                                                    <span class="input-group-text"><i
+                                                            class="bi bi-calendar4"></i></span>
+                                                </div>'
+
+                                            </div>
+                                            <span class="col text-center" style="font-size: large; font-weight: bold;">~</span>
+                                            <div class="col-md-3 align-items-center">
+
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control datepicker"
+                                                           id="search-end-date">
+                                                    <span class="input-group-text"><i
+                                                            class="bi bi-calendar4"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-5 text-end">
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
                                             <div class="col-2">
-                                                <input type="date" class="start-date">
+                                                <label for="filter-taxi-model" class="form-label">차종 필터</label>
+                                            </div>
+                                            <div class="col-2">
+
+                                                <label for="filter-taxi-is-active" class="form-label">폐차여부 필터</label>
+                                            </div>
+                                            <div class="col-5">
+
+                                            </div>
+                                            <div class="col-3">
+
+                                                <label for="search-taxi-license-plate" class="form-label">번호판 검색</label>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-2">
+                                                <select id="filter-taxi-model" class="form-select">
+                                                    <option value="">차종</option>
+                                                    <c:forEach items="${taxiModelList}" var="taxiModel">
+                                                        <option value="${taxiModel}">${taxiModel}</option>
+                                                    </c:forEach>
+                                                </select>
+                                            </div>
+                                            <div class="col-2">
+                                                <select id="filter-taxi-is-active" class="form-select">
+                                                    <option value="">폐차 여부</option>
+                                                    <option value="1">false</option>
+                                                    <option value="0">true</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-5"></div>
+                                            <div class="col-3 text-end">
+                                                <input type="text" class="form-control" id="search-taxi-license-plate"
+                                                       placeholder="번호판을 입력해 주세요">
                                             </div>
                                         </div>
                                         <div class="row">
 
+                                            <div class="col-2">
+
+                                            </div>
+                                            <div class="col-8">
+                                            </div>
+                                            <div class="col-2 text-end">
+                                            </div>
                                         </div>
                                     </div>
+                                    <!-- 검색창 종료 -->
+                                    <!-- 리스트 테이블 시작 -->
                                     <div class="table-outer">
                                         <table class="table table-hover table-bordered align-middle custom-table m-0">
                                             <thead>
-                                            <tr>
-                                                <th class="text-center">번호판</th>
-                                                <th class="text-center">차종</th>
-                                                <th class="text-center">등록일</th>
-                                                <th class="text-center">폐차 여부</th>
+                                            <tr class="">
+                                                <th class="text-center" id="th-taxi-license-plate" onclick="getThSpanId(this)">번호판 <span id="table-th-taxi-license-plate"></span></th>
+                                                <th class="text-center" id="th-taxi-model" onclick="getThSpanId(this)">차종 <span id="table-th-taxi-model"></span></th>
+                                                <th class="text-center" id="th-taxi-reg-date" onclick="getThSpanId(this)">등록일 <span id="table-th-taxi-reg-date"></span></th>
+                                                <th class="text-center" id="th-taxi-is-active" onclick="getThSpanId(this)">폐차 여부 <span id="table-th-taxi-is-active"></span></th>
                                             </tr>
                                             </thead>
                                             <tbody id="taxi-list">
                                             </tbody>
                                         </table>
                                     </div>
+                                    <!-- 리스트 테이블 종료 -->
                                 </div>
                             </div>
                         </div>
@@ -232,7 +313,11 @@
 <!-- Overlay Scroll JS -->
 <script src="/assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
 <script src="/assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
-
+<!-- Moment JS -->
+<script src="/assets/js/moment.min.js"></script>
+<!-- Date Range JS -->
+<script src="/assets/vendor/daterange/daterange.js"></script>
+<script src="/assets/vendor/daterange/custom-daterange.js"></script>
 <!-- Custom JS files -->
 <script src="/assets/js/custom.js"></script>
 <script src="/assets/js/LocalStorage.js"></script>
@@ -241,6 +326,9 @@
     // 스크립트
     getTaxiList();
 
+    function getThSpanId(){
+
+    }
     function isNumbers(input) {
         const value = input.value;
         if (isNaN(value) || value < 0 || value > 9999) {
@@ -328,6 +416,7 @@
                     $('#license-plate').val('');
                     $('#car-model').val('');
                     $('#car-fuel').val('');
+                    $('#taxi-year').val('');
                 }
             },
             error: function (error) {

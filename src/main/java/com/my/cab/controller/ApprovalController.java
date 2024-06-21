@@ -27,10 +27,11 @@ public class ApprovalController {
 		logger.info("기안서 작성 페이지 이동");
 		
 		List<ApprovalWriteFromDTO> list = apprservice.approvalWriteList();
-		logger.info("list : ", list);
+		logger.info("list : {} ", list);
 		model.addAttribute("approvalWriteList", list);
 		
 		return "approval/approvalWriteForm";
 	}
+	
 
 }

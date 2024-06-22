@@ -26,8 +26,8 @@ public class TaxiController {
     @RequestMapping("/list.go")
     public String listGo(Model model) {
         logger.info("listGo 호출");
-        model.addAttribute("taxiModelList",taxiService.getTaxiModelList());
-        model.addAttribute("taxiList",taxiService.getTaxiList());
+        model.addAttribute("taxiModelList", taxiService.getTaxiModelList());
+        model.addAttribute("taxiList", taxiService.getTaxiList());
         return "taxi/taxiList";
     }
 
@@ -35,17 +35,38 @@ public class TaxiController {
     @ResponseBody
     public Map<String, Object> listAjax(SearchDTO searchDTO) {
         logger.info("listAjax 호출");
-        logger.info("searchDTO SearchText:{}", searchDTO.getSearchText());
+        logger.info("\nsearchDTO SearchText:" + searchDTO.getSearchText()
+                + "\nsearchDTO filterTaxiModel:" + searchDTO.getFilterTaxiModel()
+                + "\nsearchDTO filterStartDate:" + searchDTO.getFilterStartDate()
+                + "\nsearchDTO filterEndDate:" + searchDTO.getFilterEndDate()
+                + "\nsearchDTO filterIsActive:" + searchDTO.getFilterIsActive()
+                + "\nsearchDTO page:" + searchDTO.getPage()
+        );
         return taxiService.listAjax(searchDTO);
     }
 
     @PostMapping("/create.ajax")
     @ResponseBody
-    public Map<String , Object> registerTaxi(TaxiDTO taxiDTO){
+    public Map<String, Object> registerTaxi(TaxiDTO taxiDTO) {
         logger.info("param taxi_license_plate:{}", taxiDTO.getTaxi_license_plate());
         logger.info("param taxi_model:{}", taxiDTO.getTaxi_model());
         logger.info("param taxi_fuel_type:{}", taxiDTO.getTaxi_fuel_type());
 
         return taxiService.registerTaxi(taxiDTO);
+    }
+
+    @RequestMapping("/detail.go")
+    public String detailGo(Model model, TaxiDTO taxiDTO) {
+        TaxiDTO taxiInfo = taxiService.getTaxiInfo(taxiDTO.getTaxi_idx());
+        taxiInfo.setTaxi_idx(taxiDTO.getTaxi_idx());
+        model.addAttribute("taxiDTO", taxiInfo);
+
+        return "taxi/taxiInfo";
+    }
+
+    @PostMapping("/update.ajax")
+    @ResponseBody
+    public Map<String, Object> updateTaxiInfo(TaxiDTO taxiDTO) {
+        return taxiService.updateTaxiInfo(taxiDTO);
     }
 }

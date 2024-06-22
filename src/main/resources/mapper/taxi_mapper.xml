@@ -6,17 +6,26 @@
 <mapper namespace="com.my.cab.dao.TaxiDAO">
 
     <select id="getTaxiList" resultType="taxi">
-        SELECT taxi_license_plate, taxi_model, taxi_registration_date, taxi_is_active
+        SELECT taxi_license_plate, taxi_model, taxi_registration_date, taxi_is_active, taxi_idx
         FROM taxi
-        ORDER BY taxi_registration_date ASC, taxi_license_plate ASC
+        ORDER BY taxi_registration_date
     </select>
 
     <select id="getSearchedTaxiList" resultType="taxi" parameterType="search">
-        SELECT taxi_license_plate, taxi_model, taxi_registration_date, taxi_is_active
+        SELECT taxi_license_plate, taxi_model, taxi_registration_date, taxi_is_active, taxi_idx
         FROM taxi
         <where>
             <if test="searchText != null and searchText != ''">
                 taxi_license_plate LIKE CONCAT('%', #{searchText}, '%')
+            </if>
+            <if test="filterTaxiModel != null and filterTaxiModel !=  ''">
+                AND taxi_model = #{filterTaxiModel}
+            </if>
+            <if test="filterIsActive != null and filterIsActive !=  ''">
+                AND taxi_is_active = #{filterIsActive}
+            </if>
+            <if test="filterStartDate != null and filterStartDate !=  '' and filterEndDate != null and filterEndDate !=  ''">
+                AND taxi_registration_date BETWEEN #{filterStartDate} AND #{filterEndDate}
             </if>
         </where>
         ORDER BY taxi_registration_date
@@ -27,15 +36,6 @@
         VALUES (#{taxi_license_plate}, #{taxi_model}, #{taxi_fuel_type}, 1)
     </insert>
 
-    <select id="isSameTaxiLicensePlate" resultType="boolean">
-        SELECT CASE
-                   WHEN COUNT(taxi_license_plate) > 0 THEN 1
-                   ELSE 0
-                   END AS is_same
-        FROM taxi
-        WHERE taxi_license_plate = #{param1}
-    </select>
-
     <select id="getTaxiModelList" resultType="String">
         SELECT taxi_model
         FROM taxi
@@ -43,13 +43,38 @@
         ORDER BY taxi_model
     </select>
 
-    <select id="isTaxiLicensePlateExists" resultType="boolean">
+    <select id="checkTaxiLicensePlateExists" resultType="boolean">
         SELECT CASE
-                   WHEN COUNT(taxi_license_plate) > 0 THEN true
-                   ELSE false
+                   WHEN EXISTS (SELECT 1
+                                FROM taxi
+                                WHERE taxi_license_plate LIKE CONCAT('%', #{param1}, '%'))
+                       THEN 1
+                   ELSE 0
                    END AS isExists
-        FROM taxi
-        WHERE taxi_license_plate LIKE CONCAT('%', #{param1}, '%')
     </select>
+
+    <select id="getTaxiInfo" resultType="taxi">
+        SELECT
+            taxi_license_plate
+            , taxi_model
+            , taxi_fuel_type
+            , taxi_is_active
+            , taxi_registration_date
+            , taxi_year
+            , taxi_scrap_car_date
+            , taxi_scrap_car_reason
+        FROM taxi
+        WHERE taxi_idx = #{param1}
+    </select>
+
+    <update id="updateTaxiInfo" parameterType="taxi">
+        UPDATE taxi
+        SET
+            taxi_license_plate = #{taxi_license_plate}
+            , taxi_model = #{taxi_model}
+            , taxi_fuel_type = #{taxi_fuel_type}
+            , taxi_year = #{taxi_year}
+        WHERE taxi_idx = #{taxi_idx}
+    </update>
 
 </mapper>

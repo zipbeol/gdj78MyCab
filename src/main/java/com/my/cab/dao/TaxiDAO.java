@@ -1,9 +1,11 @@
 package com.my.cab.dao;
 
+import com.my.cab.dto.SearchDTO;
 import com.my.cab.dto.TaxiDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface TaxiDAO {
@@ -12,9 +14,13 @@ public interface TaxiDAO {
 
     void registerTaxi(TaxiDTO taxiDTO);
 
-    boolean isSameTaxiLicensePlate(String taxiLicensePlate);
+    boolean checkTaxiLicensePlateExists(String taxiLicensePlate);
 
     List<String> getTaxiModelList();
 
-    List<TaxiDTO> getSearchedTaxiList(String searchText);
+    List<TaxiDTO> getSearchedTaxiList(SearchDTO searchDTO);
+
+    TaxiDTO getTaxiInfo(String licensePlate);
+
+    boolean updateTaxiInfo(TaxiDTO taxiDTO);
 }

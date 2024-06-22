@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,16 +24,28 @@ public class TaxiService {
 
     public Map<String, Object> listAjax(SearchDTO searchDTO) {
         Map<String, Object> result = new HashMap<>();
-
-        result.put("taxiList", getSearchedTaxiList(searchDTO));
-        result.put("result", true);
-
+        List<TaxiDTO> taxiList = null;
+        boolean isSuccess = false;
+//        if (searchDTO.getSearchText() != null && !checkTaxiLicensePlateExists(searchDTO.getSearchText())) {
+//            taxiList = getTaxiList();
+//        } else {
+//            taxiList = getSearchedTaxiList(searchDTO);
+//            isSuccess = true;
+//        }
+        taxiList = getSearchedTaxiList(searchDTO);
+        result.put("taxiList", taxiList);
+        result.put("result", isSuccess);
         return result;
     }
 
-    private boolean isTaxiLicensePlateExists(SearchDTO searchDTO) {
-        logger.info(searchDTO.getSearchText());
-        return taxiDAO.isSameTaxiLicensePlate(searchDTO.getSearchText());
+    /**
+     * 택시 번호판이 db에 존재하는지 확인하는 메서드
+     *
+     * @param licensePlate
+     * @return 존재하면 true 없으면 false
+     */
+    public boolean checkTaxiLicensePlateExists(String licensePlate) {
+        return taxiDAO.checkTaxiLicensePlateExists(licensePlate);
     }
 
     /**
@@ -44,10 +57,19 @@ public class TaxiService {
         return taxiDAO.getTaxiList();
     }
 
+    /**
+     * 택시 리스트 검색한 리스트 리턴
+     * @param searchDTO
+     * @return
+     */
     public List<TaxiDTO> getSearchedTaxiList(SearchDTO searchDTO) {
-        return taxiDAO.getSearchedTaxiList(searchDTO.getSearchText());
+        return taxiDAO.getSearchedTaxiList(searchDTO);
     }
 
+    /**
+     * 택시 차종 리스트 리턴
+     * @return
+     */
     public List<String> getTaxiModelList() {
         return taxiDAO.getTaxiModelList();
     }
@@ -62,7 +84,7 @@ public class TaxiService {
         Map<String, Object> result = new HashMap<>();
         String message = taxiDTO.getTaxi_license_plate() + " 택시 등록에 성공하였습니다.";
         boolean isSuccess = false;
-        if (isSameTaxiLicensePlate(taxiDTO.getTaxi_license_plate())) {
+        if (checkTaxiLicensePlateExists(taxiDTO.getTaxi_license_plate())) {
             message = taxiDTO.getTaxi_license_plate() + " 택시는 이미 등록된 번호판 입니다.";
         } else {
             taxiDAO.registerTaxi(taxiDTO);
@@ -73,13 +95,14 @@ public class TaxiService {
         return result;
     }
 
-    /**
-     * 택시 번호판 넣으면 중복인지 확인해 주는 메서드
-     *
-     * @param taxiLicensePlate
-     * @return 중복이면 true 아니면 false
-     */
-    private boolean isSameTaxiLicensePlate(String taxiLicensePlate) {
-        return taxiDAO.isSameTaxiLicensePlate(taxiLicensePlate);
+    public TaxiDTO getTaxiInfo(String taxi_idx) {
+        return taxiDAO.getTaxiInfo(taxi_idx);
+    }
+
+    public Map<String, Object> updateTaxiInfo(TaxiDTO taxiDTO) {
+        ;
+        Map<String, Object> result = new HashMap<>();
+        result.put("result", taxiDAO.updateTaxiInfo(taxiDTO));
+        return result;
     }
 }

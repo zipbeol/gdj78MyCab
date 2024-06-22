@@ -125,7 +125,7 @@
                                             <div class="col-2 text-end d-md-flex justify-content-md-end gap-2">
                                                 <input type="button" class="btn btn-secondary" onclick="filterReset()"
                                                        value="초기화">
-                                                <input type="button" class="btn btn-primary"
+                                                <input type="button" class="btn btn-primary" onclick="getTaxiList()"
                                                        value="검색">
                                             </div>
                                         </div>
@@ -181,23 +181,24 @@
                                     <div class="table-outer">
                                         <table class="table table-hover table-bordered align-middle custom-table m-0">
                                             <thead>
-                                            <tr class="">
+                                            <tr>
                                                 <th class="text-center" id="th-taxi-license-plate"
-                                                    onclick="getThSpanId(this)">번호판 <span
+                                                    onclick="getThSpanId(this)" style="width: 25%;">번호판 <span
                                                         id="table-th-taxi-license-plate"></span></th>
-                                                <th class="text-center" id="th-taxi-model" onclick="getThSpanId(this)">
+                                                <th class="text-center" id="th-taxi-model" onclick="getThSpanId(this)"
+                                                    style="width: 20%;">
                                                     차종 <span id="table-th-taxi-model"></span></th>
                                                 <th class="text-center" id="th-taxi-reg-date"
-                                                    onclick="getThSpanId(this)">등록일 <span
+                                                    onclick="getThSpanId(this)" style="width: 25%;">등록일 <span
                                                         id="table-th-taxi-reg-date"></span></th>
                                                 <th class="text-center" id="th-taxi-is-active"
-                                                    onclick="getThSpanId(this)">폐차 여부 <span
+                                                    onclick="getThSpanId(this)" style="width: 10%;">폐차 여부 <span
                                                         id="table-th-taxi-is-active"></span></th>
                                             </tr>
                                             </thead>
                                             <tbody id="taxi-list">
                                             <c:forEach items="${taxiList}" var="taxi">
-                                                <tr>
+                                                <tr class="taxi-list-tbody-tr" id="${taxi.taxi_idx}">
                                                     <td class="text-center">${taxi.taxi_license_plate}</td>
                                                     <td class="text-center">${taxi.taxi_model}</td>
                                                     <td class="text-center">${taxi.taxi_registration_date}</td>
@@ -315,21 +316,49 @@
 <script src="/assets/js/LocalStorage.js"></script>
 
 <script>
-    // 스크립트
-    var firstDate = $('#filter-taxi-reg-date').val();
     var searchText = $('#search-taxi-license-plate').val();
+    var filterStartDate = '';
+    var filterEndDate = '';
+    var filterTaxiModel = '';
+    var filterIsActive = '';
+    var currentPage = 1; // 현재 페이지 번호
+    var loading = false; // 로딩 상태를 나타내는 플래그
+
+    var today = moment().format('YYYY/MM/DD');
+    $('#filter-taxi-reg-date').val(today + ' - ' + today);
+
+    $(document).ready(function () {
+        getTaxiList(); // 페이지 로드 시 처음 택시 목록을 가져옵니다.
+
+        // 스크롤 이벤트 감지
+        $(window).scroll(function () {
+            if ($(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
+                if (!loading) {
+                    currentPage++;
+                    getTaxiList();
+                }
+            }
+        });
+    });
+
+    $('.taxi-list-tbody-tr').on('click', function () {
+        location.href = '/taxi/detail.go?taxi_idx=' + $(this).attr('id');
+    });
 
     function filterReset() {
-        getTaxiList(); // Refresh the list
         $('#filter-taxi-is-active').val('');
         $('#filter-taxi-model').val('');
-        $('#filter-taxi-reg-date').val(firstDate);
+        $('#filter-taxi-reg-date').val(today + ' - ' + today);
         $('#search-taxi-license-plate').val('');
+        currentPage = 1; // 페이지 번호 초기화
+        $('#taxi-list').html(''); // 기존 리스트 초기화
+        getTaxiList(); // 목록 새로고침
     }
 
     function search() {
         searchText = $('#search-taxi-license-plate').val();
-        console.log('searchText = ', searchText);
+        currentPage = 1; // 페이지 번호 초기화
+        $('#taxi-list').html(''); // 기존 리스트 초기화
         getTaxiList();
     }
 
@@ -341,36 +370,52 @@
     }
 
     function getTaxiList() {
+        var filterDate = $('#filter-taxi-reg-date').val();
+        if (filterDate) {
+            var dates = filterDate.split(' - ');
+            filterStartDate = dates[0];
+            filterEndDate = dates[1];
+        }
+
+        filterTaxiModel = $('#filter-taxi-model').val();
+        filterIsActive = $('#filter-taxi-is-active').val();
+
+        loading = true; // 데이터 로딩 시작
         $.ajax({
             url: './list.ajax',
             type: 'GET',
             data: {
-                'searchText': searchText
+                'searchText': searchText,
+                'filterStartDate': filterStartDate,
+                'filterEndDate': filterEndDate,
+                'filterTaxiModel': filterTaxiModel,
+                'filterIsActive': filterIsActive,
+                'page': currentPage // 페이지 번호 전달
             },
             dataType: 'JSON',
             success: function (data) {
-                console.log(data);
                 drawTaxiList(data.taxiList);
+                loading = false; // 데이터 로딩 완료
             },
             error: function (error) {
                 console.log(error);
+                loading = false; // 데이터 로딩 실패
             }
         });
     }
 
     function drawTaxiList(list) {
-        console.log(list);
         var content = '';
         for (item of list) {
             var taxi_is_active = item.taxi_is_active === 1 ? 'true' : 'false';
-            content += '<tr>'
+            content += '<tr class="taxi-list-tbody-tr" id="' + item.taxi_idx + '">'
                 + '<td class="text-center">' + item.taxi_license_plate + '</td>'
                 + '<td class="text-center">' + item.taxi_model + '</td>'
                 + '<td class="text-center">' + item.taxi_registration_date + '</td>'
                 + '<td class="text-center">' + taxi_is_active + '</td>'
-                + '<tr>';
+                + '</tr>';
         }
-        $('#taxi-list').html(content);
+        $('#taxi-list').append(content);
     }
 
     function taxiRegistration() {
@@ -378,11 +423,6 @@
         var taxi_model = $('#car-model').val();
         var taxi_fuel_type = $('#car-fuel').val();
         var taxi_year = $('#taxi-year').val();
-
-        console.log('taxi_license_plate = ', taxi_license_plate);
-        console.log('taxi_model = ', taxi_model);
-        console.log('taxi_fuel_type = ', taxi_fuel_type);
-        console.log('taxi_year = ', taxi_year);
 
         if (taxi_license_plate === '') {
             alert('번호판을 입력해 주세요.');
@@ -414,15 +454,10 @@
                 taxi_year: taxi_year
             },
             success: function (data) {
-                console.log(data);
                 alert(data.message);
                 if (data.isSuccess) {
                     $('#exampleModal').modal('hide');
-                    getTaxiList(); // Refresh the list
-                    $('#license-plate').val('');
-                    $('#car-model').val('');
-                    $('#car-fuel').val('');
-                    $('#taxi-year').val('');
+                    filterReset(); // 새로고침
                 }
             },
             error: function (error) {
@@ -432,5 +467,7 @@
         });
     }
 </script>
+
+
 </body>
 </html>

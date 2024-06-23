@@ -23,15 +23,15 @@ $('.sidebar-menu').on('click', 'a', function (e) {
     // console.log(parentLiClass);
 
     // 로컬 스토리지에 id와 class 저장
-    localStorage.setItem('lastClickedMenuId', parentLiId);
-    localStorage.setItem('lastClickedMenuClass', parentLiClass);
-    localStorage.setItem('lastClickedAId', clickedAId);
+    sessionStorage.setItem('lastClickedMenuId', parentLiId);
+    sessionStorage.setItem('lastClickedMenuClass', parentLiClass);
+    sessionStorage.setItem('lastClickedAId', clickedAId);
 });
 
 $(document).ready(function () {
-    var menuId = localStorage.getItem('lastClickedMenuId');
-    var menuClass = localStorage.getItem('lastClickedMenuClass');
-    var clickedAId = localStorage.getItem('lastClickedAId');
+    var menuId = sessionStorage.getItem('lastClickedMenuId');
+    var menuClass = sessionStorage.getItem('lastClickedMenuClass');
+    var clickedAId = sessionStorage.getItem('lastClickedAId');
     // console.log(menuId);
     // console.log(menuClass);
     // console.log(clickedAId);

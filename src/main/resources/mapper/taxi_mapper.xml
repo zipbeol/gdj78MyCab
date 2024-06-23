@@ -78,8 +78,8 @@
     </select>
 
     <insert id="registerTaxi" parameterType="taxi">
-        INSERT INTO taxi(taxi_license_plate, taxi_model, taxi_fuel_type, taxi_is_active)
-        VALUES (#{taxi_license_plate}, #{taxi_model}, #{taxi_fuel_type}, 1)
+        INSERT INTO taxi(taxi_license_plate, taxi_model, taxi_fuel_type, taxi_is_active, taxi_year)
+        VALUES (#{taxi_license_plate}, #{taxi_model}, #{taxi_fuel_type}, 1, #{taxi_year})
     </insert>
 
     <select id="getTaxiModelList" resultType="String">

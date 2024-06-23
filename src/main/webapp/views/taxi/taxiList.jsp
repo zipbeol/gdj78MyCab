@@ -136,6 +136,9 @@
 
                 <!-- Container starts -->
                 <div class="container-fluid">
+                    <!-- Alert placeholder start -->
+                    <div id="alertPlaceholder"></div>
+                    <!-- Alert placeholder end -->
                     <!-- Row start -->
                     <div class="row">
                         <div class="col-12">
@@ -147,7 +150,7 @@
                                     <!-- 여기에 코딩 -->
                                     <div class="text-end mb-3">
                                         <input type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                               data-bs-target="#exampleModal" value="택시 등록"/>
+                                               data-bs-target="#registorModal" value="택시 등록"/>
                                     </div>
                                     <!-- 검색창 시작 -->
                                     <div class="search-filter-container border border-2 p-3 rounded mb-3">
@@ -249,42 +252,51 @@
                     </div>
                     <!-- Row end -->
                     <!-- Modal -->
-                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    <div class="modal fade" id="registorModal" tabindex="-1" aria-labelledby="registorModalLabel"
                          aria-hidden="true">
+                        <!-- Alert placeholder start -->
+                        <div id="alertModalPlaceholder"></div>
+                        <!-- Alert placeholder end -->
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">택시 등록</h5>
+                                    <h5 class="modal-title" id="registorModalLabel">택시 등록</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <div class="mb-3">
-                                        <label for="license-plate" class="form-label">번호판 (ex: 서울11바1111)</label>
-                                        <input id="license-plate" type="text" class="form-control" maxlength="9"
-                                               required/>
-                                    </div>
+                                    <form class="needs-validation" novalidate>
+                                        <div class="mb-3">
+                                            <label for="license-plate" class="form-label">번호판</label>
+                                            <input id="license-plate" type="text" class="form-control" maxlength="9"
+                                                   placeholder="(ex: 서울11바1111)" required>
+                                            <div class="invalid-feedback">번호판을 입력해 주세요.</div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="taxi-year" class="form-label">연식</label>
+                                            <input id="taxi-year" type="number" class="form-control" min="0" max="9999"
+                                                   placeholder="(ex: 2023)" required>
+                                            <div class="invalid-feedback">연식을 입력해 주세요.</div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="car-model" class="form-label">차종</label>
+                                            <input id="car-model" type="text" class="form-control"
+                                                   placeholder="(ex: 그랜저)" required>
+                                            <div class="invalid-feedback">차종을 입력해 주세요.</div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="car-fuel" class="form-label">연료</label>
+                                            <select id="car-fuel" class="form-select" required>
+                                                <option value="">연료를 선택해주세요</option>
+                                                <option value="LPG">LPG</option>
+                                                <option value="전기">전기</option>
+                                                <option value="경유">경유</option>
+                                                <option value="휘발유">휘발유</option>
+                                            </select>
+                                            <div class="invalid-feedback">연료 타입을 선택해 주세요.</div>
+                                        </div>
+                                    </form>
 
-                                    <div class="mb-3">
-                                        <label for="taxi-year" class="form-label">연식 (ex: 2023)</label>
-                                        <input id="taxi-year" type="number" class="form-control" min="0" max="9999"
-                                               oninput="isNumbers(this)" required/>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="car-model" class="form-label">차종 (ex: 그랜저)</label>
-                                        <input id="car-model" type="text" class="form-control" required/>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="car-fuel" class="form-label">연료</label>
-                                        <select id="car-fuel" class="form-select" required>
-                                            <option value="">연료를 선택해주세요</option>
-                                            <option value="LPG">LPG</option>
-                                            <option value="전기">전기</option>
-                                            <option value="경유">경유</option>
-                                            <option value="휘발유">휘발유</option>
-                                        </select>
-                                    </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
@@ -316,6 +328,8 @@
 </div>
 <!-- Page wrapper end -->
 
+
+</body>
 <!-- *************
         ************ JavaScript Files *************
     ************* -->
@@ -338,6 +352,7 @@
 <!-- Custom JS files -->
 <script src="/assets/js/custom.js"></script>
 <script src="/assets/js/LocalStorage.js"></script>
+<!-- 페이지네이션 -->
 <script src="/assets/js/jquery.twbsPagination.min.js"></script>
 
 <script>
@@ -350,11 +365,14 @@
     var currentPage = 1; // 현재 페이지 번호
     var sortOrder = 'asc';
     var sortColumn = 'default';
+    var modalFailFlag = false;
+    var alertMessage = '';
 
     $('#filter-taxi-reg-date').val(filterAllDay);
 
     getTotalPages();
     getTaxiList();
+
 
     // 테이블 헤더 클릭 이벤트 설정
     $('th.sortable').click(function () {
@@ -380,6 +398,7 @@
         location.href = '/taxi/detail.go?taxi_idx=' + $(this).attr('id');
     });
 
+    // 페이지네이션
     $('#pagination').twbsPagination({
         totalPages: 10, // 총 페이지 수 (백엔드에서 가져와야 함)
         visiblePages: 5, // 표시할 페이지 수
@@ -391,6 +410,7 @@
         }
     });
 
+    // 필터기능
     $('#filter-taxi-reg-date').on('change', function () {
         currentPage = 1;
         getTotalPages();
@@ -402,10 +422,48 @@
         getTaxiList();
     });
 
-    $('th').on('click', function () {
-        console.log($(this).data());
-    });
 
+    // 얼럿보이기
+    function showAlert(type, message) {
+        if (alertMessage === message) {
+            return;
+        }
+        alertMessage = message;
+        var icon = '';
+        if (type === 'success') {
+            icon = '<i class="bi bi-check-circle-fill"></i>';
+        } else if (type === 'danger') {
+            icon = '<i class="bi bi-exclamation-triangle-fill"></i>';
+        }
+        console.log(icon);
+
+        // 알림 메시지 HTML을 생성
+        var alertHtml = `
+      <div class="alert alert-` + type + ` alert-dismissible fade show" role="alert" style="display: none;">
+         ` + icon + ` ` + message + `
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>`;
+        var $alert = $(alertHtml); // jQuery 객체로 변환
+
+        // modalFailFlag에 따라 알림 메시지를 추가할 위치 결정
+        if (modalFailFlag) {
+            $('#alertModalPlaceholder').append($alert); // 모달 내의 알림
+        } else {
+            $('#alertPlaceholder').append($alert); // 일반 알림
+        }
+
+        $alert.slideDown(); // 알림 메시지를 슬라이드 다운으로 표시
+
+        // 5초 후 알림 메시지를 슬라이드 업으로 숨기고 제거
+        setTimeout(function () {
+            $alert.slideUp(function () {
+                $(this).remove(); // 슬라이드 업이 완료되면 알림 메시지를 DOM에서 제거
+                alertMessage = '';
+            });
+        }, 5000); // 5000 밀리초 = 5초
+    }
+
+    // 필터 값 리셋
     function filterReset() {
         $('#filter-taxi-is-active').val('');
         $('#filter-taxi-model').val('');
@@ -416,6 +474,7 @@
         getTaxiList(); // 목록 새로고침
     }
 
+    // 연식 숫자만 입력
     function isNumbers(input) {
         var value = input.value;
         if (isNaN(value) || value < 0 || value > 9999) {
@@ -423,6 +482,7 @@
         }
     }
 
+    // 택시리스트 호출
     function getTaxiList() {
         getSearchValue();
         $.ajax({
@@ -448,6 +508,7 @@
         });
     }
 
+    // 토탈 페이지 호출
     function getTotalPages() {
         getSearchValue();
         $.ajax({
@@ -481,6 +542,7 @@
         });
     }
 
+    // 검색 값들 변수에 저장
     function getSearchValue() {
         var filterDate = $('#filter-taxi-reg-date').val();
         if (filterDate) {
@@ -494,6 +556,7 @@
         searchText = $('#search-taxi-license-plate').val();
     }
 
+    // 리스트 보여주기
     function drawTaxiList(list) {
         var content = '';
         if (list.length > 0) {
@@ -512,31 +575,21 @@
         $('#taxi-list').html(content);
     }
 
+    // 택시 등록
     function taxiRegistration() {
+        const form = document.querySelector('.needs-validation');
+        if (!form.checkValidity()) {
+            form.classList.add('was-validated');
+            modalFailFlag = true;
+            showAlert('danger', '입력 값이 올바르지 않습니다.');
+            return;
+        }
+
         var taxi_license_plate = $('#license-plate').val();
         var taxi_model = $('#car-model').val();
         var taxi_fuel_type = $('#car-fuel').val();
         var taxi_year = $('#taxi-year').val();
 
-        if (taxi_license_plate === '') {
-            alert('번호판을 입력해 주세요.');
-            $('#license-plate').focus();
-            return;
-        } else if (taxi_year === '') {
-            alert('연식을 입력해 주세요.');
-            $('#taxi-year').focus();
-            return;
-        } else if (taxi_model === '') {
-            alert('차종을 입력해 주세요.');
-            $('#car-model').focus();
-            return;
-        } else if (taxi_fuel_type === '') {
-            alert('연료 타입을 선택해 주세요.');
-            $('#car-fuel').focus();
-            return;
-        }
-
-        // Send AJAX request
         $.ajax({
             url: './create.ajax',
             type: 'POST',
@@ -548,20 +601,23 @@
                 taxi_year: taxi_year
             },
             success: function (data) {
-                alert(data.message);
                 if (data.isSuccess) {
-                    $('#exampleModal').modal('hide');
+                    $('#registorModal').modal('hide');
+                    modalFailFlag = false;
                     filterReset(); // 새로고침
+                    showAlert('success', '택시가 성공적으로 등록되었습니다.');
+                } else {
+                    showAlert('danger', '택시 등록 중 오류가 발생했습니다.');
                 }
             },
             error: function (error) {
                 console.log(error);
-                alert('택시 등록 중 오류가 발생했습니다.');
+                showAlert('danger', '택시 등록 중 오류가 발생했습니다.');
             }
         });
     }
+
+
 </script>
 
-
-</body>
 </html>

@@ -36,8 +36,8 @@
     <!-- 따로 적용한 CSS -->
     <link rel="stylesheet" href="/assets/css/default.css">
     <style>
-
     </style>
+
 </head>
 
 <body>
@@ -55,7 +55,6 @@
         <div class="app-container">
 
             <!-- App header starts -->
-
             <div class="app-header d-flex align-items-center">
 
                 <!-- Toggle buttons start -->
@@ -98,7 +97,6 @@
                 <!-- App header actions end -->
 
             </div>
-
             <!-- App header ends -->
 
             <!-- App body starts -->
@@ -106,6 +104,11 @@
 
                 <!-- Container starts -->
                 <div class="container-fluid">
+
+                    <!-- Alert placeholder start -->
+                    <div id="alertPlaceholder"></div>
+                    <!-- Alert placeholder end -->
+
                     <!-- Row start -->
                     <div class="row">
                         <div class="col-12">
@@ -233,6 +236,24 @@
 <script src="/assets/js/LocalStorage.js"></script>
 
 <script>
+    function showAlert(type, message) {
+        var alertHtml = `
+          <div class="alert alert-` + type + ` alert-dismissible fade show" role="alert" style="display: none;">
+            <strong>Notice!</strong> ` + message + `
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>`;
+        var $alert = $(alertHtml);
+        $('#alertPlaceholder').append($alert);
+        $alert.slideDown();
+
+        // 5초 후 슬라이드 아웃
+        setTimeout(function () {
+            $alert.slideUp(function () {
+                $(this).remove();
+            });
+        }, 3000); // 5000 milliseconds = 5 seconds
+    }
+
     $('#edit-button').click(function () {
         $('.info-value').each(function () {
             var value = $(this).data('value');
@@ -267,8 +288,6 @@
             success: function (data) {
                 console.log(data);
                 if (data.result) {
-                    alert('수정에 성공했습니다.');
-
                     $('.info-value').each(function () {
                         var value = $(this).find('input').val();
                         $(this).data('value', value);
@@ -276,18 +295,20 @@
                     });
                     $('#save-button').hide();
                     $('#edit-button').show();
+                    showAlert('success', '수정이 완료되었습니다.');
                 } else {
-                    alert('수정에 실패했습니다.');
+                    showAlert('danger', '수정에 실패했습니다.');
                 }
             },
             error: function (error) {
                 console.log(error);
-                alert('수정에 실패했습니다.');
+                showAlert('danger', '수정에 실패했습니다.');
             }
         });
-
     });
 </script>
 
 </body>
+</html>
+
 </html>

@@ -82,7 +82,7 @@
     <div class="main-container">
 
         <!-- Sidebar wrapper start -->
-        <jsp:include page="../sidebar.jsp"/>
+        <jsp:include page="/views/sidebar.jsp"/>
         <!-- Sidebar wrapper end -->
 
         <!-- App container starts -->
@@ -124,7 +124,7 @@
                 <!-- Breadcrumb end -->
 
                 <!-- App header actions start -->
-                <jsp:include page="../appHeader.jsp"/>
+                <jsp:include page="/views/appHeader.jsp"/>
                 <!-- App header actions end -->
 
             </div>
@@ -136,6 +136,9 @@
 
                 <!-- Container starts -->
                 <div class="container-fluid">
+                    <!-- Alert placeholder start -->
+                    <div id="alertPlaceholder"></div>
+                    <!-- Alert placeholder end -->
                     <!-- Row start -->
                     <div class="row">
                         <div class="col-12">
@@ -258,6 +261,9 @@
                     <!-- Modal -->
                     <div class="modal fade" id="registorModal" tabindex="-1" aria-labelledby="registerModalLabel"
                          aria-hidden="true">
+                        <!-- Alert placeholder start -->
+                        <div id="alertModalPlaceholder"></div>
+                        <!-- Alert placeholder end -->
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -266,41 +272,62 @@
                                             aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <div class="mb-3">
-                                        <label for="register-driver-photo" class="form-label">사진</label>
-                                        <div id="preview-container"
-                                             class="d-flex align-items-center justify-content-center border border-2 mb-3"
-                                             style="height: 108px; width: 108px;">
-                                            <img id="preview-image" src="" alt="이미지 미리보기"
-                                                 style="display: none; width: 100px; height: 100px;">
+                                    <form class="needs-validation" novalidate>
+                                        <div class="mb-3">
+                                            <label for="register-driver-photo" class="form-label">사진</label>
+                                            <div id="preview-container"
+                                                 class="d-flex align-items-center justify-content-center border border-2 mb-3"
+                                                 style="height: 108px; width: 108px;">
+                                                <img id="preview-image" src="" alt="이미지 미리보기"
+                                                     style="display: none; width: 100px; height: 100px;">
+                                            </div>
+                                            <input id="register-driver-photo" type="file" class="form-control"
+                                                   accept="image/*" onchange="previewImage()" required/>
+                                            <div class="invalid-feedback">사진을 등록해 주세요.</div>
                                         </div>
-                                        <input id="register-driver-photo" type="file" class="form-control"
-                                               accept="image/*" onchange="previewImage()" required/>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="register-driver-name" class="form-label">이름</label>
-                                        <input id="register-driver-name" type="text" class="form-control"
-                                               maxlength="100" placeholder="(ex: 홍길동)" required/>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="register-driver-taxi-license" class="form-label">택시 면허</label>
-                                        <input id="register-driver-taxi-license" type="file" class="form-control"
-                                               required/>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="register-driver-address" class="form-label">주소</label>
-                                        <input id="register-driver-address" type="text" class="form-control mb-1" placeholder="도로명주소" onclick="searchAddress()" readonly required/>
-                                        <input id="register-driver-address-detail" type="text" class="form-control" placeholder="상세주소" required/>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="register-driver-phone" class="form-label">연락처</label>
-                                        <input id="register-driver-phone" type="text" class="form-control"
-                                               pattern="\d{3}-\d{3,4}-\d{4}" required/>
-                                    </div>
+                                        <div class="mb-3">
+                                            <label for="register-driver-name" class="form-label">이름</label>
+                                            <input id="register-driver-name" type="text" class="form-control"
+                                                   maxlength="100" placeholder="(ex: 홍길동)" required/>
+                                            <div class="invalid-feedback">이름을 입력해 주세요.</div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="register-driver-taxi-license" class="form-label">택시 면허</label>
+                                            <input id="register-driver-taxi-license" type="file" class="form-control"
+                                                   required/>
+                                            <div class="invalid-feedback">면허를 등록해 주세요.</div>
+                                        </div>
+                                        <div class="row mb-3 d-flex">
+                                            <div class="col-6">
+                                                <div class="mb-3">
+                                                    <label for="register-driver-address" class="form-label">도로명
+                                                        주소</label>
+                                                    <input id="register-driver-address" type="text"
+                                                           class="form-control mb-1" placeholder="도로명주소"
+                                                           onclick="searchAddress()" tabindex="-1" required/>
+                                                    <div class="invalid-feedback">주소를 입력해 주세요.</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="mb-3">
+                                                    <label for="register-driver-address-detail" class="form-label">상세
+                                                        주소</label>
+                                                    <input id="register-driver-address-detail" type="text"
+                                                           class="form-control" placeholder="상세주소"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="register-driver-phone" class="form-label">연락처</label>
+                                            <input id="register-driver-phone" type="text" class="form-control"
+                                                   pattern="\d{3}-\d{3,4}-\d{4}" required/>
+                                            <div class="invalid-feedback">연락처를 입력해 주세요.</div>
+                                        </div>
+                                    </form>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                                    <button type="button" onclick="taxiRegistration()" class="btn btn-primary">등록
+                                    <button type="button" onclick="registration()" class="btn btn-primary">등록
                                     </button>
                                 </div>
                             </div>
@@ -329,6 +356,7 @@
 </div>
 <!-- Page wrapper end -->
 
+</body>
 <!-- *************
         ************ JavaScript Files *************
     ************* -->
@@ -351,6 +379,7 @@
 <!-- Custom JS files -->
 <script src="/assets/js/custom.js"></script>
 <script src="/assets/js/LocalStorage.js"></script>
+<script src="/assets/js/showAlert.js"></script>
 <!-- 페이지네이션 -->
 <script src="/assets/js/jquery.twbsPagination.min.js"></script>
 <!-- 다음 주소 api -->
@@ -359,7 +388,7 @@
 <script>
     var searchText = $('#search-taxi-license-plate').val();
     var today = moment().format('YYYY/MM/DD');
-    var filterAllDay = '${taxiRegFirstDate}' + ' - ' + today;
+    var filterAllDay = '${driverFirstRegDate}' + ' - ' + today;
     var filterEndDate = '';
     var filterTaxiModel = '';
     var filterIsActive = '';
@@ -367,82 +396,69 @@
     var sortOrder = 'asc';
     var sortColumn = 'default';
 
+
     $('#filter-taxi-reg-date').val(filterAllDay);
 
     getTotalPages();
     getTaxiList();
 
-    $('#register-driver-photo').on('change', function (event) {
-        var file = event.target.files[0];
-        var previewImage = $('#preview-image');
-        var reader = new FileReader();
-
-        reader.onload = function (e) {
-            previewImage.attr('src', e.target.result);
-            previewImage.show();
-        };
-
-        if (file) {
-            reader.readAsDataURL(file);
-        } else {
-            previewImage.attr('src', '');
-            previewImage.hide();
-        }
-    });
 
     // 테이블 헤더 클릭 이벤트 설정
-    $('th.sortable').click(function () {
-        sortColumn = $(this).data('value');
-        // 현재 정렬 상태 확인
-        if ($(this).hasClass('asc')) {
-            $(this).removeClass('asc').addClass('desc');
-            sortOrder = 'desc';
-        } else if ($(this).hasClass('desc')) {
-            $(this).removeClass('desc').addClass('asc');
-            sortOrder = 'asc';
-        } else {
-            $('th.sortable').removeClass('asc desc');
-            $(this).addClass('asc');
-            sortOrder = 'asc';
-        }
-        getTaxiList();
-    });
+    // $('th.sortable').click(function () {
+    //     sortColumn = $(this).data('value');
+    //     // 현재 정렬 상태 확인
+    //     if ($(this).hasClass('asc')) {
+    //         $(this).removeClass('asc').addClass('desc');
+    //         sortOrder = 'desc';
+    //     } else if ($(this).hasClass('desc')) {
+    //         $(this).removeClass('desc').addClass('asc');
+    //         sortOrder = 'asc';
+    //     } else {
+    //         $('th.sortable').removeClass('asc desc');
+    //         $(this).addClass('asc');
+    //         sortOrder = 'asc';
+    //     }
+    //     getTaxiList();
+    // });
 
 
     // 상세 페이지 이동
-    $(document).on('click', '.taxi-list-tbody-tr', function () {
-        location.href = '/taxi/detail.go?taxi_idx=' + $(this).attr('id');
-    });
+    // $(document).on('click', '.taxi-list-tbody-tr', function () {
+    //     location.href = '/taxi/detail.go?taxi_idx=' + $(this).attr('id');
+    // });
 
-    $('#pagination').twbsPagination({
-        totalPages: 10, // 총 페이지 수 (백엔드에서 가져와야 함)
-        visiblePages: 5, // 표시할 페이지 수
-        startPage: 1, // 시작 페이지
-        paginationClass: 'pagination align-items-center',
-        onPageClick: function (event, page) {
-            currentPage = page; // 현재 페이지 업데이트
-            getTaxiList(); // 택시 목록 갱신
-        }
-    });
+    // 페이지네이션
+    // $('#pagination').twbsPagination({
+    //     totalPages: 10, // 총 페이지 수 (백엔드에서 가져와야 함)
+    //     visiblePages: 5, // 표시할 페이지 수
+    //     startPage: 1, // 시작 페이지
+    //     paginationClass: 'pagination align-items-center',
+    //     onPageClick: function (event, page) {
+    //         currentPage = page; // 현재 페이지 업데이트
+    //         getTaxiList(); // 택시 목록 갱신
+    //     }
+    // });
 
-    $('#filter-taxi-reg-date').on('change', function () {
-        currentPage = 1;
-        getTotalPages();
-        getTaxiList();
-    });
-    $('.taxi-search-filter').on('input', function () {
-        currentPage = 1;
-        getTotalPages();
-        getTaxiList();
-    });
+    // 필터기능
+    // $('#filter-taxi-reg-date').on('change', function () {
+    //     currentPage = 1;
+    //     getTotalPages();
+    //     getTaxiList();
+    // });
+    // $('.taxi-search-filter').on('input', function () {
+    //     currentPage = 1;
+    //     getTotalPages();
+    //     getTaxiList();
+    // });
 
-    $('th').on('click', function () {
-        console.log($(this).data());
-    });
+    // 이미지만 업로드 가능하게
+    $('#register-driver-photo').on('change', validateImageFile);
+    $('#register-driver-taxi-license').on('change', validateImageFile);
 
+    // 카카오 api 주소 검색
     function searchAddress() {
         new daum.Postcode({
-            oncomplete: function(data) {
+            oncomplete: function (data) {
                 // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
 
                 // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
@@ -452,177 +468,200 @@
 
                 // 법정동명이 있을 경우 추가한다. (법정리는 제외)
                 // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-                if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
                     extraRoadAddr += data.bname;
                 }
                 // 건물명이 있고, 공동주택일 경우 추가한다.
-                if(data.buildingName !== '' && data.apartment === 'Y'){
+                if (data.buildingName !== '' && data.apartment === 'Y') {
                     extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
                 }
 
 
                 // 우편번호와 주소 정보를 해당 필드에 넣는다.
                 $('#register-driver-address').val(roadAddr);
+                $('#register-driver-address').prop('readonly', true);
 
             }
+            , focusInput: false
         }).open();
     }
-    function filterReset() {
-        $('#filter-taxi-is-active').val('');
-        $('#filter-taxi-model').val('');
-        $('#filter-taxi-reg-date').val(filterAllDay);
-        $('#search-taxi-license-plate').val('');
-        currentPage = 1; // 페이지 번호 초기화
-        getTotalPages();
-        getTaxiList(); // 목록 새로고침
-    }
 
-    function isNumbers(input) {
-        var value = input.value;
-        if (isNaN(value) || value < 0 || value > 9999) {
-            input.value = input.value.slice(0, -1);
-        }
-    }
+    // 필터 값 리셋
+    // function filterReset() {
+    //     $('#filter-taxi-is-active').val('');
+    //     $('#filter-taxi-model').val('');
+    //     $('#filter-taxi-reg-date').val(filterAllDay);
+    //     $('#search-taxi-license-plate').val('');
+    //     currentPage = 1; // 페이지 번호 초기화
+    //     getTotalPages();
+    //     getTaxiList(); // 목록 새로고침
+    // }
 
-    function getTaxiList() {
-        getSearchValue();
-        $.ajax({
-            url: './list.ajax',
-            type: 'GET',
-            data: {
-                'searchText': searchText,
-                'filterStartDate': filterStartDate,
-                'filterEndDate': filterEndDate,
-                'filterTaxiModel': filterTaxiModel,
-                'filterIsActive': filterIsActive,
-                'page': currentPage,
-                'sortColumn': sortColumn,
-                'sortOrder': sortOrder
-            },
-            dataType: 'JSON',
-            success: function (data) {
-                drawTaxiList(data.taxiList);
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        });
-    }
+    // 택시리스트 호출
+    // function getTaxiList() {
+    //     getSearchValue();
+    //     $.ajax({
+    //         url: './list.ajax',
+    //         type: 'GET',
+    //         data: {
+    //             'searchText': searchText,
+    //             'filterStartDate': filterStartDate,
+    //             'filterEndDate': filterEndDate,
+    //             'filterTaxiModel': filterTaxiModel,
+    //             'filterIsActive': filterIsActive,
+    //             'page': currentPage,
+    //             'sortColumn': sortColumn,
+    //             'sortOrder': sortOrder
+    //         },
+    //         dataType: 'JSON',
+    //         success: function (data) {
+    //             drawTaxiList(data.taxiList);
+    //         },
+    //         error: function (error) {
+    //             console.log(error);
+    //         }
+    //     });
+    // }
 
-    function getTotalPages() {
-        getSearchValue();
-        $.ajax({
-            url: './getTotalPages.ajax',
-            type: 'GET',
-            data: {
-                'searchText': searchText,
-                'filterStartDate': filterStartDate,
-                'filterEndDate': filterEndDate,
-                'filterTaxiModel': filterTaxiModel,
-                'filterIsActive': filterIsActive
-            },
-            dataType: 'JSON',
-            success: function (data) {
-                // console.log(data);
-                $('#pagination').twbsPagination('destroy');
-                $('#pagination').twbsPagination({
-                    totalPages: data.totalPages, // 서버에서 받은 총 페이지 수
-                    visiblePages: 5,
-                    startPage: currentPage,
-                    paginationClass: 'pagination align-items-center',
-                    onPageClick: function (event, page) {
-                        currentPage = page;
-                        getTaxiList();
-                    }
-                });
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        });
-    }
+    // 토탈 페이지 호출
+    // function getTotalPages() {
+    //     getSearchValue();
+    //     $.ajax({
+    //         url: './getTotalPages.ajax',
+    //         type: 'GET',
+    //         data: {
+    //             'searchText': searchText,
+    //             'filterStartDate': filterStartDate,
+    //             'filterEndDate': filterEndDate,
+    //             'filterTaxiModel': filterTaxiModel,
+    //             'filterIsActive': filterIsActive
+    //         },
+    //         dataType: 'JSON',
+    //         success: function (data) {
+    //             // console.log(data);
+    //             $('#pagination').twbsPagination('destroy');
+    //             $('#pagination').twbsPagination({
+    //                 totalPages: data.totalPages, // 서버에서 받은 총 페이지 수
+    //                 visiblePages: 5,
+    //                 startPage: currentPage,
+    //                 paginationClass: 'pagination align-items-center',
+    //                 onPageClick: function (event, page) {
+    //                     currentPage = page;
+    //                     getTaxiList();
+    //                 }
+    //             });
+    //         },
+    //         error: function (error) {
+    //             console.log(error);
+    //         }
+    //     });
+    // }
 
-    function getSearchValue() {
-        var filterDate = $('#filter-taxi-reg-date').val();
-        if (filterDate) {
-            var dates = filterDate.split(' - ');
-            filterStartDate = dates[0];
-            filterEndDate = dates[1];
-        }
+    // 검색 값들 변수에 저장
+    // function getSearchValue() {
+    //     var filterDate = $('#filter-taxi-reg-date').val();
+    //     if (filterDate) {
+    //         var dates = filterDate.split(' - ');
+    //         filterStartDate = dates[0];
+    //         filterEndDate = dates[1];
+    //     }
+    //
+    //     filterTaxiModel = $('#filter-taxi-model').val();
+    //     filterIsActive = $('#filter-taxi-is-active').val();
+    //     searchText = $('#search-taxi-license-plate').val();
+    // }
 
-        filterTaxiModel = $('#filter-taxi-model').val();
-        filterIsActive = $('#filter-taxi-is-active').val();
-        searchText = $('#search-taxi-license-plate').val();
-    }
+    // 리스트 보여주기
+    // function drawTaxiList(list) {
+    //     var content = '';
+    //     if (list.length > 0) {
+    //         for (item of list) {
+    //             var taxi_is_active = item.taxi_is_active === 1 ? 'true' : 'false';
+    //             content += '<tr class="taxi-list-tbody-tr" id="' + item.taxi_idx + '">'
+    //                 + '<td class="text-center">' + item.taxi_license_plate + '</td>'
+    //                 + '<td class="text-center">' + item.taxi_model + '</td>'
+    //                 + '<td class="text-center">' + item.taxi_registration_date + '</td>'
+    //                 + '<td class="text-center">' + taxi_is_active + '</td>'
+    //                 + '</tr>';
+    //         }
+    //     } else {
+    //         content = '<tr><td colspan="4" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
+    //     }
+    //     $('#taxi-list').html(content);
+    // }
 
-    function drawTaxiList(list) {
-        var content = '';
-        if (list.length > 0) {
-            for (item of list) {
-                var taxi_is_active = item.taxi_is_active === 1 ? 'true' : 'false';
-                content += '<tr class="taxi-list-tbody-tr" id="' + item.taxi_idx + '">'
-                    + '<td class="text-center">' + item.taxi_license_plate + '</td>'
-                    + '<td class="text-center">' + item.taxi_model + '</td>'
-                    + '<td class="text-center">' + item.taxi_registration_date + '</td>'
-                    + '<td class="text-center">' + taxi_is_active + '</td>'
-                    + '</tr>';
-            }
-        } else {
-            content = '<tr><td colspan="4" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
-        }
-        $('#taxi-list').html(content);
-    }
-
-    function taxiRegistration() {
-        var taxi_license_plate = $('#license-plate').val();
-        var taxi_model = $('#car-model').val();
-        var taxi_fuel_type = $('#car-fuel').val();
-        var taxi_year = $('#taxi-year').val();
-
-        if (taxi_license_plate === '') {
-            alert('번호판을 입력해 주세요.');
-            $('#license-plate').focus();
-            return;
-        } else if (taxi_year === '') {
-            alert('연식을 입력해 주세요.');
-            $('#taxi-year').focus();
-            return;
-        } else if (taxi_model === '') {
-            alert('차종을 입력해 주세요.');
-            $('#car-model').focus();
-            return;
-        } else if (taxi_fuel_type === '') {
-            alert('연료 타입을 선택해 주세요.');
-            $('#car-fuel').focus();
+    // 택시 등록
+    function registration() {
+        isModalAlert = true;
+        var form = document.querySelector('.needs-validation');
+        if (!form.checkValidity()) {
+            form.classList.add('was-validated');
+            showAlert('danger', '입력 값이 올바르지 않습니다.');
             return;
         }
 
-        // Send AJAX request
+
         $.ajax({
             url: './create.ajax',
             type: 'POST',
             dataType: 'JSON',
             data: {
-                taxi_license_plate: taxi_license_plate,
-                taxi_model: taxi_model,
-                taxi_fuel_type: taxi_fuel_type,
-                taxi_year: taxi_year
             },
             success: function (data) {
-                alert(data.message);
                 if (data.isSuccess) {
                     $('#registorModal').modal('hide');
+                    isModalAlert = false;
                     filterReset(); // 새로고침
+                    showAlert('success', '기사가 성공적으로 등록되었습니다.');
+                } else {
+                    showAlert('danger', '기사 등록 중 오류가 발생했습니다.');
                 }
             },
             error: function (error) {
                 console.log(error);
-                alert('택시 등록 중 오류가 발생했습니다.');
+                showAlert('danger', '기사 등록 중 오류가 발생했습니다.');
             }
         });
     }
+
+    // 이미지 미리보기
+    function previewImage() {
+        var $fileInput = $('#register-driver-photo');
+        var $previewContainer = $('#preview-container');
+        var $previewImage = $('#preview-image');
+
+        var file = $fileInput[0].files[0];
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            $previewImage.attr('src', e.target.result);
+            $previewImage.show();
+        };
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            $previewImage.attr('src', '');
+            $previewImage.hide();
+        }
+    }
+
+    // 이미지 파일만 등록 가능하게
+    function validateImageFile() {
+        isModalAlert = true;
+        var $fileInput = $(this);
+
+        var file = $fileInput[0].files[0];
+
+        if (file && file.type.startsWith('image/')) {
+            // 이미지 파일인 경우
+            return true;
+        } else {
+            showAlert('danger', '이미지 파일만 가능합니다.');
+            $fileInput.val(''); // 입력 값 초기화
+            return false;
+        }
+    }
+
 </script>
-
-
-</body>
 </html>

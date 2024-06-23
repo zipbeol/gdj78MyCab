@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -73,6 +74,8 @@ public class TaxiController {
     @GetMapping("/getTotalPages.ajax")
     @ResponseBody
     public Map<String, Object> getTotalPages(SearchDTO searchDTO) {
-        return taxiService.getTotalPages(searchDTO);
+        Map<String, Object> map = new HashMap<>();
+        map.put("totalPages", taxiService.getTotalPages(searchDTO));
+        return map;
     }
 }

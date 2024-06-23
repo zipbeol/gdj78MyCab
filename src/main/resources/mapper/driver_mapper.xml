@@ -3,7 +3,13 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd"
 >
 
-<mapper namespace="com.my.cab.dao.">
+<mapper namespace="com.my.cab.dao.DriverDAO">
 
+	<select id="getDriverFirstRegDate" resultType="String">
+        SELECT driver_registration_date
+        FROM driver
+        ORDER BY driver_registration_date ASC
+        LIMIT 1
+    </select>
 
 </mapper>

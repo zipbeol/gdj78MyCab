@@ -299,7 +299,7 @@
 
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="isModalAlert=false">닫기</button>
                                     <button type="button" onclick="taxiRegistration()" class="btn btn-primary">등록
                                     </button>
                                 </div>
@@ -352,6 +352,7 @@
 <!-- Custom JS files -->
 <script src="/assets/js/custom.js"></script>
 <script src="/assets/js/LocalStorage.js"></script>
+<script src="/assets/js/showAlert.js"></script>
 <!-- 페이지네이션 -->
 <script src="/assets/js/jquery.twbsPagination.min.js"></script>
 
@@ -365,8 +366,6 @@
     var currentPage = 1; // 현재 페이지 번호
     var sortOrder = 'asc';
     var sortColumn = 'default';
-    var modalFailFlag = false;
-    var alertMessage = '';
 
     $('#filter-taxi-reg-date').val(filterAllDay);
 
@@ -421,47 +420,6 @@
         getTotalPages();
         getTaxiList();
     });
-
-
-    // 얼럿보이기
-    function showAlert(type, message) {
-        if (alertMessage === message) {
-            return;
-        }
-        alertMessage = message;
-        var icon = '';
-        if (type === 'success') {
-            icon = '<i class="bi bi-check-circle-fill"></i>';
-        } else if (type === 'danger') {
-            icon = '<i class="bi bi-exclamation-triangle-fill"></i>';
-        }
-        console.log(icon);
-
-        // 알림 메시지 HTML을 생성
-        var alertHtml = `
-      <div class="alert alert-` + type + ` alert-dismissible fade show" role="alert" style="display: none;">
-         ` + icon + ` ` + message + `
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>`;
-        var $alert = $(alertHtml); // jQuery 객체로 변환
-
-        // modalFailFlag에 따라 알림 메시지를 추가할 위치 결정
-        if (modalFailFlag) {
-            $('#alertModalPlaceholder').append($alert); // 모달 내의 알림
-        } else {
-            $('#alertPlaceholder').append($alert); // 일반 알림
-        }
-
-        $alert.slideDown(); // 알림 메시지를 슬라이드 다운으로 표시
-
-        // 5초 후 알림 메시지를 슬라이드 업으로 숨기고 제거
-        setTimeout(function () {
-            $alert.slideUp(function () {
-                $(this).remove(); // 슬라이드 업이 완료되면 알림 메시지를 DOM에서 제거
-                alertMessage = '';
-            });
-        }, 5000); // 5000 밀리초 = 5초
-    }
 
     // 필터 값 리셋
     function filterReset() {
@@ -577,10 +535,10 @@
 
     // 택시 등록
     function taxiRegistration() {
-        const form = document.querySelector('.needs-validation');
+        var form = document.querySelector('.needs-validation');
+        isModalAlert = true;
         if (!form.checkValidity()) {
             form.classList.add('was-validated');
-            modalFailFlag = true;
             showAlert('danger', '입력 값이 올바르지 않습니다.');
             return;
         }
@@ -603,7 +561,7 @@
             success: function (data) {
                 if (data.isSuccess) {
                     $('#registorModal').modal('hide');
-                    modalFailFlag = false;
+                    isModalAlert = false;
                     filterReset(); // 새로고침
                     showAlert('success', '택시가 성공적으로 등록되었습니다.');
                 } else {

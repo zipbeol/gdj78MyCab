@@ -70,11 +70,10 @@
     </select>
 
     <select id="getTaxiRegFirstDate" resultType="String">
-        SELECT taxi_registration_date FROM taxi ORDER BY taxi_registration_date ASC LIMIT 1
-    </select>
-
-    <select id="getTaxiRegLastDate" resultType="String">
-        SELECT taxi_registration_date FROM taxi ORDER BY taxi_registration_date DESC LIMIT 1
+        SELECT taxi_registration_date
+        FROM taxi
+        ORDER BY taxi_registration_date ASC
+        LIMIT 1
     </select>
 
     <insert id="registerTaxi" parameterType="taxi">

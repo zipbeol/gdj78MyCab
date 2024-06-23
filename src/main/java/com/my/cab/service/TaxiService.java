@@ -87,28 +87,46 @@ public class TaxiService {
         return result;
     }
 
+    /**
+     * 특정 택시 정보 가져오는 메서드
+     *
+     * @param taxi_idx
+     * @return {@code TaxiDTO}
+     */
     public TaxiDTO getTaxiInfo(String taxi_idx) {
         return taxiDAO.getTaxiInfo(taxi_idx);
     }
 
+    /**
+     * 택시 정보 업데이트 한 후 결과 내보내는 메서드
+     *
+     * @param taxiDTO
+     * @return {@code Map}
+     */
     public Map<String, Object> updateTaxiInfo(TaxiDTO taxiDTO) {
-        ;
         Map<String, Object> result = new HashMap<>();
         result.put("result", taxiDAO.updateTaxiInfo(taxiDTO));
         return result;
     }
 
+    /**
+     * 택시 가장 오래된 등록일 가져오는 메서드
+     *
+     * @return {@code String}
+     */
     public String getTaxiRegFirstDate() {
         return taxiDAO.getTaxiRegFirstDate();
     }
 
-    public Map<String, Object> getTotalPages(SearchDTO searchDTO) {
-        Map<String, Object> result = new HashMap<>();
+    /**
+     * 페이지갯수 가져오는 메서드
+     *
+     * @param searchDTO
+     * @return {@code int}
+     */
+    public int getTotalPages(SearchDTO searchDTO) {
         int taxiTotal = taxiDAO.getTaxiCount(searchDTO);
         int totalPages = (int) Math.ceil((double) taxiTotal / PAGE_SIZE);
-        totalPages = totalPages > 0 ? totalPages : 1;
-        logger.info("totalPage {}", totalPages);
-        result.put("totalPages", totalPages);
-        return result;
+        return totalPages = totalPages > 0 ? totalPages : 1;
     }
 }

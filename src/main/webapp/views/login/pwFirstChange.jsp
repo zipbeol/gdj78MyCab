@@ -29,30 +29,36 @@
     <div class="container">
       <div class="row justify-content-center" style="position: relative;left: -6%;">
         <div class="col-xl-4 col-lg-5 col-sm-6 col-12">
-          <form action="!#" class="my-5">
+          <form class="my-5 needs-validation" action="/login/pwFirstChange.do" method="post" novalidate>
             <div class="border rounded-2 p-4 mt-5" style="width: 550px">
               <div class="login-form">
                 <a href="!#" class="mb-4 d-flex">
                   <img src="/assets/images/logo.svg" class="img-fluid login-logo" alt="Cab Admin Dashboard">
                 </a>
                 <h5 class="mb-4 lh-2 fw-light">
-                 프로필에 등록된 이메일을 입력하시고 인증번호를 입력해주세요.
+                 최초 로그인시 비밀번호 변경은 필수입니다. 
                  <br/>
-                 인증이 완료되면 임시 비밀번호가 발급됩니다.
+                 비밀번호 변경 후 다시 로그인 해주세요.
                 </h5>
                 <div class="mb-2" >
                 	<div style="position: relative;">
-                  <label class="form-label">이메일</label>
-                  <input type="text" class="form-control" placeholder="이메일을 입력해주세요.">
-                  <button style="position: relative;right: -440;margin-top: -29.5;width: 55;">확인</button>
+                  <label for="validationTooltip01" class="form-label">새 비밀번호 (8자리 이상, 영문, 숫자, 특수문자 2가지 이상 포함해야 합니다.)</label>
+                  <input type="text" class="form-control" id="password" name="emp_password" placeholder="새 비밀번호" required pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$" minlength="8" required>
+                  <div id="pwChk" class="invalid-feedback"></div>
                   </div>
                   <br/>
-                  <label class="form-label">인증번호</label>
-                  <input type="text" class="form-control" placeholder="인증번호를 입력해주세요.">
+                  <div class="was-validated">
+                  <label for="validationTooltip01" class="form-label was-validated">새 비밀번호 확인</label>
+                  <input type="text" class="form-control" id="passwordChk" placeholder="새 비밀번호 확인" required>
+                    <div id="pwChkValid" class="invalid-feedback"></div>
+                    </div>
                 </div>
                 <div class="d-grid pb-3">
-                
+                <input type="hidden" class="form-control" id="passwordChk" name="emp_no" value="${sessionScope.loginId}">
                 </div>
+                          <button class="btn btn-primary" type="submit" id="submitBtn">
+                            비밀번호 수정
+                          </button>
               </div>
             </div>
           </form>
@@ -61,5 +67,9 @@
     </div>
     <!-- Container end -->
   </body>
+  <script>
+  
+  
+  </script>
 
 </html>

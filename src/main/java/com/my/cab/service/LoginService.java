@@ -12,6 +12,8 @@ import com.my.cab.dao.LoginDAO;
 @Service
 public class LoginService {
 	
+	private String password = "";
+	
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired LoginDAO dao;
 	@Autowired PasswordEncoder encoder;
@@ -20,31 +22,39 @@ public class LoginService {
 	
 	public int login(String emp_no, String emp_password) {
 		
-		int row = dao.login(emp_no, emp_password); //로그인 체크
+		password = dao.pwfind(emp_no);
 		
-		int attRow = dao.attChk(emp_no); // 최초 로그인 확인 위해 근태 테이블 확인
-		
-		int attDup  = dao.attDup(emp_no);//오늘 출근 중복 처리 방지 카운트
-		
+		boolean pwPass = encoder.matches(emp_password, password);
 		int result = 0;
+		
+		if (pwPass) {
+			
+			boolean firstLogin = dao.firstLogin(emp_no); // 최초 로그인 확인 
+			
+			if (firstLogin) {
 				
-		if (row == 1 ) {//로그인 성공시		
-			if (attRow > 0 && attDup == 0) {//최초 로그인 아니고 출근 미처리
-				dao.att(emp_no);
-				result = 1;
-				
-			}else if (attRow > 0 && attDup > 0) {//최초 로그인 아니고 출근 이미 처리
-				result = 1;
-				
-			}else if (attRow == 0) {//최초 로그인시
-				dao.att(emp_no);
 				result = 2;
 				
-			} else {// 로그인 실패시
-			result = -1;
+			}else {
+				
+				int attDup  = dao.attDup(emp_no);//오늘 출근 중복 처리 방지 카운트
+				
+				if (attDup > 0) {//출근 데이터가 이미 있다면
+					
+					result = 1; //그냥 로그인만
+					
+				}else {
+					
+					dao.addAtt(emp_no);
+					result = 1;
+					
+				}
+			}
+			
+		}else {//로그인 실패시
+			result = 0;
 		}
-	
-	}
+		
 		return result;
 }
 	

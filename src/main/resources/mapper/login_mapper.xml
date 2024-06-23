@@ -5,5 +5,34 @@
 
 <mapper namespace="com.my.cab.dao.LoginDAO">
 
+	 <select id="pwfind" resultType="String">
+        SELECT emp_password
+        FROM employee
+        WHERE emp_no = #{emp_no}
+    </select>
+
+    <!-- 최초 로그인 여부를 확인하는 쿼리 -->
+    <select id="firstLogin" resultType="boolean">
+        SELECT first_login
+        FROM employee
+        WHERE emp_no = #{emp_no}
+    </select>
+
+    <!-- 오늘 날짜의 출근 중복 여부를 확인하는 쿼리 -->
+    <select id="attDup" resultType="int">
+        SELECT COUNT(*)
+        FROM attendance
+        WHERE emp_no = #{emp_no}
+          AND DATE(work_day) = CURDATE()
+    </select>
+
+    <!-- 출근 시간을 추가하는 쿼리 -->
+    <insert id="addAttendance" >
+        INSERT INTO attendance (emp_no, att_time)
+        VALUES (#{emp_no}, NOW())
+    </insert>
+
+
+
 
 </mapper>

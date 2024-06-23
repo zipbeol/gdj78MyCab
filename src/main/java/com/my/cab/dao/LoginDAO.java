@@ -5,12 +5,12 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface LoginDAO {
 
-	int attChk(String emp_no);
-
-	int login(String emp_no, String emp_password);
-
-	void att(String emp_no);
-
 	int attDup(String emp_no);
+
+	boolean firstLogin(String emp_no);
+
+	String pwfind(String emp_no);
+
+	void addAtt(String emp_no);
 
 }

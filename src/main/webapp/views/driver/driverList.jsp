@@ -399,8 +399,8 @@
 
     $('#filter-taxi-reg-date').val(filterAllDay);
 
-    getTotalPages();
-    getTaxiList();
+    // getTotalPages();
+    // getTaxiList();
 
 
     // 테이블 헤더 클릭 이벤트 설정
@@ -600,13 +600,21 @@
             return;
         }
 
+        var formData = new FormData();
+        formData.append('photo', $('#register-driver-photo')[0].files[0]);
+        formData.append('driver_name', $('#register-driver-name').val());
+        formData.append('driver_taxi_license', $('#register-driver-taxi-license')[0].files[0]);
+        formData.append('driver_address', $('#register-driver-address').val() + ' ' + $('#register-driver-address-detail').val());
+        formData.append('driver_phone', $('#register-driver-phone').val());
+
 
         $.ajax({
             url: './create.ajax',
             type: 'POST',
             dataType: 'JSON',
-            data: {
-            },
+            processData: false,
+            contentType: false,
+            data: formData,
             success: function (data) {
                 if (data.isSuccess) {
                     $('#registorModal').modal('hide');

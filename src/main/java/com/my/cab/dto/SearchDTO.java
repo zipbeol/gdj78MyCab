@@ -9,13 +9,40 @@ public class SearchDTO {
     private String filterIsActive;
     private String filterStartDate;
     private String filterEndDate;
-    private String page;
+    private String sortOrder;
+    private String sortColumn;
+    private int page;
+    private int pageSize;
 
-    public String getPage() {
+    public String getSortOrder() {
+        return sortOrder;
+    }
+
+    public void setSortOrder(String sortOrder) {
+        this.sortOrder = sortOrder;
+    }
+
+    public String getSortColumn() {
+        return sortColumn;
+    }
+
+    public void setSortColumn(String sortColumn) {
+        this.sortColumn = sortColumn;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public int getPage() {
         return page;
     }
 
-    public void setPage(String page) {
+    public void setPage(int page) {
         this.page = page;
     }
 

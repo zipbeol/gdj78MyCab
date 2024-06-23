@@ -37,9 +37,41 @@
 
     <!-- 따로 적용한 CSS -->
     <link rel="stylesheet" href="/assets/css/default.css">
-    <style>
+    <!-- FontAwesome 추가 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
+    <style>
+        th.sortable {
+            position: relative;
+            cursor: pointer;
+        }
+
+        th.sortable::after {
+            content: '\f0dc'; /* FontAwesome 기본 sort 아이콘 */
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 8px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        th.sortable:hover::after {
+            opacity: 0.3; /* 흐릿하게 설정 */
+        }
+
+        th.sortable.asc::after {
+            content: '\f0de'; /* FontAwesome sort up 아이콘 */
+            opacity: 1;
+        }
+
+        th.sortable.desc::after {
+            content: '\f0dd'; /* FontAwesome sort down 아이콘 */
+            opacity: 1;
+        }
     </style>
+
+
 </head>
 
 <body>
@@ -126,7 +158,7 @@
                                                 <input type="button" class="btn btn-secondary" onclick="filterReset()"
                                                        value="초기화">
                                                 <input type="button" class="btn btn-primary" onclick="getTaxiList()"
-                                                       value="검색">
+                                                       value="검색" style="display: none">
                                             </div>
                                         </div>
                                         <div class="row">
@@ -148,14 +180,15 @@
                                         </div>
                                         <div class="row mb-3">
                                             <div class="col-4">
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control datepicker-range"
+                                                <div class="input-group" id="filter-taxi-reg-date-div">
+                                                    <input type="text"
+                                                           class="form-control datepicker-range taxi-search-filter"
                                                            id="filter-taxi-reg-date">
                                                     <span class="input-group-text"><i class="bi bi-calendar2-range"></i></span>
                                                 </div>
                                             </div>
                                             <div class="col-2">
-                                                <select id="filter-taxi-model" class="form-select">
+                                                <select id="filter-taxi-model" class="form-select taxi-search-filter">
                                                     <option value="">차종</option>
                                                     <c:forEach items="${taxiModelList}" var="taxiModel">
                                                         <option value="${taxiModel}">${taxiModel}</option>
@@ -163,7 +196,8 @@
                                                 </select>
                                             </div>
                                             <div class="col-2">
-                                                <select id="filter-taxi-is-active" class="form-select">
+                                                <select id="filter-taxi-is-active"
+                                                        class="form-select taxi-search-filter">
                                                     <option value="">폐차 여부</option>
                                                     <option value="1">false</option>
                                                     <option value="0">true</option>
@@ -171,54 +205,44 @@
                                             </div>
                                             <div class="col-1"></div>
                                             <div class="col-3 text-end">
-                                                <input type="text" class="form-control" id="search-taxi-license-plate"
-                                                       oninput="search()" placeholder="번호판을 입력해 주세요">
+                                                <input type="text" class="form-control taxi-search-filter bg-"
+                                                       id="search-taxi-license-plate"
+                                                       placeholder="번호판을 입력해 주세요">
                                             </div>
                                         </div>
                                     </div>
                                     <!-- 검색창 종료 -->
                                     <!-- 리스트 테이블 시작 -->
                                     <div class="table-outer">
-                                        <table class="table table-hover table-bordered align-middle custom-table m-0">
-                                            <thead>
-                                            <tr>
-                                                <th class="text-center" id="th-taxi-license-plate"
-                                                    onclick="getThSpanId(this)" style="width: 25%;">번호판 <span
-                                                        id="table-th-taxi-license-plate"></span></th>
-                                                <th class="text-center" id="th-taxi-model" onclick="getThSpanId(this)"
-                                                    style="width: 20%;">
-                                                    차종 <span id="table-th-taxi-model"></span></th>
-                                                <th class="text-center" id="th-taxi-reg-date"
-                                                    onclick="getThSpanId(this)" style="width: 25%;">등록일 <span
-                                                        id="table-th-taxi-reg-date"></span></th>
-                                                <th class="text-center" id="th-taxi-is-active"
-                                                    onclick="getThSpanId(this)" style="width: 10%;">폐차 여부 <span
-                                                        id="table-th-taxi-is-active"></span></th>
-                                            </tr>
-                                            </thead>
-                                            <tbody id="taxi-list">
-                                            <c:forEach items="${taxiList}" var="taxi">
-                                                <tr class="taxi-list-tbody-tr" id="${taxi.taxi_idx}">
-                                                    <td class="text-center">${taxi.taxi_license_plate}</td>
-                                                    <td class="text-center">${taxi.taxi_model}</td>
-                                                    <td class="text-center">${taxi.taxi_registration_date}</td>
-                                                    <td class="text-center">
-                                                        <c:choose>
-                                                            <c:when test="${taxi.taxi_is_active == 1}">
-                                                                false
-                                                            </c:when>
-                                                            <c:otherwise>
-                                                                true
-                                                            </c:otherwise>
-                                                        </c:choose>
-                                                    </td>
+                                        <div class="table-responsive">
+                                            <table class="table align-middle table-hover m-0">
+                                                <thead>
+                                                <tr>
+                                                    <th class="text-center sortable" id="th-taxi-license-plate"
+                                                        style="width: 25%;" data-value="taxi-license-plate">번호판
+                                                    </th>
+                                                    <th class="text-center sortable" id="th-taxi-model"
+                                                        style="width: 20%;" data-value="taxi-model">차종
+                                                    </th>
+                                                    <th class="text-center sortable" id="th-taxi-reg-date"
+                                                        style="width: 25%;" data-value="taxi-reg-date">등록일
+                                                    </th>
+                                                    <th class="text-center sortable" id="th-taxi-is-active"
+                                                        style="width: 15%;" data-value="taxi-is-active">폐차 여부
+                                                    </th>
                                                 </tr>
-                                            </c:forEach>
-
-                                            </tbody>
-                                        </table>
+                                                </thead>
+                                                <tbody id="taxi-list">
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                     <!-- 리스트 테이블 종료 -->
+                                    <!-- 페이지 네이션 시작 -->
+                                    <nav aria-label="Page navigation example" class="mt-3">
+                                        <ul class="pagination justify-content-center" id="pagination"></ul>
+                                    </nav>
+                                    <!-- 페이지 네이션 종료 -->
                                 </div>
                             </div>
                         </div>
@@ -314,52 +338,82 @@
 <!-- Custom JS files -->
 <script src="/assets/js/custom.js"></script>
 <script src="/assets/js/LocalStorage.js"></script>
+<script src="/assets/js/jquery.twbsPagination.min.js"></script>
 
 <script>
     var searchText = $('#search-taxi-license-plate').val();
-    var filterStartDate = '';
+    var today = moment().format('YYYY/MM/DD');
+    var filterAllDay = '${taxiRegFirstDate}' + ' - ' + today;
     var filterEndDate = '';
     var filterTaxiModel = '';
     var filterIsActive = '';
     var currentPage = 1; // 현재 페이지 번호
-    var loading = false; // 로딩 상태를 나타내는 플래그
+    var sortOrder = 'asc';
+    var sortColumn = 'default';
 
-    var today = moment().format('YYYY/MM/DD');
-    $('#filter-taxi-reg-date').val(today + ' - ' + today);
+    $('#filter-taxi-reg-date').val(filterAllDay);
 
-    $(document).ready(function () {
-        getTaxiList(); // 페이지 로드 시 처음 택시 목록을 가져옵니다.
+    getTotalPages();
+    getTaxiList();
 
-        // 스크롤 이벤트 감지
-        $(window).scroll(function () {
-            if ($(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
-                if (!loading) {
-                    currentPage++;
-                    getTaxiList();
-                }
-            }
-        });
+    // 테이블 헤더 클릭 이벤트 설정
+    $('th.sortable').click(function () {
+        sortColumn = $(this).data('value');
+        // 현재 정렬 상태 확인
+        if ($(this).hasClass('asc')) {
+            $(this).removeClass('asc').addClass('desc');
+            sortOrder = 'desc';
+        } else if ($(this).hasClass('desc')) {
+            $(this).removeClass('desc').addClass('asc');
+            sortOrder = 'asc';
+        } else {
+            $('th.sortable').removeClass('asc desc');
+            $(this).addClass('asc');
+            sortOrder = 'asc';
+        }
+        getTaxiList();
     });
 
-    $('.taxi-list-tbody-tr').on('click', function () {
+
+    // 상세 페이지 이동
+    $(document).on('click', '.taxi-list-tbody-tr', function () {
         location.href = '/taxi/detail.go?taxi_idx=' + $(this).attr('id');
+    });
+
+    $('#pagination').twbsPagination({
+        totalPages: 10, // 총 페이지 수 (백엔드에서 가져와야 함)
+        visiblePages: 5, // 표시할 페이지 수
+        startPage: 1, // 시작 페이지
+        paginationClass: 'pagination align-items-center',
+        onPageClick: function (event, page) {
+            currentPage = page; // 현재 페이지 업데이트
+            getTaxiList(); // 택시 목록 갱신
+        }
+    });
+
+    $('#filter-taxi-reg-date').on('change', function () {
+        currentPage = 1;
+        getTotalPages();
+        getTaxiList();
+    });
+    $('.taxi-search-filter').on('input', function () {
+        currentPage = 1;
+        getTotalPages();
+        getTaxiList();
+    });
+
+    $('th').on('click', function () {
+        console.log($(this).data());
     });
 
     function filterReset() {
         $('#filter-taxi-is-active').val('');
         $('#filter-taxi-model').val('');
-        $('#filter-taxi-reg-date').val(today + ' - ' + today);
+        $('#filter-taxi-reg-date').val(filterAllDay);
         $('#search-taxi-license-plate').val('');
         currentPage = 1; // 페이지 번호 초기화
-        $('#taxi-list').html(''); // 기존 리스트 초기화
+        getTotalPages();
         getTaxiList(); // 목록 새로고침
-    }
-
-    function search() {
-        searchText = $('#search-taxi-license-plate').val();
-        currentPage = 1; // 페이지 번호 초기화
-        $('#taxi-list').html(''); // 기존 리스트 초기화
-        getTaxiList();
     }
 
     function isNumbers(input) {
@@ -370,17 +424,7 @@
     }
 
     function getTaxiList() {
-        var filterDate = $('#filter-taxi-reg-date').val();
-        if (filterDate) {
-            var dates = filterDate.split(' - ');
-            filterStartDate = dates[0];
-            filterEndDate = dates[1];
-        }
-
-        filterTaxiModel = $('#filter-taxi-model').val();
-        filterIsActive = $('#filter-taxi-is-active').val();
-
-        loading = true; // 데이터 로딩 시작
+        getSearchValue();
         $.ajax({
             url: './list.ajax',
             type: 'GET',
@@ -390,32 +434,82 @@
                 'filterEndDate': filterEndDate,
                 'filterTaxiModel': filterTaxiModel,
                 'filterIsActive': filterIsActive,
-                'page': currentPage // 페이지 번호 전달
+                'page': currentPage,
+                'sortColumn': sortColumn,
+                'sortOrder': sortOrder
             },
             dataType: 'JSON',
             success: function (data) {
                 drawTaxiList(data.taxiList);
-                loading = false; // 데이터 로딩 완료
             },
             error: function (error) {
                 console.log(error);
-                loading = false; // 데이터 로딩 실패
             }
         });
     }
 
+    function getTotalPages() {
+        getSearchValue();
+        $.ajax({
+            url: './getTotalPages.ajax',
+            type: 'GET',
+            data: {
+                'searchText': searchText,
+                'filterStartDate': filterStartDate,
+                'filterEndDate': filterEndDate,
+                'filterTaxiModel': filterTaxiModel,
+                'filterIsActive': filterIsActive
+            },
+            dataType: 'JSON',
+            success: function (data) {
+                // console.log(data);
+                $('#pagination').twbsPagination('destroy');
+                $('#pagination').twbsPagination({
+                    totalPages: data.totalPages, // 서버에서 받은 총 페이지 수
+                    visiblePages: 5,
+                    startPage: currentPage,
+                    paginationClass: 'pagination align-items-center',
+                    onPageClick: function (event, page) {
+                        currentPage = page;
+                        getTaxiList();
+                    }
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function getSearchValue() {
+        var filterDate = $('#filter-taxi-reg-date').val();
+        if (filterDate) {
+            var dates = filterDate.split(' - ');
+            filterStartDate = dates[0];
+            filterEndDate = dates[1];
+        }
+
+        filterTaxiModel = $('#filter-taxi-model').val();
+        filterIsActive = $('#filter-taxi-is-active').val();
+        searchText = $('#search-taxi-license-plate').val();
+    }
+
     function drawTaxiList(list) {
         var content = '';
-        for (item of list) {
-            var taxi_is_active = item.taxi_is_active === 1 ? 'true' : 'false';
-            content += '<tr class="taxi-list-tbody-tr" id="' + item.taxi_idx + '">'
-                + '<td class="text-center">' + item.taxi_license_plate + '</td>'
-                + '<td class="text-center">' + item.taxi_model + '</td>'
-                + '<td class="text-center">' + item.taxi_registration_date + '</td>'
-                + '<td class="text-center">' + taxi_is_active + '</td>'
-                + '</tr>';
+        if (list.length > 0) {
+            for (item of list) {
+                var taxi_is_active = item.taxi_is_active === 1 ? 'true' : 'false';
+                content += '<tr class="taxi-list-tbody-tr" id="' + item.taxi_idx + '">'
+                    + '<td class="text-center">' + item.taxi_license_plate + '</td>'
+                    + '<td class="text-center">' + item.taxi_model + '</td>'
+                    + '<td class="text-center">' + item.taxi_registration_date + '</td>'
+                    + '<td class="text-center">' + taxi_is_active + '</td>'
+                    + '</tr>';
+            }
+        } else {
+            content = '<tr><td colspan="4" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
         }
-        $('#taxi-list').append(content);
+        $('#taxi-list').html(content);
     }
 
     function taxiRegistration() {

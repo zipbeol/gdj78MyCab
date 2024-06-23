@@ -10,17 +10,21 @@ import java.util.Map;
 @Mapper
 public interface TaxiDAO {
 
-    List<TaxiDTO> getTaxiList();
-
     void registerTaxi(TaxiDTO taxiDTO);
 
     boolean checkTaxiLicensePlateExists(String taxiLicensePlate);
 
     List<String> getTaxiModelList();
 
-    List<TaxiDTO> getSearchedTaxiList(SearchDTO searchDTO);
+    List<TaxiDTO> getTaxiList(SearchDTO searchDTO);
 
     TaxiDTO getTaxiInfo(String licensePlate);
 
     boolean updateTaxiInfo(TaxiDTO taxiDTO);
+
+    String getTaxiRegFirstDate();
+
+    String getTaxiRegLastDate();
+
+    int getTaxiCount(SearchDTO searchDTO);
 }

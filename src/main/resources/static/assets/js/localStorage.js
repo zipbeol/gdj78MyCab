@@ -37,7 +37,7 @@ $(document).ready(function () {
     // console.log(clickedAId);
 
     if (menuId) {
-        console.log('적용');
+        // console.log('적용');
         var menuElement = $('#' + menuId);
         // console.log(menuElement);
         if (menuClass === 'undefined') {

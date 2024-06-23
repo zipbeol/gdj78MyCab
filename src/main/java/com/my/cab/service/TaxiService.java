@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,22 +18,22 @@ public class TaxiService {
 
     Logger logger = LoggerFactory.getLogger(getClass());
 
+    private static final int PAGE_SIZE = 10;
+
     @Autowired
     TaxiDAO taxiDAO;
 
+
     public Map<String, Object> listAjax(SearchDTO searchDTO) {
         Map<String, Object> result = new HashMap<>();
-        List<TaxiDTO> taxiList = null;
-        boolean isSuccess = false;
-//        if (searchDTO.getSearchText() != null && !checkTaxiLicensePlateExists(searchDTO.getSearchText())) {
-//            taxiList = getTaxiList();
-//        } else {
-//            taxiList = getSearchedTaxiList(searchDTO);
-//            isSuccess = true;
-//        }
-        taxiList = getSearchedTaxiList(searchDTO);
+        int page = (searchDTO.getPage() - 1) * PAGE_SIZE;
+        logger.info("page {}", page);
+        logger.info("searchDTO page {}", searchDTO.getPage());
+        searchDTO.setPage(page);
+        searchDTO.setPageSize(PAGE_SIZE);
+        logger.info("searchDTO pageSize {}", searchDTO.getPageSize());
+        List<TaxiDTO> taxiList = getTaxiList(searchDTO);
         result.put("taxiList", taxiList);
-        result.put("result", isSuccess);
         return result;
     }
 
@@ -49,25 +48,18 @@ public class TaxiService {
     }
 
     /**
-     * {@code TaxiDTO}리스트 리턴해주는 메서드
-     *
-     * @return List<TaxiDTO>
-     */
-    public List<TaxiDTO> getTaxiList() {
-        return taxiDAO.getTaxiList();
-    }
-
-    /**
      * 택시 리스트 검색한 리스트 리턴
+     *
      * @param searchDTO
      * @return
      */
-    public List<TaxiDTO> getSearchedTaxiList(SearchDTO searchDTO) {
-        return taxiDAO.getSearchedTaxiList(searchDTO);
+    public List<TaxiDTO> getTaxiList(SearchDTO searchDTO) {
+        return taxiDAO.getTaxiList(searchDTO);
     }
 
     /**
      * 택시 차종 리스트 리턴
+     *
      * @return
      */
     public List<String> getTaxiModelList() {
@@ -103,6 +95,20 @@ public class TaxiService {
         ;
         Map<String, Object> result = new HashMap<>();
         result.put("result", taxiDAO.updateTaxiInfo(taxiDTO));
+        return result;
+    }
+
+    public String getTaxiRegFirstDate() {
+        return taxiDAO.getTaxiRegFirstDate();
+    }
+
+    public Map<String, Object> getTotalPages(SearchDTO searchDTO) {
+        Map<String, Object> result = new HashMap<>();
+        int taxiTotal = taxiDAO.getTaxiCount(searchDTO);
+        int totalPages = (int) Math.ceil((double) taxiTotal / PAGE_SIZE);
+        totalPages = totalPages > 0 ? totalPages : 1;
+        logger.info("totalPage {}", totalPages);
+        result.put("totalPages", totalPages);
         return result;
     }
 }

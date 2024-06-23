@@ -5,13 +5,7 @@
 
 <mapper namespace="com.my.cab.dao.TaxiDAO">
 
-    <select id="getTaxiList" resultType="taxi">
-        SELECT taxi_license_plate, taxi_model, taxi_registration_date, taxi_is_active, taxi_idx
-        FROM taxi
-        ORDER BY taxi_registration_date
-    </select>
-
-    <select id="getSearchedTaxiList" resultType="taxi" parameterType="search">
+    <select id="getTaxiList" resultType="taxi" parameterType="search">
         SELECT taxi_license_plate, taxi_model, taxi_registration_date, taxi_is_active, taxi_idx
         FROM taxi
         <where>
@@ -28,7 +22,59 @@
                 AND taxi_registration_date BETWEEN #{filterStartDate} AND #{filterEndDate}
             </if>
         </where>
-        ORDER BY taxi_registration_date
+            <choose>
+                <when test="sortColumn != null and sortColumn == 'taxi-license-plate'">
+                    ORDER BY taxi_license_plate
+                </when>
+                <when test="sortColumn != null and sortColumn == 'taxi-model'">
+                    ORDER BY taxi_model
+                </when>
+                <when test="sortColumn != null and sortColumn == 'taxi-reg-date'">
+                    ORDER BY taxi_registration_date
+                </when>
+                <when test="sortColumn != null and sortColumn == 'taxi-fuel-type'">
+                    ORDER BY taxi_fuel_type
+                </when>
+                <otherwise>
+                    ORDER BY taxi_idx
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="sortOrder != null and sortOrder == 'desc'">
+                    DESC
+                </when>
+                <when test="sortOrder != null and sortOrder == 'asc'">
+                    ASC
+                </when>
+            </choose>
+        LIMIT #{pageSize} OFFSET #{page}
+    </select>
+
+    <select id="getTaxiCount" resultType="int" parameterType="search">
+        SELECT COUNT(taxi_idx)
+        FROM taxi
+        <where>
+            <if test="searchText != null and searchText != ''">
+                taxi_license_plate LIKE CONCAT('%', #{searchText}, '%')
+            </if>
+            <if test="filterTaxiModel != null and filterTaxiModel !=  ''">
+                AND taxi_model = #{filterTaxiModel}
+            </if>
+            <if test="filterIsActive != null and filterIsActive !=  ''">
+                AND taxi_is_active = #{filterIsActive}
+            </if>
+            <if test="filterStartDate != null and filterStartDate !=  '' and filterEndDate != null and filterEndDate !=  ''">
+                AND taxi_registration_date BETWEEN #{filterStartDate} AND #{filterEndDate}
+            </if>
+        </where>
+    </select>
+
+    <select id="getTaxiRegFirstDate" resultType="String">
+        SELECT taxi_registration_date FROM taxi ORDER BY taxi_registration_date ASC LIMIT 1
+    </select>
+
+    <select id="getTaxiRegLastDate" resultType="String">
+        SELECT taxi_registration_date FROM taxi ORDER BY taxi_registration_date DESC LIMIT 1
     </select>
 
     <insert id="registerTaxi" parameterType="taxi">

@@ -27,7 +27,7 @@ public class TaxiController {
     public String listGo(Model model) {
         logger.info("listGo 호출");
         model.addAttribute("taxiModelList", taxiService.getTaxiModelList());
-        model.addAttribute("taxiList", taxiService.getTaxiList());
+        model.addAttribute("taxiRegFirstDate", taxiService.getTaxiRegFirstDate());
         return "taxi/taxiList";
     }
 
@@ -68,5 +68,11 @@ public class TaxiController {
     @ResponseBody
     public Map<String, Object> updateTaxiInfo(TaxiDTO taxiDTO) {
         return taxiService.updateTaxiInfo(taxiDTO);
+    }
+
+    @GetMapping("/getTotalPages.ajax")
+    @ResponseBody
+    public Map<String, Object> getTotalPages(SearchDTO searchDTO) {
+        return taxiService.getTotalPages(searchDTO);
     }
 }

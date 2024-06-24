@@ -10,4 +10,6 @@ public interface CalendarDAO {
 
 	List<Map<String, Object>> calListCall();
 
+	List<Map<String, Object>> dayCalListCall(String selectedDay);
+
 }

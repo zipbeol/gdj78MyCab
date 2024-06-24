@@ -24,4 +24,8 @@ public interface DriverDAO {
     DriverDTO getDriverInfo(String driverIdx);
 
     boolean updateDriverInfo(DriverDTO driverDTO);
+
+    String getDriverPhotoName(int driverIdx);
+
+    String getDriverTaxiLicensePhotoName(int driverIdx);
 }

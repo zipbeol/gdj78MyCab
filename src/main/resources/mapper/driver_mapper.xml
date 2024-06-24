@@ -126,4 +126,11 @@
         WHERE driver_idx = #{driver_idx}
     </update>
 
+    <select id="getDriverPhotoName" resultType="String">
+        SELECT driver_photo FROM driver WHERE driver_idx = #{param1}
+    </select>
+    <select id="getDriverTaxiLicensePhotoName" resultType="String">
+        SELECT driver_taxi_license_photo FROM driver WHERE driver_idx = #{param1}
+    </select>
+
 </mapper>

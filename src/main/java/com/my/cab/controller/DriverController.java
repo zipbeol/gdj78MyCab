@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Driver;
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/driver")
@@ -69,15 +70,24 @@ public class DriverController {
 
     @PostMapping("update.ajax")
     @ResponseBody
-    public Map<String, Object> update(DriverDTO driverDTO) {
+    public Map<String, Object> update(DriverDTO driverDTO, @RequestParam Map<String, MultipartFile> files) {
         logger.info("\ndriverDTO idx:" + driverDTO.getDriver_idx()
                 + "\ndriverDTO name:" + driverDTO.getDriver_name()
                 + "\ndriverDTO isRetired:" + driverDTO.getDriver_is_retired()
                 + "\ndriverDTO phone:" + driverDTO.getDriver_phone()
                 + "\ndriverDTO Address:" + driverDTO.getDriver_address()
                 + "\ndriverDTO AddressDetail:" + driverDTO.getDriver_address_detail()
+                + "\nfiles driverPhoto:" + getFileName(files, "driver_photo_file")
+                + "\nfiles driverTaxiLicensePhoto:" + getFileName(files, "driver_taxi_license_photo_file")
         );
-        return Map.of("result", driverService.updateDriverInfo(driverDTO));
+
+        return Map.of("result", driverService.updateDriverInfo(driverDTO, files));
     }
+
+    private String getFileName(Map<String, MultipartFile> files, String key) {
+        return files.containsKey(key) && !files.get(key).isEmpty() ? files.get(key).getOriginalFilename() : "No file";
+    }
+
+
 
 }

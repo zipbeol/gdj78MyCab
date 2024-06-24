@@ -143,11 +143,24 @@
                                         <div class="col">
                                             <dl class="row">
                                                 <!-- 수정필요 -->
-                                                <dd class="col-10"><img src="/upload/${driverInfo.driver_photo}"
-                                                                        style="width: 150px; height: 150px;"></dd>
-                                                <div class="col-2 text-end"><input type="button"
-                                                                                   class="btn btn-secondary"
-                                                                                   value="면허사진"></div>
+                                                <dd class="col-12 gap-2">
+                                                    <div>
+                                                        <label for="driver-photo">기사 사진:</label>
+                                                        <img src="/upload/${driverInfo.driver_photo}"
+                                                             style="width: 150px; height: 150px;" id="driver-photo">
+                                                        <input type="file" id="driver-photo-input"
+                                                               style="display: none;">
+                                                    </div>
+                                                    <div>
+                                                        <label for="driver-taxi-license-photo">면허 사진:</label>
+                                                        <img src="/upload/${driverInfo.driver_taxi_license_photo}"
+                                                             style="width: 200px; height: 150px;"
+                                                             id="driver-taxi-license-photo">
+                                                        <input type="file" id="license-photo-input"
+                                                               style="display: none;">
+                                                    </div>
+                                                </dd>
+
                                                 <!-- 수정필요 -->
                                                 <dt class="col-3">기사 이름:</dt>
                                                 <dd class="col-9 info-value mb-3" id="driver-name"
@@ -215,24 +228,6 @@
 
 </div>
 <!-- Page wrapper end -->
-<!-- 면허사진 -->
-<div class="modal fade" id="licensePhotoModal" tabindex="-1" aria-labelledby="licensePhotoModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="licensePhotoModalLabel">면허 사진</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <img id="licensePhoto" src="" alt="Driver License Photo" class="img-fluid">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 </body>
 <!-- *************
@@ -259,16 +254,10 @@
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 <script>
-    $('.btn-secondary').click(function () {
-        var licensePhotoUrl = '/upload/${driverInfo.driver_taxi_license_photo}';
-        $('#licensePhoto').attr('src', licensePhotoUrl);
-        $('#licensePhotoModal').modal('show');
-    });
     $('#edit-button').click(function () {
         $('.info-value').each(function () {
             var value = $(this).data('value');
             var id = $(this).attr('id');
-            console.log(id);
             if (id === 'driver-address') {
                 $(this).html('<input type="text" class="form-control" id="' + id + '" value="' + value + '" onclick="searchAddress()" tabindex="-1" readonly>');
             } else if (id === 'driver-is-retired') {
@@ -277,11 +266,14 @@
                     + '<option value="0"' + (value == 0 ? ' selected' : '') + '>재직중</option>'
                     + '</select>';
                 $(this).html(selectHtml);
-                console.log(value);
             } else {
                 $(this).html('<input type="text" class="form-control" id="' + id + '" value="' + value + '">');
             }
         });
+
+        $('#driver-photo-input').show();
+        $('#license-photo-input').show();
+
         $('#edit-button').hide();
         $('#save-button').show();
     });
@@ -293,26 +285,32 @@
         var driverAddress = $('#driver-address input').val();
         var driverAddressDetail = $('#driver-address-detail input').val();
         var driverIdx = '${driverInfo.driver_idx}';
-        <%--console.log(driverName);--%>
-        <%--console.log(driverIsRetired);--%>
-        <%--console.log(driverPhone);--%>
-        <%--console.log(driverAddress);--%>
-        <%--console.log(driverAddressDetail);--%>
-        <%--console.log('${driverInfo.driver_idx}');--%>
+        var driverPhoto = $('#driver-photo-input')[0].files[0];
+        var licensePhoto = $('#license-photo-input')[0].files[0];
+
+        var formData = new FormData();
+        formData.append('driver_name', driverName);
+        formData.append('driver_is_retired', driverIsRetired);
+        formData.append('driver_phone', driverPhone);
+        formData.append('driver_address', driverAddress);
+        formData.append('driver_address_detail', driverAddressDetail);
+        formData.append('driver_idx', driverIdx);
+
+        if (driverPhoto) {
+            formData.append('driver_photo_name', driverPhoto);
+        }
+        if (licensePhoto) {
+            formData.append('driver_taxi_license_photo_name', licensePhoto);
+        }
+
         $.ajax({
             url: './update.ajax',
             type: 'POST',
-            data: {
-                'driver_name': driverName,
-                'driver_is_retired': driverIsRetired,
-                'driver_phone': driverPhone,
-                'driver_address': driverAddress,
-                'driver_address_detail': driverAddressDetail,
-                'driver_idx': driverIdx
-            },
+            data: formData,
+            processData: false,
+            contentType: false,
             dataType: 'JSON',
             success: function (data) {
-                console.log(data);
                 if (data.result) {
                     $('.info-value').each(function () {
                         var value;
@@ -332,6 +330,16 @@
                             $(this).text(value);
                         }
                     });
+                    if (data.driver_photo) {
+                        $('#driver-photo').attr('src', '/upload/' + data.driver_photo);
+                    }
+                    if (data.license_photo) {
+                        $('#driver-taxi-license-photo').attr('src', '/upload/' + data.license_photo);
+                    }
+
+                    $('#driver-photo-input').hide();
+                    $('#license-photo-input').hide();
+
                     $('#save-button').hide();
                     $('#edit-button').show();
                     showAlert('success', '수정이 완료되었습니다.');
@@ -339,9 +347,7 @@
                     showAlert('danger', '수정에 실패했습니다.');
                 }
             },
-
             error: function (error) {
-                console.log(error);
                 showAlert('danger', '수정에 실패했습니다.');
             }
         });
@@ -350,35 +356,24 @@
     function searchAddress() {
         new daum.Postcode({
             oncomplete: function (data) {
-                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
-
-                // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
-                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-                var roadAddr = data.roadAddress; // 도로명 주소 변수
-                var extraRoadAddr = ''; // 참고 항목 변수
-
-                // 법정동명이 있을 경우 추가한다. (법정리는 제외)
-                // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                var roadAddr = data.roadAddress;
+                var extraRoadAddr = '';
                 if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
                     extraRoadAddr += data.bname;
                 }
-                // 건물명이 있고, 공동주택일 경우 추가한다.
                 if (data.buildingName !== '' && data.apartment === 'Y') {
                     extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
                 }
-
-
-                // 우편번호와 주소 정보를 해당 필드에 넣는다.
                 $('#driver-address').val(roadAddr);
-
-            }
-            , focusInput: false
+            },
+            focusInput: false
         }).open();
     }
 
     function formatPhoneNumber(phoneNumber) {
         return phoneNumber.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
     }
+
 
 </script>
 

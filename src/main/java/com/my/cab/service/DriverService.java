@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -59,7 +60,6 @@ public class DriverService {
                 result = updateDriverTaxiLicensePhoto(driverDTO);
             }
         }
-
         return result;
     }
 
@@ -127,7 +127,40 @@ public class DriverService {
         return driverDAO.getDriverInfo(driverIdx);
     }
 
-    public boolean updateDriverInfo(DriverDTO driverDTO) {
-        return driverDAO.updateDriverInfo(driverDTO);
+    @Transactional
+    public boolean updateDriverInfo(DriverDTO driverDTO, Map<String, MultipartFile> files) {
+        boolean result = false;
+        result = driverDAO.updateDriverInfo(driverDTO);
+        for (Map.Entry<String, MultipartFile> file : files.entrySet()) {
+            Map<String, Object> map = fileUpload(file, driverDTO.getDriver_idx(), result);
+            String fileName = (String) map.get("fileName");
+            result = (boolean) map.get("result");
+            logger.info("fileName: {}", file.getKey());
+            logger.info("result: {}", result);
+            logger.info("driverDTO: {}", driverDTO.getDriver_idx());
+            if (file.getKey().equals("driver_photo_name")) {
+                driverDTO.setDriver_photo(fileName);
+                String oldFileName = driverDAO.getDriverPhotoName(driverDTO.getDriver_idx());
+                deleteFile(oldFileName);
+                result = updateDriverPhoto(driverDTO);
+            } else {
+                driverDTO.setDriver_photo(file.getValue().getOriginalFilename());
+                String oldFileName = driverDAO.getDriverTaxiLicensePhotoName(driverDTO.getDriver_idx());
+                deleteFile(oldFileName);
+                result = updateDriverTaxiLicensePhoto(driverDTO);
+            }
+        }
+        return result;
+
     }
+
+    private void deleteFile(String file) {
+        logger.info("delete file {}", file);
+        File delFile = new File(uploadDir + "/" + file);
+        if (delFile.exists()) {
+            delFile.delete();
+        }
+    }
+
+
 }

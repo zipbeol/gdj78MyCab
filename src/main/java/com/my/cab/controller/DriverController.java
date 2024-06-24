@@ -36,7 +36,7 @@ public class DriverController {
     @ResponseBody
     public Map<String, Object> create(DriverDTO driverDTO, @RequestParam Map<String, MultipartFile> files) {
         logger.info("Create driverName : {}", driverDTO.getDriver_name());
-        logger.info("Create files : {}", files);
+        logger.info("Create files : {}", files.size());
 
         boolean isSuccess = driverService.createDriver(driverDTO, files);
 
@@ -71,23 +71,19 @@ public class DriverController {
     @PostMapping("update.ajax")
     @ResponseBody
     public Map<String, Object> update(DriverDTO driverDTO, @RequestParam Map<String, MultipartFile> files) {
-        logger.info("\ndriverDTO idx:" + driverDTO.getDriver_idx()
+        logger.info("\n::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+                + "\ndriverDTO idx:" + driverDTO.getDriver_idx()
                 + "\ndriverDTO name:" + driverDTO.getDriver_name()
                 + "\ndriverDTO isRetired:" + driverDTO.getDriver_is_retired()
                 + "\ndriverDTO phone:" + driverDTO.getDriver_phone()
                 + "\ndriverDTO Address:" + driverDTO.getDriver_address()
                 + "\ndriverDTO AddressDetail:" + driverDTO.getDriver_address_detail()
-                + "\nfiles driverPhoto:" + getFileName(files, "driver_photo_file")
-                + "\nfiles driverTaxiLicensePhoto:" + getFileName(files, "driver_taxi_license_photo_file")
+                + "\nfile fileCount:" + files.size()
+                + "\n::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
         );
 
-        return Map.of("result", driverService.updateDriverInfo(driverDTO, files));
+
+        return Map.of("result", driverService.updateDriverInfoAndUploadFiles(driverDTO,files));
     }
-
-    private String getFileName(Map<String, MultipartFile> files, String key) {
-        return files.containsKey(key) && !files.get(key).isEmpty() ? files.get(key).getOriginalFilename() : "No file";
-    }
-
-
 
 }

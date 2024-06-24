@@ -687,7 +687,6 @@
     // 이미지 미리보기
     function previewImage() {
         var $fileInput = $('#register-driver-photo');
-        var $previewContainer = $('#preview-container');
         var $previewImage = $('#preview-image');
 
         var file = $fileInput[0].files[0];

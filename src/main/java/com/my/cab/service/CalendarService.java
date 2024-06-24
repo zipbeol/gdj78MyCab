@@ -35,4 +35,13 @@ public class CalendarService {
 		return getCalList;
 	}
 
+	public List<Map<String, Object>> dayCalListCall(String selectedDay) {
+		List<Map<String, Object>> getDayCalList = calendarDao.dayCalListCall(selectedDay);
+		for (Map<String, Object> map : getDayCalList) {
+			logger.info("getDayCalList get conetent : "+map.get("schedule_content"));
+		}
+		
+		return getDayCalList;
+	}
+
 }

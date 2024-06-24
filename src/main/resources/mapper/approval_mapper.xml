@@ -7,4 +7,9 @@
 	<select id="approvalWriteList" resultType="ApprovalWriteFrom">
 	SELECT approval_doc_type_item_idx, approval_doc_type_item_name, approval_doc_type_item_type FROM tb_approval_doc_type_item;
 	</select>
+    
+    <insert id="save" parameterType="com.my.cab.dto.ApprovalDocDTO">
+        INSERT INTO tb_doc_item_file (appr_file_path)
+        VALUES (#{appr_file_path})
+    </insert>
 </mapper>

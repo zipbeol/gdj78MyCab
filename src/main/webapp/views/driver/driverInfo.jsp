@@ -215,6 +215,24 @@
 
 </div>
 <!-- Page wrapper end -->
+<!-- 면허사진 -->
+<div class="modal fade" id="licensePhotoModal" tabindex="-1" aria-labelledby="licensePhotoModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="licensePhotoModalLabel">면허 사진</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <img id="licensePhoto" src="" alt="Driver License Photo" class="img-fluid">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 <!-- *************
@@ -241,7 +259,11 @@
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 <script>
-
+    $('.btn-secondary').click(function () {
+        var licensePhotoUrl = '/upload/${driverInfo.driver_taxi_license_photo}';
+        $('#licensePhoto').attr('src', licensePhotoUrl);
+        $('#licensePhotoModal').modal('show');
+    });
     $('#edit-button').click(function () {
         $('.info-value').each(function () {
             var value = $(this).data('value');
@@ -249,6 +271,13 @@
             console.log(id);
             if (id === 'driver-address') {
                 $(this).html('<input type="text" class="form-control" id="' + id + '" value="' + value + '" onclick="searchAddress()" tabindex="-1" readonly>');
+            } else if (id === 'driver-is-retired') {
+                var selectHtml = '<select class="form-select" id="' + id + '">'
+                    + '<option value="1"' + (value == 1 ? ' selected' : '') + '>퇴직</option>'
+                    + '<option value="0"' + (value == 0 ? ' selected' : '') + '>재직중</option>'
+                    + '</select>';
+                $(this).html(selectHtml);
+                console.log(value);
             } else {
                 $(this).html('<input type="text" class="form-control" id="' + id + '" value="' + value + '">');
             }
@@ -259,29 +288,49 @@
 
     $('#save-button').click(function () {
         var driverName = $('#driver-name input').val();
-        var driverIsRetired = $('#driver-is-retired input').val();
+        var driverIsRetired = $('#driver-is-retired select').val();
         var driverPhone = $('#driver-phone input').val();
         var driverAddress = $('#driver-address input').val();
-        console.log(driverName);
-        console.log(driverIsRetired);
-        console.log(driverPhone);
-        console.log(driverAddress);
-        console.log('${driverInfo.driver_idx}');
+        var driverAddressDetail = $('#driver-address-detail input').val();
+        var driverIdx = '${driverInfo.driver_idx}';
+        <%--console.log(driverName);--%>
+        <%--console.log(driverIsRetired);--%>
+        <%--console.log(driverPhone);--%>
+        <%--console.log(driverAddress);--%>
+        <%--console.log(driverAddressDetail);--%>
+        <%--console.log('${driverInfo.driver_idx}');--%>
         $.ajax({
             url: './update.ajax',
             type: 'POST',
-            data: {},
+            data: {
+                'driver_name': driverName,
+                'driver_is_retired': driverIsRetired,
+                'driver_phone': driverPhone,
+                'driver_address': driverAddress,
+                'driver_address_detail': driverAddressDetail,
+                'driver_idx': driverIdx
+            },
             dataType: 'JSON',
             success: function (data) {
                 console.log(data);
                 if (data.result) {
                     $('.info-value').each(function () {
-                        var value = $(this).find('input').val();
-                        $(this).data('value', value);
-                        if ($(this).attr('id') === 'driver-phone') {
-                            value = formatPhoneNumber(value);
+                        var value;
+                        if ($(this).find('input').length > 0) {
+                            value = $(this).find('input').val();
+                            $(this).data('value', value);
+                            if ($(this).attr('id') === 'driver-phone') {
+                                value = formatPhoneNumber(value);
+                            }
+                            $(this).text(value);
+                        } else if ($(this).find('select').length > 0) {
+                            value = $(this).find('select').val();
+                            $(this).data('value', value);
+                            if ($(this).attr('id') === 'driver-is-retired') {
+                                value = value === 0 ? '재직중' : '퇴사';
+                            }
+                            $(this).text(value);
                         }
-                        $(this).text(value);
                     });
                     $('#save-button').hide();
                     $('#edit-button').show();
@@ -290,6 +339,7 @@
                     showAlert('danger', '수정에 실패했습니다.');
                 }
             },
+
             error: function (error) {
                 console.log(error);
                 showAlert('danger', '수정에 실패했습니다.');

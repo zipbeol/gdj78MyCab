@@ -22,4 +22,6 @@ public interface DriverDAO {
     int getDriverTotal(SearchDTO searchDTO);
 
     DriverDTO getDriverInfo(String driverIdx);
+
+    boolean updateDriverInfo(DriverDTO driverDTO);
 }

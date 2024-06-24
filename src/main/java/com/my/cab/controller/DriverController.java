@@ -18,53 +18,66 @@ import java.util.Map;
 @RequestMapping("/driver")
 public class DriverController {
 
-	private final DriverService driverService;
-	Logger logger = LoggerFactory.getLogger(getClass());
+    private final DriverService driverService;
+    Logger logger = LoggerFactory.getLogger(getClass());
 
-	public DriverController(DriverService driverService) {
-		this.driverService = driverService;
-	}
+    public DriverController(DriverService driverService) {
+        this.driverService = driverService;
+    }
 
-	@RequestMapping("/list.go")
-	public String listGo(Model model) {
-		model.addAttribute("driverFirstRegDate", driverService.getDriverFirstRegDate());
-		return "driver/driverList";
-	}
+    @RequestMapping("/list.go")
+    public String listGo(Model model) {
+        model.addAttribute("driverFirstRegDate", driverService.getDriverFirstRegDate());
+        return "driver/driverList";
+    }
 
-	@PostMapping("/create.ajax")
-	@ResponseBody
-	public Map<String, Object> create(DriverDTO driverDTO, @RequestParam Map<String, MultipartFile> files) {
-		logger.info("Create driverName : {}", driverDTO.getDriver_name());
-		logger.info("Create files : {}", files);
+    @PostMapping("/create.ajax")
+    @ResponseBody
+    public Map<String, Object> create(DriverDTO driverDTO, @RequestParam Map<String, MultipartFile> files) {
+        logger.info("Create driverName : {}", driverDTO.getDriver_name());
+        logger.info("Create files : {}", files);
 
-		boolean isSuccess = driverService.createDriver(driverDTO,files);
+        boolean isSuccess = driverService.createDriver(driverDTO, files);
 
-		return Map.of("isSuccess", isSuccess);
-	}
+        return Map.of("isSuccess", isSuccess);
+    }
 
-	@GetMapping("/list.ajax")
-	@ResponseBody
-	public Map<String, Object> list(SearchDTO searchDTO) {
-		logger.info("\nsearchDTO SearchText:" + searchDTO.getSearchText()
-				+ "\nsearchDTO filterIsRetired:" + searchDTO.getFilterIsRetired()
-				+ "\nsearchDTO filterStartDate:" + searchDTO.getFilterStartDate()
-				+ "\nsearchDTO filterEndDate:" + searchDTO.getFilterEndDate()
-				+ "\nsearchDTO page:" + searchDTO.getPage()
-		);
-		return driverService.getDriverList(searchDTO);
-	}
+    @GetMapping("/list.ajax")
+    @ResponseBody
+    public Map<String, Object> list(SearchDTO searchDTO) {
+        logger.info("\nsearchDTO SearchText:" + searchDTO.getSearchText()
+                + "\nsearchDTO filterIsRetired:" + searchDTO.getFilterIsRetired()
+                + "\nsearchDTO filterStartDate:" + searchDTO.getFilterStartDate()
+                + "\nsearchDTO filterEndDate:" + searchDTO.getFilterEndDate()
+                + "\nsearchDTO page:" + searchDTO.getPage()
+        );
+        return driverService.getDriverList(searchDTO);
+    }
 
-	@GetMapping("/getTotalPages.ajax")
-	@ResponseBody
-	public Map<String, Object> getTotalPages(SearchDTO searchDTO) {
-		return driverService.getDriverTotalPages(searchDTO);
-	}
+    @GetMapping("/getTotalPages.ajax")
+    @ResponseBody
+    public Map<String, Object> getTotalPages(SearchDTO searchDTO) {
+        return driverService.getDriverTotalPages(searchDTO);
+    }
 
-	@RequestMapping("/detail.go")
-	public String detailGo(Model model, String driver_idx) {
-		DriverDTO driverInfo = driverService.getDriverInfo(driver_idx);
-		model.addAttribute("driverInfo", driverInfo);
-		return "driver/driverInfo";
-	}
+    @RequestMapping("/detail.go")
+    public String detailGo(Model model, String driver_idx) {
+        DriverDTO driverInfo = driverService.getDriverInfo(driver_idx);
+        model.addAttribute("driverInfo", driverInfo);
+        return "driver/driverInfo";
+    }
+
+    @PostMapping("update.ajax")
+    @ResponseBody
+    public Map<String, Object> update(DriverDTO driverDTO) {
+        logger.info("\ndriverDTO idx:" + driverDTO.getDriver_idx()
+                + "\ndriverDTO name:" + driverDTO.getDriver_name()
+                + "\ndriverDTO isRetired:" + driverDTO.getDriver_is_retired()
+                + "\ndriverDTO phone:" + driverDTO.getDriver_phone()
+                + "\ndriverDTO Address:" + driverDTO.getDriver_address()
+                + "\ndriverDTO AddressDetail:" + driverDTO.getDriver_address_detail()
+        );
+        return Map.of("result", driverService.updateDriverInfo(driverDTO));
+    }
 
 }

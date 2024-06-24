@@ -126,4 +126,8 @@ public class DriverService {
     public DriverDTO getDriverInfo(String driverIdx) {
         return driverDAO.getDriverInfo(driverIdx);
     }
+
+    public boolean updateDriverInfo(DriverDTO driverDTO) {
+        return driverDAO.updateDriverInfo(driverDTO);
+    }
 }

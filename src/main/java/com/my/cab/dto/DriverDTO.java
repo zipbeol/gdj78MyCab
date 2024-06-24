@@ -1,15 +1,35 @@
 package com.my.cab.dto;
 
+import org.apache.ibatis.type.Alias;
+
+@Alias("driver")
 public class DriverDTO {
     private int driver_idx;
     private String driver_name;
     private String driver_photo;
-    private String driver_taxi_license_number;
+    private String driver_taxi_license_photo;
     private String driver_address;
     private String driver_phone;
     private String driver_registration_date;
     private String driver_quit_date;
     private String driver_is_retired;
+    private String driver_address_detail;
+
+    public String getDriver_address_detail() {
+        return driver_address_detail;
+    }
+
+    public void setDriver_address_detail(String driver_address_detail) {
+        this.driver_address_detail = driver_address_detail;
+    }
+
+    public String getDriver_taxi_license_photo() {
+        return driver_taxi_license_photo;
+    }
+
+    public void setDriver_taxi_license_photo(String driver_taxi_license_photo) {
+        this.driver_taxi_license_photo = driver_taxi_license_photo;
+    }
 
     public int getDriver_idx() {
         return driver_idx;
@@ -33,14 +53,6 @@ public class DriverDTO {
 
     public void setDriver_photo(String driver_photo) {
         this.driver_photo = driver_photo;
-    }
-
-    public String getDriver_taxi_license_number() {
-        return driver_taxi_license_number;
-    }
-
-    public void setDriver_taxi_license_number(String driver_taxi_license_number) {
-        this.driver_taxi_license_number = driver_taxi_license_number;
     }
 
     public String getDriver_address() {

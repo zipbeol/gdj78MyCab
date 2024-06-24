@@ -13,6 +13,15 @@ public class SearchDTO {
     private String sortColumn;
     private int page;
     private int pageSize;
+    private String filterIsRetired;
+
+    public String getFilterIsRetired() {
+        return filterIsRetired;
+    }
+
+    public void setFilterIsRetired(String filterIsRetired) {
+        this.filterIsRetired = filterIsRetired;
+    }
 
     public String getSortOrder() {
         return sortOrder;

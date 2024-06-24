@@ -86,7 +86,7 @@
                         <a href="/taxi/list.go" class="text-decoration-none">택시 조회</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="/taxi/info.go?taxi_idx=${taxiDTO.taxi_idx}"
+                        <a href="/taxi/detail.go?taxi_idx=${taxiDTO.taxi_idx}"
                            class="text-decoration-none">택시 상세</a>
                     </li>
                 </ol>
@@ -215,6 +215,7 @@
 </div>
 <!-- Page wrapper end -->
 
+</body>
 <!-- *************
         ************ JavaScript Files *************
     ************* -->
@@ -234,25 +235,9 @@
 <!-- Custom JS files -->
 <script src="/assets/js/custom.js"></script>
 <script src="/assets/js/LocalStorage.js"></script>
+<script src="/assets/js/showAlert.js"></script>
 
 <script>
-    function showAlert(type, message) {
-        var alertHtml = `
-          <div class="alert alert-` + type + ` alert-dismissible fade show" role="alert" style="display: none;">
-            <strong>Notice!</strong> ` + message + `
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>`;
-        var $alert = $(alertHtml);
-        $('#alertPlaceholder').append($alert);
-        $alert.slideDown();
-
-        // 5초 후 슬라이드 아웃
-        setTimeout(function () {
-            $alert.slideUp(function () {
-                $(this).remove();
-            });
-        }, 3000); // 5000 milliseconds = 5 seconds
-    }
 
     $('#edit-button').click(function () {
         $('.info-value').each(function () {
@@ -307,8 +292,5 @@
         });
     });
 </script>
-
-</body>
-</html>
 
 </html>

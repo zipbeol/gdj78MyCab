@@ -202,8 +202,8 @@
                                                 <select id="filter-taxi-is-active"
                                                         class="form-select taxi-search-filter">
                                                     <option value="">폐차 여부</option>
-                                                    <option value="1">false</option>
-                                                    <option value="0">true</option>
+                                                    <option value="1">폐차아님</option>
+                                                    <option value="0">폐차</option>
                                                 </select>
                                             </div>
                                             <div class="col-1"></div>
@@ -299,7 +299,9 @@
 
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="isModalAlert=false">닫기</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                            onclick="isModalAlert=false">닫기
+                                    </button>
                                     <button type="button" onclick="taxiRegistration()" class="btn btn-primary">등록
                                     </button>
                                 </div>
@@ -432,14 +434,6 @@
         getTaxiList(); // 목록 새로고침
     }
 
-    // 연식 숫자만 입력
-    function isNumbers(input) {
-        var value = input.value;
-        if (isNaN(value) || value < 0 || value > 9999) {
-            input.value = input.value.slice(0, -1);
-        }
-    }
-
     // 택시리스트 호출
     function getTaxiList() {
         getSearchValue();
@@ -519,7 +513,7 @@
         var content = '';
         if (list.length > 0) {
             for (item of list) {
-                var taxi_is_active = item.taxi_is_active === 1 ? 'true' : 'false';
+                var taxi_is_active = item.taxi_is_active === 1 ? '폐차' : '폐차아님';
                 content += '<tr class="taxi-list-tbody-tr" id="' + item.taxi_idx + '">'
                     + '<td class="text-center">' + item.taxi_license_plate + '</td>'
                     + '<td class="text-center">' + item.taxi_model + '</td>'
@@ -562,8 +556,13 @@
                 if (data.isSuccess) {
                     $('#registorModal').modal('hide');
                     isModalAlert = false;
-                    filterReset(); // 새로고침
+                    $('#license-plate').val('');
+                    $('#car-model').val('');
+                    $('#car-fuel').val('');
+                    $('#taxi-year').val('');
                     showAlert('success', '택시가 성공적으로 등록되었습니다.');
+                    getTotalPages();
+                    getTaxiList();
                 } else {
                     showAlert('danger', '택시 등록 중 오류가 발생했습니다.');
                 }

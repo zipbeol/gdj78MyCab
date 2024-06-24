@@ -13,4 +13,6 @@ public interface LoginDAO {
 
 	void addAtt(String emp_no);
 
+	int pwFirstChange(String emp_no, String password);
+
 }

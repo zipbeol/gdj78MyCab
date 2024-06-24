@@ -29,9 +29,8 @@
     <div class="container">
       <div class="row justify-content-center" style="position: relative;left: -6%;">
         <div class="col-xl-4 col-lg-5 col-sm-6 col-12">
-          <form class="my-5 needs-validation" action="/login/pwFirstChange.do" method="post" novalidate>
+          <form class="my-5 needs-validation" action="/login/pwFirstChange.do" onsubmit="return validateForm()" method="post" novalidate>
             <div class="border rounded-2 p-4 mt-5" style="width: 550px">
-              <div class="login-form">
                 <a href="!#" class="mb-4 d-flex">
                   <img src="/assets/images/logo.svg" class="img-fluid login-logo" alt="Cab Admin Dashboard">
                 </a>
@@ -42,14 +41,14 @@
                 </h5>
                 <div class="mb-2" >
                 	<div style="position: relative;">
-                  <label for="validationTooltip01" class="form-label">새 비밀번호 (8자리 이상, 영문, 숫자, 특수문자 2가지 이상 포함해야 합니다.)</label>
-                  <input type="text" class="form-control" id="password" name="emp_password" placeholder="새 비밀번호" required pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$" minlength="8" required>
-                  <div id="pwChk" class="invalid-feedback"></div>
+                  <label for="validationTooltip01" class="form-label">새 비밀번호 <br/>8자리 이상, 영문, 숫자, 특수문자를 모두 포함해야 합니다. <br/>(특수문자는 !@#$%^&*만 가능합니다.)</label>
+                  <input type="password" class="form-control" oninput="pwCheck()" name="emp_password" placeholder="새 비밀번호" required pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$" minlength="8" required>
+                  <div id="pwChk" class="invalid-feedback">비밀번호 조건을 확인해주세요.</div>
                   </div>
                   <br/>
                   <div class="was-validated">
-                  <label for="validationTooltip01" class="form-label was-validated">새 비밀번호 확인</label>
-                  <input type="text" class="form-control" id="passwordChk" placeholder="새 비밀번호 확인" required>
+                  <label for="validationCustom01" class="form-label">새 비밀번호 확인</label>
+                  <input type="password" class="form-control" oninput="pwCheck()" name="emp_passwordChk" placeholder="새 비밀번호 확인" required>
                     <div id="pwChkValid" class="invalid-feedback"></div>
                     </div>
                 </div>
@@ -59,17 +58,62 @@
                           <button class="btn btn-primary" type="submit" id="submitBtn">
                             비밀번호 수정
                           </button>
-              </div>
+              
             </div>
           </form>
         </div>
       </div>
     </div>
     <!-- Container end -->
+    
+    <!-- Custom JS files -->
+    <script src="/assets/js/validations.js"></script>
+    
   </body>
+  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
   <script>
   
   
-  </script>
+  var message = "${message}";
+     if (message) {
+         alert(message);
+     }
+  
+     document.addEventListener("DOMContentLoaded", function() {
+    	    var pwInput = document.querySelector('input[name="emp_password"]');
+    	    var pwChkInput = document.querySelector('input[name="emp_passwordChk"]');
+    	    var pwChkValidDiv = document.getElementById('pwChkValid');
+
+    	    pwChkInput.addEventListener('keyup', function() {
+    	        var pw = pwInput.value;
+    	        var pwChk = pwChkInput.value;
+
+    	        if (pw === pwChk) {
+    	            pwChkValidDiv.classList.remove('invalid-feedback');
+    	            pwChkValidDiv.classList.add('valid-feedback');
+    	            pwChkValidDiv.textContent = '비밀번호가 일치합니다';
+    	        } else {
+    	            pwChkValidDiv.classList.remove('valid-feedback');
+    	            pwChkValidDiv.classList.add('invalid-feedback');
+    	            pwChkValidDiv.textContent = '비밀번호가 일치하지 않습니다';
+    	        }
+    	    });
+    	});
+			
+			
+			function validateForm() {
+			     if (pw !== pwChk) {
+			         alert('비밀번호 확인란을 올바르게 작성해주세요.');
+			         return false; // 폼 전송 취소
+			     }else{
+			    	 if (confirm("비밀번호를 수정하시겠습니까?")) {
+			     		return true; // 폼 전송 허용
+					}else{
+							alert("비밀번호 수정을 취소했습니다.");
+					}
+			     }
+			 }
+			 
+		</script>
 
 </html>

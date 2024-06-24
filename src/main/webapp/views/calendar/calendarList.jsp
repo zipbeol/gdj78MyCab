@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Main</title>
+    <title>Bootstrap Gallery - My Cab Bootstrap 5 Dashboard</title>
 
     <!-- Meta -->
     <meta name="description" content="Marketplace for Bootstrap Admin Dashboards">
@@ -30,30 +30,58 @@
     <!-- Scrollbar CSS -->
     <link rel="stylesheet" href="/assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
 
-    <!-- Toastify CSS -->
-    <link rel="stylesheet" href="/assets/vendor/toastify/toastify.css">
+    <!-- Calendar CSS -->
+    <link rel="stylesheet" href="/assets/vendor/calendar/css/main.min.css">
+    <link rel="stylesheet" href="/assets/vendor/calendar/css/custom.css">
     
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.css" />
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.14/index.global.min.js"></script>
-	
-	<style
-	   #scheduleModal {
-            display: none;
-            position: absolute;
-            z-index: 1000;
-            background-color: white;
-            border: 1px solid #ccc;
-            padding: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-	></style>
-
+    <style >
+    	#selectableCalendar{
+    		width: 1000px;
+    		height: 800px;
+    	}
+		    	/* 테이블 스타일 */
+		.schedule-table {
+		  width: 100%;
+		  border-collapse: collapse;
+		  margin: 20px 0;
+		  font-size: 18px;
+		  text-align: left;
+		}
+		
+		/* 테이블 행 스타일 */
+		.schedule-event {
+		  border-bottom: 1px solid #ddd;
+		  transition: background-color 0.3s ease;
+		}
+		
+		/* 행 호버 효과 */
+		.schedule-event:hover {
+		  background-color: #f1f1f1;
+		}
+		
+		/* 첫 번째 열 (시간) 스타일 */
+		.schedule-event td:first-child {
+		  padding: 10px;
+		  font-weight: bold;
+		  color: #333;
+		  width: 150px;
+		}
+		
+		
+		/* 세 번째 열 (이벤트 이름) 스타일 */
+		.schedule-event td:last-child a {
+		  text-decoration: none;
+		  color: #007bff; /* 링크 색상 */
+		}
+		
+		.schedule-event td:last-child a:hover {
+		  text-decoration: underline;
+		}
+    	
+    </style>
   </head>
 
   <body>
-  <div id="scheduleModal"></div>
     <!-- Page wrapper start -->
     <div class="page-wrapper">
 
@@ -74,187 +102,294 @@
           <!-- Sidebar menu starts -->
           <div class="sidebarMenuScroll">
             <ul class="sidebar-menu">
-              <li class="active current-page">
+              <li>
+                <a href="index.go">
+                  <i class="bi bi-speedometer2"></i>
+                  <span class="menu-text">Dashboard</span>
+                </a>
               </li>
               <li>
-                <a href="notice/list.go">
-                  <i class="fs-3 bi bi-pin-angle"></i>
-                  <span class="menu-text">공지사항</span>
-                </a>
-              </li>
-              
-              <li class="treeview">
-                <a href="#!">
-                  <i class="bi bi-postcard"></i>
-                  <span class="menu-text">마이페이지</span>
-                </a>
-                <ul class="treeview-menu">
-                  <li>
-                    <a href="mypage/detail.go">프로필</a>
-                  </li>
-                  <li>
-                    <a href="mypage/vac/list.go">연차 관리</a>
-                  </li>
-                  <li>
-                    <a href="mypage/vacApply/list.go">연차 승인 및 반려</a>
-                  </li>
-                   <li>
-                    <a href="attendance/myAttendance/list.go">근태 관리</a>
-                  </li>
-                  <li>
-                    <a href="mypage/alarm/list.go">알림</a>
-                  </li>
-                  
-                </ul>
-              </li>
-               <li>
-                <a href="chat/chat.go">
-                  <i class="fs-3 bi bi-chat"></i>
-                  <span class="menu-text">채팅</span>
-                </a>
-              </li>
-              <li class="treeview">
-                <a href="#!">
-                  <i class="fs-3 bi bi-envelope"></i>
-                  <span class="menu-text">메일</span>
-                </a>
-                <ul class="treeview-menu">
-                  <li>
-                    <a href="mail/write.go">메일 작성</a>
-                  </li>
-                   <li>
-                    <a href="mail/list.go">내가 보낸 메일함</a>
-                  </li>
-                </ul>
-              </li>
-              
-              <li>
-                <a href="/calendar/calendar.go">
-                  <i class="bi bi-calendar2"></i>
-                  <span class="menu-text">일정 관리</span>
-                </a>
-              </li>
-              
-              <li class="treeview">
-                <a href="#!">
+                <a href="trips.go">
                   <i class="bi bi-car-front"></i>
-                  <span class="menu-text">택시 관리</span>
+                  <span class="menu-text">Trips</span>
+                  <span class="badge border border-danger text-danger rounded-5 ms-2">New</span>
                 </a>
-                <ul class="treeview-menu">
-                  <li>
-                    <a href="taxi/list.go">차량 관리</a>
-                  </li>
-                  <li>
-                    <a href="driver/list.go">기사 관리</a>
-                  </li>
-                  <li>
-                    <a href="triprecord/list.go">운행 기록 관리</a>
-                  </li>
-                </ul>
               </li>
-              <li class="treeview">
-                <a href="#!">
-                  <i class="bi bi-layout-text-window-reverse"></i>
-                  <span class="menu-text">전자결재</span>
+              <li>
+                <a href="upcoming-trips.go">
+                  <i class="bi bi-pin-map"></i>
+                  <span class="menu-text">Upcoming Trips</span>
                 </a>
-                <ul class="treeview-menu">
-                  <li>
-                    <a href="approval/write.go">기안서 작성</a>
-                  </li>
-                    <li>
-                    <a href="approval/list.go">내 결재 관리</a>
-                  </li>
-                  <li>
-                    <a href="approval/list.go">결재 통합 관리</a>
-                  </li>
-                  <li>
-                    <a href="approval/create.go">공통 양식 등록</a>
-                  </li>
-                </ul>
               </li>
-              
-              <li class="treeview">
-                <a href="#!">
+              <li>
+                <a href="trip-history.go">
+                  <i class="bi bi-map"></i>
+                  <span class="menu-text">Trips History</span>
+                </a>
+              </li>
+              <li>
+                <a href="customers.go">
                   <i class="bi bi-person"></i>
-                  <span class="menu-text">인사 관리</span>
+                  <span class="menu-text">Customers</span>
+                </a>
+              </li>
+              <li>
+                <a href="available-cabs.go">
+                  <i class="bi bi-phone-vibrate"></i>
+                  <span class="menu-text">Available Cabs</span>
+                </a>
+              </li>
+              <li>
+                <a href="faq.go">
+                  <i class="bi bi-box"></i>
+                  <span class="menu-text">FAQ's</span>
+                  <span class="badge border border-success text-success rounded-5 ms-2">New</span>
+                </a>
+              </li>
+              <li class="treeview active">
+                <a href="#!">
+                  <i class="bi bi-calendar2"></i>
+                  <span class="menu-text">Calendars</span>
                 </a>
                 <ul class="treeview-menu">
                   <li>
-                    <a href="attendance/attendance/list.go">근태 관리</a>
+                    <a href="calendar.go">Daygrid View</a>
                   </li>
                   <li>
-                    <a href="emp/emp/create.go">사원 등록</a>
+                    <a href="calendar-external-draggable.go">External Draggable</a>
                   </li>
                   <li>
-                    <a href="emp/hremp/list.go">사원 조회</a>
+                    <a href="calendar-google.go">Google Calendar</a>
                   </li>
                   <li>
-                    <a href="emp/vac/list.go">연차 관리</a>
+                    <a href="calendar-list-view.go">List View</a>
                   </li>
                   <li>
-                    <a href="emp/dept/list.go">부서 관리</a>
-                  </li>
-                  <li>
-                    <a href="emp/sal/list.go">급여 관리</a>
-                  </li>
-                  <li>
-                    <a href="emp/driver/list.go">기사 정산 관리</a>
-                  </li>
-                  <li>
-                    <a href="emp/emp/list.go">사원 조회</a>
+                    <a href="calendar-selectable.go" class="active-sub">Selectable</a>
                   </li>
                 </ul>
               </li>
-               <li class="treeview">
+              <li class="treeview">
+                <a href="#!">
+                  <i class="bi bi-stickies"></i>
+                  <span class="menu-text">Components</span>
+                </a>
+                <ul class="treeview-menu">
+                  <li>
+                    <a href="accordions.go">Accordions</a>
+                  </li>
+                  <li>
+                    <a href="alerts.go">Alerts</a>
+                  </li>
+                  <li>
+                    <a href="avatars.go">Avatars</a>
+                  </li>
+                  <li>
+                    <a href="buttons.go">Buttons</a>
+                  </li>
+                  <li>
+                    <a href="badges.go">Badges</a>
+                  </li>
+                  <li>
+                    <a href="carousel.go">Carousel</a>
+                  </li>
+                  <li>
+                    <a href="list-items.go">List Items</a>
+                  </li>
+                  <li>
+                    <a href="placeholders.go">Placeholders</a>
+                  </li>
+                  <li>
+                    <a href="progress.go">Progress Bars</a>
+                  </li>
+                  <li>
+                    <a href="popovers.go">Popovers</a>
+                  </li>
+                  <li>
+                    <a href="spinners.go">Spinners</a>
+                  </li>
+                  <li>
+                    <a href="tooltips.go">Tooltips</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="treeview">
+                <a href="#!">
+                  <i class="bi bi-ui-checks-grid"></i>
+                  <span class="menu-text">Forms</span>
+                </a>
+                <ul class="treeview-menu">
+                  <li>
+                    <a href="form-inputs.go">Basic Form Inputs</a>
+                  </li>
+                  <li>
+                    <a href="form-checkbox-radio.go">Checkbox &amp; Radio</a>
+                  </li>
+                  <li>
+                    <a href="form-file-input.go">File Input</a>
+                  </li>
+                  <li>
+                    <a href="form-validations.go">Validations</a>
+                  </li>
+                  <li>
+                    <a href="date-time-pickers.go">Date Time Pickers</a>
+                  </li>
+                  <li>
+                    <a href="form-layouts.go">Form Layouts</a>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <a href="tables.go">
+                  <i class="bi bi-border-all"></i>
+                  <span class="menu-text">Tables</span>
+                </a>
+              </li>
+              <li>
+                <a href="settings.go">
+                  <i class="bi bi-gear"></i>
+                  <span class="menu-text">Settings</span>
+                </a>
+              </li>
+              <li>
+                <a href="profile.go">
+                  <i class="bi bi-postcard"></i>
+                  <span class="menu-text">Profile</span>
+                </a>
+              </li>
+              <li>
+                <a href="starter-page.go">
+                  <i class="bi bi-layout-text-window-reverse"></i>
+                  <span class="menu-text">Starter Page</span>
+                </a>
+              </li>
+              <li class="treeview">
+                <a href="#!">
+                  <i class="bi bi-code-square"></i>
+                  <span class="menu-text">Cards</span>
+                </a>
+                <ul class="treeview-menu">
+                  <li>
+                    <a href="cards.go">Cards</a>
+                  </li>
+                  <li>
+                    <a href="advanced-cards.go">Advanced Cards</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="treeview">
                 <a href="#!">
                   <i class="bi bi-pie-chart"></i>
-                  <span class="menu-text">재무 관리</span>
+                  <span class="menu-text">Graphs</span>
                 </a>
                 <ul class="treeview-menu">
                   <li>
-                    <a href="finance/profit/list.go">수익</a>
+                    <a href="apex.go">Apex</a>
                   </li>
                   <li>
-                    <a href="finance/expenses/list.go">지출</a>
-                  </li>
-                  <li>
-                    <a href="finance/deal/list.go">거래 내역</a>
-                  </li>
-                   <li>
-                    <a href="finance/dash.go">대쉬 보드</a>
+                    <a href="morris.go">Morris</a>
                   </li>
                 </ul>
               </li>
-               <li class="treeview">
-                <a href="#!">
-                  <i class="bi bi-box"></i>
-                  <span class="menu-text">자원 관리</span>
+              <li>
+                <a href="maps.go">
+                  <i class="bi bi-pin-map"></i>
+                  <span class="menu-text">Maps</span>
                 </a>
-                <ul class="treeview-menu">
-                   <li>
-                    <a href="resource/create.go">자원 등록</a>
-                  </li>
-                   <li>
-                    <a href="resource/list.go">자원 예약</a>
-                  </li>
-                </ul>
+              </li>
+              <li>
+                <a href="tabs.go">
+                  <i class="bi bi-slash-square"></i>
+                  <span class="menu-text">Tabs</span>
+                </a>
+              </li>
+              <li>
+                <a href="modals.go">
+                  <i class="bi bi-terminal"></i>
+                  <span class="menu-text">Modals</span>
+                </a>
+              </li>
+              <li>
+                <a href="icons.go">
+                  <i class="bi bi-textarea"></i>
+                  <span class="menu-text">Icons</span>
+                </a>
+              </li>
+              <li>
+                <a href="typography.go">
+                  <i class="bi bi-explicit"></i>
+                  <span class="menu-text">Typography</span>
+                </a>
               </li>
               <li class="treeview">
                 <a href="#!">
-                  <i class="bi bi-terminal"></i>
-                  <span class="menu-text">로그 관리</span>
+                  <i class="bi bi-upc-scan"></i>
+                  <span class="menu-text">Login/Signup</span>
                 </a>
                 <ul class="treeview-menu">
-                   <li>
-                    <a href="mail/admin/list.go">메일 로그</a>
+                  <li>
+                    <a href="login.go">Login</a>
                   </li>
-                   <li>
-                    <a href="chat/admin/list.go">채팅 로그</a>
+                  <li>
+                    <a href="signup.go">Signup</a>
+                  </li>
+                  <li>
+                    <a href="forgot-password.go">Forgot Password</a>
                   </li>
                 </ul>
               </li>
-              
-              
+              <li>
+                <a href="page-not-found.go">
+                  <i class="bi bi-exclamation-diamond"></i>
+                  <span class="menu-text">Page Not Found</span>
+                </a>
+              </li>
+              <li>
+                <a href="maintenance.go">
+                  <i class="bi bi-exclamation-octagon"></i>
+                  <span class="menu-text">Maintenance</span>
+                </a>
+              </li>
+              <li class="treeview">
+                <a href="#!">
+                  <i class="bi bi-code-square"></i>
+                  <span class="menu-text">Multi Level</span>
+                </a>
+                <ul class="treeview-menu">
+                  <li>
+                    <a href="#!">Level One Link</a>
+                  </li>
+                  <li>
+                    <a href="#!">
+                      Level One Menu
+                      <i class="bi bi-chevron-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                      <li>
+                        <a href="#!">Level Two Link</a>
+                      </li>
+                      <li>
+                        <a href="#!">Level Two Menu
+                          <i class="bi bi-chevron-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                          <li>
+                            <a href="#!">Level Three Link</a>
+                          </li>
+                          <li>
+                            <a href="#!">Level Three Link</a>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <a href="#!">Level One Link</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
           <!-- Sidebar menu ends -->
 
         </nav>
@@ -289,15 +424,20 @@
             <ol class="breadcrumb d-none d-lg-flex ms-3">
               <li class="breadcrumb-item">
                 <i class="bi bi-house lh-1"></i>
-                <a href="index.go" class="text-decoration-none">메인</a>
+                <a href="index.go" class="text-decoration-none">Home</a>
               </li>
+              <li class="breadcrumb-item">Calendars</li>
+              <li class="breadcrumb-item text-secondary">Selectable</li>
             </ol>
             <!-- Breadcrumb end -->
 
             <!-- App header actions start -->
             <div class="header-actions">
               <div class="dropdown">
-                
+                <a class="dropdown-toggle d-flex px-3 py-4 position-relative" href="#!" role="button"
+                  data-bs-toggle="dropdown" aria-expanded="false">
+                  <img src="/assets/images/flags/1x1/gb.svg" class="flag-img" alt="Cab Admin Template">
+                </a>
                 <div class="dropdown-menu dropdown-menu-end shadow-sm dropdown-menu-mini">
                   <div class="country-container">
                     <a href="index.go" class="py-2">
@@ -319,7 +459,10 @@
                 </div>
               </div>
               <div class="dropdown border-start">
-                
+                <a class="dropdown-toggle d-flex px-3 py-4 position-relative" href="#!" role="button"
+                  data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="bi bi-grid fs-4 lh-1 text-secondary"></i>
+                </a>
                 <div class="dropdown-menu dropdown-menu-end shadow-sm dropdown-menu-md">
                   <!-- Row start -->
                   <div class="d-flex gap-2 m-2 flex-wrap">
@@ -345,7 +488,7 @@
               <div class="dropdown border-start">
                 <a class="dropdown-toggle d-flex px-3 py-4 position-relative" href="#!" role="button"
                   data-bs-toggle="dropdown" aria-expanded="false">
-                  <i class="fs-3 bi bi-bell"></i>
+                  <i class="bi bi-bag-check fs-4 lh-1 text-secondary"></i>
                   <span class="count-label info"></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-md shadow-sm">
@@ -396,7 +539,7 @@
               <div class="dropdown border-start">
                 <a class="dropdown-toggle d-flex px-3 py-4 position-relative" href="#!" role="button"
                   data-bs-toggle="dropdown" aria-expanded="false">
-                  <i class="fs-3 bi bi-chat"></i>
+                  <i class="bi bi-envelope-open fs-4 lh-1 text-secondary"></i>
                   <span class="count-label"></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-md shadow-sm">
@@ -456,7 +599,7 @@
                   <a class="dropdown-item d-flex align-items-center" href="settings.go"><i
                       class="bi bi-gear fs-4 me-2"></i>Settings</a>
                   <div class="d-grid p-3 py-2">
-                    <a class="btn btn-danger" href="login/logout.do">Logout</a>
+                    <a class="btn btn-danger" href="login.go">Logout</a>
                   </div>
                 </div>
               </div>
@@ -468,36 +611,24 @@
 
           <!-- App body starts -->
           <div class="app-body">
-          
-          	<div class="mycab-cal-utilbox">
-          		<table>
-          			<thead>
-          				<tr>
-          					<td>
-          					
-          					</td>
-          				</tr>
-          			</thead>
-          		</table>
-          	</div>
 
             <!-- Container starts -->
             <div class="container-fluid">
-			<h2> <center>FullCalendar</center> </h2>
-             <div class="calendar-main">
-             	<div id="calendar"></div>
-             </div>
-             
-              </div>
-              <!-- Row end -->
 
               <!-- Row start -->
               <div class="row">
-               
+                <div class="col-12">
+                  <div class="card">
+                    <div class="card-header">
+                      <h4 class="card-title">일정관리</h4>
+                    </div>
+                    <div class="card-body">
+                      <div id="selectableCalendar"></div>
+                    </div>
+                  </div>
+                </div>
               </div>
               <!-- Row end -->
-
-              
 
             </div>
             <!-- Container ends -->
@@ -524,7 +655,7 @@
 			************ JavaScript Files *************
 		************* -->
     <!-- Required jQuery first, then Bootstrap Bundle JS -->
-<!--     <script src="/assets/js/jquery.min.js"></script> -->
+    <script src="/assets/js/jquery.min.js"></script>
     <script src="/assets/js/bootstrap.bundle.min.js"></script>
 
     <!-- *************
@@ -535,112 +666,47 @@
     <script src="/assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
     <script src="/assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
 
-    <!-- Toastify JS -->
-    <script src="/assets/vendor/toastify/toastify.js"></script>
-    <script src="/assets/vendor/toastify/custom.js"></script>
-
-    <!-- Apex Charts -->
-    <script src="/assets/vendor/apex/apexcharts.min.js"></script>
-    <script src="/assets/vendor/apex/custom/home/overview.js"></script>
-    <script src="/assets/vendor/apex/custom/home/reachedAudience.js"></script>
-    <script src="/assets/vendor/apex/custom/home/social.js"></script>
-    <script src="/assets/vendor/apex/custom/home/sparkline.js"></script>
-    <script src="/assets/vendor/apex/custom/home/sparkline2.js"></script>
-    <script src="/assets/vendor/apex/custom/home/visitors.js"></script>
+    <!-- Calendar JS -->
+    <script src="/assets/vendor/calendar/js/main.min.js"></script>
+    <script src="/assets/vendor/calendar/custom/mycab-cal.js"></script>
 
     <!-- Custom JS files -->
     <script src="/assets/js/custom.js"></script>
-  </body>
-  
+    
+    <!-- mycab-cal-wirte-modal -->
+	<div class="modal fade show" id="mycab-cal-modal" tabindex="-1" aria-labelledby="exampleModalCenteredScrollableTitle" aria-modal="true" role="dialog">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalCenteredScrollableTitle">
+                                일정관리
+                              </h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body" id = "cal-modal-content">
+                              <table id = "cal-modal-content2" class="schedule-table">
+                              
+                              </table>
+                              
+                     
+                              <br><br><br><br><br><br><br><br><br><br>
+                              <br><br><br><br><br><br><br><br><br><br>
+                              <p>Just like that.</p>
+                            </div>
+                            <div class="modal-footer">
+                              
+                                
+                              </button>
+                              <button type="button" class="btn btn-primary">
+                                Save changes
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+</body>
   <script >
   
-  $(document).ready(selectCallList())
-  
-  function selectCallList(){
-	  $.ajax({
-		  url : '/calendar/listCall.ajax',
-		  type : 'GET',
-		  date :{},
-		  success: function(response){
-			  alert('캘린더 리스트 통신 정상');
-			  var events=[];
-			  
-			  for (var i = 0; i < response.length; i++) {
-				var res = response[i];
-				var event = {
-						id : res.schedule_idx,
-						title : res.schedule_name,
-						start : res.schedule_start_date
-				};
-				
-				events.push(event);
-			}
-			  console.log('Events:',events);
-			  showFullCalendar(events);
-			  
-		  },
-		  error : function(data){
-			  console.log(data)
-		  }
-	  })
-  };
-  
-  function showFullCalendar(getEvent){
-	  var calendarEl = document.getElementById('calendar');
-	  var calendar = new FullCalendar.Calendar(calendarEl, {
-		    selectable: true,
-		    headerToolbar: {
-		      left: 'prev,next today',
-		      center: 'title',
-		      right: 'dayGridMonth,timeGridWeek,timeGridDay'
-		    },
-		    events: getEvent,
-		    
-		    select: function(info) {
-		    	console.log("클릭됨");
-		      alert('selected '+info.resource.id);
-		    }
-		  });
-
-		  calendar.render();
-  };
-  
-  
-  
- /*  	$(document).ready(function(){
-  		$('#calendar').fullCalendar({
-  			selectable : true,
-  			selectHelper: true,
-  			select : function(){
-  				alert("check");
-  			},
-  			events:[{
-  	  			title: '안녕',
-  	  			start: '2024-06-20T12:00',
-  	  			end: '2024-06-21T18:00'
-  	  		}]
-  			
-  		});
-  		
-  		
-  	}); */
   </script>
-  
- 	<style>
-		.calendar-main{
-			width: 70%;
-			display: inline-block;
-			
-		}
-		.mycab-cal-utilbox {
-			position : relative;
-		    border: 1px solid black;
-		    width: 20%;
-		    float: left;
-		    height: 300px;
-		    height: 100%;
-		    top: 10%;
-		}
-	</style>
 
 </html>

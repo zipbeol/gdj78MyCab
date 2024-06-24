@@ -9,5 +9,8 @@
 		SELECT * FROM schedule
 	</select>
 	
+	<select id="dayCalListCall" resultType="map">
+		SELECT * FROM schedule WHERE schedule_start_date LIKE CONCAT('%',#{param1},'%')
+	</select>
 
 </mapper>

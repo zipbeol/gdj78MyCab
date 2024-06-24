@@ -90,6 +90,12 @@
         a:hover {
             text-decoration: underline;
         }
+        
+        .modal-dialog {
+            max-width: none; /* 기본 최대 너비 제거 */
+            width: 50%; /* 원하는 너비로 설정 */
+        }
+    
     </style>
 </head>
 
@@ -257,13 +263,12 @@
                                                 <input type="file" id="file" name="file" class="form-control">
                                             </div>
                                         </form>
-                                        <h2>연차 신청서</h2>
-                                        <!-- 연차신청서.html을 불러오는 iframe -->
-                                        <iframe id="leaveApplicationIframe" src="/연차신청서.html" style="width:100%; height:400px; border:none;"></iframe>
+                                        <!-- 경로를 지정하여 HTML 파일을 로드 -->
+               							<iframe id="documentFrame" src="" width="100%" height="500px"></iframe>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-primary">저장/결재</button>
-                                        <button type="button" class="btn btn-secondary">임시 저장</button>
+                                        <button type="submit" class="btn btn-primary" onclick="sendHtmlToServer()" >저장/결재</button>
+                                        <button type="submit" class="btn btn-secondary">임시 저장</button>
                                         <button type="button" class="btn btn-danger" data-dismiss="modal">닫기</button>
                                     </div>
                                 </div>
@@ -280,6 +285,7 @@
                 </div>
               </div>
               <!-- Row end -->
+              
 
                 </div>
                 <!-- Container ends -->
@@ -321,94 +327,110 @@
 <!-- Custom JS files -->
 <script src="/assets/js/custom.js"></script>
 <script src="/assets/js/LocalStorage.js"></script>
-<!-- 결재자 선택 모달창 -->
-<div class="modal fade" id="approverSelectModal" tabindex="-1" role="dialog" aria-labelledby="approverSelectModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="approverSelectModalLabel">결재자 선택</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="container">
-                    <h2>사용자 검색</h2>
-                    <div class="form-group">
-                        <label for="search">검색:</label>
-                        <input type="text" id="search" name="search" class="form-control" placeholder="검색">
-                    </div>
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>소속부서</th>
-                                <th>성명</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>고객팀</td>
-                                <td><a href="#" onclick="selectApprover('고객팀', '고개발')">고개발</a></td>
-                            </tr>
-                            <tr>
-                                <td>개발팀</td>
-                                <td><a href="#" onclick="selectApprover('개발팀', '사용자1')">사용자1</a></td>
-                            </tr>
-                            <tr>
-                                <td>영업팀</td>
-                                <td><a href="#" onclick="selectApprover('영업팀', '양개발')">양개발</a></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- 결재자 선택 모달창 종료 -->
+
 </body>
 <script>
-    $(document).ready(function() {
-        // 저장 버튼 클릭 시 실행될 이벤트 리스너
-        $('#saveButton').on('click', function() {
-            // 메인 폼 데이터 추출
-            var mainFormData = new FormData(document.getElementById('mainForm'));
+document.addEventListener('DOMContentLoaded', function() {
+	  // 모든 링크 요소를 선택
+	  var links = document.querySelectorAll('a[data-toggle="modal"], button[data-toggle="modal"]');
 
-            // iframe 내의 연차 신청서 폼 데이터 추출
-            var iframeDocument = document.getElementById('leaveApplicationIframe').contentDocument;
-            var leaveApplicationForm = iframeDocument.getElementById('leaveApplicationForm');
-            var leaveApplicationData = new FormData(leaveApplicationForm);
+	  // 각 링크에 클릭 이벤트 리스너 추가
+	  links.forEach(function(link) {
+	    link.addEventListener('click', function() {
+	      // 클릭된 링크의 텍스트 값을 가져옴
+	      var docName = this.textContent.trim();
 
-            // 폼 데이터를 JSON 객체로 변환
-            var mainFormObject = {};
-            mainFormData.forEach((value, key) => mainFormObject[key] = value);
+	      // 파일 경로를 텍스트 값에 따라 설정
+	      var filePath = '';
+	      switch(docName) {
+	        case '연차신청서':
+	          filePath = '/연차신청서.html';
+	          break;
+	        case '휴가신청서':
+	          filePath = '/휴가신청서.html';
+	          break;
+	        case '출장보고서':
+	          filePath = '/출장보고서.html';
+	          break;
+	        case '지출결의서':
+	          filePath = '/지출결의서.html';
+	          break;
+	        case '사고경위서':
+	          filePath = '/사고경위서.html';
+	          break;
+	        default:
+	          filePath = '/default.html'; // 기본 파일 경로 설정
+	      }
 
-            var leaveApplicationObject = {};
-            leaveApplicationData.forEach((value, key) => leaveApplicationObject[key] = value);
+	      // iframe 요소를 선택
+	      var iframe = document.getElementById('documentFrame');
+	      // iframe의 src 속성을 업데이트하여 새로운 파일을 로드
+	      iframe.setAttribute('src', filePath);
+	      
+	    });
+	  });
+	});
+	
+function sendHtmlToServer() {
+    // iframe 내부의 HTML 콘텐츠를 가져옴
+    const iframe = document.getElementById('documentFrame');
+    const doc = iframe.contentDocument || iframe.contentWindow.document;
+    
+    // input 요소의 값을 설정
+    const inputs = doc.querySelectorAll('input');
+    inputs.forEach(input => {
+        if (input.type === 'checkbox' || input.type === 'radio') {
+            if (input.checked) {
+                input.setAttribute('checked', 'checked');
+            } else {
+                input.removeAttribute('checked');
+            }
+        } else {
+            input.setAttribute('value', input.value);
+        }
+    });
 
-            var combinedData = {
-                mainForm: mainFormObject,
-                leaveApplication: leaveApplicationObject
-            };
+    // textarea 요소의 값을 설정
+    const textareas = doc.querySelectorAll('textarea');
+    textareas.forEach(textarea => {
+        textarea.textContent = textarea.value;
+    });
 
-            // 서버로 데이터 전송
-            $.ajax({
-                type: 'POST',
-                url: '/saveData',
-                contentType: 'application/json',
-                data: JSON.stringify(combinedData),
-                success: function(response) {
-                    alert('저장되었습니다.');
-                    $('#approvalModal').modal('hide');
-                },
-                error: function(xhr, status, error) {
-                    alert('저장에 실패했습니다.');
-                }
-            });
+    // select 요소의 값을 설정
+    const selects = doc.querySelectorAll('select');
+    selects.forEach(select => {
+        const options = select.querySelectorAll('option');
+        options.forEach(option => {
+            if (option.selected) {
+                option.setAttribute('selected', 'selected');
+            } else {
+                option.removeAttribute('selected');
+            }
         });
     });
+    
+    // 최종 HTML 콘텐츠 가져오기
+    const htmlContent = doc.documentElement.outerHTML;
+    console.log(htmlContent); // HTML 콘텐츠를 콘솔에 출력
+
+    // FormData 객체 생성
+    const formData = new FormData();
+    formData.append('htmlContent', htmlContent);
+
+    // 서버로 전송
+    fetch('/save-html', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+    .then(result => {
+        // 서버로부터 반환된 뷰를 새 창에서 표시
+        const newWindow = window.open();
+        newWindow.document.write(result);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
 </script>
 </html>

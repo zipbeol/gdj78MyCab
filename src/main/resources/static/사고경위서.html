@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>사고 경위서</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .approval-table-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .approval-table {
+            width: 200px;
+            border: 1px solid #000;
+            border-collapse: collapse;
+        }
+        .approval-table th, .approval-table td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: center;
+            font-size: 12px;
+        }
+        .approval-table th {
+            background-color: #e9e9e9;
+        }
+        .section {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .section label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+            vertical-align: top;
+        }
+        .section input[type="text"], 
+        .section input[type="date"],
+        .section textarea {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .section textarea {
+            height: 100px;
+            resize: none;
+        }
+        .checkbox-group {
+            display: flex;
+            flex-direction: row;
+            margin-left: 110px;
+        }
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
+        }
+        .checkbox-group input {
+            margin-right: 5px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .footer p {
+            margin: 5px 0;
+        }
+        .footer input[type="text"] {
+            border: none;
+            border-bottom: 1px solid #000;
+            text-align: center;
+        }
+        .content {
+            margin-bottom: 20px;
+        }
+        .content table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .content th, .content td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+        }
+        .content th {
+            background-color: #e9e9e9;
+        }
+        .content .title {
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .content .subtitle {
+            text-align: center;
+            margin-top: 10px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>사고 경위서</h1>
+        <div class="content">
+            <div class="title">사고 개요</div>
+            <table>
+                <tr>
+                    <th>소속</th>
+                    <td><input type="text" name="department"></td>
+                    <th>성명</th>
+                    <td><input type="text" name="name"></td>
+                </tr>
+                <tr>
+                    <th>사고 발생일시</th>
+                    <td><input type="date" name="incident_date"></td>
+                    <th>발생 장소</th>
+                    <td><input type="text" name="incident_location"></td>
+                </tr>
+                <tr>
+                    <th>사고 내용</th>
+                    <td colspan="3"><textarea name="incident_details"style="width: 620px; height: 480px; resize: none;">육하원칙에 의거하여 정확히 기술"
+                    * 목격자가 있을 경우 목격자의 의견도 반영하여 기술</textarea></td>
+                </tr>
+            </table>
+        </div>
+        <div class="footer">
+            <p>위 내용은 사실에 근거하여 작성했습니다.</p>
+        </br>
+            <p id="current-date"></p>
+        </br>
+            <p>(신청인) 성명: <input type="text" name="applicant_name"></p>
+            <p>주식회사 MTCAB 대표이사 귀하</p>
+        </div>
+    </div>
+</body>
+<script>
+    function setDate() {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = ('0' + (today.getMonth() + 1)).slice(-2);
+        const day = ('0' + today.getDate()).slice(-2);
+        document.getElementById('current-date').innerText = `${year}년 ${month}월 ${day}일`;
+    }
+    window.onload = setDate;q
+</script>
+</html>

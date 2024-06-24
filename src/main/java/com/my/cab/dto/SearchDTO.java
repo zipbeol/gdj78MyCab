@@ -11,8 +11,27 @@ public class SearchDTO {
     private String filterEndDate;
     private String sortOrder;
     private String sortColumn;
+    private String pro_filter;
+    private String category;
     private int page;
-    private int pageSize;
+    
+    public String getPro_filter() {
+		return pro_filter;
+	}
+
+	public void setPro_filter(String pro_filter) {
+		this.pro_filter = pro_filter;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	private int pageSize;
     private String filterIsRetired;
 
     public String getFilterIsRetired() {

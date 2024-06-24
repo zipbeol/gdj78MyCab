@@ -12,11 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.my.cab.dao.FinanceDAO;
 import com.my.cab.dto.FinanceDTO;
+import com.my.cab.dto.SearchDTO;
 
 @Service
 public class FinanceService {
 
-	private static final Logger logger = LoggerFactory.getLogger(FinanceService.class);
+	Logger logger = LoggerFactory.getLogger(FinanceService.class);
+	
+	private static final int PAGE_SIZE = 10;
 
 	@Autowired
 	private FinanceDAO financeDao;
@@ -32,11 +35,22 @@ public class FinanceService {
 		return map;
 	}
 
-	public Map<String, Object> getProfitList(Map<String, Object> param) {
+	public Map<String, Object> getProfitList(Map<String, Object> param, SearchDTO searchDTO) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		List<FinanceDTO> profitList = financeDao.getProfitList(param);
+        int page = (searchDTO.getPage() - 1) * PAGE_SIZE;
+        logger.info("page {}", page);
+        logger.info("searchDTO page {}", searchDTO.getPage());
+        searchDTO.setPage(page);
+        searchDTO.setPageSize(PAGE_SIZE);
+		List<FinanceDTO> profitList = financeDao.getProfitList(searchDTO);
 		map.put("profit", profitList);
 		logger.info("수익리스트");
 		return map;
+	}
+
+	public Object getTotalPages(SearchDTO searchDTO) {
+        int profitTotal = financeDao.getProfitCount(searchDTO);
+        int totalPages = (int) Math.ceil((double) profitTotal / PAGE_SIZE);
+        return totalPages = totalPages > 0 ? totalPages : 1;
 	}
 }

@@ -188,6 +188,11 @@
                                                     <!-- AJAX 요청으로 항목들이 여기에 추가됩니다 -->
                                                 </tbody>
                                             </table>
+		                                    <!-- 페이지 네이션 시작 -->
+		                                    <nav aria-label="Page navigation example" class="mt-3">
+		                                        <ul class="pagination justify-content-center" id="pagination"></ul>
+		                                    </nav>
+		                                    <!-- 페이지 네이션 종료 -->
                                         </div>
 
                                         <!-- 모달 창 -->
@@ -278,9 +283,18 @@
     <!-- Custom JS files -->
     <script src="/assets/js/custom.js"></script>
     <script src="/assets/js/LocalStorage.js"></script>
-
+	<!-- 페이지네이션 -->
+	<script src="/assets/js/jquery.twbsPagination.min.js"></script>
     <!-- AJAX 및 모달 스크립트 -->
     <script>
+    
+    var currentPage = 1;
+	var searchFlag = false;
+	var category = '';
+    
+    getTotalPages();
+    refreshProfitList();
+    
  // 리셋 버튼 클릭 시 호출되는 함수
     function resetFilters() {
         // 선택된 버튼의 active 클래스 제거
@@ -309,8 +323,7 @@
     }
 
     
-    	var searchFlag = false;
-    	var category = '';
+
         // 모든 버튼 요소를 선택합니다.
         const buttons = document.querySelectorAll('.filter-btn');
 
@@ -421,10 +434,11 @@
                 url: '/finance/profit/list.ajax',
                 data: {
                     'category': category,
-                    'actual_profit_start_date': $('#startDate').val(),
-                    'actual_profit_end_date': $('#endDate').val(),
+                    'filterStartDate': $('#startDate').val(),
+                    'filterEndDate': $('#endDate').val(),
                     'pro_filter': $('#filter').val(),
-                    'proSearchQuery': $('#searchQuery').val()
+                    'searchText': $('#searchQuery').val(),
+                    'page' : currentPage
                 },
                 dataType : 'json',
                 success: function(data) {
@@ -448,7 +462,52 @@
             $('#profitForm')[0].reset();
         });
         
-        
+
+        // 페이지네이션
+        $('#pagination').twbsPagination({
+            totalPages: 10, // 총 페이지 수 (백엔드에서 가져와야 함)
+            visiblePages: 5, // 표시할 페이지 수
+            startPage: 1, // 시작 페이지
+            paginationClass: 'pagination align-items-center',
+            onPageClick: function (event, page) {
+                currentPage = page; // 현재 페이지 업데이트
+                refreshProfitList(); // 수익 갱신
+            }
+        });
+
+        // 토탈 페이지 호출
+        function getTotalPages() {
+            $.ajax({
+                url: './getTotalPages.ajax',
+                type: 'GET',
+                data: {
+                    'category': category,
+                    'actual_profit_start_date': $('#startDate').val(),
+                    'actual_profit_end_date': $('#endDate').val(),
+                    'pro_filter': $('#filter').val(),
+                    'proSearchQuery': $('#searchQuery').val(),
+                    'page' : currentPage
+                },
+                dataType: 'JSON',
+                success: function (data) {
+                    // console.log(data);
+                    $('#pagination').twbsPagination('destroy');
+                    $('#pagination').twbsPagination({
+                        totalPages: data.totalPages, // 서버에서 받은 총 페이지 수
+                        visiblePages: 5,
+                        startPage: currentPage,
+                        paginationClass: 'pagination align-items-center',
+                        onPageClick: function (event, page) {
+                            currentPage = page;
+                            refreshProfitList();
+                        }
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
     </script>
 </body>
 </html>

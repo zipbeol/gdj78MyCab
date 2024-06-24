@@ -61,6 +61,18 @@
         color: #fff;
         border-color: #0d6efd;
     }
+	    /* 리셋 버튼 스타일 */
+	.reset-btn {
+	    background-color: #dc3545;
+	    color: #fff;
+	    border-color: #dc3545;
+	}
+	
+	/* 리셋 버튼 호버 효과 */
+	.reset-btn:hover {
+	    background-color: #c82333;
+	    border-color: #bd2130;
+	}
     </style>
 </head>
 
@@ -130,6 +142,7 @@
                                         <h4 class="card-title">수익</h4>
                                     </div>
                                     <div class="card-body">
+                                    <button class="btn btn-secondary" onclick="resetFilters()">초기화</button>
                                     	<!-- 카테고리 필터링 버튼 -->
                                         <div class="mt-3">
                                             <button class="btn btn-secondary filter-btn" data-category="택시">택시 수익</button>
@@ -153,10 +166,10 @@
                                         <div class="mt-3">
 										    <!-- 검색 입력 필드 -->
 										    <label for="searchQuery">검색:</label>
-										    <input type="text" id="searchQuery" placeholder="검색어 입력">
+										    <input type="text" id="searchQuery" placeholder="검색 내용을 입력하세요.">
 										</div>
 										<!-- 검색 버튼 -->
-										<button id="go" onclick="refreshProfitList()">검색</button>
+										<button id="go" onclick="refreshProfitList()">찾기</button>
                                         <!-- 수익 등록 버튼 -->
                                         <div class="text-end">
                                             <button id="myBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">수익 등록</button>
@@ -186,7 +199,7 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <form id="profitForm">
+                                                        <form id="profitForm" class="needs-validation" novalidate>
                                                            <div class="mb-3">
                                                               <label for="pro_category" class="form-label">수익 종류:</label>
                                                               <select id="pro_category" name="pro_category" class="form-select" required>
@@ -195,22 +208,27 @@
                                                                   <option value="광고">광고 수익</option>
                                                                   <option value="기타">기타 수익</option>
                                                               </select>
+                                                              <div class="invalid-feedback">수익 종류를 입력해주세요</div>
                                                           </div>
                                                             <div class="mb-3">
                                                                 <label for="pro_actual_date" class="form-label">수익 발생일:</label>
                                                                 <input type="date" id="pro_actual_date" name="pro_actual_date" class="form-control" required>
+                                                                <div class="invalid-feedback">수익 발생일을 입력해주세요</div>
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="pro_who" class="form-label">수익자:</label>
                                                                 <input type="text" id="pro_who" name="pro_who" class="form-control" required>
+                                                                <div class="invalid-feedback">수익자를 입력해주세요</div>
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="pro_cash" class="form-label">수익 금액:</label>
                                                                 <input type="text" id="pro_cash" name="pro_cash" class="form-control" maxlength="10" required>
+                                                                <div class="invalid-feedback">수익 금액을 입력해주세요</div>
                                                             </div>
                                                             <div class="mb-3">
                                                               <label for="pro_content" class="form-label">수익 내용:</label>
-                                                              <textarea id="pro_content" name="pro_content" class="form-control" rows="3"></textarea>
+                                                              <textarea id="pro_content" name="pro_content" class="form-control" rows="3" required></textarea>
+                                                              <div class="invalid-feedback">수익 내용을 입력해주세요</div>
                                                           </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
@@ -263,6 +281,33 @@
 
     <!-- AJAX 및 모달 스크립트 -->
     <script>
+ // 리셋 버튼 클릭 시 호출되는 함수
+    function resetFilters() {
+        // 선택된 버튼의 active 클래스 제거
+        $('.filter-btn').removeClass('active');
+
+        // 날짜 입력 필드 초기화
+        $('#startDate').val('');
+        $('#endDate').val('');
+
+        // 필터링 선택 필드 초기화
+        $('#filter').val('');
+
+        // 검색 입력 필드 초기화
+        $('#searchQuery').val('');
+
+        // 카테고리 변수 초기화
+        category = '';
+
+        // 수익 리스트 다시 불러오기
+        refreshProfitList();
+
+        // 필터링 버튼 위치로 스크롤 이동 (선택하지 않은 경우)
+        $('html, body').animate({
+            scrollTop: $(".mt-3").offset().top
+        }, 500);
+    }
+
     
     	var searchFlag = false;
     	var category = '';
@@ -290,6 +335,12 @@
         
         // 등록 버튼 클릭 이벤트 처리
         $('#submitBtn').click(function(event) {
+            var form = document.querySelector('.needs-validation');
+            if (!form.checkValidity()) {
+                form.classList.add('was-validated');
+
+                return;
+            }
             $.ajax({
                 url: '/finance/profit/add.ajax', // 서버의 폼 처리 엔드포인트
                 type: 'POST',
@@ -363,17 +414,23 @@
         refreshProfitList();
         // 수익 리스트 갱신 함수
         function refreshProfitList() {
+            // 카테고리 값이 없으면 기본 값을 설정 (예: 모든 카테고리)
+            
             $.ajax({
                 type: 'POST',
                 url: '/finance/profit/list.ajax',
-                data : {
-                	'actual_profit_start_date' : $('#startDate').val(),
-                	'actual_profit_end_date' : $('#endDate').val(),
-                	'category' : category
+                data: {
+                    'category': category,
+                    'actual_profit_start_date': $('#startDate').val(),
+                    'actual_profit_end_date': $('#endDate').val(),
+                    'pro_filter': $('#filter').val(),
+                    'proSearchQuery': $('#searchQuery').val()
                 },
                 dataType : 'json',
                 success: function(data) {
                     displayProfitList(data.profit); // 갱신된 수익 리스트 표시
+                    console.log($('#filter').val());
+                    console.log($('#searchQuery').val());
                 },
                 error: function(error) {
                     console.error("AJAX 요청 실패:", error);

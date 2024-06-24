@@ -36,6 +36,7 @@ public class FinanceService {
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<FinanceDTO> profitList = financeDao.getProfitList(param);
 		map.put("profit", profitList);
+		logger.info("수익리스트");
 		return map;
 	}
 }

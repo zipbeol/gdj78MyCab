@@ -15,12 +15,36 @@
 			<if test="category != null and category != ''">
 				AND pro_category = #{category}
 			</if>
-			<if
-				test="actual_profit_start_date != null and actual_profit_end_date != null and actual_profit_end_date !='' and actual_profit_start_date !=''">
+			<if test="actual_profit_start_date != null and actual_profit_end_date != null and actual_profit_end_date !='' and actual_profit_start_date !=''">
 				AND pro_actual_date BETWEEN #{actual_profit_start_date} AND
 				#{actual_profit_end_date}
 			</if>
-		</where>
+			<if test="proSearchQuery != null and proSearchQuery != ''">
+				AND (
+	                pro_who LIKE CONCAT('%', #{proSearchQuery}, '%')
+	                OR pro_content LIKE CONCAT('%', #{proSearchQuery}, '%')
+	            )
+			</if>
+			</where>
+    <!-- 초기화면은 수익 발생일(pro_actual_date) 순으로 정렬 -->
+    ORDER BY pro_actual_date DESC
+    <if test="pro_filter != null and pro_filter != ''">
+        <choose>
+            <when test="pro_filter == '많은 수익 순'">
+                , pro_cash DESC
+            </when>
+            <when test="pro_filter == '적은 수익 순'">
+                , pro_cash ASC
+            </when>
+            <when test="pro_filter == '이름 순'">
+                , pro_who ASC
+            </when>
+            <!-- 초기화면 이후에는 기본적으로 pro_actual_date DESC 정렬을 유지 -->
+            <otherwise>
+                , pro_actual_date DESC
+            </otherwise>
+        </choose>
+    </if>
 	</select>
 
 
@@ -31,7 +55,7 @@
 		(pro_trip_id, pro_category, pro_content, pro_who,
 		pro_cash,
 		pro_actual_date)
-		VALUES (1, #{pro_category}, #{pro_content},
+		VALUES (2, #{pro_category}, #{pro_content},
 		#{pro_who}, #{pro_cash},
 		#{pro_actual_date})
 	</insert>

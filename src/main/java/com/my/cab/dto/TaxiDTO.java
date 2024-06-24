@@ -12,6 +12,15 @@ public class TaxiDTO {
     private String taxi_is_active;
     private String taxi_fuel_type;
     private String taxi_year;
+    private String taxi_idx;
+
+    public String getTaxi_idx() {
+        return taxi_idx;
+    }
+
+    public void setTaxi_idx(String taxi_idx) {
+        this.taxi_idx = taxi_idx;
+    }
 
     public String getTaxi_license_plate() {
         return taxi_license_plate;

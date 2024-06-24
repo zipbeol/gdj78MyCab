@@ -1,9 +1,136 @@
 <!-- <?xml version="1.0" encoding="UTF-8"?> -->
-<!DOCTYPE mapper PUBLIC	"-//mybatis.org//DTD Mapper 3.0//EN"
-	"http://mybatis.org/dtd/mybatis-3-mapper.dtd"
->
+<!DOCTYPE mapper PUBLIC    "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
+        >
 
-<mapper namespace="com.my.cab.dao.">
+<mapper namespace="com.my.cab.dao.DriverDAO">
 
+    <select id="getDriverFirstRegDate" resultType="String">
+        SELECT driver_registration_date
+        FROM driver
+        ORDER BY driver_registration_date ASC
+        LIMIT 1
+    </select>
+
+    <insert id="insertDriverInfo" parameterType="driver" useGeneratedKeys="true" keyColumn="driver_idx"
+            keyProperty="driver_idx">
+        INSERT INTO driver(driver_name, driver_address, driver_phone, driver_address_detail)
+        VALUES (#{driver_name}, #{driver_address}, #{driver_phone}, #{driver_address_detail});
+    </insert>
+
+    <update id="updateDriverPhoto" parameterType="driver">
+        UPDATE driver
+        SET driver_photo = #{driver_photo}
+        WHERE driver_idx = #{driver_idx}
+    </update>
+
+    <update id="updateDriverTaxiLicensePhoto" parameterType="driver">
+        UPDATE driver
+        SET driver_taxi_license_photo = #{driver_taxi_license_photo}
+        WHERE driver_idx = #{driver_idx}
+    </update>
+
+    <select id="getDriverList" resultType="driver" parameterType="search">
+        SELECT driver_idx, driver_photo, driver_name, driver_registration_date, driver_is_retired, driver_phone,
+        driver_address, driver_address_detail
+        FROM driver
+        <where>
+            <if test="searchText != null and searchText != ''">
+                driver_name LIKE CONCAT('%', #{searchText}, '%')
+            </if>
+            <if test="filterIsRetired != null and filterIsRetired !=  ''">
+                AND driver_is_retired = #{filterIsRetired}
+            </if>
+            <if test="filterStartDate != null and filterStartDate !=  '' and filterEndDate != null and filterEndDate !=  ''">
+                AND driver_registration_date BETWEEN #{filterStartDate} AND #{filterEndDate}
+            </if>
+        </where>
+        <choose>
+            <when test="sortColumn != null and sortColumn == 'driver-name'">
+                ORDER BY driver_name
+            </when>
+            <when test="sortColumn != null and sortColumn == 'driver-reg-date'">
+                ORDER BY driver_registration_date
+            </when>
+            <when test="sortColumn != null and sortColumn == 'driver-is-retired'">
+                ORDER BY driver_is_retired
+            </when>
+            <when test="sortColumn != null and sortColumn == 'driver-address'">
+                ORDER BY driver_address
+            </when>
+            <otherwise>
+                ORDER BY driver_idx
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="sortOrder != null and sortOrder == 'desc'">
+                DESC
+            </when>
+            <when test="sortOrder != null and sortOrder == 'asc'">
+                ASC
+            </when>
+        </choose>
+        LIMIT #{pageSize} OFFSET #{page}
+    </select>
+
+    <select id="getDriverTotal" resultType="int" parameterType="search">
+        SELECT COUNT(driver_idx)
+        FROM driver
+        <where>
+            <if test="searchText != null and searchText != ''">
+                driver_name LIKE CONCAT('%', #{searchText}, '%')
+            </if>
+            <if test="filterIsRetired != null and filterIsRetired !=  ''">
+                AND driver_is_retired = #{filterIsRetired}
+            </if>
+            <if test="filterStartDate != null and filterStartDate !=  '' and filterEndDate != null and filterEndDate !=  ''">
+                AND driver_registration_date BETWEEN #{filterStartDate} AND #{filterEndDate}
+            </if>
+        </where>
+    </select>
+
+    <select id="getDriverInfo" resultType="driver">
+        SELECT driver_idx,
+               driver_name,
+               driver_photo,
+               driver_taxi_license_photo,
+               driver_address,
+               driver_phone,
+               driver_registration_date,
+               driver_quit_date,
+               driver_is_retired,
+               driver_address_detail
+        FROM driver
+        WHERE driver_idx = #{param1}
+    </select>
+
+    <update id="updateDriverInfo" parameterType="driver">
+        UPDATE driver
+        <set>
+            <if test="driver_name != null and driver_name != ''">
+                driver_name = #{driver_name},
+            </if>
+            <if test="driver_address != null and driver_address != ''">
+                driver_address = #{driver_address},
+            </if>
+            <if test="driver_address_detail != null and driver_address_detail != ''">
+                driver_address_detail = #{driver_address_detail},
+            </if>
+            <if test="driver_is_retired != null and driver_is_retired != ''">
+                driver_is_retired = #{driver_is_retired},
+            </if>
+            <if test="driver_phone != null and driver_phone != ''">
+                driver_phone = #{driver_phone},
+            </if>
+        </set>
+        WHERE driver_idx = #{driver_idx}
+    </update>
+
+    <select id="getDriverPhotoName" resultType="String">
+        SELECT driver_photo FROM driver WHERE driver_idx = #{param1}
+    </select>
+    <select id="getDriverTaxiLicensePhotoName" resultType="String">
+        SELECT driver_taxi_license_photo FROM driver WHERE driver_idx = #{param1}
+    </select>
 
 </mapper>

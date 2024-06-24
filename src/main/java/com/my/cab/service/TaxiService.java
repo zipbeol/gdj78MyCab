@@ -18,36 +18,50 @@ public class TaxiService {
 
     Logger logger = LoggerFactory.getLogger(getClass());
 
+    private static final int PAGE_SIZE = 10;
+
     @Autowired
     TaxiDAO taxiDAO;
 
+
     public Map<String, Object> listAjax(SearchDTO searchDTO) {
         Map<String, Object> result = new HashMap<>();
-
-        result.put("taxiList", getSearchedTaxiList(searchDTO));
-        result.put("result", true);
-
+        int page = (searchDTO.getPage() - 1) * PAGE_SIZE;
+        logger.info("page {}", page);
+        logger.info("searchDTO page {}", searchDTO.getPage());
+        searchDTO.setPage(page);
+        searchDTO.setPageSize(PAGE_SIZE);
+        logger.info("searchDTO pageSize {}", searchDTO.getPageSize());
+        List<TaxiDTO> taxiList = getTaxiList(searchDTO);
+        result.put("taxiList", taxiList);
         return result;
     }
 
-    private boolean isTaxiLicensePlateExists(SearchDTO searchDTO) {
-        logger.info(searchDTO.getSearchText());
-        return taxiDAO.isSameTaxiLicensePlate(searchDTO.getSearchText());
+    /**
+     * 택시 번호판이 db에 존재하는지 확인하는 메서드
+     *
+     * @param licensePlate
+     * @return 존재하면 true 없으면 false
+     */
+    public boolean checkTaxiLicensePlateExists(String licensePlate) {
+        return taxiDAO.checkTaxiLicensePlateExists(licensePlate);
     }
 
     /**
-     * {@code TaxiDTO}리스트 리턴해주는 메서드
+     * 택시 리스트 검색한 리스트 리턴
      *
-     * @return List<TaxiDTO>
+     * @param searchDTO
+     * @return
      */
-    public List<TaxiDTO> getTaxiList() {
-        return taxiDAO.getTaxiList();
+    public List<TaxiDTO> getTaxiList(SearchDTO searchDTO) {
+        return taxiDAO.getTaxiList(searchDTO);
     }
 
-    public List<TaxiDTO> getSearchedTaxiList(SearchDTO searchDTO) {
-        return taxiDAO.getSearchedTaxiList(searchDTO.getSearchText());
-    }
-
+    /**
+     * 택시 차종 리스트 리턴
+     *
+     * @return
+     */
     public List<String> getTaxiModelList() {
         return taxiDAO.getTaxiModelList();
     }
@@ -62,7 +76,7 @@ public class TaxiService {
         Map<String, Object> result = new HashMap<>();
         String message = taxiDTO.getTaxi_license_plate() + " 택시 등록에 성공하였습니다.";
         boolean isSuccess = false;
-        if (isSameTaxiLicensePlate(taxiDTO.getTaxi_license_plate())) {
+        if (checkTaxiLicensePlateExists(taxiDTO.getTaxi_license_plate())) {
             message = taxiDTO.getTaxi_license_plate() + " 택시는 이미 등록된 번호판 입니다.";
         } else {
             taxiDAO.registerTaxi(taxiDTO);
@@ -74,12 +88,45 @@ public class TaxiService {
     }
 
     /**
-     * 택시 번호판 넣으면 중복인지 확인해 주는 메서드
+     * 특정 택시 정보 가져오는 메서드
      *
-     * @param taxiLicensePlate
-     * @return 중복이면 true 아니면 false
+     * @param taxi_idx
+     * @return {@code TaxiDTO}
      */
-    private boolean isSameTaxiLicensePlate(String taxiLicensePlate) {
-        return taxiDAO.isSameTaxiLicensePlate(taxiLicensePlate);
+    public TaxiDTO getTaxiInfo(String taxi_idx) {
+        return taxiDAO.getTaxiInfo(taxi_idx);
+    }
+
+    /**
+     * 택시 정보 업데이트 한 후 결과 내보내는 메서드
+     *
+     * @param taxiDTO
+     * @return {@code Map}
+     */
+    public Map<String, Object> updateTaxiInfo(TaxiDTO taxiDTO) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("result", taxiDAO.updateTaxiInfo(taxiDTO));
+        return result;
+    }
+
+    /**
+     * 택시 가장 오래된 등록일 가져오는 메서드
+     *
+     * @return {@code String}
+     */
+    public String getTaxiRegFirstDate() {
+        return taxiDAO.getTaxiRegFirstDate();
+    }
+
+    /**
+     * 페이지갯수 가져오는 메서드
+     *
+     * @param searchDTO
+     * @return {@code int}
+     */
+    public int getTotalPages(SearchDTO searchDTO) {
+        int taxiTotal = taxiDAO.getTaxiCount(searchDTO);
+        int totalPages = (int) Math.ceil((double) taxiTotal / PAGE_SIZE);
+        return totalPages = totalPages > 0 ? totalPages : 1;
     }
 }

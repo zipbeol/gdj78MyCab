@@ -29,7 +29,7 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-xl-4 col-lg-5 col-sm-6 col-12">
-          <form class="my-5" action="emp/login.do" method="post">
+          <form class="my-5" action="/emp/login.do" method="post">
             <div class="border rounded-2 p-4 mt-5">
               <div class="login-form">
                 <a href="!#" class="mb-4 d-flex">
@@ -63,5 +63,15 @@
     </div>
     <!-- Container end -->
   </body>
+  <script>
+    // 스크립트
+
+    
+     var message = "${message}";
+        if (message) {
+            alert(message);
+        }
+
+</script>
 
 </html>

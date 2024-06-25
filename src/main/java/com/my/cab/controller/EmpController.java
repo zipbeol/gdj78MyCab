@@ -6,11 +6,14 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.my.cab.dto.EmpDTO;
+import com.my.cab.dto.SearchDTO;
 import com.my.cab.service.EmpService;
 
 
@@ -34,7 +37,7 @@ public class EmpController {
 	
 	
 	
-	@RequestMapping(value="emp/emp/emailOverlay.ajax")
+	@RequestMapping(value="/emailOverlay.ajax")
 	@ResponseBody
 	public Map<String, Object> overlay(String email){
 		logger.info("중복 확인 요청 email : "+email);
@@ -45,7 +48,7 @@ public class EmpController {
 	}
 	
 
-	@RequestMapping(value="emp/emp/getNextEmpNo.ajax")
+	@RequestMapping(value="/getNextEmpNo.ajax")
 	@ResponseBody
 	public Map<String, Object> getNextEmpNo(int deptNo){
 		logger.info("생성 할 사원 부서번호 : "+deptNo);
@@ -76,6 +79,35 @@ public class EmpController {
             return "redirect:/";
 		}
 		
+	}
+	
+	
+	@RequestMapping(value="emp/hremp/list.go")
+	public String hremp() {
+		logger.info("인사부용 사원 조회 이동");
+		
+		return "HR/hrEmpList";
+	}
+	
+	
+	
+	@GetMapping(value="emp/hremp/hrEmpList.ajax")
+	@ResponseBody
+	public Map<String, Object> hrEmpList(SearchDTO searchDTO){
+		 logger.info("\nsearchDTO SearchText:" + searchDTO.getSearchText()
+         + "\nsearchDTO filterIsRetired:" + searchDTO.getFilterIsRetired()
+        + "\nsearchDTO filterIsRetired:" + searchDTO.getFilterForSearch()
+         + "\nsearchDTO page:" + searchDTO.getPage());
+		
+		return service.getEmpList(searchDTO);
+		
+	}
+	
+	@GetMapping(value="emp/hremp/getTotalPages.ajax")
+	@ResponseBody
+	public Map<String, Object> getTotalPages(SearchDTO searchDTO){
+		
+		return service.getEmpTotalPages(searchDTO);
 	}
 	
 	

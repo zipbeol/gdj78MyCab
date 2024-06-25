@@ -14,6 +14,7 @@ public class SearchDTO {
     private int page;
     private int pageSize;
     private String filterIsRetired;
+    private String filterForSearch;
 
     public String getFilterIsRetired() {
         return filterIsRetired;
@@ -94,4 +95,13 @@ public class SearchDTO {
     public void setSearchText(String searchText) {
         this.searchText = searchText;
     }
+
+	public String getFilterForSearch() {
+		return filterForSearch;
+	}
+
+	public void setFilterForSearch(String filterForSearch) {
+		this.filterForSearch = filterForSearch;
+	}
+    
 }

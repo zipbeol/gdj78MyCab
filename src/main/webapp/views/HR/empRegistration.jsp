@@ -823,7 +823,7 @@
  //이름을 예금주명에 넣기
  
  var emp_name = $('input[name="emp_name"]').val();
- var acc_name = 
+ var acc_name = $('input[name="acc_name"]').val();
  
  document.getElementById('emp_name').addEventListener('keyup', function() {
 	 console.log(this.value);

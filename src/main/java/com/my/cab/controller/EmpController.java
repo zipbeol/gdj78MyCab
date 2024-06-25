@@ -37,7 +37,7 @@ public class EmpController {
 	
 	
 	
-	@RequestMapping(value="/emailOverlay.ajax")
+	@RequestMapping(value="emp/emp/emailOverlay.ajax")
 	@ResponseBody
 	public Map<String, Object> overlay(String email){
 		logger.info("중복 확인 요청 email : "+email);
@@ -48,7 +48,7 @@ public class EmpController {
 	}
 	
 
-	@RequestMapping(value="/getNextEmpNo.ajax")
+	@RequestMapping(value="emp/emp/getNextEmpNo.ajax")
 	@ResponseBody
 	public Map<String, Object> getNextEmpNo(int deptNo){
 		logger.info("생성 할 사원 부서번호 : "+deptNo);
@@ -108,6 +108,16 @@ public class EmpController {
 	public Map<String, Object> getTotalPages(SearchDTO searchDTO){
 		
 		return service.getEmpTotalPages(searchDTO);
+	}
+	
+	
+	@GetMapping(value="emp/hremp/getEmpDetail.ajax")
+	@ResponseBody
+	public Map<String, Object> getEmpDetail(EmpDTO empDTO){
+		logger.info(empDTO.getEmp_no() + "사원 상세보기 요청");
+		
+		
+		return service.getEmpDetail(empDTO);
 	}
 	
 	

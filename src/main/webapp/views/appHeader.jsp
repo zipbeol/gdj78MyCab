@@ -164,7 +164,8 @@
     <div class="dropdown ms-2">
         <a id="userSettings" class="dropdown-toggle d-flex py-2 align-items-center text-decoration-none"
            href="#!" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="/assets/images/user.png" class="rounded-2 img-3x" alt="Bootstrap Gallery">
+            <!-- <img src="/assets/images/user.png" class="rounded-2 img-3x" alt="Bootstrap Gallery"> -->
+            <i class="fs-3 bi bi-person-fill"></i>
         </a>
         <div class="dropdown-menu dropdown-menu-end shadow-sm">
             <div class="p-3 border-bottom mb-2">

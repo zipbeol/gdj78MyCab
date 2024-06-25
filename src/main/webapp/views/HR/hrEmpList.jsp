@@ -152,7 +152,7 @@ th.sortable.desc::after {
 					<!-- Container starts -->
 					<div class="container-fluid">
 						<!-- Alert placeholder start -->
-						<div id="alertPlaceholder"></div>
+						<div id="alertPlaceholder" class="alert-placeholder"></div>
 						<!-- Alert placeholder end -->
 						<!-- Row start -->
 						<div class="row">
@@ -255,7 +255,7 @@ th.sortable.desc::after {
 						<div class="modal fade" id="empModal" tabindex="-1"
 							aria-labelledby="registerModalLabel" aria-hidden="true">
 							<!-- Alert placeholder start -->
-							<div id="alertModalPlaceholder"></div>
+							<div id="alertModalPlaceholder" class="alert-placeholder"></div>
 							<!-- Alert placeholder end -->
 							<div class="modal-dialog">
 								<div class="modal-content">
@@ -266,46 +266,57 @@ th.sortable.desc::after {
 									</div>
 									<div class="modal-body">
 											<div class="mb-3">
-												<label for="register-driver-photo" class="form-label">사진</label>
+												<label for="register-emp-photo" class="form-label">사진</label>
 												<div id="preview-container"
 													class="d-flex align-items-center justify-content-center border border-2 mb-3"
 													style="height: 108px; width: 108px;">
-													<img id="preview-image" src="" alt="이미지 미리보기"
+													<img id="preview-image"  alt="이미지 미리보기"
 														style="display: none; width: 100px; height: 100px;">
 												</div>										
 											</div>
 											<div class="mb-3">
-												<label for="register-driver-name" class="form-label">사번</label>
+												<label for="emp-no" class="form-label">사번</label>
+												<input type="text" class="form-control" id="emp-no" readonly>
 											</div>
 											<div class="mb-3">
-												<label for="register-driver-phone" class="form-label">이름</label>
+												<label for="emp-name" class="form-label">이름</label>
+												<input type="text" class="form-control" id="emp-name" readonly>
 											</div>
 											<div class="mb-3">
-												<label for="register-driver-phone" class="form-label">부서</label>
+												<label for="dept-name" class="form-label">부서</label>
+												<input type="text" class="form-control" id="dept-name" readonly>
 											</div>
 											<div class="mb-3">
-												<label for="register-driver-phone" class="form-label">직급</label>
+												<label for="title-name" class="form-label">직급</label>
+												 <input type="text" class="form-control" id="title-name" readonly>
 											</div>
 											<div class="mb-3">
-												<label for="register-driver-phone" class="form-label">권한 레벨</label>
+												<label for="emp-level" class="form-label">권한 레벨</label>
+												<input type="text" class="form-control" id="emp-level" readonly>
 											</div>
 											<div class="mb-3">
-												<label for="register-driver-phone" class="form-label">이메일</label>
+												<label for="emp-email" class="form-label">이메일</label>
+												<input type="text" class="form-control" id="emp-email" readonly>
 											</div>
 											<div class="mb-3">
-												<label for="register-driver-phone" class="form-label">입사일</label>
+												<label for="emp-hired-date" class="form-label">입사일</label>
+												<input type="text" class="form-control" id="emp-hired-date" readonly>
 											</div>
 											<div class="mb-3">
-												<label for="register-driver-phone" class="form-label">재직 여부</label>
+												<label for="emp-employment_status" class="form-label">재직 여부</label>
+												<input type="text" class="form-control" id="emp-employment-status" readonly>
 											</div>
 											<div class="mb-3">
-												<label for="register-driver-phone" class="form-label">주소</label>
+												<label for="emp-add" class="form-label">주소</label>
+												<input type="text" class="form-control" id="emp-add" readonly>
 											</div>
 											<div class="mb-3">
-												<label for="register-driver-phone" class="form-label">잔여 연차</label>
+												<label for="vac-left" class="form-label">잔여 연차</label>
+												<input type="text" class="form-control" id="vac-left" readonly>
 											</div>
 											<div class="mb-3">
-												<label for="register-driver-phone" class="form-label">내선 번호</label>
+												<label for="emp-extension-number" class="form-label">내선 번호</label>
+												<input type="text" class="form-control" id="emp-extension-number" readonly>
 											</div>
 											<div class="button-position">
 											<button type="button" class="btn btn-outline-dark">
@@ -314,7 +325,7 @@ th.sortable.desc::after {
                         					</div>
 									</div>
 									<div class="modal-footer">
-										<button type="button" onclick="registration()"
+										<button type="button" id="editButton"
 											class="btn btn-primary">수정</button>
 										<button type="button" class="btn btn-secondary"
 											data-bs-dismiss="modal">닫기</button>
@@ -488,22 +499,9 @@ th.sortable.desc::after {
             }
         });
     }
-
-    // 검색 값들 변수에 저장
-    function getSearchValue() {
-        filterIsRetired = $('#filter-emp-is-retired').val();
-		filterForSearch = $('#filterforsearch').val();
-        searchText = $('#search-emp').val();
-    }
     
     
-    var myModal = new bootstrap.Modal(document.getElementById('empModal'));
     
-    function showModal(){
-    	
-    myModal.show();
-    	
-    };
 
     // 리스트 보여주기
     function drawList(list) {
@@ -515,7 +513,7 @@ th.sortable.desc::after {
                 
                 content += '<tr class="emp-list-tbody-tr" id="' + item.emp_no + '">'
                 	+ '<td class="text-center">' + item.emp_no + '</td>'
-                    + '<td class="text-center" onclick="showModal()">' + item.emp_name + '</td>'
+                    + '<td class="text-center" data-emp-no="' + item.emp_no + '" onclick="showModal(' + item.emp_no + ')">' + item.emp_name + '</td>'
                     + '<td class="text-center">' + item.title_name + '</td>'
                     + '<td class="text-center">' + item.dept_name + '</td>'
                     + '<td class="text-center">' + emp_employment_status + '</td>'
@@ -526,6 +524,83 @@ th.sortable.desc::after {
         }
         $('#emp-list').html(content);
     }
+    
+    
+    
+
+    // 검색 값들 변수에 저장
+    function getSearchValue() {
+        filterIsRetired = $('#filter-emp-is-retired').val();
+		filterForSearch = $('#filterforsearch').val();
+        searchText = $('#search-emp').val();
+    }
+    
+    
+    
+    
+    
+    var myModal = new bootstrap.Modal(document.getElementById('empModal'));
+    
+    
+    
+    
+    function showModal(emp_no){
+    	
+    	console.log(emp_no);
+    	
+    	getEmployeeById(emp_no).done(function(employee) {
+    		var fileName = employee.profile_new;
+    		
+    		if (fileName) {
+                $('#preview-image').attr('src', '/photo/' + fileName).show();
+            } else {
+                $('#preview-image').hide();
+                $('#preview-image').attr('src', ''); // 이미지 소스 비우기
+                $('#preview-image').parent().html('<i class="fs-3 bi bi-person-fill"></i>'); // 아이콘으로 대체
+            }
+    		
+            $('#emp-no').val(employee.emp_no);
+            $('#emp-name').val(employee.emp_name);
+            $('#dept-name').val(employee.dept_name);
+            $('#title-name').val(employee.title_name);
+            $('#emp-level').val(employee.emp_level);
+            $('#emp-email').val(employee.emp_email);
+            $('#emp-hired-date').val(employee.emp_hired_date);
+            $('#emp-employment-status').val(employee.emp_employment_status ? '재직중' : '퇴사');
+            $('#emp-add').val(employee.emp_add);
+            $('#vac-left').val(employee.vac_left);
+            $('#emp-extension-number').val(employee.emp_extension_number);
+            
+
+            
+
+            // 모달을 표시
+            myModal.show();
+        });
+    	
+    function getEmployeeById(emp_no) {//사원 상세보기 
+        return $.ajax({
+            url: './getEmpDetail.ajax',
+            type: 'GET',
+            data: {
+                'emp_no': emp_no
+            },
+            dataType: 'JSON',           
+            success: function(data) {
+                return data;
+            },
+            error: function(xhr, status, error) {
+                console.error('직원 데이터를 가져오는 중 오류 발생:', status, error);
+            }
+        });
+    }
+    	
+    }
+    
+    
+    
+
+    
 
 
 

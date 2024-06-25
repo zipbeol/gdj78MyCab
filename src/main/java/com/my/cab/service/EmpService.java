@@ -7,6 +7,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,9 @@ import com.my.cab.dto.SearchDTO;
 public class EmpService {
 	
 	private String password = "";
+	
+	@Value("${spring.servlet.multipart.location}")
+    private String uploadDir;
 	
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired EmpDAO dao;
@@ -116,6 +120,32 @@ public class EmpService {
 		totalPages = totalPages > 0? totalPages : 1;
 		
 		return Map.of("totalPages", totalPages);
+	}
+
+
+	public Map<String, Object> getEmpDetail(EmpDTO empDTO) {
+		int emp_no = empDTO.getEmp_no();
+		
+		EmpDTO dto = dao.getEmpDetail(emp_no);
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("profile_new", dto.getProfile_new());
+		result.put("emp_no", dto.getEmp_no());
+		result.put("emp_name", dto.getEmp_name());
+		result.put("dept_name", dto.getDept_name());
+		result.put("title_name", dto.getTitle_name());
+		result.put("emp_level", dto.getEmp_level());
+		result.put("emp_email", dto.getEmp_email());
+		result.put("emp_hired_date", dto.getEmp_hired_date());
+		result.put("emp_employment_status", dto.isEmp_employment_status());
+		result.put("emp_add", dto.getEmp_add());
+		result.put("vac_left", dto.getVac_left());
+		result.put("emp_extension_number", dto.getEmp_extension_number());
+		
+		
+		
+		
+		return result;
 	}
 
 }

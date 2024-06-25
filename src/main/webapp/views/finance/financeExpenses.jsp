@@ -442,13 +442,13 @@
                     '<td>' + formatNumberWithCommas(item.exp_cash) + '</td>' +
                     '</tr>'+
                     '<tr class="detail-row">'+
-                    '<td colspan="3" class="detail-content">'+
-                    '<strong>지출 발생일:</strong> ' + item.exp_actual_date +
-                    '<strong>지출 등록일:</strong> ' + item.exp_date +
-                    '<strong>지출 종류:</strong> ' + item.exp_category +
-                    '<strong>지출 내용:</strong> ' + item.exp_content +
-                    '<strong>지출 금액:</strong> ' + formatNumberWithCommas(item.exp_cash) +
-                    '<strong>원</strong> ' +
+                    '<td colspan="3" class="detail-content gap-2">'+
+                    '<div class="mb-2 mt-2"><strong>지출 발생일:</strong> ' + item.exp_actual_date + '</div>'+
+                    '<div class="mb-2"><strong>지출 등록일:</strong> ' + item.exp_date + '</div>'+
+                    '<div class="mb-2"><strong>지출 종류:</strong> ' + item.exp_category + '</div>'+
+                    '<div class="mb-2"><strong>지출 내용:</strong> ' + item.exp_content + '</div>'+
+                    '<div class="mb-2"><strong>지출 금액:</strong> ' + formatNumberWithCommas(item.exp_cash) +
+                    '<strong>원</strong></div> ' +
                     '</td>'+
                     '</tr>';
             }

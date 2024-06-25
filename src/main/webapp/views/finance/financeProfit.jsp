@@ -438,13 +438,13 @@
                     '<td>' + formatNumberWithCommas(item.pro_cash) + '</td>' +
                     '</tr>'+
                     '<tr class="detail-row">'+
-                    '<td colspan="3" class="detail-content">'+
-                    '<strong>수익 발생일:</strong> ' + item.pro_actual_date +
-                    '<strong>수익 등록일:</strong> ' + item.pro_date +
-                    '<strong>수익 종류:</strong> ' + item.pro_category +
-                    '<strong>수익 내용:</strong> ' + item.pro_content +
-                    '<strong>수익 금액:</strong> ' + formatNumberWithCommas(item.pro_cash) +
-                    '<strong>원</strong> ' +
+                    '<td colspan="3" class="detail-content gap-2">'+
+                    '<div class="mb-2 mt-2"><strong>수익 발생일:</strong> ' + item.pro_actual_date + '</div>' +
+                    '<div class="mb-2 mt-2"><strong>수익 등록일:</strong> ' + item.pro_date + '</div>' +
+                    '<div class="mb-2 mt-2"><strong>수익 종류:</strong> ' + item.pro_category + '</div>' +
+                    '<div class="mb-2 mt-2"><strong>수익 내용:</strong> ' + item.pro_content + '</div>' +
+                    '<div class="mb-2 mt-2"><strong>수익 금액:</strong> ' + formatNumberWithCommas(item.pro_cash) +
+                    '<strong>원</strong></div>' +
                     '</td>'+
                     '</tr>';
             }

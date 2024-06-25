@@ -22,14 +22,14 @@ public class FinanceService {
 	private static final int PAGE_SIZE = 10;
 
 	@Autowired
-	private FinanceDAO financeDao;
+	private FinanceDAO financeDAO;
 
 	@Transactional
 	public Map<String, Object> addProfit(FinanceDTO profitDTO) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		logger.info("수익 등록 시작: {}", profitDTO.getPro_cash());
 
-		map.put("result", financeDao.addProfit(profitDTO));
+		map.put("result", financeDAO.addProfit(profitDTO));
 
 		logger.info("수익 등록 완료: {}", profitDTO);
 		return map;
@@ -42,14 +42,14 @@ public class FinanceService {
         logger.info("searchDTO page {}", searchDTO.getPage());
         searchDTO.setPage(page);
         searchDTO.setPageSize(PAGE_SIZE);
-		List<FinanceDTO> profitList = financeDao.getProfitList(searchDTO);
+		List<FinanceDTO> profitList = financeDAO.getProfitList(searchDTO);
 		map.put("profit", profitList);
 		logger.info("수익리스트");
 		return map;
 	}
 
 	public Object getTotalPages(SearchDTO searchDTO) {
-        int profitTotal = financeDao.getProfitCount(searchDTO);
+        int profitTotal = financeDAO.getProfitCount(searchDTO);
         int totalPages = (int) Math.ceil((double) profitTotal / PAGE_SIZE);
         return totalPages = totalPages > 0 ? totalPages : 1;
 	}

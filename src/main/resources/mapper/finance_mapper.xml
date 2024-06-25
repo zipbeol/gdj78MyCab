@@ -7,46 +7,44 @@
 
 	<!-- 수익 리스트 조회 쿼리 -->
 	<select id="getProfitList" resultType="finance" parameterType="search">
-		SELECT pro_who, pro_cash, pro_actual_date, pro_date, pro_category,
-		pro_content, pro_cash
-		FROM profit
-		<where>
-			<if test="category != null and category != ''">
-				AND pro_category = #{category}
-			</if>
-			<if test="filterStartDate != null and filterEndDate != null and filterEndDate !='' and filterStartDate !=''">
-				AND pro_actual_date BETWEEN #{filterStartDate} AND
-				#{filterEndDate}
-			</if>
-			<if test="searchText != null and searchText != ''">
-				AND pro_who LIKE CONCAT('%', #{searchText}, '%')
-			</if>
-			</where>
-		    <!-- 초기화면은 수익 발생일(pro_actual_date) 순으로 정렬 -->
-		    ORDER BY pro_actual_date DESC
-		    <if test="pro_filter != null and pro_filter != ''">
-		        <choose>
-		            <when test="pro_filter == '많은 수익 순'">
-		                , pro_cash DESC
-		            </when>
-		            <when test="pro_filter == '적은 수익 순'">
-		                , pro_cash ASC
-		            </when>
-		            <when test="pro_filter == '이름 순'">
-		                , pro_who ASC
-		            </when>
-		            <!-- 초기화면 이후에는 기본적으로 pro_actual_date DESC 정렬을 유지 -->
-		            <otherwise>
-		                , pro_actual_date DESC
-		            </otherwise>
-		        </choose>
-		    </if>
-		    LIMIT #{pageSize} OFFSET #{page}
-	</select>
+    SELECT pro_who, pro_cash, pro_actual_date, pro_date, pro_category,
+    pro_content, pro_cash
+    FROM profit
+    <where>
+        <if test="category != null and category != ''">
+            AND pro_category = #{category}
+        </if>
+        <if test="filterStartDate != null and filterEndDate != null and filterEndDate !='' and filterStartDate !=''">
+            AND pro_actual_date BETWEEN #{filterStartDate} AND
+            #{filterEndDate}
+        </if>
+        <if test="searchText != null and searchText != ''">
+            AND pro_who LIKE CONCAT('%', #{searchText}, '%')
+        </if>
+    </where>
+    <!-- 초기화면은 수익 발생일(pro_actual_date) 순으로 정렬 -->
+    <choose>
+        <when test="pro_filter == '많은 수익 순'">
+            ORDER BY pro_cash DESC
+        </when>
+        <when test="pro_filter == '적은 수익 순'">
+            ORDER BY pro_cash ASC
+        </when>
+        <when test="pro_filter == '이름 순'">
+            ORDER BY pro_who ASC
+        </when>
+        <!-- 초기화면 이후에는 기본적으로 pro_actual_date DESC 정렬을 유지 -->
+        <otherwise>
+            ORDER BY pro_actual_date DESC
+        </otherwise>
+    </choose>
+    LIMIT #{pageSize} OFFSET #{page}
+</select>
 
-    <select id="getTaxiCount" resultType="int" parameterType="search">
+
+    <select id="getProfitCount" resultType="int" parameterType="search">
         SELECT COUNT(pro_idx)
-        FROM finance
+        FROM profit
 		<where>
 			<if test="category != null and category != ''">
 				AND pro_category = #{category}

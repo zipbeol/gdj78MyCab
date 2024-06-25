@@ -73,8 +73,6 @@
 	    background-color: #c82333;
 	    border-color: #bd2130;
 	}
-	
-	
     </style>
 </head>
 
@@ -149,17 +147,22 @@
                                     <div class="card-body">
                                     <button class="btn btn-secondary" onclick="resetFilters()">초기화</button>
                                     	<!-- 카테고리 필터링 버튼 -->
-                                    	<div class="btn-group" role="group" aria-label="Basic example">
-				                        <button type="button" class="btn btn-primary filter-btn" data-category="택시">
+                                    	<!-- <div class="btn-group" role="group" aria-label="Basic example">
+				                        <button type="button" class="btn btn-primary" data-category="택시">
 				                          택시 수익
 				                        </button>
-				                        <button type="button" class="btn btn-primary filter-btn" data-category="광고">
+				                        <button type="button" class="btn btn-primary" data-category="광고">
 				                          광고 수익
 				                        </button>
-				                        <button type="button" class="btn btn-primary filter-btn" data-category="기타">
+				                        <button type="button" class="btn btn-primary" data-category="기타">
 				                          기타 수익
 				                        </button>
-				                      </div>
+				                      </div> -->
+                                        <div class="mt-3">
+                                            <button class="btn btn-secondary filter-btn" data-category="택시">택시 수익</button>
+                                            <button class="btn btn-secondary filter-btn" data-category="광고">광고 수익</button>
+                                            <button class="btn btn-secondary filter-btn" data-category="기타">기타 수익</button>
+                                        </div>
                                         <!-- 날짜 필터링 입력 -->
 										<div class="mt-3">
 										    <label for="startDate">시작 날짜:</label>
@@ -180,7 +183,7 @@
 										    <input type="text" id="searchQuery" placeholder="검색 내용을 입력하세요.">
 										</div>
 										<!-- 검색 버튼 -->
-										<button id="go" class="btn btn-outline-info">찾기</button>
+										<button id="go" class="btn btn-outline-info" onclick="refreshProfitList()">찾기</button>
                                         <!-- 수익 등록 버튼 -->
                                         <div class="text-end">
                                             <button id="myBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">수익 등록</button>
@@ -306,10 +309,6 @@
     getTotalPages();
     refreshProfitList();
     
-    $('#go').on('click',function(){
-        getTotalPages();
-        refreshProfitList();
-    });
  // 리셋 버튼 클릭 시 호출되는 함수
     function resetFilters() {
         // 선택된 버튼의 active 클래스 제거
@@ -328,10 +327,6 @@
         // 카테고리 변수 초기화
         category = '';
 
-        // 총 페이지
-        currentPage = 1;
-        getTotalPages();
-        
         // 수익 리스트 다시 불러오기
         refreshProfitList();
 
@@ -356,15 +351,13 @@
                 // 클릭된 버튼의 데이터를 기반으로 필터링된 결과를 표시
                 category = this.getAttribute('data-category');
                 categoryName(category); // categoryName 함수 호출
-                getTotalPages();
-                refreshProfitList();
             });
         });
 
         // 카테고리 이름을 출력하는 함수
         function categoryName(category) {
             console.log('Selected category:', category);
-            // refreshProfitList();
+            refreshProfitList();
         }
         
         // 등록 버튼 클릭 이벤트 처리
@@ -445,9 +438,7 @@
                 $(this).next('.detail-row').toggleClass('active');
             });
         }
-
-        
-        
+        refreshProfitList();
         // 수익 리스트 갱신 함수
         function refreshProfitList() {
             // 카테고리 값이 없으면 기본 값을 설정 (예: 모든 카테고리)
@@ -466,6 +457,7 @@
                 dataType : 'json',
                 success: function(data) {
                     displayProfitList(data.profit); // 갱신된 수익 리스트 표시
+                    console.log($('#filter').val());
                     console.log($('#searchQuery').val());
                 },
                 error: function(error) {
@@ -474,6 +466,10 @@
             });
         }
 
+        // 초기 수익 리스트 불러오기
+        $(document).ready(function() {
+            refreshProfitList();
+        });
 
         // 모달이 닫힐 때 폼 초기화
         $('#exampleModal').on('hidden.bs.modal', function (e) {
@@ -481,7 +477,7 @@
         });
         
 
-/*         // 페이지네이션 확인용 ㅋ
+        // 페이지네이션
         $('#pagination').twbsPagination({
             totalPages: 10, // 총 페이지 수 (백엔드에서 가져와야 함)
             visiblePages: 5, // 표시할 페이지 수
@@ -491,7 +487,7 @@
                 currentPage = page; // 현재 페이지 업데이트
                 refreshProfitList(); // 수익 갱신
             }
-        }); */
+        });
 
         // 토탈 페이지 호출
         function getTotalPages() {
@@ -500,14 +496,15 @@
                 type: 'GET',
                 data: {
                     'category': category,
-                    'filterStartDate': $('#startDate').val(),
-                    'filterEndDate': $('#endDate').val(),
-                    'searchText': $('#searchQuery').val(),
+                    'actual_profit_start_date': $('#startDate').val(),
+                    'actual_profit_end_date': $('#endDate').val(),
+                    'pro_filter': $('#filter').val(),
+                    'proSearchQuery': $('#searchQuery').val(),
                     'page' : currentPage
                 },
                 dataType: 'JSON',
                 success: function (data) {
-                    console.log(data);
+                    // console.log(data);
                     $('#pagination').twbsPagination('destroy');
                     $('#pagination').twbsPagination({
                         totalPages: data.totalPages, // 서버에서 받은 총 페이지 수

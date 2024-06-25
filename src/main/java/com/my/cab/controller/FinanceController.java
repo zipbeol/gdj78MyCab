@@ -47,7 +47,7 @@ public class FinanceController {
 	public Map<String, Object> getProfitList(HttpSession session, SearchDTO searchDTO,@RequestParam Map<String, Object> param) {
 		logger.info("재무관리 수익리스트 - AJAX 요청");
 		logger.info("\nsearchDTO SearchText:" + searchDTO.getSearchText()
-        + "\nsearchDTO filterIsRetired:" + searchDTO.getFilterIsRetired()
+        + "\nsearchDTO Category:" + searchDTO.getCategory()
         + "\nsearchDTO filterStartDate:" + searchDTO.getFilterStartDate()
         + "\nsearchDTO filterEndDate:" + searchDTO.getFilterEndDate()
         + "\nsearchDTO page:" + searchDTO.getPage()
@@ -63,11 +63,19 @@ public class FinanceController {
 		return financeService.addProfit(profit);
 	}
 	
-    @GetMapping("/getTotalPages.ajax")
+    @GetMapping("/profit/getTotalPages.ajax")
     @ResponseBody
     public Map<String, Object> getTotalPages(SearchDTO searchDTO) {
+		logger.info("\nsearchDTO SearchText:" + searchDTO.getSearchText()
+        + "\nsearchDTO Category:" + searchDTO.getCategory()
+        + "\nsearchDTO filterStartDate:" + searchDTO.getFilterStartDate()
+        + "\nsearchDTO filterEndDate:" + searchDTO.getFilterEndDate()
+        + "\nsearchDTO page:" + searchDTO.getPage()
+		);
+    	logger.info("searchDTO = "+ searchDTO);
         Map<String, Object> map = new HashMap<>();
         map.put("totalPages", financeService.getTotalPages(searchDTO));
+        
         return map;
     }
 

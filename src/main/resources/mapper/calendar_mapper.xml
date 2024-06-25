@@ -12,5 +12,11 @@
 	<select id="dayCalListCall" resultType="map">
 		SELECT * FROM schedule WHERE schedule_start_date LIKE CONCAT('%',#{param1},'%')
 	</select>
+	
+	<insert id="createSchedule" parameterType="calendarDTO">
+		INSERT INTO schedule 
+		(schedule_name,schedule_content,schedule_start_date,schedule_end_date,schedule_emp_no,schedule_category,schedule_color)
+		VALUES (#{schedule_name},#{schedule_content},#{schedule_start_date},#{schedule_end_date},#{schedule_emp_no},#{schedule_category},#{schedule_color})
+	</insert>
 
 </mapper>

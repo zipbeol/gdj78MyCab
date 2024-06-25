@@ -34,6 +34,20 @@
     <link rel="stylesheet" href="/assets/vendor/calendar/css/main.min.css">
     <link rel="stylesheet" href="/assets/vendor/calendar/css/custom.css">
     
+    
+    <!-- 폰트 -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+
+    <!-- 따로 적용한 CSS -->
+
+    <link rel="stylesheet" href="/assets/css/default.css">
+
+    <!-- 데이트 피커 -->
+    <link rel="stylesheet" href="/assets/vendor/daterange/daterange.css">
+    
     <style >
     	#selectableCalendar{
     		width: 1000px;
@@ -89,310 +103,7 @@
       <div class="main-container">
 
         <!-- Sidebar wrapper start -->
-        <nav id="sidebar" class="sidebar-wrapper">
-
-          <!-- App brand starts -->
-          <div class="app-brand px-3 py-2 d-flex align-items-center">
-            <a href="index.go">
-              <img src="/assets/images/logo.svg" class="logo" alt="Bootstrap Gallery">
-            </a>
-          </div>
-          <!-- App brand ends -->
-
-          <!-- Sidebar menu starts -->
-          <div class="sidebarMenuScroll">
-            <ul class="sidebar-menu">
-              <li>
-                <a href="index.go">
-                  <i class="bi bi-speedometer2"></i>
-                  <span class="menu-text">Dashboard</span>
-                </a>
-              </li>
-              <li>
-                <a href="trips.go">
-                  <i class="bi bi-car-front"></i>
-                  <span class="menu-text">Trips</span>
-                  <span class="badge border border-danger text-danger rounded-5 ms-2">New</span>
-                </a>
-              </li>
-              <li>
-                <a href="upcoming-trips.go">
-                  <i class="bi bi-pin-map"></i>
-                  <span class="menu-text">Upcoming Trips</span>
-                </a>
-              </li>
-              <li>
-                <a href="trip-history.go">
-                  <i class="bi bi-map"></i>
-                  <span class="menu-text">Trips History</span>
-                </a>
-              </li>
-              <li>
-                <a href="customers.go">
-                  <i class="bi bi-person"></i>
-                  <span class="menu-text">Customers</span>
-                </a>
-              </li>
-              <li>
-                <a href="available-cabs.go">
-                  <i class="bi bi-phone-vibrate"></i>
-                  <span class="menu-text">Available Cabs</span>
-                </a>
-              </li>
-              <li>
-                <a href="faq.go">
-                  <i class="bi bi-box"></i>
-                  <span class="menu-text">FAQ's</span>
-                  <span class="badge border border-success text-success rounded-5 ms-2">New</span>
-                </a>
-              </li>
-              <li class="treeview active">
-                <a href="#!">
-                  <i class="bi bi-calendar2"></i>
-                  <span class="menu-text">Calendars</span>
-                </a>
-                <ul class="treeview-menu">
-                  <li>
-                    <a href="calendar.go">Daygrid View</a>
-                  </li>
-                  <li>
-                    <a href="calendar-external-draggable.go">External Draggable</a>
-                  </li>
-                  <li>
-                    <a href="calendar-google.go">Google Calendar</a>
-                  </li>
-                  <li>
-                    <a href="calendar-list-view.go">List View</a>
-                  </li>
-                  <li>
-                    <a href="calendar-selectable.go" class="active-sub">Selectable</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="treeview">
-                <a href="#!">
-                  <i class="bi bi-stickies"></i>
-                  <span class="menu-text">Components</span>
-                </a>
-                <ul class="treeview-menu">
-                  <li>
-                    <a href="accordions.go">Accordions</a>
-                  </li>
-                  <li>
-                    <a href="alerts.go">Alerts</a>
-                  </li>
-                  <li>
-                    <a href="avatars.go">Avatars</a>
-                  </li>
-                  <li>
-                    <a href="buttons.go">Buttons</a>
-                  </li>
-                  <li>
-                    <a href="badges.go">Badges</a>
-                  </li>
-                  <li>
-                    <a href="carousel.go">Carousel</a>
-                  </li>
-                  <li>
-                    <a href="list-items.go">List Items</a>
-                  </li>
-                  <li>
-                    <a href="placeholders.go">Placeholders</a>
-                  </li>
-                  <li>
-                    <a href="progress.go">Progress Bars</a>
-                  </li>
-                  <li>
-                    <a href="popovers.go">Popovers</a>
-                  </li>
-                  <li>
-                    <a href="spinners.go">Spinners</a>
-                  </li>
-                  <li>
-                    <a href="tooltips.go">Tooltips</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="treeview">
-                <a href="#!">
-                  <i class="bi bi-ui-checks-grid"></i>
-                  <span class="menu-text">Forms</span>
-                </a>
-                <ul class="treeview-menu">
-                  <li>
-                    <a href="form-inputs.go">Basic Form Inputs</a>
-                  </li>
-                  <li>
-                    <a href="form-checkbox-radio.go">Checkbox &amp; Radio</a>
-                  </li>
-                  <li>
-                    <a href="form-file-input.go">File Input</a>
-                  </li>
-                  <li>
-                    <a href="form-validations.go">Validations</a>
-                  </li>
-                  <li>
-                    <a href="date-time-pickers.go">Date Time Pickers</a>
-                  </li>
-                  <li>
-                    <a href="form-layouts.go">Form Layouts</a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <a href="tables.go">
-                  <i class="bi bi-border-all"></i>
-                  <span class="menu-text">Tables</span>
-                </a>
-              </li>
-              <li>
-                <a href="settings.go">
-                  <i class="bi bi-gear"></i>
-                  <span class="menu-text">Settings</span>
-                </a>
-              </li>
-              <li>
-                <a href="profile.go">
-                  <i class="bi bi-postcard"></i>
-                  <span class="menu-text">Profile</span>
-                </a>
-              </li>
-              <li>
-                <a href="starter-page.go">
-                  <i class="bi bi-layout-text-window-reverse"></i>
-                  <span class="menu-text">Starter Page</span>
-                </a>
-              </li>
-              <li class="treeview">
-                <a href="#!">
-                  <i class="bi bi-code-square"></i>
-                  <span class="menu-text">Cards</span>
-                </a>
-                <ul class="treeview-menu">
-                  <li>
-                    <a href="cards.go">Cards</a>
-                  </li>
-                  <li>
-                    <a href="advanced-cards.go">Advanced Cards</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="treeview">
-                <a href="#!">
-                  <i class="bi bi-pie-chart"></i>
-                  <span class="menu-text">Graphs</span>
-                </a>
-                <ul class="treeview-menu">
-                  <li>
-                    <a href="apex.go">Apex</a>
-                  </li>
-                  <li>
-                    <a href="morris.go">Morris</a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <a href="maps.go">
-                  <i class="bi bi-pin-map"></i>
-                  <span class="menu-text">Maps</span>
-                </a>
-              </li>
-              <li>
-                <a href="tabs.go">
-                  <i class="bi bi-slash-square"></i>
-                  <span class="menu-text">Tabs</span>
-                </a>
-              </li>
-              <li>
-                <a href="modals.go">
-                  <i class="bi bi-terminal"></i>
-                  <span class="menu-text">Modals</span>
-                </a>
-              </li>
-              <li>
-                <a href="icons.go">
-                  <i class="bi bi-textarea"></i>
-                  <span class="menu-text">Icons</span>
-                </a>
-              </li>
-              <li>
-                <a href="typography.go">
-                  <i class="bi bi-explicit"></i>
-                  <span class="menu-text">Typography</span>
-                </a>
-              </li>
-              <li class="treeview">
-                <a href="#!">
-                  <i class="bi bi-upc-scan"></i>
-                  <span class="menu-text">Login/Signup</span>
-                </a>
-                <ul class="treeview-menu">
-                  <li>
-                    <a href="login.go">Login</a>
-                  </li>
-                  <li>
-                    <a href="signup.go">Signup</a>
-                  </li>
-                  <li>
-                    <a href="forgot-password.go">Forgot Password</a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <a href="page-not-found.go">
-                  <i class="bi bi-exclamation-diamond"></i>
-                  <span class="menu-text">Page Not Found</span>
-                </a>
-              </li>
-              <li>
-                <a href="maintenance.go">
-                  <i class="bi bi-exclamation-octagon"></i>
-                  <span class="menu-text">Maintenance</span>
-                </a>
-              </li>
-              <li class="treeview">
-                <a href="#!">
-                  <i class="bi bi-code-square"></i>
-                  <span class="menu-text">Multi Level</span>
-                </a>
-                <ul class="treeview-menu">
-                  <li>
-                    <a href="#!">Level One Link</a>
-                  </li>
-                  <li>
-                    <a href="#!">
-                      Level One Menu
-                      <i class="bi bi-chevron-right"></i>
-                    </a>
-                    <ul class="treeview-menu">
-                      <li>
-                        <a href="#!">Level Two Link</a>
-                      </li>
-                      <li>
-                        <a href="#!">Level Two Menu
-                          <i class="bi bi-chevron-right"></i>
-                        </a>
-                        <ul class="treeview-menu">
-                          <li>
-                            <a href="#!">Level Three Link</a>
-                          </li>
-                          <li>
-                            <a href="#!">Level Three Link</a>
-                          </li>
-                        </ul>
-                      </li>
-                    </ul>
-                  </li>
-                  <li>
-                    <a href="#!">Level One Link</a>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </div>
-          <!-- Sidebar menu ends -->
-
-        </nav>
+       <jsp:include page="/views/sidebar.jsp"/>
         <!-- Sidebar wrapper end -->
 
         <!-- App container starts -->
@@ -424,10 +135,9 @@
             <ol class="breadcrumb d-none d-lg-flex ms-3">
               <li class="breadcrumb-item">
                 <i class="bi bi-house lh-1"></i>
-                <a href="index.go" class="text-decoration-none">Home</a>
+                <a href="/" class="text-decoration-none">메인</a>
               </li>
-              <li class="breadcrumb-item">Calendars</li>
-              <li class="breadcrumb-item text-secondary">Selectable</li>
+              <a href="/calendar/calendar.go" class="breadcrumb-item">일정관리</a>
             </ol>
             <!-- Breadcrumb end -->
 
@@ -649,6 +359,178 @@
       <!-- Main container end -->
 
     </div>
+    
+    <!-- 일정 리스트 모달 -->
+	<div class="modal fade show" id="mycab-cal-modal" tabindex="-1" aria-labelledby="exampleModalCenteredScrollableTitle" aria-modal="true" role="dialog">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalCenteredScrollableTitle">
+                                일정관리
+                              </h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body" id = "cal-modal-content">
+                              <table id = "cal-modal-content2" class="schedule-table">
+                              
+                              </table>
+                              
+                     
+                              <br><br><br><br><br><br><br><br><br><br>
+                              <br><br><br><br><br><br><br><br><br><br>
+                              <p>Just like that.</p>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-primary">
+                                일정추가
+                              </button>
+                              <button type="button" class="btn btn-primary">
+                                취소
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+    <!-- 일정리스트 모달 끝 -->                  
+    <!-- 일반모달 -->                  
+	<div class="modal fade show" id="exampleModalCenteredScrollable" tabindex="-1" aria-labelledby="exampleModalCenteredScrollableTitle" aria-modal="true" role="dialog" style="display: none;">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalCenteredScrollableTitle">
+                                Modal title
+                              </h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <p>
+                                This is some placeholder content to show a
+                                vertically centered modal. We've added some
+                                extra copy here to show how vertically centering
+                                the modal works when combined with scrollable
+                                modals. We also use some repeated line breaks to
+                                quickly extend the height of the content,
+                                thereby triggering the scrolling. When content
+                                becomes longer than the predefined max-height of
+                                modal, content will be cropped and scrollable
+                                within the modal.
+                              </p>
+                              <br><br><br><br><br><br><br><br><br><br>
+                              <br><br><br><br><br><br><br><br><br><br>
+                              <p>Just like that.</p>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Close
+                              </button>
+                              <button type="button" class="btn btn-primary">
+                                Save changes
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+	<!-- 일반모달 끝 -->
+	<!-- 일정추가 모달 -->
+	<div class="modal fade" id="scheduleAddModal" tabindex="-1"
+		aria-labelledby="exampleModalLgLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title h4" id="exampleModalLgLabel">일정 등록</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="scheduleTitle" class="form-label">제목</label>
+                    <input type="text" class="form-control" id="scheduleTitle" placeholder="일정 제목을 입력하세요" name="scheduleTitle">
+                </div>
+                <div class="mb-3">
+                    <label for="sel-start-date" class="form-label">시작 일정</label>
+                    <div class="input-group">
+                        <input type="text" class="datepicker form-control" id="sel-start-date" name="sel-start-date">
+                        <input type="time" class="form-control" name="sel-start-date">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="sel-end-date" class="form-label">종료 일정</label>
+                    <div class="input-group">
+                        <input type="text" class="datepicker form-control" id="sel-end-date" name="sel-end-date">
+                        <input type="time" class="form-control" name="sel-end-date">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="scheduleCategory" class="form-label">일정 범위</label>
+                    <select class="form-select" id="scheduleCategory">
+                        <option value="개인" style="color: red;">개인</option>
+                        <option value="부서" style="color: blue;">부서</option>
+                        <option value="전사" style="color: green;">전사</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="scheduleContent" class="form-label">내용</label>
+                    <textarea class="form-control" id="scheduleContent" placeholder="내용을 입력하세요" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="addSchedule()">작성</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+	<!-- 일정추가 모달 끝 -->
+	<!-- 일정 상세보기 시작-->
+	<div class="modal fade" id="scheduleDetailModal" tabindex="-1" aria-labelledby="exampleModalLgLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title h4" id="exampleModalLgLabel">일정 상세보기</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">                    
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="scheduleDetailTitle">제목</label>
+                        <input type="text" class="form-control" id="scheduleDetailTitle" name="scheduleDetailTitle" readonly>
+                    </div>                                    
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="sel-start-date">일정</label>
+                        <input type="text" class="form-control datepicker" id="sel-start-date-Detail" name="sel-start-date-Detail" readonly>
+                        <input type="time" class="form-control" name="sel-start-time-Detail" readonly>
+                        <span class="input-group-text">~</span>
+                        <input type="text" class="form-control datepicker" id="sel-end-date-Detail" name="sel-end-date-Detail" readonly>
+                        <input type="time" class="form-control" name="sel-end-time-Detail" readonly>
+                    </div>
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="scheduleDetailCategory">일정범위</label>
+                        <select class="form-select" id="scheduleDetailCategory" disabled>
+                            <option value="개인">개인</option>
+                            <option value="부서">부서</option>
+                            <option value="전사">전사</option>
+                        </select>
+                    </div>
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="scheduleDetailColor">색깔 선택</label>
+                        <input type="color" class="form-control form-control-color" id="scheduleDetailColor" name="scheduleDetailColor" disabled>
+                    </div>
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="scheduleDetailContent">내용</label>
+                        <textarea class="form-control" id="scheduleDetailContent" name="scheduleDetailContent" placeholder="Enter message" rows="3" style="height: 245px;" readonly></textarea>
+                    </div>  
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary btn-lg" onclick="editSchedule()">수정</button>
+                    <button class="btn btn-danger btn-lg" onclick="deleteSchedule()">삭제</button>                 
+                    <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal">닫기</button>         
+                </div>
+            </div>
+        </div>
+    </div>
+	<!-- 일정 상세보기 끝 -->
+	
+</body>
+
     <!-- Page wrapper end -->
 
     <!-- *************
@@ -670,43 +552,63 @@
     <script src="/assets/vendor/calendar/js/main.min.js"></script>
     <script src="/assets/vendor/calendar/custom/mycab-cal.js"></script>
 
+    
+    
+    <!-- 모멘트 -->
+    <script src="/assets/js/moment.min.js"></script>
+    
+    <!-- 데이터 피커 -->
+   <script src="/assets/vendor/daterange/daterange.js"></script>
+   <script src="/assets/vendor/daterange/custom-daterange-mycab.js"></script>
+    
     <!-- Custom JS files -->
     <script src="/assets/js/custom.js"></script>
     
-    <!-- mycab-cal-wirte-modal -->
-	<div class="modal fade show" id="mycab-cal-modal" tabindex="-1" aria-labelledby="exampleModalCenteredScrollableTitle" aria-modal="true" role="dialog">
-                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="exampleModalCenteredScrollableTitle">
-                                일정관리
-                              </h5>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body" id = "cal-modal-content">
-                              <table id = "cal-modal-content2" class="schedule-table">
-                              
-                              </table>
-                              
-                     
-                              <br><br><br><br><br><br><br><br><br><br>
-                              <br><br><br><br><br><br><br><br><br><br>
-                              <p>Just like that.</p>
-                            </div>
-                            <div class="modal-footer">
-                              
-                                
-                              </button>
-                              <button type="button" class="btn btn-primary">
-                                Save changes
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-</body>
   <script >
+  	var calendar;
+	var startStr;
+	var endStr;
+	var scheduleCategory = document.getElementById('scheduleCategory');
+	
+	function addSchedule(){
+		console.log(document.getElementById("sel-start-date").value,document.getElementById("sel-end-date").value);
+		//선택된 색 값 가져오기 
+		
+		var selectedOption = scheduleCategory.options[scheduleCategory.selectedIndex];
+        var color = selectedOption.style.color;
+        console.log(color)
+		$.ajax({
+	        type: "GET",
+	        url: "/calendar/createSchedule.ajax",
+	        data: {
+	        	'schedule_name': document.getElementById("scheduleTitle").value,
+	        	'schedule_content': document.getElementById("scheduleTitle").value,
+	        	'schedule_start_date': document.getElementById("sel-start-date").value,
+	        	'schedule_end_date': document.getElementById("sel-end-date").value,
+	        	'schedule_category': document.getElementById("scheduleCategory").value,
+	        	'schedule_color': color,
+	        	'schedule_emp_no': '30001' //나중에 세션으로 처리
+	        },
+	        dataType: "json",
+			success: function(response) {
+				var myModal = new bootstrap.Modal(document.getElementById('scheduleAddModal'));
+				var modalCloseButton = document.getElementById('scheduleAddModalCloseButton');
+				console.log(calendar.refetchEvents());
+				console.log(calendar);
+				calendar.refetchEvents();
+				
+	        },
+	        error: function(xhr, status, error) {
+	            // 에러 처리
+	            $("#result").html("<p>There was an error: " + error + "</p>");
+	        }
+	    });
+		
+	};
+  //일정 추가
   
-  </script>
+  
+  moment.locale('ko');	
+</script>
 
 </html>

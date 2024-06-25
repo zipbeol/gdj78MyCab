@@ -737,6 +737,7 @@
     <!-- Custom JS files -->
     <script src="/assets/js/custom.js"></script>
     <script src="/assets/js/validations.js"></script>
+    <script src="/assets/js/localStorage.js"></script>
   </body>
   <script>
   document.getElementById('domain-select').addEventListener('change', function() {
@@ -758,7 +759,7 @@
     		
     		$.ajax({
     			type:'post', // method 방식
-    			url:'getNextEmpNo.ajax', // 요청한 주소
+    			url:'./getNextEmpNo.ajax', // 요청한 주소
     			data:{'deptNo':deptNo}, // 파라메터
     			success:function(data){ // 통신 성공했을경우
     			//ajax에서 XmlhttpRequest 객체를 통해 대신 받아와서
@@ -796,7 +797,7 @@
 			
 		$.ajax({
 			type:'post', // method 방식
-			url:'emailOverlay.ajax', // 요청한 주소
+			url:'./emailOverlay.ajax', // 요청한 주소
 			data:{'email':email}, // 파라메터
 			success:function(data){ // 통신 성공했을경우
 			//ajax에서 XmlhttpRequest 객체를 통해 대신 받아와서

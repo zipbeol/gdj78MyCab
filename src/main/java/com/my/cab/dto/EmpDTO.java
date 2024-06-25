@@ -26,6 +26,8 @@ public class EmpDTO {
 	private String acc_no;
 	private String bank_name;
 	private String acc_name;
+	private String dept_name;
+	private String title_name;
 	
 	public int getEmp_no() {
 		return emp_no;
@@ -128,6 +130,18 @@ public class EmpDTO {
 	}
 	public void setAcc_name(String acc_name) {
 		this.acc_name = acc_name;
+	}
+	public String getDept_name() {
+		return dept_name;
+	}
+	public void setDept_name(String dept_name) {
+		this.dept_name = dept_name;
+	}
+	public String getTitle_name() {
+		return title_name;
+	}
+	public void setTitle_name(String title_name) {
+		this.title_name = title_name;
 	}
 	
 	

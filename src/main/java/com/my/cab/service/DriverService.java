@@ -47,6 +47,13 @@ public class DriverService {
     }
 
 
+    /**
+     * 기사 생성하는 메서드
+     *
+     * @param driverDTO
+     * @param files
+     * @return
+     */
     @Transactional
     public boolean createDriver(DriverDTO driverDTO, Map<String, MultipartFile> files) {
         boolean result = false;
@@ -67,16 +74,36 @@ public class DriverService {
         return result;
     }
 
+    /**
+     * 기사 면허사진 업데이트
+     *
+     * @param driverDTO
+     * @return
+     */
     private boolean updateDriverTaxiLicensePhoto(DriverDTO driverDTO) {
 
         return driverDAO.updateDriverTaxiLicensePhoto(driverDTO);
     }
 
+    /**
+     * 기사 사진이름 디비에서 업데이트
+     *
+     * @param driverDTO
+     * @return
+     */
     private boolean updateDriverPhoto(DriverDTO driverDTO) {
 
         return driverDAO.updateDriverPhoto(driverDTO);
     }
 
+    /**
+     * 기사 사진 파일 업로드
+     *
+     * @param file
+     * @param driverIdx
+     * @param result
+     * @return
+     */
     private Map<String, Object> fileUpload(Map.Entry<String, MultipartFile> file, int driverIdx, boolean result) {
         /////////////////// 나중에 수정해야함///////////////////
         uploadDir = "src/main/resources/static/upload";
@@ -102,13 +129,24 @@ public class DriverService {
         return Map.of("newFileName", uploadFileName, "result", result);
     }
 
+    /**
+     * 기사 추가
+     *
+     * @param driverDTO
+     * @return
+     */
     private boolean insertDriverInfo(DriverDTO driverDTO) {
-
         return driverDAO.insertDriverInfo(driverDTO);
     }
 
+    /**
+     * 기사 리스트 리턴하는 메서드
+     *
+     * @param searchDTO
+     * @return
+     */
     public Map<String, Object> getDriverList(SearchDTO searchDTO) {
-        Map<String, Object> result = new HashMap<String,Object>();
+        Map<String, Object> result = new HashMap<String, Object>();
         int page = (searchDTO.getPage() - 1) * PAGE_SIZE;
         searchDTO.setPage(page);
         searchDTO.setPageSize(PAGE_SIZE);
@@ -120,6 +158,12 @@ public class DriverService {
         return result;
     }
 
+    /**
+     * 기사 총 페이지수 리턴하는 메서드
+     *
+     * @param searchDTO
+     * @return
+     */
     public Map<String, Object> getDriverTotalPages(SearchDTO searchDTO) {
         int driverTotal = driverDAO.getDriverTotal(searchDTO);
         int totalPages = (int) Math.ceil((double) driverTotal / PAGE_SIZE);
@@ -131,6 +175,11 @@ public class DriverService {
         return driverDAO.getDriverInfo(driverIdx);
     }
 
+    /**
+     * 파일 이름 넣으면 /upload/파일이름 삭제
+     *
+     * @param file
+     */
     private void deleteFile(String file) {
         logger.info("delete file {}", file);
         File delFile = new File("/upload/" + "/" + file);
@@ -139,6 +188,13 @@ public class DriverService {
         }
     }
 
+    /**
+     * 기사 정보 업데이트하고 사진있다면 업로드후 디비 업데이트
+     *
+     * @param driverDTO
+     * @param files
+     * @return
+     */
     public boolean updateDriverInfoAndUploadFiles(DriverDTO driverDTO, Map<String, MultipartFile> files) {
         boolean result = false;
         result = driverDAO.updateDriverInfo(driverDTO);
@@ -163,5 +219,13 @@ public class DriverService {
         }
 
         return result;
+    }
+
+    /**
+     * 재직중인 택시기사 리스트 리턴
+     * @return
+     */
+    public List<DriverDTO> getNotRetiredDriverList() {
+        return driverDAO.getNotRetiredDriverList();
     }
 }

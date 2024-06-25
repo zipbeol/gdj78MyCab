@@ -178,19 +178,27 @@
                                     <h4 class="card-title">택시 시뮬레이터</h4>
                                 </div>
                                 <div class="card-body">
+                                    <div class="row d-flex align-items-center">
+                                        <div>
+                                            <img id="driver_photo" src="" alt="기사사진" class="rounded-circle me-2"
+                                                 style="width: 100px; height: 100px; display: none">
+                                        </div>
+                                        <div>
+                                            <h2 id="driver_name" class="me-2">님 안녕하세요!</h2>
+                                        </div>
+                                    </div>
                                     <div class="row mb-3">
                                         <div class="col-3">
                                             <button class="btn btn-outline-primary" data-bs-toggle="modal"
                                                     data-bs-target="#driverSelectionModal">기사 선택
                                             </button>
                                         </div>
-                                        <div class="col-6">
-
-                                        </div>
+                                        <div class="col-6"></div>
                                         <div class="col-3 text-end">
                                             <input type="button" class="btn btn-primary" id="startBtn" value="운행 시작">
                                         </div>
                                     </div>
+
                                     <div id="map" style="width:100%;height:350px;">
 
                                     </div>
@@ -206,6 +214,9 @@
                                             <th>운행 시간</th>
                                         </tr>
                                         </thead>
+                                        <tbody id="trip-body">
+
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>
@@ -250,10 +261,11 @@
                     <ul class="list-group">
                         <c:forEach var="driver" items="${drivers}">
                             <li class="list-group-item driver-item d-flex align-items-center"
-                                data-driver-id="${driver.id}">
-                                <img src="${driver.photo}" alt="${driver.name}" class="rounded-circle me-2"
+                                data-driver-id="${driver.driver_idx}">
+                                <img src="/upload/${driver.driver_photo}" alt="${driver.driver_name}"
+                                     class="rounded-circle me-2"
                                      style="width: 40px; height: 40px;">
-                                <span>${driver.name}</span>
+                                <span>${driver.driver_name}</span>
                             </li>
                         </c:forEach>
                     </ul>
@@ -266,7 +278,6 @@
         </div>
     </div>
 </div>
-
 
 </body>
 <!-- *************
@@ -301,14 +312,30 @@
     // 구디 아카데미 좌표
     var latitude = 37.4763;
     var longitude = 126.8798;
+    var tripStartLocation;
+    var tripEndLocation;
+    var tripCount = 1;
+
+    var tripRecord = {
+        recordLat: [],
+        recordLng: []
+    };
+
 
     var selectedDriverId;
+    var selectedDriverPhoto;
+    var selectedDriverName;
 
+    var distance;
+    var timeString = '';
+    var money = 0;
+    var lng = 0;
+    var lat = 0;
     $('#selectDriverBtn').click(function () {
         if (selectedDriverId) {
-            // 선택된 기사의 ID를 처리합니다.
-            console.log('Selected Driver ID:', selectedDriverId);
-            // 모달 닫기
+            // 선택된 기사의 정보를 처리합니다.
+            $('#driver_photo').attr('src', selectedDriverPhoto).show();
+            $('#driver_name').text(selectedDriverName + ' 님 안녕하세요!');
             $('#driverSelectionModal').modal('hide');
         } else {
             alert('기사를 선택하세요.');
@@ -319,6 +346,8 @@
         $('.driver-item').removeClass('active');
         $(this).addClass('active');
         selectedDriverId = $(this).data('driver-id');
+        selectedDriverPhoto = $(this).find('img').attr('src');
+        selectedDriverName = $(this).find('span').text();
     });
 
     $('#searchDriverInput').on('input', function () {
@@ -361,10 +390,25 @@
     function start(mouseEvent) {
         // 마우스로 클릭한 위치입니다
         var clickPosition = mouseEvent.latLng;
-        console.log(mouseEvent);
+        lat = clickPosition.La.toFixed(4);
+        lng = clickPosition.Ma.toFixed(4);
+
+        tripRecord.recordLat.push(lat);
+        tripRecord.recordLng.push(lng);
+
+        console.log(tripRecord);
+
 
         // 지도 클릭이벤트가 발생했는데 선을 그리고있는 상태가 아니면
         if (!drawingFlag) {
+            var geocoder = new kakao.maps.services.Geocoder();
+
+            geocoder.coord2Address(lat, lng, function (result, status) {
+                if (status === kakao.maps.services.Status.OK) {
+                    tripStartLocation = result[0].address.address_name;
+                    console.log(tripStartLocation);
+                }
+            });
             // 상태를 true로, 선이 그리고있는 상태로 변경합니다
             drawingFlag = true;
 
@@ -409,7 +453,7 @@
             // 다시 선에 좌표 배열을 설정하여 클릭 위치까지 선을 그리도록 설정합니다
             clickLine.setPath(path);
 
-            var distance = Math.round(clickLine.getLength());
+            distance = Math.round(clickLine.getLength());
             displayCircleDot(clickPosition, distance);
         }
     }
@@ -430,7 +474,7 @@
             moveLine.setPath(movepath);
             moveLine.setMap(map);
 
-            var distance = Math.round(clickLine.getLength() + moveLine.getLength()); // 선의 총 거리를 계산합니다
+            distance = Math.round(clickLine.getLength() + moveLine.getLength()); // 선의 총 거리를 계산합니다
             //     content = '<div class="dotOverlay distanceInfo">총거리 <span class="number">' + distance + '</span>m</div>'; // 커스텀오버레이에 추가될 내용입니다
 
             // 거리정보를 지도에 표시합니다
@@ -443,6 +487,20 @@
     kakao.maps.event.addListener(map, 'rightclick', function (mouseEvent) {
         // 지도 오른쪽 클릭 이벤트가 발생했는데 선을 그리고있는 상태이면
         if (drawingFlag) {
+            var geocoder = new kakao.maps.services.Geocoder();
+
+            console.log('lng:',lng);
+            console.log('lat:',lat);
+
+            geocoder.coord2Address(lng, lat, function (result, status) {
+                if (status === kakao.maps.services.Status.OK) {
+                    tripEndLocation = result[0].address.address_name;
+
+                }
+                console.log(result);
+                console.log(status);
+                console.log(tripEndLocation);
+            });
             // 마우스무브로 그려진 선은 지도에서 제거합니다
             moveLine.setMap(null);
             moveLine = null;
@@ -458,11 +516,24 @@
                     dots[dots.length - 1].distance = null;
                 }
 
-                var distance = Math.round(clickLine.getLength()), // 선의 총 거리를 계산합니다
+                distance = Math.round(clickLine.getLength()), // 선의 총 거리를 계산합니다
                     content = getTimeHTML(distance); // 커스텀오버레이에 추가될 내용입니다
 
                 // 그려진 선의 거리정보를 지도에 표시합니다
                 showDistance(content, path[path.length - 1]);
+
+
+                var content = ''
+                    + '<tr>'
+                    + '<td>' + tripCount + '</td>'
+                    + '<td>' + tripStartLocation + '</td>'
+                    + '<td>' + tripEndLocation + '</td>'
+                    + '<td>' + distance + 'm' + '</td>'
+                    + '<td>' + money.toLocaleString() + '원' + '</td>'
+                    + '<td>' + timeString + '</td>';
+                $('#trip-body').append(content);
+                tripCount++;
+
 
             } else {
                 // 선을 구성하는 좌표의 개수가 1개 이하이면
@@ -568,16 +639,19 @@
         var minutes = Math.floor((totalTimeInSeconds % 3600) / 60);
         var seconds = totalTimeInSeconds % 60;
 
-        var timeString = '';
+
         if (hours > 0) {
             timeString += '<span class="number">' + hours + '</span> 시간 ';
         }
-        if (minutes > 0 || hours > 0) { // 시간이 있으면 분도 표시, 분만 있을 경우에도 표시
-            timeString += '<span class="number">' + minutes + '</span> 분 ';
-        }
-        timeString += '<span class="number">' + seconds + '</span> 초';
+        timeString += '<span class="number">' + minutes + '</span> 분 ';
 
-        var money = 0;
+
+        console.log(hours);
+        console.log(minutes);
+        console.log(seconds);
+        console.log(timeString);
+
+        money = 0;
         if (distance < 1600) {
             money = 4800;
         } else {

@@ -24,7 +24,7 @@ public class TaxiSimulatorController {
 
     @RequestMapping("/taxiSimulator.go")
     public String taxiSimulator(Model model) {
-        model.addAttribute("drivers", driverService.getDriverList(new SearchDTO()));
+        model.addAttribute("drivers", driverService.getNotRetiredDriverList());
         return "simulator/taxiSimulator";
     }
 

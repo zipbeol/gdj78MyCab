@@ -1,5 +1,7 @@
 package com.my.cab.service;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.my.cab.dao.EmpDAO;
 import com.my.cab.dto.EmpDTO;
+import com.my.cab.dto.SearchDTO;
 
 
 @Service
@@ -20,6 +23,8 @@ public class EmpService {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired EmpDAO dao;
 	@Autowired PasswordEncoder encoder;
+	
+	private static final int PAGE_SIZE = 10;
 	
 
 	public int empRegistration(Map<String, Object> param) {
@@ -86,6 +91,31 @@ public class EmpService {
 		int lastEmpNo = dao.getLastEmpNo(deptNo);
 		
 		return (deptNo * 10000) + lastEmpNo + 1;
+	}
+
+
+	public Map<String, Object> getEmpList(SearchDTO searchDTO) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		int page = (searchDTO.getPage() - 1)*PAGE_SIZE;
+		searchDTO.setPage(page);
+		searchDTO.setPageSize(PAGE_SIZE);
+		logger.info("page {}",page);
+		logger.info("searchDTO page {}",searchDTO.getPage());
+		List<EmpDTO> empList = dao.getEmpList(searchDTO);
+		logger.info("empList {}", empList);
+		result.put("empList", empList);
+		
+		
+		return result;
+	}
+
+
+	public Map<String, Object> getEmpTotalPages(SearchDTO searchDTO) {
+		int empTotal = dao.getEmpTotal(searchDTO);
+		int totalPages = (int) Math.ceil((double)empTotal/PAGE_SIZE);
+		totalPages = totalPages > 0? totalPages : 1;
+		
+		return Map.of("totalPages", totalPages);
 	}
 
 }

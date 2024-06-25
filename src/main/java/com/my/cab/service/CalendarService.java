@@ -1,5 +1,6 @@
 package com.my.cab.service;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.my.cab.dao.CalendarDAO;
+import com.my.cab.dto.CalendarDTO;
 
 
 @Service
@@ -42,6 +44,14 @@ public class CalendarService {
 		}
 		
 		return getDayCalList;
+	}
+
+	public Map<String, Object> createSchedule(CalendarDTO calendarDTO) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		int row = calendarDao.createSchedule(calendarDTO);
+		map.put("success", row);
+		return map;
 	}
 
 }

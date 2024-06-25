@@ -108,7 +108,7 @@ public class DriverService {
     }
 
     public Map<String, Object> getDriverList(SearchDTO searchDTO) {
-        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> result = new HashMap<String,Object>();
         int page = (searchDTO.getPage() - 1) * PAGE_SIZE;
         searchDTO.setPage(page);
         searchDTO.setPageSize(PAGE_SIZE);

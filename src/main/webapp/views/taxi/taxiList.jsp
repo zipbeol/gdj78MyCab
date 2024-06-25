@@ -69,6 +69,17 @@
             content: '\f0dd'; /* FontAwesome sort down 아이콘 */
             opacity: 1;
         }
+
+        .alert-placeholder {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1050;
+            margin: 0;
+            padding: 10px;
+            text-align: center;
+        }
     </style>
 
 
@@ -137,7 +148,7 @@
                 <!-- Container starts -->
                 <div class="container-fluid">
                     <!-- Alert placeholder start -->
-                    <div id="alertPlaceholder"></div>
+                    <div id="alertPlaceholder" class="alert-placeholder"></div>
                     <!-- Alert placeholder end -->
                     <!-- Row start -->
                     <div class="row">
@@ -255,7 +266,7 @@
                     <div class="modal fade" id="registorModal" tabindex="-1" aria-labelledby="registorModalLabel"
                          aria-hidden="true">
                         <!-- Alert placeholder start -->
-                        <div id="alertModalPlaceholder"></div>
+                        <div id="alertModalPlaceholder" class="alert alert-placeholder"></div>
                         <!-- Alert placeholder end -->
                         <div class="modal-dialog">
                             <div class="modal-content">

@@ -36,6 +36,16 @@
     <!-- 따로 적용한 CSS -->
     <link rel="stylesheet" href="/assets/css/default.css">
     <style>
+        .alert-placeholder {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1050;
+            margin: 0;
+            padding: 10px;
+            text-align: center;
+        }
     </style>
 
 </head>
@@ -106,7 +116,7 @@
                 <div class="container-fluid">
 
                     <!-- Alert placeholder start -->
-                    <div id="alertPlaceholder"></div>
+                    <div id="alertPlaceholder" class="alert-placeholder"></div>
                     <!-- Alert placeholder end -->
 
                     <!-- Row start -->

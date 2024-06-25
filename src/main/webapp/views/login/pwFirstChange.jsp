@@ -46,11 +46,11 @@
                   <div id="pwChk" class="invalid-feedback">비밀번호 조건을 확인해주세요.</div>
                   </div>
                   <br/>
-                  <div class="was-validated">
+                  
                   <label for="validationCustom01" class="form-label">새 비밀번호 확인</label>
-                  <input type="password" class="form-control" oninput="pwCheck()" name="emp_passwordChk" placeholder="새 비밀번호 확인" required>
-                    <div id="pwChkValid" class="invalid-feedback"></div>
-                    </div>
+                  <input type="password" class="form-control" oninput="pwCheck()" name="emp_passwordChk" placeholder="새 비밀번호 확인" >
+                    <font id="pwChkValid"></font>
+                    
                 </div>
                 <div class="d-grid pb-3">
                 <input type="hidden" class="form-control" id="passwordChk" name="emp_no" value="${sessionScope.loginId}">
@@ -70,7 +70,7 @@
     <script src="/assets/js/validations.js"></script>
     
   </body>
-  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+
   <script>
   
   
@@ -79,26 +79,40 @@
          alert(message);
      }
   
-     document.addEventListener("DOMContentLoaded", function() {
+    
     	    var pwInput = document.querySelector('input[name="emp_password"]');
     	    var pwChkInput = document.querySelector('input[name="emp_passwordChk"]');
     	    var pwChkValidDiv = document.getElementById('pwChkValid');
 
-    	    pwChkInput.addEventListener('keyup', function() {
+    	    pwChkInput.addEventListener('focusout', function() {
     	        var pw = pwInput.value;
     	        var pwChk = pwChkInput.value;
 
     	        if (pw === pwChk) {
-    	            pwChkValidDiv.classList.remove('invalid-feedback');
-    	            pwChkValidDiv.classList.add('valid-feedback');
+    	           
     	            pwChkValidDiv.textContent = '비밀번호가 일치합니다';
+    	            pwChkValidDiv.style.color = 'green';
     	        } else {
-    	            pwChkValidDiv.classList.remove('valid-feedback');
-    	            pwChkValidDiv.classList.add('invalid-feedback');
+    	           
     	            pwChkValidDiv.textContent = '비밀번호가 일치하지 않습니다';
+    	            pwChkValidDiv.style.color = 'red';
     	        }
     	    });
-    	});
+    	    
+    	    pwInput.addEventListener('focusout', function() {
+    	        var pw = pwInput.value;
+    	        var pwChk = pwChkInput.value;
+
+    	        if (pw === pwChk) {
+    	           
+    	            pwChkValidDiv.textContent = '비밀번호가 일치합니다';
+    	            pwChkValidDiv.style.color = 'green';
+    	        } else {
+    	           
+    	            pwChkValidDiv.textContent = '비밀번호가 일치하지 않습니다';
+    	            pwChkValidDiv.style.color = 'red';
+    	        }
+    	    });
 			
 			
 			function validateForm() {

@@ -34,6 +34,7 @@ public class SearchDTO {
 
 	private int pageSize;
     private String filterIsRetired;
+    private String filterForSearch;
 
     public String getFilterIsRetired() {
         return filterIsRetired;
@@ -122,4 +123,13 @@ public class SearchDTO {
 	public void setExp_filter(String exp_filter) {
 		this.exp_filter = exp_filter;
 	}
+
+	public String getFilterForSearch() {
+		return filterForSearch;
+	}
+
+	public void setFilterForSearch(String filterForSearch) {
+		this.filterForSearch = filterForSearch;
+	}
+
 }

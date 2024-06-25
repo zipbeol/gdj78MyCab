@@ -325,7 +325,7 @@
     var selectedDriverId;
     var selectedDriverPhoto;
     var selectedDriverName;
-
+    var geocoder;
     var distance;
     var timeString = '';
     var money = 0;
@@ -376,10 +376,6 @@
     var distanceOverlay; // 선의 거리정보를 표시할 커스텀오버레이 입니다
     var dots = []; // 선이 그려지고 있을때 클릭할 때마다 클릭 지점과 거리를 표시하는 커스텀 오버레이 배열입니다.
 
-    document.getElementById('startBtn').addEventListener('click', function (evt) {
-        var clickPosition = new kakao.maps.LatLng(latitude, longitude);
-        start({latLng: clickPosition});
-    });
 
     // 지도에 클릭 이벤트를 등록합니다
     // 지도를 클릭하면 선 그리기가 시작됩니다 그려진 선이 있으면 지우고 다시 그립니다
@@ -401,7 +397,7 @@
 
         // 지도 클릭이벤트가 발생했는데 선을 그리고있는 상태가 아니면
         if (!drawingFlag) {
-            var geocoder = new kakao.maps.services.Geocoder();
+            geocoder = new kakao.maps.services.Geocoder();
 
             geocoder.coord2Address(lat, lng, function (result, status) {
                 if (status === kakao.maps.services.Status.OK) {
@@ -484,70 +480,71 @@
 
     // 지도에 마우스 오른쪽 클릭 이벤트를 등록합니다
     // 선을 그리고있는 상태에서 마우스 오른쪽 클릭 이벤트가 발생하면 선 그리기를 종료합니다
+    // 오른쪽 클릭 이벤트 리스너의 기존 코드 부분
     kakao.maps.event.addListener(map, 'rightclick', function (mouseEvent) {
-        // 지도 오른쪽 클릭 이벤트가 발생했는데 선을 그리고있는 상태이면
         if (drawingFlag) {
-            var geocoder = new kakao.maps.services.Geocoder();
-
-            console.log('lng:',lng);
-            console.log('lat:',lat);
-
-            geocoder.coord2Address(lng, lat, function (result, status) {
-                if (status === kakao.maps.services.Status.OK) {
-                    tripEndLocation = result[0].address.address_name;
-
-                }
-                console.log(result);
-                console.log(status);
-                console.log(tripEndLocation);
-            });
-            // 마우스무브로 그려진 선은 지도에서 제거합니다
             moveLine.setMap(null);
             moveLine = null;
 
-            // 마우스 클릭으로 그린 선의 좌표 배열을 얻어옵니다
             var path = clickLine.getPath();
-
-            // 선을 구성하는 좌표의 개수가 2개 이상이면
             if (path.length > 1) {
-                // 마지막 클릭 지점에 대한 거리 정보 커스텀 오버레이를 지웁니다
                 if (dots[dots.length - 1].distance) {
                     dots[dots.length - 1].distance.setMap(null);
                     dots[dots.length - 1].distance = null;
                 }
 
-                distance = Math.round(clickLine.getLength()), // 선의 총 거리를 계산합니다
-                    content = getTimeHTML(distance); // 커스텀오버레이에 추가될 내용입니다
+                distance = Math.round(clickLine.getLength());
+                var content = getTimeHTML(distance);
 
-                // 그려진 선의 거리정보를 지도에 표시합니다
                 showDistance(content, path[path.length - 1]);
 
+                geocoder.coord2Address(parseFloat(lat), parseFloat(lng), function (result, status) {
+                    if (status === kakao.maps.services.Status.OK) {
+                        tripEndLocation = result[0].address.address_name;
+                        processTripEnd(); // 주소 값이 설정된 후 호출
+                    } else {
+                        console.error('Failed to get address: ' + status);
+                    }
+                });
 
-                var content = ''
-                    + '<tr>'
-                    + '<td>' + tripCount + '</td>'
-                    + '<td>' + tripStartLocation + '</td>'
-                    + '<td>' + tripEndLocation + '</td>'
-                    + '<td>' + distance + 'm' + '</td>'
-                    + '<td>' + money.toLocaleString() + '원' + '</td>'
-                    + '<td>' + timeString + '</td>';
-                $('#trip-body').append(content);
-                tripCount++;
-
+                // $.ajax({
+                //     url: './insertTripRecord.ajax',
+                //     type: 'POST',
+                //     data: {
+                //         'trip_record_driver_id':
+                //     },
+                //     dataType: 'JSON',
+                //     success: function (data) {
+                //         console.log(data);
+                //     },
+                //     error: function (error) {
+                //         console.log(error);
+                //     },
+                // });
 
             } else {
-                // 선을 구성하는 좌표의 개수가 1개 이하이면
-                // 지도에 표시되고 있는 선과 정보들을 지도에서 제거합니다.
                 deleteClickLine();
                 deleteCircleDot();
                 deleteDistance();
             }
 
-            // 상태를 false로, 그리지 않고 있는 상태로 변경합니다
             drawingFlag = false;
-
         }
     });
+
+    // 새로운 함수로 분리된 코드
+    function processTripEnd() {
+        var content = ''
+            + '<tr>'
+            + '<td>' + tripCount + '</td>'
+            + '<td>' + tripStartLocation + '</td>'
+            + '<td>' + tripEndLocation + '</td>'
+            + '<td>' + distance + 'm' + '</td>'
+            + '<td>' + money.toLocaleString() + '원' + '</td>'
+            + '<td>' + timeString + '</td>';
+        $('#trip-body').append(content);
+        tripCount++;
+    }
 
     // 클릭으로 그려진 선을 지도에서 제거하는 함수입니다
     function deleteClickLine() {
@@ -639,7 +636,7 @@
         var minutes = Math.floor((totalTimeInSeconds % 3600) / 60);
         var seconds = totalTimeInSeconds % 60;
 
-
+        timeString = '';
         if (hours > 0) {
             timeString += '<span class="number">' + hours + '</span> 시간 ';
         }

@@ -30,8 +30,12 @@ public class DriverService {
 
     private static final int PAGE_SIZE = 10;
 
+    private final DriverDAO driverDAO;
+
     @Autowired
-    DriverDAO driverDAO;
+    public DriverService(DriverDAO driverDAO) {
+        this.driverDAO = driverDAO;
+    }
 
     /**
      * 택시기사 가장 오래된 등록일 가져오는 메서드
@@ -49,14 +53,14 @@ public class DriverService {
         result = insertDriverInfo(driverDTO);
         for (Map.Entry<String, MultipartFile> file : files.entrySet()) {
             Map<String, Object> map = fileUpload(file, driverDTO.getDriver_idx(), result);
-            String fileName = (String) map.get("fileName");
+            String newFileName = (String) map.get("newFileName");
             result = (boolean) map.get("result");
 
             if (file.getKey().equals("driver_photo_file")) {
-                driverDTO.setDriver_photo(fileName);
+                driverDTO.setDriver_photo(newFileName);
                 result = updateDriverPhoto(driverDTO);
             } else {
-                driverDTO.setDriver_taxi_license_photo(fileName);
+                driverDTO.setDriver_taxi_license_photo(newFileName);
                 result = updateDriverTaxiLicensePhoto(driverDTO);
             }
         }
@@ -95,7 +99,7 @@ public class DriverService {
             e.printStackTrace();
         }
         result = true;
-        return Map.of("fileName", uploadFileName, "result", result);
+        return Map.of("newFileName", uploadFileName, "result", result);
     }
 
     private boolean insertDriverInfo(DriverDTO driverDTO) {
@@ -104,7 +108,7 @@ public class DriverService {
     }
 
     public Map<String, Object> getDriverList(SearchDTO searchDTO) {
-        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> result = new HashMap<String,Object>();
         int page = (searchDTO.getPage() - 1) * PAGE_SIZE;
         searchDTO.setPage(page);
         searchDTO.setPageSize(PAGE_SIZE);
@@ -127,40 +131,37 @@ public class DriverService {
         return driverDAO.getDriverInfo(driverIdx);
     }
 
-    @Transactional
-    public boolean updateDriverInfo(DriverDTO driverDTO, Map<String, MultipartFile> files) {
-        boolean result = false;
-        result = driverDAO.updateDriverInfo(driverDTO);
-        for (Map.Entry<String, MultipartFile> file : files.entrySet()) {
-            Map<String, Object> map = fileUpload(file, driverDTO.getDriver_idx(), result);
-            String fileName = (String) map.get("fileName");
-            result = (boolean) map.get("result");
-            logger.info("fileName: {}", file.getKey());
-            logger.info("result: {}", result);
-            logger.info("driverDTO: {}", driverDTO.getDriver_idx());
-            if (file.getKey().equals("driver_photo_name")) {
-                driverDTO.setDriver_photo(fileName);
-                String oldFileName = driverDAO.getDriverPhotoName(driverDTO.getDriver_idx());
-                deleteFile(oldFileName);
-                result = updateDriverPhoto(driverDTO);
-            } else {
-                driverDTO.setDriver_photo(file.getValue().getOriginalFilename());
-                String oldFileName = driverDAO.getDriverTaxiLicensePhotoName(driverDTO.getDriver_idx());
-                deleteFile(oldFileName);
-                result = updateDriverTaxiLicensePhoto(driverDTO);
-            }
-        }
-        return result;
-
-    }
-
     private void deleteFile(String file) {
         logger.info("delete file {}", file);
-        File delFile = new File(uploadDir + "/" + file);
+        File delFile = new File("/upload/" + "/" + file);
         if (delFile.exists()) {
             delFile.delete();
         }
     }
 
+    public boolean updateDriverInfoAndUploadFiles(DriverDTO driverDTO, Map<String, MultipartFile> files) {
+        boolean result = false;
+        result = driverDAO.updateDriverInfo(driverDTO);
 
+        for (Map.Entry<String, MultipartFile> file : files.entrySet()) {
+            Map<String, Object> map = fileUpload(file, driverDTO.getDriver_idx(), result);
+            logger.info("upload file {}", file.getValue().getOriginalFilename());
+            logger.info("upload newFileName {}", map.get("newFileName"));
+            logger.info("upload column {}", file.getKey());
+            String newFileName = (String) map.get("newFileName");
+            result = (boolean) map.get("result");
+
+            if (file.getKey().equals("driver_photo_file")) {
+                logger.info("driver_photo_file_file");
+                driverDTO.setDriver_photo(newFileName);
+                result = updateDriverPhoto(driverDTO);
+            } else {
+                logger.info("driver_taxi_license_photo_file");
+                driverDTO.setDriver_taxi_license_photo(newFileName);
+                result = updateDriverTaxiLicensePhoto(driverDTO);
+            }
+        }
+
+        return result;
+    }
 }

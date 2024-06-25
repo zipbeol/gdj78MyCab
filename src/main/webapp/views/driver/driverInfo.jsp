@@ -125,88 +125,86 @@
                         <div class="col-12">
                             <div class="card mb-3">
                                 <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-8">
-                                            <h1>기사 정보</h1>
+                                    <form id="driver-form" class="needs-validation" novalidate>
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <h1>기사 정보</h1>
+                                            </div>
+                                            <div class="col-4 text-end">
+                                                <input type="button" class="btn btn-primary" value="수정"
+                                                       id="edit-button">
+                                                <input type="button" class="btn btn-success" value="저장" id="save-button"
+                                                       style="display: none;">
+                                            </div>
                                         </div>
-                                        <div class="col-4 text-end">
-                                            <input type="button" class="btn btn-primary" value="수정"
-                                                   id="edit-button">
-                                            <input type="button" class="btn btn-success" value="저장" id="save-button"
-                                                   style="display: none;">
+                                        <div class="row">
+                                            <hr/>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <hr/>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col">
-                                            <dl class="row">
-                                                <!-- 수정필요 -->
-                                                <dd class="col-12 gap-2">
-                                                    <div>
-                                                        <label for="driver-photo">기사 사진:</label>
+                                        <div class="row">
+                                            <div class="col">
+                                                <dl class="row">
+                                                    <dt class="col-12 mb-3">기사
+                                                        입사일: ${driverInfo.driver_registration_date}</dt>
+                                                    <dt class="col-6">기사 사진</dt>
+                                                    <dt class="col-6">면허 사진</dt>
+                                                    <dd class="col-6 d-flex">
                                                         <img src="/upload/${driverInfo.driver_photo}"
                                                              style="width: 150px; height: 150px;" id="driver-photo">
                                                         <input type="file" id="driver-photo-input"
-                                                               style="display: none;">
-                                                    </div>
-                                                    <div>
-                                                        <label for="driver-taxi-license-photo">면허 사진:</label>
+                                                               data-value="driver-photo" style="display: none;"
+                                                               class="form-control">
+                                                    </dd>
+                                                    <dd class="col-6 d-flex">
                                                         <img src="/upload/${driverInfo.driver_taxi_license_photo}"
                                                              style="width: 200px; height: 150px;"
                                                              id="driver-taxi-license-photo">
                                                         <input type="file" id="license-photo-input"
-                                                               style="display: none;">
-                                                    </div>
-                                                </dd>
-
-                                                <!-- 수정필요 -->
-                                                <dt class="col-3">기사 이름:</dt>
-                                                <dd class="col-9 info-value mb-3" id="driver-name"
-                                                    data-value="${driverInfo.driver_name}">${driverInfo.driver_name}</dd>
-                                                <dt class="col-3">기사 재직 여부:</dt>
-                                                <dd class="col-9 info-value mb-3" id="driver-is-retired"
-                                                    data-value="${driverInfo.driver_is_retired}">
-                                                    <c:choose>
-                                                        <c:when test="${driverInfo.driver_is_retired == 0}">
-                                                            재직중
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            퇴사
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </dd>
-                                                <dt class="col-3">기사 연락처:</dt>
-                                                <dd class="col-9 info-value mb-3" id="driver-phone"
-                                                    data-value="${driverInfo.driver_phone}">${fn:substring(driverInfo.driver_phone, 0, 3)}-${fn:substring(driverInfo.driver_phone, 3, 7)}-${fn:substring(driverInfo.driver_phone, 7, 11)}</dd>
-
-                                                <dt class="col-3">기사 주소:</dt>
-                                                <dd class="col-9 mb-3 d-flex gap-2">
-                                                    <div class="col-6">
-                                                        <span class="info-value" id="driver-address"
-                                                              data-value="${driverInfo.driver_address}">${driverInfo.driver_address}</span>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <span class="info-value" id="driver-address-detail"
-                                                              data-value="${driverInfo.driver_address_detail}">${driverInfo.driver_address_detail}</span>
-                                                    </div>
-                                                </dd>
-                                                <dt class="col-3">기사 입사일:</dt>
-                                                <dd class="col-9 mb-3"
-                                                    data-value="${driverInfo.driver_registration_date}">${driverInfo.driver_registration_date}</dd>
-                                            </dl>
+                                                               data-value="driver-taxi-license-photo"
+                                                               style="display: none;" class="form-control">
+                                                    </dd>
+                                                    <dt class="col-12">기사 이름:</dt>
+                                                    <dd class="col-12 info-value mb-3" id="driver-name"
+                                                        data-value="${driverInfo.driver_name}">${driverInfo.driver_name}</dd>
+                                                    <dt class="col-12">기사 재직 여부:</dt>
+                                                    <dd class="col-12 info-value mb-3" id="driver-is-retired"
+                                                        data-value="${driverInfo.driver_is_retired}">
+                                                        <c:choose>
+                                                            <c:when test="${driverInfo.driver_is_retired == 0}">
+                                                                재직중
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                퇴사
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </dd>
+                                                    <dt class="col-12">기사 연락처:</dt>
+                                                    <dd class="col-12 info-value mb-3" id="driver-phone"
+                                                        data-value="${driverInfo.driver_phone}">
+                                                        ${fn:substring(driverInfo.driver_phone, 0, 3)}-${fn:substring(driverInfo.driver_phone, 3, 7)}-${fn:substring(driverInfo.driver_phone, 7, 11)}
+                                                    </dd>
+                                                    <dt class="col-6">기사 주소:</dt>
+                                                    <dt class="col-6">기사 상세 주소:</dt>
+                                                    <dd class="col-6">
+                                                        <div class="col-6">
+                                                            <span class="info-value" id="driver-address"
+                                                                  data-value="${driverInfo.driver_address}">${driverInfo.driver_address}</span>
+                                                        </div>
+                                                    </dd>
+                                                    <dd class="col-6">
+                                                        <div class="col-6">
+                                                            <span class="info-value" id="driver-address-detail"
+                                                                  data-value="${driverInfo.driver_address_detail}">${driverInfo.driver_address_detail}</span>
+                                                        </div>
+                                                    </dd>
+                                                </dl>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="tab-pane fade" id="taxi-schedule" role="tabpanel"
-                                         aria-labelledby="taxi-schedule-tab">
-                                        <h1>택시 스케쥴</h1>
-                                        <!-- 여기 스케쥴 내용을 추가하세요 -->
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <!-- Row end -->
                 </div>
                 <!-- Container ends -->
@@ -248,12 +246,13 @@
 <script src="/assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
 <!-- Custom JS files -->
 <script src="/assets/js/custom.js"></script>
-<script src="/assets/js/LocalStorage.js"></script>
+<script src="/assets/js/localStorage.js"></script>
 <script src="/assets/js/showAlert.js"></script>
 <!-- 다음 주소 api -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 <script>
+    // 수정
     $('#edit-button').click(function () {
         $('.info-value').each(function () {
             var value = $(this).data('value');
@@ -262,10 +261,16 @@
                 $(this).html('<input type="text" class="form-control" id="' + id + '" value="' + value + '" onclick="searchAddress()" tabindex="-1" readonly>');
             } else if (id === 'driver-is-retired') {
                 var selectHtml = '<select class="form-select" id="' + id + '">'
-                    + '<option value="1"' + (value == 1 ? ' selected' : '') + '>퇴직</option>'
+                    + '<option value="1"' + (value == 1 ? ' selected' : '') + '>퇴사</option>'
                     + '<option value="0"' + (value == 0 ? ' selected' : '') + '>재직중</option>'
                     + '</select>';
                 $(this).html(selectHtml);
+            } else if (id === 'driver-phone') {
+                var formattedValue = formatPhoneNumber(value);
+                $(this).html('<input type="text" class="form-control" id="' + id + '" value="' + formattedValue + '" maxlength="13">');
+                $('#driver-phone input').on('input', function () {
+                    this.value = formatPhoneNumber(this.value.replace(/\D/g, ''));
+                });
             } else {
                 $(this).html('<input type="text" class="form-control" id="' + id + '" value="' + value + '">');
             }
@@ -278,7 +283,59 @@
         $('#save-button').show();
     });
 
+    function formatPhoneNumber(phoneNumber) {
+        var formattedValue = '';
+        if (phoneNumber.length > 10) {
+            formattedValue = phoneNumber.substring(0, 3) + '-' + phoneNumber.substring(3, 7) + '-' + phoneNumber.substring(7);
+        } else if (phoneNumber.length > 6) {
+            formattedValue = phoneNumber.substring(0, 3) + '-' + phoneNumber.substring(3, 6) + '-' + phoneNumber.substring(6);
+        } else if (phoneNumber.length > 3) {
+            formattedValue = phoneNumber.substring(0, 3) + '-' + phoneNumber.substring(3);
+        } else {
+            formattedValue = phoneNumber;
+        }
+        return formattedValue;
+    }
+
+    $('#driver-phone').on('input', function (e) {
+        var value = $(this).val().replace(/\D/g, '');
+        var formattedValue = '';
+
+        if (value.length > 10) {
+            value = value.substring(0, 11);
+        }
+
+        if (value.length > 7) {
+            formattedValue = value.substring(0, 3) + '-' + value.substring(3, 7) + '-' + value.substring(7);
+        } else if (value.length > 3) {
+            formattedValue = value.substring(0, 3) + '-' + value.substring(3);
+        } else {
+            formattedValue = value;
+        }
+
+        $(this).val(formattedValue);
+    });
+
+    // 파일 이미지인지 검사, 이미지 맞으면 미리보기
+    $('#driver-photo-input').on('change', function () {
+        if (validateImageFile.call(this)) {
+            previewImage.call(this);
+        }
+    });
+    $('#license-photo-input').on('change', function () {
+        if (validateImageFile.call(this)) {
+            previewImage.call(this);
+        }
+    });
+
+    // 저장
     $('#save-button').click(function () {
+        var form = document.querySelector('.needs-validation');
+        if (!form.checkValidity()) {
+            form.classList.add('was-validated');
+            showAlert('danger', '입력 값이 올바르지 않습니다.');
+            return;
+        }
         var driverName = $('#driver-name input').val();
         var driverIsRetired = $('#driver-is-retired select').val();
         var driverPhone = $('#driver-phone input').val();
@@ -297,10 +354,10 @@
         formData.append('driver_idx', driverIdx);
 
         if (driverPhoto) {
-            formData.append('driver_photo_name', driverPhoto);
+            formData.append('driver_photo_file', driverPhoto);
         }
         if (licensePhoto) {
-            formData.append('driver_taxi_license_photo_name', licensePhoto);
+            formData.append('driver_taxi_license_photo_file', licensePhoto);
         }
 
         $.ajax({
@@ -325,7 +382,7 @@
                             value = $(this).find('select').val();
                             $(this).data('value', value);
                             if ($(this).attr('id') === 'driver-is-retired') {
-                                value = value === 0 ? '재직중' : '퇴사';
+                                value = value == 0 ? '재직중' : '퇴사';
                             }
                             $(this).text(value);
                         }
@@ -353,6 +410,7 @@
         });
     });
 
+    // 주소검색 daum api
     function searchAddress() {
         new daum.Postcode({
             oncomplete: function (data) {
@@ -364,16 +422,48 @@
                 if (data.buildingName !== '' && data.apartment === 'Y') {
                     extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
                 }
-                $('#driver-address').val(roadAddr);
+                $('#driver-address input').val(roadAddr);
             },
             focusInput: false
         }).open();
     }
 
-    function formatPhoneNumber(phoneNumber) {
-        return phoneNumber.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+    // 이미지 미리보기
+    function previewImage() {
+        var previewId = $(this).data('value');
+        var $previewImage = $('#' + previewId);
+
+        var file = this.files[0];
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            $previewImage.attr('src', e.target.result);
+            $previewImage.show();
+        };
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            $previewImage.attr('src', '');
+            $previewImage.hide();
+        }
     }
 
+    // 이미지 파일만 등록 가능하게
+    function validateImageFile() {
+        var $fileInput = $(this);
+
+        var file = $fileInput[0].files[0];
+
+        if (file && file.type.startsWith('image/')) {
+            // 이미지 파일인 경우
+            return true;
+        } else {
+            showAlert('danger', '이미지 파일만 가능합니다.');
+            $fileInput.val(''); // 입력 값 초기화
+            return false;
+        }
+    }
 
 </script>
 

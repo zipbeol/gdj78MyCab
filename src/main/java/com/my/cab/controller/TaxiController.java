@@ -74,7 +74,7 @@ public class TaxiController {
     @GetMapping("/getTotalPages.ajax")
     @ResponseBody
     public Map<String, Object> getTotalPages(SearchDTO searchDTO) {
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<String, Object>();
         map.put("totalPages", taxiService.getTotalPages(searchDTO));
         return map;
     }

@@ -3,11 +3,13 @@ package com.my.cab.aop;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.core.annotation.Order;
 
 @Aspect
+@Order(1)
 public class TimeTraceAop {
 
-    @Around("execution(* com.my.cab.service..*(..)) && !execution(* com.my.cab.config..*(..))")
+    @Around("execution(* com.my.cab..*(..)) && !execution(* com.my.cab.config..*(..))")
     public Object execute(ProceedingJoinPoint joinPoint) throws Throwable {
         long startTime = System.currentTimeMillis();
         System.out.println("START::: " + joinPoint.toString());

@@ -52,12 +52,12 @@
         .dotOverlay {
             position: relative;
             bottom: 10px;
-            /*border-radius: 6px;*/
-            /*border: 1px solid #ccc;*/
-            /*border-bottom: 2px solid #ddd;*/
-            /*float: left;*/
-            /*font-size: 12px;*/
-            /*padding: 5px;*/
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            border-bottom: 2px solid #ddd;
+            float: left;
+            font-size: 12px;
+            padding: 10px;
             background: #fff;
         }
 
@@ -88,15 +88,16 @@
             left: 5px;
             list-style: none;
             margin: 0;
+            padding: 0;
+        }
+
+        .distanceInfo li {
+            margin-bottom: 5px;
         }
 
         .distanceInfo .label {
             display: inline-block;
-            width: 50px;
-        }
-
-        .distanceInfo:after {
-            content: none;
+            width: 80px;
         }
 
     </style>
@@ -177,13 +178,11 @@
                                     <h4 class="card-title">택시 시뮬레이터</h4>
                                 </div>
                                 <div class="card-body">
-                                    <h1>GPS 현재 위치 확인</h1>
-                                    <p id="location">위치 정보가 여기에 표시됩니다.</p>
                                     <div class="row mb-3">
                                         <div class="col-3">
-                                            <select class="form-select">
-                                                <option value="">기사 선택</option>
-                                            </select>
+                                            <button class="btn btn-outline-primary" data-bs-toggle="modal"
+                                                    data-bs-target="#driverSelectionModal">기사 선택
+                                            </button>
                                         </div>
                                         <div class="col-6">
 
@@ -196,17 +195,18 @@
 
                                     </div>
                                     <hr>
-                                    <h1>Route Finder</h1>
-                                    <form id="routeForm" onsubmit="calculateRoute(); return false;">
-                                        <label for="origin">Origin:</label>
-                                        <input type="text" id="origin" name="origin" required>
-                                        <br><br>
-                                        <label for="destination">Destination:</label>
-                                        <input type="text" id="destination" name="destination" required>
-                                        <br><br>
-                                        <input type="submit" value="Find Route">
-                                    </form>
-                                    <div id="searchMap"></div>
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>운행 회차</th>
+                                            <th>운행 출발지</th>
+                                            <th>운행 도착지</th>
+                                            <th>운행 거리</th>
+                                            <th>운행 요금</th>
+                                            <th>운행 시간</th>
+                                        </tr>
+                                        </thead>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -232,6 +232,42 @@
 
 </div>
 <!-- Page wrapper end -->
+]
+<!-- Driver Selection Modal -->
+<div class="modal fade" id="driverSelectionModal" tabindex="-1" aria-labelledby="driverSelectionModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="driverSelectionModalLabel">기사 선택</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="searchDriverInput" placeholder="기사 이름 검색">
+                </div>
+                <div class="driver-list" style="max-height: 300px; overflow-y: auto;">
+                    <ul class="list-group">
+                        <c:forEach var="driver" items="${drivers}">
+                            <li class="list-group-item driver-item d-flex align-items-center"
+                                data-driver-id="${driver.id}">
+                                <img src="${driver.photo}" alt="${driver.name}" class="rounded-circle me-2"
+                                     style="width: 40px; height: 40px;">
+                                <span>${driver.name}</span>
+                            </li>
+                        </c:forEach>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                <button type="button" class="btn btn-primary" id="selectDriverBtn">선택</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 </body>
 <!-- *************
         ************ JavaScript Files *************
@@ -262,8 +298,40 @@
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6a9392fb6c3d719802f976bbff4678eb&libraries=services"></script>
 
 <script>
+    // 구디 아카데미 좌표
     var latitude = 37.4763;
     var longitude = 126.8798;
+
+    var selectedDriverId;
+
+    $('#selectDriverBtn').click(function () {
+        if (selectedDriverId) {
+            // 선택된 기사의 ID를 처리합니다.
+            console.log('Selected Driver ID:', selectedDriverId);
+            // 모달 닫기
+            $('#driverSelectionModal').modal('hide');
+        } else {
+            alert('기사를 선택하세요.');
+        }
+    });
+
+    $(document).on('click', '.driver-item', function () {
+        $('.driver-item').removeClass('active');
+        $(this).addClass('active');
+        selectedDriverId = $(this).data('driver-id');
+    });
+
+    $('#searchDriverInput').on('input', function () {
+        var searchValue = $(this).val().toLowerCase();
+        $('.driver-item').each(function () {
+            var driverName = $(this).text().toLowerCase();
+            if (driverName.includes(searchValue)) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    });
 
     var mapContainer = document.getElementById('map'), // 지도를 표시할 div
         mapOption = {
@@ -488,15 +556,13 @@
                 dots[i].distance.setMap(null);
             }
         }
-
+        console.log(dots);
         dots = [];
     }
 
     function getTimeHTML(distance) {
-        // 자동차 서울시 평균 시속 30km/h 이고, 초속은 30 * 1000 / 3600 = 8.33m/s 입니다
         var carSpeed = 30 * 1000 / 3600; // meters per second
-        var totalTimeInSeconds = distance / carSpeed | 0; // 초 단위로 시간 계산
-        console.log(totalTimeInSeconds);
+        var totalTimeInSeconds = Math.floor(distance / carSpeed); // 초 단위로 시간 계산
 
         var hours = Math.floor(totalTimeInSeconds / 3600);
         var minutes = Math.floor((totalTimeInSeconds % 3600) / 60);
@@ -504,33 +570,27 @@
 
         var timeString = '';
         if (hours > 0) {
-            timeString += hours + ' 시간 ';
+            timeString += '<span class="number">' + hours + '</span> 시간 ';
         }
         if (minutes > 0 || hours > 0) { // 시간이 있으면 분도 표시, 분만 있을 경우에도 표시
-            timeString +=  minutes + '분 ';
+            timeString += '<span class="number">' + minutes + '</span> 분 ';
         }
-        timeString += seconds + '초';
+        timeString += '<span class="number">' + seconds + '</span> 초';
 
         var money = 0;
-        console.log(distance);
         if (distance < 1600) {
-            console.log(distance + ' <= 1600');
             money = 4800;
         } else {
-            console.log(distance + ' > 1600');
             var extraDistance = distance - 1600;
 
-            // 131m당 100원 추가
             var distanceCharges = Math.ceil(extraDistance / 131) * 100;
 
-            // 30초당 100원 추가
             var extraTimeInSeconds = extraDistance / carSpeed;
             var timeCharges = Math.ceil(extraTimeInSeconds / 30) * 100; // 30초당 100원
 
             money = 4800 + distanceCharges + timeCharges;
         }
 
-        // 거리와 시간을 가지고 HTML Content를 만들어 리턴합니다
         var content = '<ul class="dotOverlay distanceInfo">';
         content += '    <li>';
         content += '        <span class="label">총거리</span><span class="number">' + distance + '</span>m';
@@ -539,7 +599,7 @@
         content += '        <span class="label">예상 시간</span>' + timeString;
         content += '    </li>';
         content += '    <li>';
-        content += '        <span class="label">예상 금액</span>' + money + '원';
+        content += '        <span class="label">예상 금액</span><span class="number">' + money.toLocaleString() + '</span> 원';
         content += '    </li>';
         content += '</ul>';
 

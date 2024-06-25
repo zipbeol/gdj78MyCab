@@ -23,6 +23,19 @@ public class FinanceService {
 
 	@Autowired
 	private FinanceDAO financeDAO;
+	
+	public Map<String, Object> getProfitList(Map<String, Object> param, SearchDTO searchDTO) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		int page = (searchDTO.getPage() - 1) * PAGE_SIZE;
+		logger.info("page {}", page);
+		logger.info("searchDTO page {}", searchDTO.getPage());
+		searchDTO.setPage(page);
+		searchDTO.setPageSize(PAGE_SIZE);
+		List<FinanceDTO> profitList = financeDAO.getProfitList(searchDTO);
+		map.put("profit", profitList);
+		logger.info("수익리스트");
+		return map;
+	}
 
 	@Transactional
 	public Map<String, Object> addProfit(FinanceDTO profitDTO) {
@@ -35,22 +48,41 @@ public class FinanceService {
 		return map;
 	}
 
-	public Map<String, Object> getProfitList(Map<String, Object> param, SearchDTO searchDTO) {
+
+	public Object getProTotalPages(SearchDTO searchDTO) {
+        int profitTotal = financeDAO.getProfitCount(searchDTO);
+        int totalPages = (int) Math.ceil((double) profitTotal / PAGE_SIZE);
+        return totalPages = totalPages > 0 ? totalPages : 1;
+	}
+
+	public Map<String, Object> getExpensesList(Map<String, Object> param, SearchDTO searchDTO) {
 		Map<String, Object> map = new HashMap<String, Object>();
         int page = (searchDTO.getPage() - 1) * PAGE_SIZE;
         logger.info("page {}", page);
         logger.info("searchDTO page {}", searchDTO.getPage());
         searchDTO.setPage(page);
         searchDTO.setPageSize(PAGE_SIZE);
-		List<FinanceDTO> profitList = financeDAO.getProfitList(searchDTO);
-		map.put("profit", profitList);
-		logger.info("수익리스트");
+		List<FinanceDTO> getExpensesList = financeDAO.getExpensesList(searchDTO);
+		map.put("expenses", getExpensesList);
+		logger.info("지출리스트");
+		return map;
+	}
+	
+	@Transactional
+	public Map<String, Object> addExpenses(FinanceDTO expensesDTO) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		logger.info("지출 등록 시작: {}", expensesDTO.getExp_cash());
+
+		map.put("result", financeDAO.addExpenses(expensesDTO));
+
+		logger.info("지출 등록 완료: {}", expensesDTO);
+		
 		return map;
 	}
 
-	public Object getTotalPages(SearchDTO searchDTO) {
-        int profitTotal = financeDAO.getProfitCount(searchDTO);
-        int totalPages = (int) Math.ceil((double) profitTotal / PAGE_SIZE);
+	public Object getExpTotalPages(SearchDTO searchDTO) {
+        int expensesTotal = financeDAO.getExpensesCount(searchDTO);
+        int totalPages = (int) Math.ceil((double) expensesTotal / PAGE_SIZE);
         return totalPages = totalPages > 0 ? totalPages : 1;
 	}
 }

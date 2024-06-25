@@ -39,7 +39,7 @@
         </otherwise>
     </choose>
     LIMIT #{pageSize} OFFSET #{page}
-</select>
+	</select>
 
 
     <select id="getProfitCount" resultType="int" parameterType="search">
@@ -71,5 +71,70 @@
 		#{pro_actual_date})
 	</insert>
 
+	<!-- 지출 리스트 조회 쿼리 -->
+	<select id="getExpensesList" resultType="finance" parameterType="search">
+    SELECT exp_sal_idx, exp_driver_salary_idx, exp_category, exp_date, exp_content,
+    exp_who, exp_cash,exp_actual_date
+    FROM expenses
+    <where>
+        <if test="category != null and category != ''">
+            AND exp_category = #{category}
+        </if>
+        <if test="filterStartDate != null and filterEndDate != null and filterEndDate !='' and filterStartDate !=''">
+            AND exp_actual_date BETWEEN #{filterStartDate} AND
+            #{filterEndDate}
+        </if>
+        <if test="searchText != null and searchText != ''">
+            AND exp_who LIKE CONCAT('%', #{searchText}, '%')
+        </if>
+    </where>
+    <!-- 초기화면은 지출 발생일(exp_actual_date) 순으로 정렬 -->
+    <choose>
+        <when test="exp_filter == '많은 지출 순'">
+            ORDER BY exp_cash DESC
+        </when>
+        <when test="exp_filter == '적은 지출 순'">
+            ORDER BY exp_cash ASC
+        </when>
+        <when test="exp_filter == '이름 순'">
+            ORDER BY exp_who ASC
+        </when>
+        <!-- 초기화면 이후에는 기본적으로 exp_actual_date DESC 정렬을 유지 -->
+        <otherwise>
+            ORDER BY exp_actual_date DESC
+        </otherwise>
+    </choose>
+    LIMIT #{pageSize} OFFSET #{page}
+	</select>
 
+	<!-- 지출 등록 쿼리 -->
+	<!-- 나중에 수정 필요 -->
+	<insert id="addExpenses" parameterType="finance">
+		INSERT INTO expenses
+		(exp_driver_salary_idx,exp_sal_idx, exp_category, exp_content, exp_who,
+		exp_cash,
+		exp_actual_date)
+		VALUES (0, 0,#{exp_category}, #{exp_content},
+		#{exp_who}, #{exp_cash},
+		#{exp_actual_date})
+	</insert>
+	
+	
+	<select id="getExpensesCount" resultType="int" parameterType="search">
+        SELECT COUNT(exp_idx)
+        FROM expenses
+		<where>
+        <if test="category != null and category != ''">
+            AND exp_category = #{category}
+        </if>
+        <if test="filterStartDate != null and filterEndDate != null and filterEndDate !='' and filterStartDate !=''">
+            AND exp_actual_date BETWEEN #{filterStartDate} AND
+            #{filterEndDate}
+        </if>
+        <if test="searchText != null and searchText != ''">
+            AND exp_who LIKE CONCAT('%', #{searchText}, '%')
+        </if>
+    </where>
+    </select>
+	
 </mapper>

@@ -12,6 +12,7 @@ public class SearchDTO {
     private String sortOrder;
     private String sortColumn;
     private String pro_filter;
+    private String exp_filter;
     private String category;
     private int page;
     
@@ -113,4 +114,12 @@ public class SearchDTO {
     public void setSearchText(String searchText) {
         this.searchText = searchText;
     }
+
+	public String getExp_filter() {
+		return exp_filter;
+	}
+
+	public void setExp_filter(String exp_filter) {
+		this.exp_filter = exp_filter;
+	}
 }

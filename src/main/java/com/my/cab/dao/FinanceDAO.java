@@ -16,4 +16,10 @@ public interface FinanceDAO {
 
 	int getProfitCount(SearchDTO searchDTO);
 
+	List<FinanceDTO> getExpensesList(SearchDTO searchDTO);
+
+	boolean addExpenses(FinanceDTO expenses);
+
+	int getExpensesCount(SearchDTO searchDTO);
+
 }

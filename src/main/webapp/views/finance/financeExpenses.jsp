@@ -73,6 +73,8 @@
 	    background-color: #c82333;
 	    border-color: #bd2130;
 	}
+	
+	
     </style>
 </head>
 
@@ -121,7 +123,7 @@
                             <a href="#!" class="text-decoration-none">재무 관리</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="/finance/profit/list.go" class="text-decoration-none">수익</a>
+                            <a href="/finance/expenses/list.go" class="text-decoration-none">지출</a>
                         </li>
                     </ol>
                     <!-- Breadcrumb end -->
@@ -142,27 +144,22 @@
                             <div class="col-12">
                                 <div class="card mb-3">
                                     <div class="card-header">
-                                        <h4 class="card-title">수익</h4>
+                                        <h4 class="card-title">지출</h4>
                                     </div>
                                     <div class="card-body">
                                     <button class="btn btn-secondary" onclick="resetFilters()">초기화</button>
                                     	<!-- 카테고리 필터링 버튼 -->
-                                    	<!-- <div class="btn-group" role="group" aria-label="Basic example">
-				                        <button type="button" class="btn btn-primary" data-category="택시">
-				                          택시 수익
+                                    	<div class="btn-group" role="group" aria-label="Basic example">
+				                        <button type="button" class="btn btn-primary filter-btn" data-category="택시">
+				                          택시 지출
 				                        </button>
-				                        <button type="button" class="btn btn-primary" data-category="광고">
-				                          광고 수익
+				                        <button type="button" class="btn btn-primary filter-btn" data-category="사내">
+				                          사내 지출
 				                        </button>
-				                        <button type="button" class="btn btn-primary" data-category="기타">
-				                          기타 수익
+				                        <button type="button" class="btn btn-primary filter-btn" data-category="기타">
+				                          기타 지출
 				                        </button>
-				                      </div> -->
-                                        <div class="mt-3">
-                                            <button class="btn btn-secondary filter-btn" data-category="택시">택시 수익</button>
-                                            <button class="btn btn-secondary filter-btn" data-category="광고">광고 수익</button>
-                                            <button class="btn btn-secondary filter-btn" data-category="기타">기타 수익</button>
-                                        </div>
+				                      </div>
                                         <!-- 날짜 필터링 입력 -->
 										<div class="mt-3">
 										    <label for="startDate">시작 날짜:</label>
@@ -174,8 +171,8 @@
 										 <select id="filter" name="filter" class="form-select" required>
                                             <option value="" selected disabled>필터 선택</option>
                                             <option value="이름 순">이름 순</option>
-                                            <option value="많은 수익 순">많은 수익 순</option>
-                                            <option value="적은 수익 순">적은 수익 순</option>
+                                            <option value="많은 지출 순">많은 지출 순</option>
+                                            <option value="적은 지출 순">적은 지출 순</option>
                                         </select>
                                         <div class="mt-3">
 										    <!-- 검색 입력 필드 -->
@@ -183,22 +180,22 @@
 										    <input type="text" id="searchQuery" placeholder="검색 내용을 입력하세요.">
 										</div>
 										<!-- 검색 버튼 -->
-										<button id="go" class="btn btn-outline-info" onclick="refreshProfitList()">찾기</button>
-                                        <!-- 수익 등록 버튼 -->
+										<button id="go" class="btn btn-outline-info">찾기</button>
+                                        <!-- 지출 등록 버튼 -->
                                         <div class="text-end">
-                                            <button id="myBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">수익 등록</button>
+                                            <button id="myBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">지출 등록</button>
                                         </div>
-                                        <!-- 수익 리스트 테이블 -->
+                                        <!-- 지출 리스트 테이블 -->
                                         <div class="table-outer mt-3">
                                             <table class="table table-hover align-middle custom-table m-0">
                                                 <thead>
                                                     <tr>
-                                                        <th>수익 발생일</th>
-                                                        <th>수익자</th>
-                                                        <th>수익 금액</th>
+                                                        <th>지출 발생일</th>
+                                                        <th>지출자</th>
+                                                        <th>지출 금액</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody id="profitTableBody">
+                                                <tbody id="expensesTableBody">
                                                     <!-- AJAX 요청으로 항목들이 여기에 추가됩니다 -->
                                                 </tbody>
                                             </table>
@@ -214,40 +211,40 @@
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">수익 등록</h5>
+                                                        <h5 class="modal-title" id="exampleModalLabel">지출 등록</h5>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <form id="profitForm" class="needs-validation" novalidate>
+                                                        <form id="expensesForm" class="needs-validation" novalidate>
                                                            <div class="mb-3">
-                                                              <label for="pro_category" class="form-label">수익 종류:</label>
-                                                              <select id="pro_category" name="pro_category" class="form-select" required>
-                                                                  <option value="" selected disabled>수익 종류 선택</option>
-                                                                  <option value="택시">택시 수익</option>
-                                                                  <option value="광고">광고 수익</option>
-                                                                  <option value="기타">기타 수익</option>
+                                                              <label for="exp_category" class="form-label">지출 종류:</label>
+                                                              <select id="exp_category" name="exp_category" class="form-select" required>
+                                                                  <option value="" selected disabled>지출 종류 선택</option>
+                                                                  <option value="택시">택시 지출</option>
+                                                                  <option value="사내">사내 지출</option>
+                                                                  <option value="기타">기타 지출</option>
                                                               </select>
-                                                              <div class="invalid-feedback">수익 종류를 입력해주세요</div>
+                                                              <div class="invalid-feedback">지출 종류를 입력해주세요</div>
                                                           </div>
                                                             <div class="mb-3">
-                                                                <label for="pro_actual_date" class="form-label">수익 발생일:</label>
-                                                                <input type="date" id="pro_actual_date" name="pro_actual_date" class="form-control" required>
-                                                                <div class="invalid-feedback">수익 발생일을 입력해주세요</div>
+                                                                <label for="exp_actual_date" class="form-label">지출 발생일:</label>
+                                                                <input type="date" id="exp_actual_date" name="exp_actual_date" class="form-control" required>
+                                                                <div class="invalid-feedback">지출 발생일을 입력해주세요</div>
                                                             </div>
                                                             <div class="mb-3">
-                                                                <label for="pro_who" class="form-label">수익자:</label>
-                                                                <input type="text" id="pro_who" name="pro_who" class="form-control" required>
-                                                                <div class="invalid-feedback">수익자를 입력해주세요</div>
+                                                                <label for="exp_who" class="form-label">지출자:</label>
+                                                                <input type="text" id="exp_who" name="exp_who" class="form-control" required>
+                                                                <div class="invalid-feedback">지출자를 입력해주세요</div>
                                                             </div>
                                                             <div class="mb-3">
-                                                                <label for="pro_cash" class="form-label">수익 금액:</label>
-                                                                <input type="text" id="pro_cash" name="pro_cash" class="form-control" maxlength="10" required>
-                                                                <div class="invalid-feedback">수익 금액을 입력해주세요</div>
+                                                                <label for="exp_cash" class="form-label">지출 금액:</label>
+                                                                <input type="text" id="exp_cash" name="exp_cash" class="form-control" maxlength="10" required>
+                                                                <div class="invalid-feedback">지출 금액을 입력해주세요</div>
                                                             </div>
                                                             <div class="mb-3">
-                                                              <label for="pro_content" class="form-label">수익 내용:</label>
-                                                              <textarea id="pro_content" name="pro_content" class="form-control" rows="3" required></textarea>
-                                                              <div class="invalid-feedback">수익 내용을 입력해주세요</div>
+                                                              <label for="exp_content" class="form-label">지출 내용:</label>
+                                                              <textarea id="exp_content" name="exp_content" class="form-control" rows="3" required></textarea>
+                                                              <div class="invalid-feedback">지출 내용을 입력해주세요</div>
                                                           </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
@@ -307,8 +304,12 @@
 	var category = '';
     
     getTotalPages();
-    refreshProfitList();
+    refreshExpensesList();
     
+    $('#go').on('click',function(){
+        getTotalPages();
+        refreshExpensesList();
+    });
  // 리셋 버튼 클릭 시 호출되는 함수
     function resetFilters() {
         // 선택된 버튼의 active 클래스 제거
@@ -327,8 +328,12 @@
         // 카테고리 변수 초기화
         category = '';
 
-        // 수익 리스트 다시 불러오기
-        refreshProfitList();
+        // 총 페이지
+        currentPage = 1;
+        getTotalPages();
+        
+        // 지출 리스트 다시 불러오기
+        refreshExpensesList();
 
         // 필터링 버튼 위치로 스크롤 이동 (선택하지 않은 경우)
         $('html, body').animate({
@@ -351,13 +356,14 @@
                 // 클릭된 버튼의 데이터를 기반으로 필터링된 결과를 표시
                 category = this.getAttribute('data-category');
                 categoryName(category); // categoryName 함수 호출
+                getTotalPages();
+                refreshExpensesList();
             });
         });
 
         // 카테고리 이름을 출력하는 함수
         function categoryName(category) {
             console.log('Selected category:', category);
-            refreshProfitList();
         }
         
         // 등록 버튼 클릭 이벤트 처리
@@ -369,26 +375,26 @@
                 return;
             }
             $.ajax({
-                url: '/finance/profit/add.ajax', // 서버의 폼 처리 엔드포인트
+                url: '/finance/expenses/add.ajax', // 서버의 폼 처리 엔드포인트
                 type: 'POST',
                 data: {
-                    pro_category: $('#pro_category').val(),
-                    pro_date: $('#pro_date').val(),
-                    pro_actual_date: $('#pro_actual_date').val(),
-                    pro_who: $('#pro_who').val(),
-                    pro_cash: $('#pro_cash').val().replace(/,/g, ''),
-                    pro_content: $('#pro_content').val()
+                	exp_category: $('#exp_category').val(),
+                	exp_date: $('#exp_date').val(),
+                	exp_actual_date: $('#exp_actual_date').val(),
+                	exp_who: $('#exp_who').val(),
+                	exp_cash: $('#exp_cash').val().replace(/,/g, ''),
+                	exp_content: $('#exp_content').val()
                 },
                 success: function(response) {
                     // 성공적으로 저장되었음을 사용자에게 알리고 모달을 닫음
-                    alert('수익이 등록되었습니다.');
+                    alert('지출이 등록되었습니다.');
                     $('#exampleModal').modal('hide');
-                    // 수익 리스트를 다시 불러옵니다
-                    refreshProfitList();
+                    // 지출 리스트를 다시 불러옵니다
+                    refreshExpensesList();
                 },
                 error: function(error) {
                     console.error("AJAX 요청 실패:", error);
-                    alert('수익 등록 중 오류가 발생했습니다.');
+                    alert('지출 등록 중 오류가 발생했습니다.');
                 }
             });
         });
@@ -398,8 +404,8 @@
             return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
 
-        // 수익 금액 입력 필드에서 키 입력 시 호출되는 함수
-        $('#pro_cash').on('input', function() {
+        // 지출 금액 입력 필드에서 키 입력 시 호출되는 함수
+        $('#exp_cash').on('input', function() {
             var value = $(this).val(); // 입력된 값 가져오기
             var number = parseInt(value.replace(/[^\d]/g, '')); // 숫자만 추출하여 정수로 변환
 
@@ -409,25 +415,25 @@
             }
         });
 
-        // AJAX로 받은 수익 리스트를 테이블에 표시하는 함수
-        function displayProfitList(profitList) {
-            var tbody = $('#profitTableBody');
-            console.log(profitList);
+        // AJAX로 받은 지출 리스트를 테이블에 표시하는 함수
+        function displayExpensesList(expensesList) {
+            var tbody = $('#expensesTableBody');
+            console.log(expensesList);
             tbody.empty(); // 테이블 본문을 비웁니다.
             var row = '';
-            for (item of profitList) {
+            for (item of expensesList) {
                 row += '<tr class="clickable-row">' +
-                    '<td>' + item.pro_actual_date + '</td>' +
-                    '<td>' + item.pro_who + '</td>' +
-                    '<td>' + formatNumberWithCommas(item.pro_cash) + '</td>' +
+                    '<td>' + item.exp_actual_date + '</td>' +
+                    '<td>' + item.exp_who + '</td>' +
+                    '<td>' + formatNumberWithCommas(item.exp_cash) + '</td>' +
                     '</tr>'+
                     '<tr class="detail-row">'+
                     '<td colspan="3" class="detail-content">'+
-                    '<strong>수익 발생일:</strong> ' + item.pro_actual_date +
-                    '<strong>수익 등록일:</strong> ' + item.pro_date +
-                    '<strong>수익 종류:</strong> ' + item.pro_category +
-                    '<strong>수익 내용:</strong> ' + item.pro_content +
-                    '<strong>수익 금액:</strong> ' + formatNumberWithCommas(item.pro_cash) +
+                    '<strong>지출 발생일:</strong> ' + item.exp_actual_date +
+                    '<strong>지출 등록일:</strong> ' + item.exp_date +
+                    '<strong>지출 종류:</strong> ' + item.exp_category +
+                    '<strong>지출 내용:</strong> ' + item.exp_content +
+                    '<strong>지출 금액:</strong> ' + formatNumberWithCommas(item.exp_cash) +
                     '<strong>원</strong> ' +
                     '</td>'+
                     '</tr>';
@@ -438,26 +444,27 @@
                 $(this).next('.detail-row').toggleClass('active');
             });
         }
-        refreshProfitList();
-        // 수익 리스트 갱신 함수
-        function refreshProfitList() {
+
+        
+        
+        // 지출 리스트 갱신 함수
+        function refreshExpensesList() {
             // 카테고리 값이 없으면 기본 값을 설정 (예: 모든 카테고리)
             
             $.ajax({
                 type: 'POST',
-                url: '/finance/profit/list.ajax',
+                url: '/finance/expenses/list.ajax',
                 data: {
                     'category': category,
                     'filterStartDate': $('#startDate').val(),
                     'filterEndDate': $('#endDate').val(),
-                    'pro_filter': $('#filter').val(),
+                    'exp_filter': $('#filter').val(),
                     'searchText': $('#searchQuery').val(),
                     'page' : currentPage
                 },
                 dataType : 'json',
                 success: function(data) {
-                    displayProfitList(data.profit); // 갱신된 수익 리스트 표시
-                    console.log($('#filter').val());
+                    displayExpensesList(data.expenses); // 갱신된 지출 리스트 표시
                     console.log($('#searchQuery').val());
                 },
                 error: function(error) {
@@ -466,28 +473,14 @@
             });
         }
 
-        // 초기 수익 리스트 불러오기
-        $(document).ready(function() {
-            refreshProfitList();
-        });
 
         // 모달이 닫힐 때 폼 초기화
         $('#exampleModal').on('hidden.bs.modal', function (e) {
-            $('#profitForm')[0].reset();
+            $('#expensesForm')[0].reset();
         });
         
 
-        // 페이지네이션
-        $('#pagination').twbsPagination({
-            totalPages: 10, // 총 페이지 수 (백엔드에서 가져와야 함)
-            visiblePages: 5, // 표시할 페이지 수
-            startPage: 1, // 시작 페이지
-            paginationClass: 'pagination align-items-center',
-            onPageClick: function (event, page) {
-                currentPage = page; // 현재 페이지 업데이트
-                refreshProfitList(); // 수익 갱신
-            }
-        });
+
 
         // 토탈 페이지 호출
         function getTotalPages() {
@@ -496,15 +489,14 @@
                 type: 'GET',
                 data: {
                     'category': category,
-                    'actual_profit_start_date': $('#startDate').val(),
-                    'actual_profit_end_date': $('#endDate').val(),
-                    'pro_filter': $('#filter').val(),
-                    'proSearchQuery': $('#searchQuery').val(),
+                    'filterStartDate': $('#startDate').val(),
+                    'filterEndDate': $('#endDate').val(),
+                    'searchText': $('#searchQuery').val(),
                     'page' : currentPage
                 },
                 dataType: 'JSON',
                 success: function (data) {
-                    // console.log(data);
+                    console.log(data);
                     $('#pagination').twbsPagination('destroy');
                     $('#pagination').twbsPagination({
                         totalPages: data.totalPages, // 서버에서 받은 총 페이지 수
@@ -513,7 +505,7 @@
                         paginationClass: 'pagination align-items-center',
                         onPageClick: function (event, page) {
                             currentPage = page;
-                            refreshProfitList();
+                            refreshExpensesList();
                         }
                     });
                 },

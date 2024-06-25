@@ -3,8 +3,6 @@ package com.my.cab.controller;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpSession;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,53 +28,87 @@ public class FinanceController {
 	FinanceService financeService;
 
 	@RequestMapping("/profit/list.go")
-	public String financeProfit(HttpSession session, Model model) {
+	public String financeProfit(Model model) {
 		logger.info("재무관리 수익리스트");
-		// 세션 체크
-		// if(session.getAttribute("loginId")!=null) {
-		// model.addObject("chk", "on");
-		// } else {
-		// model.addObject("chk", "notOn");
-		// }
 
 		return "finance/financeProfit"; // 뷰 경로: /WEB-INF/views/finance/financeProfit.jsp
 	}
 
 	@PostMapping("/profit/list.ajax")
 	@ResponseBody
-	public Map<String, Object> getProfitList(HttpSession session, SearchDTO searchDTO,@RequestParam Map<String, Object> param) {
+	public Map<String, Object> getProfitList(SearchDTO searchDTO, @RequestParam Map<String, Object> param) {
 		logger.info("재무관리 수익리스트 - AJAX 요청");
-		logger.info("\nsearchDTO SearchText:" + searchDTO.getSearchText()
-        + "\nsearchDTO Category:" + searchDTO.getCategory()
-        + "\nsearchDTO filterStartDate:" + searchDTO.getFilterStartDate()
-        + "\nsearchDTO filterEndDate:" + searchDTO.getFilterEndDate()
-        + "\nsearchDTO page:" + searchDTO.getPage()
-);
+		logger.info("\nsearchDTO SearchText:" + searchDTO.getSearchText() + "\nsearchDTO Category:"
+				+ searchDTO.getCategory() + "\nsearchDTO filterStartDate:" + searchDTO.getFilterStartDate()
+				+ "\nsearchDTO filterEndDate:" + searchDTO.getFilterEndDate() + "\nsearchDTO page:"
+				+ searchDTO.getPage());
 		// 서비스 호출하여 리스트 데이터 가져오기
 		return financeService.getProfitList(param, searchDTO);
 	}
 
+	// 수익 등록 폼
 	@PostMapping("/profit/add.ajax")
 	@ResponseBody
 	public Map<String, Object> addProfit(FinanceDTO profit) {
 		logger.info("pro_actual_date = " + profit.getPro_actual_date());
 		return financeService.addProfit(profit);
 	}
-	
-    @GetMapping("/profit/getTotalPages.ajax")
-    @ResponseBody
-    public Map<String, Object> getTotalPages(SearchDTO searchDTO) {
-		logger.info("\nsearchDTO SearchText:" + searchDTO.getSearchText()
-        + "\nsearchDTO Category:" + searchDTO.getCategory()
-        + "\nsearchDTO filterStartDate:" + searchDTO.getFilterStartDate()
-        + "\nsearchDTO filterEndDate:" + searchDTO.getFilterEndDate()
-        + "\nsearchDTO page:" + searchDTO.getPage()
-		);
-    	logger.info("searchDTO = "+ searchDTO);
-        Map<String, Object> map = new HashMap<>();
-        map.put("totalPages", financeService.getTotalPages(searchDTO));
-        
-        return map;
-    }
 
+	// 수익 페이징 처리
+	@GetMapping("/profit/getTotalPages.ajax")
+	@ResponseBody
+	public Map<String, Object> getProTotalPages(SearchDTO searchDTO) {
+		logger.info("\nsearchDTO SearchText:" + searchDTO.getSearchText() + "\nsearchDTO Category:"
+				+ searchDTO.getCategory() + "\nsearchDTO filterStartDate:" + searchDTO.getFilterStartDate()
+				+ "\nsearchDTO filterEndDate:" + searchDTO.getFilterEndDate() + "\nsearchDTO page:"
+				+ searchDTO.getPage());
+		logger.info("searchDTO = " + searchDTO);
+		Map<String, Object> map = new HashMap<>();
+		map.put("totalPages", financeService.getProTotalPages(searchDTO));
+
+		return map;
+	}
+
+	// 지출
+	@RequestMapping("/expenses/list.go")
+	public String financeExpenses(Model model) {
+		logger.info("재무관리 지출리스트");
+
+		return "finance/financeExpenses"; // 뷰 경로: /WEB-INF/views/finance/financeProfit.jsp
+	}
+
+	@PostMapping("/expenses/list.ajax")
+	@ResponseBody
+	public Map<String, Object> getExpensesList(SearchDTO searchDTO, @RequestParam Map<String, Object> param) {
+		logger.info("재무관리 지출리스트 - AJAX 요청");
+		logger.info("\nsearchDTO SearchText:" + searchDTO.getSearchText() + "\nsearchDTO Category:"
+				+ searchDTO.getCategory() + "\nsearchDTO filterStartDate:" + searchDTO.getFilterStartDate()
+				+ "\nsearchDTO filterEndDate:" + searchDTO.getFilterEndDate() + "\nsearchDTO page:"
+				+ searchDTO.getPage());
+		// 서비스 호출하여 리스트 데이터 가져오기
+		return financeService.getExpensesList(param, searchDTO);
+	}
+	
+	// 지출 등록 폼
+	@PostMapping("/expenses/add.ajax")
+	@ResponseBody
+	public Map<String, Object> addExpenses(FinanceDTO expenses) {
+		logger.info("exp_actual_date = " + expenses.getExp_actual_date());
+		return financeService.addExpenses(expenses);
+	}
+	
+	// 지출 페이징 처리
+	@GetMapping("/expenses/getTotalPages.ajax")
+	@ResponseBody
+	public Map<String, Object> getExpTotalPages(SearchDTO searchDTO) {
+		logger.info("\nsearchDTO SearchText:" + searchDTO.getSearchText() + "\nsearchDTO Category:"
+				+ searchDTO.getCategory() + "\nsearchDTO filterStartDate:" + searchDTO.getFilterStartDate()
+				+ "\nsearchDTO filterEndDate:" + searchDTO.getFilterEndDate() + "\nsearchDTO page:"
+				+ searchDTO.getPage());
+		logger.info("searchDTO = " + searchDTO);
+		Map<String, Object> map = new HashMap<>();
+		map.put("totalPages", financeService.getExpTotalPages(searchDTO));
+
+		return map;
+	}
 }

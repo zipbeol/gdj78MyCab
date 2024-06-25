@@ -160,13 +160,22 @@
 				                          기타 지출
 				                        </button>
 				                      </div>
+				                        <!-- 지출 등록 버튼 -->
+                                        <div class="text-end mb-2">
+                                            <button id="myBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">지출 등록</button>
+                                        </div>
+				                    <!-- 검색창 시작 -->
+                                    <div class="search-filter-container border border-2 p-3 rounded mb-3">
                                         <!-- 날짜 필터링 입력 -->
 										<div class="mt-3">
-										    <label for="startDate">시작 날짜:</label>
+										<label for="startDate" class="form-label">시작 날짜&nbsp;</label>
 										    <input type="date" id="startDate">
-										    <label for="endDate"> &nbsp - 종료 날짜:</label>
+										<label for="endDate" class="form-label">&nbsp;&nbsp;-&nbsp;&nbsp;종료 날짜&nbsp;</label>
 										    <input type="date" id="endDate">
 										</div>
+										<div class="row mt-2">
+										<div class="col-2">
+										<label for="filter" class="form-label">정렬</label>
 										<!-- 필터링 버튼 -->
 										 <select id="filter" name="filter" class="form-select" required>
                                             <option value="" selected disabled>필터 선택</option>
@@ -174,17 +183,17 @@
                                             <option value="많은 지출 순">많은 지출 순</option>
                                             <option value="적은 지출 순">적은 지출 순</option>
                                         </select>
-                                        <div class="mt-3">
-										    <!-- 검색 입력 필드 -->
-										    <label for="searchQuery">검색:</label>
-										    <input type="text" id="searchQuery" placeholder="검색 내용을 입력하세요.">
-										</div>
-										<!-- 검색 버튼 -->
-										<button id="go" class="btn btn-outline-info">찾기</button>
-                                        <!-- 지출 등록 버튼 -->
-                                        <div class="text-end">
-                                            <button id="myBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">지출 등록</button>
                                         </div>
+                                        <div class="col-10"></div>
+                                        </div>
+										    <label for="searchQuery" class="form-label mt-2">검색</label>
+                                        <div class="d-flex">
+										    <!-- 검색 입력 필드 -->
+										    <input type="text" id="searchQuery" placeholder="검색 내용을 입력하세요.">
+											<!-- 검색 버튼 -->
+											<button id="go" class="btn btn-outline-info">찾기</button>
+										</div>
+										</div>
                                         <!-- 지출 리스트 테이블 -->
                                         <div class="table-outer mt-3">
                                             <table class="table table-hover align-middle custom-table m-0">
@@ -305,6 +314,11 @@
     
     getTotalPages();
     refreshExpensesList();
+    
+    $('#filter').on('change',function(){
+        getTotalPages();
+        refreshExpensesList();
+    });
     
     $('#go').on('click',function(){
         getTotalPages();

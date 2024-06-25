@@ -424,9 +424,11 @@ function sendHtmlToServer() {
     })
     .then(response => response.text())
     .then(result => {
-        // 서버로부터 반환된 뷰를 새 창에서 표시
-        const newWindow = window.open();
-        newWindow.document.write(result);
+        // 서버로부터 반환된 메시지를 알림창으로 표시
+        alert('결재 문서 등록 되었습니다.');
+        
+        // 모달 창 닫기
+        $('#approvalModal').modal('hide');
     })
     .catch(error => {
         console.error('Error:', error);

@@ -10,6 +10,14 @@ document.addEventListener("DOMContentLoaded", function(){
 				center: "title",
 				right: 'insertScheduleButton'
 			},
+			 eventDidMount: function(arg) {
+		       $(arg.el).tooltip({ 
+				    title: arg.event.extendedProps.content,
+				    placement: "top",
+				    trigger: "hover",
+				    container: "body"
+			  });
+		     },
 			customButtons: {
 	          insertScheduleButton: {
 	            text: '일정추가',

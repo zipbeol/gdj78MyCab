@@ -18,5 +18,9 @@
 		(schedule_name,schedule_content,schedule_start_date,schedule_end_date,schedule_emp_no,schedule_category,schedule_color)
 		VALUES (#{schedule_name},#{schedule_content},#{schedule_start_date},#{schedule_end_date},#{schedule_emp_no},#{schedule_category},#{schedule_color})
 	</insert>
+	
+	<select id="calendarDetail" resultType="calendarDTO">
+		SELECT * FROM schedule WHERE schedule_idx = #{param1}
+	</select>
 
 </mapper>

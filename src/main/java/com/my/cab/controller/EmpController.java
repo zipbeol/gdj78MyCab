@@ -103,13 +103,6 @@ public class EmpController {
 		
 	}
 	
-	@GetMapping(value="emp/hremp/getTotalPages.ajax")
-	@ResponseBody
-	public Map<String, Object> getTotalPages(SearchDTO searchDTO){
-		
-		return service.getEmpTotalPages(searchDTO);
-	}
-	
 	
 	
 

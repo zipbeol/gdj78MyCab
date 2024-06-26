@@ -12,4 +12,5 @@
         INSERT INTO tb_doc_item_file (appr_file_path)
         VALUES (#{appr_file_path})
     </insert>
+   
 </mapper>

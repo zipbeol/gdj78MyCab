@@ -139,6 +139,8 @@
 	SELECT
 	e.emp_no,
 	e.emp_name,
+	e.dept_no,
+	e.title_no,
 	e.emp_email,
 	e.emp_hired_date,
 	e.emp_retired_date,
@@ -163,6 +165,29 @@
 	WHERE
 	e.emp_no = #{param1}
     </select>
+    
+    <update id="updateEmp" parameterType="emp">
+    UPDATE employee
+	SET
+    dept_no = #{dept_no},
+    title_no = #{title_no},
+    emp_level = #{emp_level}
+	WHERE emp_no = #{emp_no};
+    </update>
+    
+    
+    
+    <update id="updateEmpRetried" parameterType="emp">
+    UPDATE employee
+	SET
+    dept_no = #{dept_no},
+    title_no = #{title_no},
+    emp_level = #{emp_level},
+    emp_employment_status = 0,
+    emp_retired_date = CURDATE()
+	WHERE emp_no = #{emp_no};
+    </update>
+    
     
     
 

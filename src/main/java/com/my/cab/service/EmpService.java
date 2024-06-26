@@ -132,17 +132,39 @@ public class EmpService {
 		result.put("profile_new", dto.getProfile_new());
 		result.put("emp_no", dto.getEmp_no());
 		result.put("emp_name", dto.getEmp_name());
+		result.put("dept_no", dto.getDept_no());
+		result.put("title_no", dto.getTitle_no());
 		result.put("dept_name", dto.getDept_name());
 		result.put("title_name", dto.getTitle_name());
 		result.put("emp_level", dto.getEmp_level());
 		result.put("emp_email", dto.getEmp_email());
 		result.put("emp_hired_date", dto.getEmp_hired_date());
+		result.put("emp_retired_date", dto.getEmp_retired_date());
 		result.put("emp_employment_status", dto.isEmp_employment_status());
 		result.put("emp_add", dto.getEmp_add());
 		result.put("vac_left", dto.getVac_left());
 		result.put("emp_extension_number", dto.getEmp_extension_number());
 		
 		
+		
+		
+		return result;
+	}
+
+
+	public boolean updateEmp(EmpDTO empDTO) {
+		boolean result = false;
+		
+		
+		boolean isRetired = empDTO.isEmp_employment_status();
+		
+		if (isRetired) {
+			
+			result = dao.updateEmp(empDTO);
+			
+		}else {
+			result = dao.updateEmpRetried(empDTO);
+		}
 		
 		
 		return result;

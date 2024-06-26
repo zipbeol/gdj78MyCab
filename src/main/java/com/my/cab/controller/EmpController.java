@@ -121,6 +121,26 @@ public class EmpController {
 	}
 	
 	
+	@GetMapping("emp/hremp/updateEmp.ajax")
+	@ResponseBody
+	public Map<String, Object> updateEmp(EmpDTO empDTO){
+		logger.info("사원 수정 요청");
+		logger.info("수정할 사번 : "+empDTO.getEmp_no());
+		logger.info("수정할 재직상태 : "+empDTO.isEmp_employment_status());
+		
+		boolean isSuccess = service.updateEmp(empDTO);
+		
+		
+		
+		return Map.of("isSuccess", isSuccess);
+		
+	}
+	
+	
+	
+	
+	
+	
 	
 
 }

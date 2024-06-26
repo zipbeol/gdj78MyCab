@@ -78,9 +78,22 @@ th.sortable.desc::after {
 	content: '\f0dd'; /* FontAwesome sort down 아이콘 */
 	opacity: 1;
 }
+ .alert-placeholder {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1050;
+            margin: 0;
+            padding: 10px;
+            text-align: center;
+        }
 .button-position{
-	
-
+	margin-left: 346px;
+}
+.resetPosition{
+	margin-left: 170px;
+    margin-bottom: 5px;
 }
 </style>
 
@@ -167,25 +180,48 @@ th.sortable.desc::after {
 										<div
 											class="search-filter-container border border-2 p-3 rounded mb-3">
 											<div class="row mb-3">
-												<div class="col-10"></div>
-												<div
-													class="col-2 text-end d-md-flex justify-content-md-end gap-2">
-													<input type="button" class="btn btn-secondary"
-														onclick="filterReset()" value="초기화"> <input
-														type="button" class="btn btn-primary" onclick="getList()"
-														value="검색" style="display: none">
+												<div class="col-10">
+													<div class="col-xxl-6 col-xl-12">
+														<div class="card mb-3">
+															<div class="card-header">
+																<h5 class="card-title">Line Graph</h5>
+															</div>
+															<div class="card-body">
+																<div id="lineGraph"></div>
+															</div>
+														</div>
+													</div>
+													<div class="row mb-3">
+													<div class="col-xxl-6 col-xl-12">
+														<div class="card mb-3">
+															<div class="card-header">
+																<h5 class="card-title">Line Graph</h5>
+															</div>
+															<div class="card-body">
+																<div id="barGraph"></div>
+															</div>
+														</div>
+													</div>
+													</div>
+
 												</div>
-											</div>
 											<div class="row">
 												<div class="col-4"></div>
 												<div class="col-2"></div>
 												<div class="col-2">
+												
 													<label for="filter-emp" class="form-label">사원 검색</label>
 												</div>
 												<div class="col-2"></div>
 												<div class="col-1">
 													<label for="filter-emp-is-retired" class="form-label">재직여부
 														필터</label>
+														
+													<input type="button" class="btn btn-secondary resetPosition"
+														onclick="filterReset()" value="초기화"> <input
+														type="button" class="btn btn-primary" onclick="getList()"
+														value="검색" style="display: none">
+												
 												</div>
 											</div>
 											<div class="row mb-3">
@@ -285,26 +321,53 @@ th.sortable.desc::after {
 											<div class="mb-3">
 												<label for="dept-name" class="form-label">부서</label>
 												<input type="text" class="form-control" id="dept-name" readonly>
+												<select id="sdept-name" class="form-select dept-select" name="dept_name">
+												<option value="1">인사부</option>
+												<option value="2">영업부</option>
+												<option value="3">영업지원부</option>
+												<option value="4">택시관리부</option>
+												</select>
 											</div>
 											<div class="mb-3">
 												<label for="title-name" class="form-label">직급</label>
 												 <input type="text" class="form-control" id="title-name" readonly>
+												 <select id="stitle-name" class="form-select title-select" name = "title_name">
+												 <option value="5">사원</option>
+												 <option value="4">대리</option>
+												 <option value="3">과장</option>
+												 <option value="2">부장</option>
+												 <option value="1">대표이사</option>
+												 </select>
 											</div>
 											<div class="mb-3">
 												<label for="emp-level" class="form-label">권한 레벨</label>
 												<input type="text" class="form-control" id="emp-level" readonly>
+												<select id="semp-level" class="form-select level-select" name="emp_level">
+												<option value="1">1</option>
+												<option value="2">2</option>
+												<option value="3">3</option>
+												<option value="4">4</option>
+												</select>
 											</div>
 											<div class="mb-3">
 												<label for="emp-email" class="form-label">이메일</label>
 												<input type="text" class="form-control" id="emp-email" readonly>
 											</div>
 											<div class="mb-3">
+												<label for="emp-employment_status" class="form-label">재직 여부</label>
+												<input type="text" class="form-control" id="emp-employment-status" readonly>
+												<select id="semp-employment-status" class="form-select status-select" name="emp_employment_status">
+												<option value="true">재직중</option>
+												<option value="false">퇴사</option>
+												</select>
+											</div>
+											<div class="mb-3">
 												<label for="emp-hired-date" class="form-label">입사일</label>
 												<input type="text" class="form-control" id="emp-hired-date" readonly>
 											</div>
 											<div class="mb-3">
-												<label for="emp-employment_status" class="form-label">재직 여부</label>
-												<input type="text" class="form-control" id="emp-employment-status" readonly>
+												<label for="emp-retired-date" class="form-label" id="retired-label">퇴사일</label>
+												<input type="text" class="form-control" id="emp-retired-date" readonly>
 											</div>
 											<div class="mb-3">
 												<label for="emp-add" class="form-label">주소</label>
@@ -326,6 +389,8 @@ th.sortable.desc::after {
 									</div>
 									<div class="modal-footer">
 										<button type="button" id="editButton"
+											class="btn btn-primary">수정</button>
+											<button type="button" id="editButton2"
 											class="btn btn-primary">수정</button>
 										<button type="button" class="btn btn-secondary"
 											data-bs-dismiss="modal">닫기</button>
@@ -362,6 +427,18 @@ th.sortable.desc::after {
 <!-- Required jQuery first, then Bootstrap Bundle JS -->
 <script src="/assets/js/jquery.min.js"></script>
 <script src="/assets/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/vendor/apex/custom/graphs/line.js"></script>
+<script src="/assets/vendor/apex/apexcharts.min.js"></script>
+<script src="/assets/vendor/apex/custom/graphs/area.js"></script>
+    <script src="/assets/vendor/apex/custom/graphs/line.js"></script>
+    <script src="/assets/vendor/apex/custom/graphs/bar.js"></script>
+    <script src="/assets/vendor/apex/custom/graphs/column-area.js"></script>
+    <script src="/assets/vendor/apex/custom/graphs/candlestick.js"></script>
+    <script src="/assets/vendor/apex/custom/graphs/heatmap.js"></script>
+    <script src="/assets/vendor/apex/custom/graphs/donut.js"></script>
+    <script src="/assets/vendor/apex/custom/graphs/pie.js"></script>
+    <script src="/assets/vendor/apex/custom/graphs/funnel.js"></script>
+    <script src="/assets/vendor/apex/custom/graphs/pyramid.js"></script>
 
 <!-- *************
         ************ Vendor Js Files *************
@@ -543,10 +620,45 @@ th.sortable.desc::after {
     
     
     
+    	$('#empModal').on('shown.bs.modal', function(){
+    		 $('#sdept-name').hide();
+         	$('#stitle-name').hide();
+         	$('#semp-level').hide();
+         	$('#semp-employment-status').hide();
+        	$('#editButton2').hide();
+         	
+         	$('#dept-name').show();
+        	$('#title-name').show();
+        	$('#emp-level').show();
+        	$('#emp-employment-status').show();
+        	$('#editButton').show()
+        	
+        	
+         	
+            $('#editButton').on('click',function(){
+            	
+            	$('#dept-name').hide();
+            	$('#title-name').hide();
+            	$('#emp-level').hide();
+            	$('#emp-employment-status').hide();
+            	$('#editButton').hide();
+            	
+            	 $('#sdept-name').show();
+             	$('#stitle-name').show();
+             	$('#semp-level').show();
+             	$('#semp-employment-status').show();
+             	$('#editButton2').show();
+             	
+             	
+             	
+                 
+            	
+            });
+    	});
     
     function showModal(emp_no){
     	
-    	console.log(emp_no);
+    	/* console.log(emp_no); */
     	
     	getEmployeeById(emp_no).done(function(employee) {
     		var fileName = employee.profile_new;
@@ -566,24 +678,88 @@ th.sortable.desc::after {
             $('#emp-level').val(employee.emp_level);
             $('#emp-email').val(employee.emp_email);
             $('#emp-hired-date').val(employee.emp_hired_date);
+        	$('#emp-retired-date').val(employee.emp_retired_date);
+        	$('#sdept-name').val(employee.dept_no);
+          	$('#stitle-name').val(employee.title_no);
+          	$('#semp-level').val(employee.emp_level);
+            
             $('#emp-employment-status').val(employee.emp_employment_status ? '재직중' : '퇴사');
             $('#emp-add').val(employee.emp_add);
             $('#vac-left').val(employee.vac_left);
             $('#emp-extension-number').val(employee.emp_extension_number);
+            $('#sdept-name').hide();
+        	$('#stitle-name').hide();
+        	$('#semp-level').hide();
+        	$('#semp-employment-status').hide();
+        	$('#editButton2').hide();
+        	
+        	var isEmp = employee.emp_employment_status;
+        	
+        	
+        	if (isEmp) {
+     		console.log('재직 직원');
+			$('#emp-retired-date').hide();
+			$('#retired-label').hide();
+			
+			}else {
+			console.log('퇴사 직원');
+			console.log(employee.emp_retired_date);
+        	$('#editButton').hide();
+			$('#retired-label').show();
+        	$('#emp-retired-date').show();
+        	
+			} 
+        	console.log('이건 뭘까? : '+employee.emp_retired_date);
             
-
             
-
             // 모달을 표시
             myModal.show();
         });
     	
+    }
+    
+    $('#editButton2').on('click', function(){
+    	
+    		var emp_no = $('#emp-no').val();
+    		var dept_no = $('#sdept-name').val();
+    		var title_no = $('#stitle-name').val();
+    		var emp_level = $('#semp-level').val();
+    		var emp_employment_status = $('#semp-employment-status').val();
+    		
+    		var isEmployed = emp_employment_status === 'true';
+    		
+    		console.log('재직여부는? :'+emp_employment_status);
+    		
+    		if (!isEmployed) {		
+    			console.log('재직여부는? :'+emp_employment_status);
+    			alert('재직 여부가 퇴사입니다. 한번 더 확인 부탁드립니다.');
+			}
+    		
+    	
+    	if (confirm('수정 하시겠습니까?')) {
+    		
+    		
+    		console.log('여기다 : '+emp_no);
+    		console.log('부서번호는? :'+dept_no);
+    		console.log('재직여부는? :'+emp_employment_status);
+    		updateEmp(emp_no, dept_no, title_no, emp_level, emp_employment_status);
+    				
+    	
+			}else{
+				showAlert('danger', '수정이 취소되었습니다.');
+				myModal.hide();
+			
+		}
+    	
+
+    });
+    
     function getEmployeeById(emp_no) {//사원 상세보기 
         return $.ajax({
             url: './getEmpDetail.ajax',
             type: 'GET',
             data: {
-                'emp_no': emp_no
+                'emp_no': emp_no     
             },
             dataType: 'JSON',           
             success: function(data) {
@@ -594,9 +770,36 @@ th.sortable.desc::after {
             }
         });
     }
-    	
-    }
     
+    
+    function updateEmp(emp_no, dept_no, title_no, emp_level, emp_employment_status) {//사원 수정
+    	console.log('ajax: '+emp_no);
+        return $.ajax({
+            url: './updateEmp.ajax',
+            type: 'GET',
+            data: {
+                'emp_no': emp_no,
+                'dept_no': dept_no, 
+                'title_no' : title_no, 
+                'emp_level' : emp_level, 
+                'emp_employment_status' : emp_employment_status      
+            },
+            dataType: 'JSON',           
+            success: function(data) {
+            	if (data.isSuccess) {
+                    $('#empModal').modal('hide');
+                    showAlert('success', '사원 수정에 성공했습니다.');
+                    getTotalPages();
+                    getList();
+                } else {
+                    showAlert('danger', '사원 수정에 실패했습니다.');
+                }  
+            },
+            error: function(xhr, status, error) {
+                console.error('사원 수정 오류 발생:', status, error);
+            }
+        });
+    }
     
     
 

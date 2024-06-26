@@ -24,4 +24,8 @@ public interface EmpDAO {
 
 	EmpDTO getEmpDetail(int emp_no);
 
+	boolean updateEmp(EmpDTO empDTO);
+
+	boolean updateEmpRetried(EmpDTO empDTO);
+
 }

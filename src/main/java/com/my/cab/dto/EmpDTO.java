@@ -28,6 +28,8 @@ public class EmpDTO {
 	private String acc_name;
 	private String dept_name;
 	private String title_name;
+	private String vac_left; //잔여 연차
+	private String profile_new; // 프로필 사진
 	
 	public int getEmp_no() {
 		return emp_no;
@@ -142,6 +144,18 @@ public class EmpDTO {
 	}
 	public void setTitle_name(String title_name) {
 		this.title_name = title_name;
+	}
+	public String getVac_left() {
+		return vac_left;
+	}
+	public void setVac_left(String vac_left) {
+		this.vac_left = vac_left;
+	}
+	public String getProfile_new() {
+		return profile_new;
+	}
+	public void setProfile_new(String profile_new) {
+		this.profile_new = profile_new;
 	}
 	
 	

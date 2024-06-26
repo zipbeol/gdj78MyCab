@@ -307,7 +307,6 @@
                                             <div class="invalid-feedback">연료 타입을 선택해 주세요.</div>
                                         </div>
                                     </form>
-
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"

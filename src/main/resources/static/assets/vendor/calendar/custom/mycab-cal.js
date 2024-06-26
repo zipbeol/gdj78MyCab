@@ -24,8 +24,7 @@ document.addEventListener("DOMContentLoaded", function(){
 			selectable: true,
 			selectMirror: true,
 			select: function (arg) {
-				var adjustedEnd = moment(arg.end).subtract(1, 'days');
-				var adjustedEnd = adjustedEnd.format("YYYY-MM-DD");
+				var adjustedEnd = moment(arg.end).subtract(1, 'days').format("YYYY-MM-DD");
 				addScheduleModal(arg,adjustedEnd);		
 			},
 			eventClick: function (arg) {
@@ -34,7 +33,11 @@ document.addEventListener("DOMContentLoaded", function(){
 			editable: true,
 			dayMaxEvents: true,
 			
-			events: function(start,end,timezone,callback){
+			events: function(fetchInfo, successCallback, failureCallback){
+				console.log(fetchInfo);
+				console.log(successCallback);
+				console.log(failureCallback);
+				
 				$.ajax({
 				    type: "GET",
 				    url: "/calendar/listCall.ajax",
@@ -51,17 +54,17 @@ document.addEventListener("DOMContentLoaded", function(){
 				                content: res.schedule_content,
 				                start: res.schedule_start_date,
 				                end: res.schedule_end_date,
-				                color:res.schedule_color
+				                color:res.schedule_color,
+				                category:res.schedule_category
 				                }
 						events.push(event)
-					 };
-					 callback(events);
+					 	};
 					 console.log('Events:', events);
+					 successCallback(events);
 				         
 				    },
 				    error: function(xhr, status, error) {
-				        // 에러 처리
-				        $("#result").html("<p>There was an error: " + error + "</p>");
+				    	alert("캘린더 불러오기에 실패했습니다.");
 				    }
 				});			
 			}
@@ -80,10 +83,10 @@ function addScheduleModal(arg,adjustedEnd){
   	
   	
   	if(startStr != null){
-      document.getElementById("sel-start-date").value = startStr;
+      document.getElementById("create-start-date").value = startStr;
     }
     if(endStr != null){
-      document.getElementById("sel-end-date").value = endStr;
+      document.getElementById("create-end-date").value = endStr;
     }
     	
   // 모달을 표시
@@ -91,12 +94,12 @@ function addScheduleModal(arg,adjustedEnd){
 }
 
 function scheduleDetail(arg){
-	var myModal = new bootstrap.Modal(document.getElementById('scheduleDetailModal'));
+	myModal = new bootstrap.Modal(document.getElementById('scheduleDetailModal'));
 	console.log(arg);
-	document.getElementById('scheduleDetailTitle').value = arg.event.title;
-    document.getElementById('sel-start-date-Detail').value = arg.event.startStr  
-    document.getElementById('sel-end-date-Detail').value = arg.event.endStr
-    document.getElementById('scheduleDetailContent').value = arg.event.extendedProps.content;
+	document.getElementById('detail-title').value = arg.event.title;
+    document.getElementById('detail-start-date').value = arg.event.startStr  
+    document.getElementById('detail-end-date').value = arg.event.endStr
+    document.getElementById('detail-content').value = arg.event.extendedProps.content;
 	 myModal.show();
 	
 }

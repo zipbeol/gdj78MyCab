@@ -332,7 +332,7 @@
             <div class="modal-body">
                 <ul class="list-group">
                     <li class="list-group-item">총 운행 횟수: <span id="totalTrips"></span></li>
-                    <li class="list-group-item">총 운행 거리: <span id="totalDistance"></span> m</li>
+                    <li class="list-group-item">총 운행 거리: <span id="totalDistance"></span> km</li>
                     <li class="list-group-item">총 운행 요금: <span id="totalFare"></span> 원</li>
                 </ul>
             </div>
@@ -541,7 +541,7 @@
         } else {
             startBtnClicked = false;
 
-            var totalDistanceInKm = (totalDistance / 1000).toFixed(2);
+            var totalDistanceInKm = Math.floor((totalDistance / 100) / 10); // 거리 소숫점 1자리 남기고 버리기
 
             // Show the settlement modal with the total values
             $('#totalTrips').text(totalTrips);

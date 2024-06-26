@@ -16,4 +16,6 @@ public interface CalendarDAO {
 
 	int createSchedule(CalendarDTO calendarDTO);
 
+	CalendarDTO calendarDetail(int schedule_idx);
+
 }

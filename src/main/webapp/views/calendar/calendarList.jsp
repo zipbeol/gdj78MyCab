@@ -433,8 +433,7 @@
                       </div>
 	<!-- 일반모달 끝 -->
 	<!-- 일정추가 모달 -->
-	<div class="modal fade" id="scheduleAddModal" tabindex="-1"
-		aria-labelledby="exampleModalLgLabel" aria-hidden="true">
+	<div class="modal fade" id="scheduleAddModal" tabindex="-1" aria-labelledby="exampleModalLgLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -442,44 +441,59 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="mb-3">
-                    <label for="scheduleTitle" class="form-label">제목</label>
-                    <input type="text" class="form-control" id="scheduleTitle" placeholder="일정 제목을 입력하세요" name="scheduleTitle">
+                <div class="input-group mb-3">
+                    <label class="input-group-text" for="create-title">제목</label>
+                    <input type="text" class="form-control" id="create-title" placeholder="일정 제목을 입력하세요" name="create-title">
                 </div>
-                <div class="mb-3">
-                    <label for="sel-start-date" class="form-label">시작 일정</label>
-                    <div class="input-group">
-                        <input type="text" class="datepicker form-control" id="sel-start-date" name="sel-start-date">
-                        <input type="time" class="form-control" name="sel-start-date">
-                    </div>
+                <div class="input-group mb-3">
+                    <label class="input-group-text" for="create-start-date">시작 일정</label>
+                    <input type="text" class="datepicker form-control" id="create-start-date" name="create-start-date">
+                    <select id="create-start-hour" name="create-start-hour">
+                        <c:forEach var="a" begin="0" end="23" varStatus="i">
+                            <option value="${a}">${a}시</option>
+                        </c:forEach>
+                    </select>
+                    <select id="create-start-min" name="create-start-min">
+                        <c:forEach var="a" begin="0" end="59" varStatus="i">
+                            <option value="${a}">${a}분</option>
+                        </c:forEach>
+                    </select>
+                    <span class="input-group-text">~</span>
+                    <input type="text" class="datepicker form-control" id="create-end-date" name="create-end-date">
+                    <select id="create-end-hour" name="create-end-hour">
+                        <c:forEach var="a" begin="0" end="23" varStatus="i">
+                            <option value="${a}">${a}시</option>
+                        </c:forEach>
+                    </select>
+                    <select id="create-end-min" name="create-end-min">
+                        <c:forEach var="a" begin="0" end="59" varStatus="i">
+                            <option value="${a}">${a}분</option>
+                        </c:forEach>
+                    </select>
                 </div>
-                <div class="mb-3">
-                    <label for="sel-end-date" class="form-label">종료 일정</label>
-                    <div class="input-group">
-                        <input type="text" class="datepicker form-control" id="sel-end-date" name="sel-end-date">
-                        <input type="time" class="form-control" name="sel-end-date">
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label for="scheduleCategory" class="form-label">일정 범위</label>
-                    <select class="form-select" id="scheduleCategory">
-                        <option value="개인" style="color: red;">개인</option>
+                <div class="input-group mb-3">
+                    <label class="input-group-text" for="create-category">일정 범위</label>
+                    <select class="form-select" id="create-category" onchange="changeCategoryColor()">
+                        <c:if test="${sessionScope.loginId == '개인'}">
+                            <option value="개인" style="color: red;">개인</option>
+                        </c:if>
                         <option value="부서" style="color: blue;">부서</option>
                         <option value="전사" style="color: green;">전사</option>
                     </select>
                 </div>
-                <div class="mb-3">
-                    <label for="scheduleContent" class="form-label">내용</label>
-                    <textarea class="form-control" id="scheduleContent" placeholder="내용을 입력하세요" rows="3"></textarea>
+                <div class="input-group mb-3">
+                    <label class="input-group-text" for="create-content">내용</label>
+                    <textarea class="form-control" id="create-content" placeholder="내용을 입력하세요" rows="3" style="height: 245px;"></textarea>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="addSchedule()">작성</button>
+                <button type="button" class="btn btn-primary" onclick="addSchedule()" data-bs-dismiss="modal">작성</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
             </div>
         </div>
     </div>
 </div>
+
 	<!-- 일정추가 모달 끝 -->
 	<!-- 일정 상세보기 시작-->
 	<div class="modal fade" id="scheduleDetailModal" tabindex="-1" aria-labelledby="exampleModalLgLabel" aria-hidden="true">
@@ -491,32 +505,47 @@
                 </div>
                 <div class="modal-body">                    
                     <div class="input-group mb-3">
-                        <label class="input-group-text" for="scheduleDetailTitle">제목</label>
-                        <input type="text" class="form-control" id="scheduleDetailTitle" name="scheduleDetailTitle" readonly>
+                        <label class="input-group-text" for="detail-title">제목</label>
+                        <input type="text" class="form-control" id="detail-title" name="detail-title" readonly>
                     </div>                                    
                     <div class="input-group mb-3">
-                        <label class="input-group-text" for="sel-start-date">일정</label>
-                        <input type="text" class="form-control datepicker" id="sel-start-date-Detail" name="sel-start-date-Detail" readonly>
-                        <input type="time" class="form-control" name="sel-start-time-Detail" readonly>
+                        <label class="input-group-text" for="detail-start-date">일정</label>
+                        <input type="text" class="form-control datepicker" id="detail-start-date" name="detail-start-date" readonly>
+                        <select id="detail-start-hour" name="detail-start-hour">
+                        	    <c:forEach var="a" begin="1" end="24" varStatus="i">
+                        	    	<option value="${a}">${a}시</option>
+                        	    </c:forEach>                    	
+                        </select>
+                        <select id="detail-start-min" name="detail-start-min">
+                        	    <c:forEach var="a" begin="1" end="59" varStatus="i">
+                        	    	<option value="${a}">${a}분</option>
+                        	    </c:forEach>                    	
+                        </select>
                         <span class="input-group-text">~</span>
-                        <input type="text" class="form-control datepicker" id="sel-end-date-Detail" name="sel-end-date-Detail" readonly>
-                        <input type="time" class="form-control" name="sel-end-time-Detail" readonly>
+                        <input type="text" class="form-control datepicker" id="detail-end-date" name="detail-end-date" readonly>
+                        <select id="detail-end-hour" name="detail-end-hour">
+                        	    <c:forEach var="a" begin="1" end="24" varStatus="i">
+                        	    	<option value="${a}">${a}시</option>
+                        	    </c:forEach>                    	
+                        </select>
+                        <select id="detail-end-min" name="detail-end-min">
+                        	    <c:forEach var="a" begin="1" end="59" varStatus="i">
+                        	    	<option value="${a}">${a}분</option>
+                        	    </c:forEach>                    	
+                        </select>
                     </div>
                     <div class="input-group mb-3">
-                        <label class="input-group-text" for="scheduleDetailCategory">일정범위</label>
-                        <select class="form-select" id="scheduleDetailCategory" disabled>
+                        <label class="input-group-text" for="detail-category">일정범위</label>
+                        <select class="form-select" id="detail-category" disabled>
                             <option value="개인">개인</option>
                             <option value="부서">부서</option>
                             <option value="전사">전사</option>
                         </select>
                     </div>
+                    
                     <div class="input-group mb-3">
-                        <label class="input-group-text" for="scheduleDetailColor">색깔 선택</label>
-                        <input type="color" class="form-control form-control-color" id="scheduleDetailColor" name="scheduleDetailColor" disabled>
-                    </div>
-                    <div class="input-group mb-3">
-                        <label class="input-group-text" for="scheduleDetailContent">내용</label>
-                        <textarea class="form-control" id="scheduleDetailContent" name="scheduleDetailContent" placeholder="Enter message" rows="3" style="height: 245px;" readonly></textarea>
+                        <label class="input-group-text" for="detail-content">내용</label>
+                        <textarea class="form-control" id="detail-content" name="detail-content" placeholder="Enter message" rows="3" style="height: 245px;" readonly></textarea>
                     </div>  
                 </div>
                 <div class="modal-footer">
@@ -568,24 +597,39 @@
   	var calendar;
 	var startStr;
 	var endStr;
-	var scheduleCategory = document.getElementById('scheduleCategory');
+	var scheduleCategory = document.getElementById('create-category');
 	
 	function addSchedule(){
-		console.log(document.getElementById("sel-start-date").value,document.getElementById("sel-end-date").value);
-		//선택된 색 값 가져오기 
+		// 시작 날짜 밸류 가져오기
+		var startHour = document.getElementById('create-start-hour')
+		var startMinute = document.getElementById('create-start-min')		
+		var startDate = document.getElementById("create-start-date");
+		
+		// 종료 날짜 밸류 가져오기
+		var endDate = document.getElementById("create-end-date");
+		var endHour = document.getElementById("create-end-hour");
+		var startMinute = document.getElementById("create-end-min");
+		
+		
+		// 날짜 형식에 맞게 변환
+		var startDateTime = adjustDateTime(startDate,startHour,startMinute);
+		var endDateTime = adjustDateTime(endDate,endHour,startMinute);
+		// 종료 날짜 가져오기
+		var endHour = document
 		
 		var selectedOption = scheduleCategory.options[scheduleCategory.selectedIndex];
         var color = selectedOption.style.color;
+       /* 	   아작스 안에 들어갈 값     	'schedule_end_date': document.getElementById("sel-end-date").value, */
         console.log(color)
 		$.ajax({
 	        type: "GET",
 	        url: "/calendar/createSchedule.ajax",
 	        data: {
-	        	'schedule_name': document.getElementById("scheduleTitle").value,
-	        	'schedule_content': document.getElementById("scheduleTitle").value,
-	        	'schedule_start_date': document.getElementById("sel-start-date").value,
-	        	'schedule_end_date': document.getElementById("sel-end-date").value,
-	        	'schedule_category': document.getElementById("scheduleCategory").value,
+	        	'schedule_name': document.getElementById("create-title").value,
+	        	'schedule_content': document.getElementById("create-content").value,
+	        	'schedule_start_date': startDateTime,
+	        	'schedule_end_date': endDateTime,
+	        	'schedule_category': document.getElementById("create-category").value,
 	        	'schedule_color': color,
 	        	'schedule_emp_no': '30001' //나중에 세션으로 처리
 	        },
@@ -606,9 +650,42 @@
 		
 	};
   //일정 추가
-  
+  function scheduleDetailModalHide(){
+	  var modal = document.getElementById('scheduleDetailModal');
+	  modal.style.display = "none";	  
+  }
   
   moment.locale('ko');	
+  
+  
+  // 일정 형식변환 
+  function adjustDateTime(date,hour,min){
+	  var parseHour = hour.options[hour.selectedIndex].value;
+	  var parseMin = min.options[min.selectedIndex].value;
+	  var parseDate = date.value;
+	  // 0시 -> 00시 / 1시 -> 01시 로 변환 
+	  parseHour = parseHour.padStart(2, '0');
+	  parseMin = parseMin.padStart(2, '0');
+	  var dateTime = parseDate+'T'+parseHour+':'+parseMin+':'+'00';
+	  console.log(dateTime);
+	  return dateTime;
+  }
+  
+  
+  // 일정 카테고리 선택시 색생 변경
+  function changeCategoryColor(){
+	  console.log("색깔변경할거지롱");
+	 var val = document.getElementById("create-category");
+	 var valOption = val.options[val.selectedIndex];
+	 var getColor = valOption.style.color;
+	 document.getElementById("create-category").style.color=getColor;	 
+	 
+	 console.log(getColor);
+  }
+  
+  //수정버튼
+  // unction 
+  
 </script>
 
 </html>

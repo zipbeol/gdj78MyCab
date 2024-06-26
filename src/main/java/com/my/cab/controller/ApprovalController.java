@@ -6,16 +6,19 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.my.cab.dto.ApprovalWriteFromDTO;
+
 import com.my.cab.service.ApprovalService;
 
 
@@ -27,6 +30,17 @@ public class ApprovalController {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired ApprovalService apprservice;
 	
+    private static final String UPLOAD_DIR = "C:/upload"; // 저장 디렉토리
+
+    // 애플리케이션 시작 시 저장 디렉토리 생성
+    static {
+        File uploadDir = new File(UPLOAD_DIR);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdirs();
+        }
+    }
+	
+    // 기안서 작성 페이징 이동 요청
 	@RequestMapping(value="approval/approvalWriteForm.go")
 	public String approvalWriteForm(Model model) {
 
@@ -39,24 +53,16 @@ public class ApprovalController {
 		return "approval/approvalWriteForm";
 	}
 	
-    private static final String UPLOAD_DIR = "C:/upload"; // 저장 디렉토리
 
-    // 애플리케이션 시작 시 저장 디렉토리 생성
-    static {
-        File uploadDir = new File(UPLOAD_DIR);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdirs();
-        }
-    }
-
-    @PostMapping("/save-html")
+	//기안서 작성 후 html 파일 경로 저장
+    @PostMapping("/approval/save-html.go")
     public String saveHtmlFile(@RequestParam("htmlContent") String htmlContent, Model model) {
         try {
         	
         	System.out.println("Received HTML content: " + htmlContent);
             // 현재 시간을 밀리초 단위로 가져옴
             String timeStamp = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date(System.currentTimeMillis()));
-            String fileName = "saved_file_" + timeStamp + ".html";
+            String fileName = "approval_file_" + timeStamp + ".html"; // session 에 저장 되는 loginId 이용하여 변경
             String filePath = UPLOAD_DIR + File.separator + fileName; // 저장 경로 수정
 
             // HTML 파일 저장
@@ -64,11 +70,6 @@ public class ApprovalController {
             FileOutputStream fos = new FileOutputStream(file);
             fos.write(htmlContent.getBytes());
             fos.close();
-
-           /* // 파일 경로를 텍스트 파일에 저장
-            try (FileWriter fw = new FileWriter("file_paths.txt", true)) {
-                fw.write(filePath + "\n");
-            }*/
             
             // 파일 경로를 데이터베이스에 저장
             apprservice.saveHtmlFilePath(filePath);
@@ -83,6 +84,7 @@ public class ApprovalController {
             return "error"; 
         }
     }
+    
     
 }
 

@@ -81,7 +81,7 @@ public class CalendarService {
 	public Map<String, Object> divideDateTime(LocalDateTime date) {
 		Map<String, Object>map = new HashMap<String, Object>();
 		if(date != null) {
-			date.getYear();
+			/* String dateStr= date.getYear() */
 			
 			map.put("getHout", date.getHour());
 			map.put("getMin", date.getMinute());

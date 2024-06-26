@@ -91,10 +91,7 @@ th.sortable.desc::after {
 .button-position{
 	margin-left: 346px;
 }
-.resetPosition{
-	margin-left: 170px;
-    margin-bottom: 5px;
-}
+
 </style>
 
 
@@ -165,7 +162,7 @@ th.sortable.desc::after {
 					<!-- Container starts -->
 					<div class="container-fluid">
 						<!-- Alert placeholder start -->
-						<div id="alertPlaceholder" class="alert-placeholder"></div>
+						<div id="alertPlaceholder"></div>
 						<!-- Alert placeholder end -->
 						<!-- Row start -->
 						<div class="row">
@@ -177,33 +174,15 @@ th.sortable.desc::after {
 									<div class="card-body">
 										<!-- 여기에 코딩 -->
 										<!-- 검색창 시작 -->
-										<div
-											class="search-filter-container border border-2 p-3 rounded mb-3">
-											<div class="row mb-3">
-												<div class="col-10">
-													<div class="col-xxl-6 col-xl-12">
-														<div class="card mb-3">
-															<div class="card-header">
-																<h5 class="card-title">Line Graph</h5>
-															</div>
-															<div class="card-body">
-																<div id="lineGraph"></div>
-															</div>
-														</div>
-													</div>
-													<div class="row mb-3">
-													<div class="col-xxl-6 col-xl-12">
-														<div class="card mb-3">
-															<div class="card-header">
-																<h5 class="card-title">Line Graph</h5>
-															</div>
-															<div class="card-body">
-																<div id="barGraph"></div>
-															</div>
-														</div>
-													</div>
-													</div>
-
+										<div class="search-filter-container border border-2 p-3 rounded mb-3">
+										 <div class="row mb-3">
+                                            <div class="col-10">
+                                            </div>
+                                            <div class="col-2 text-end d-md-flex justify-content-md-end gap-2">
+													<input type="button" class="btn btn-secondary resetPosition"
+														onclick="filterReset()" value="초기화"> <input
+														type="button" class="btn btn-primary" onclick="getList()"
+														value="검색" style="display: none">
 												</div>
 											<div class="row">
 												<div class="col-4"></div>
@@ -217,11 +196,6 @@ th.sortable.desc::after {
 													<label for="filter-emp-is-retired" class="form-label">재직여부
 														필터</label>
 														
-													<input type="button" class="btn btn-secondary resetPosition"
-														onclick="filterReset()" value="초기화"> <input
-														type="button" class="btn btn-primary" onclick="getList()"
-														value="검색" style="display: none">
-												
 												</div>
 											</div>
 											<div class="row mb-3">
@@ -427,18 +401,6 @@ th.sortable.desc::after {
 <!-- Required jQuery first, then Bootstrap Bundle JS -->
 <script src="/assets/js/jquery.min.js"></script>
 <script src="/assets/js/bootstrap.bundle.min.js"></script>
-<script src="/assets/vendor/apex/custom/graphs/line.js"></script>
-<script src="/assets/vendor/apex/apexcharts.min.js"></script>
-<script src="/assets/vendor/apex/custom/graphs/area.js"></script>
-    <script src="/assets/vendor/apex/custom/graphs/line.js"></script>
-    <script src="/assets/vendor/apex/custom/graphs/bar.js"></script>
-    <script src="/assets/vendor/apex/custom/graphs/column-area.js"></script>
-    <script src="/assets/vendor/apex/custom/graphs/candlestick.js"></script>
-    <script src="/assets/vendor/apex/custom/graphs/heatmap.js"></script>
-    <script src="/assets/vendor/apex/custom/graphs/donut.js"></script>
-    <script src="/assets/vendor/apex/custom/graphs/pie.js"></script>
-    <script src="/assets/vendor/apex/custom/graphs/funnel.js"></script>
-    <script src="/assets/vendor/apex/custom/graphs/pyramid.js"></script>
 
 <!-- *************
         ************ Vendor Js Files *************

@@ -252,7 +252,7 @@
                                                             </div>
                                                             <div class="mb-3">
                                                               <label for="exp_content" class="form-label">지출 내용:</label>
-                                                              <textarea id="exp_content" name="exp_content" class="form-control" rows="3" required></textarea>
+                                                              <textarea id="exp_content" name="exp_content" class="form-control" rows="3" maxlength="500" required></textarea>
                                                               <div class="invalid-feedback">지출 내용을 입력해주세요</div>
                                                           </div>
                                                             <div class="modal-footer">

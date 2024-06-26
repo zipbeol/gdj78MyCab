@@ -473,5 +473,7 @@ function selectApprover(dept, name) {
     console.log("Approver selected: " + name + " from " + dept);
     $('#approverSelectModal').modal('hide'); // jQuery를 사용하여 모달 창을 닫습니다.
 }
+
+
 </script>
 </html>

@@ -9,6 +9,17 @@ $(".datepicker").daterangepicker({
 		daysOfWeek: ['일', '월', '화', '수', '목', '금', '토'],
         monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']
 	},
+	onSelect: function(){
+		console.log("데이트피커 클릭됨");
+		var startStr = document.getElementsByName('sel-start-date')[0];
+	    var endStr = document.getElementsByName('sel-end-date')[0];
+	    console.log(startStr);
+	    console.log(endStr);
+	    if (startStr.value>endStr.value) {
+	      alert("시작일보다 종료일이 더 빠릅니다");
+	    }
+   		startStr.focus;
+	}
 });
 
 // Date Range Opens Left

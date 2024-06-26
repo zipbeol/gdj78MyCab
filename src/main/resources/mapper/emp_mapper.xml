@@ -135,6 +135,60 @@
         </where>
     </select>
     
+    <select id="getEmpDetail" resultType="emp">
+	SELECT
+	e.emp_no,
+	e.emp_name,
+	e.dept_no,
+	e.title_no,
+	e.emp_email,
+	e.emp_hired_date,
+	e.emp_retired_date,
+	e.emp_add,
+	e.emp_extension_number,
+	e.emp_level,
+	e.emp_employment_status,
+	t.title_name,
+	d.dept_name,
+	v.vac_left,
+	pp.profile_new
+	FROM
+	employee e
+	JOIN
+	department d ON e.dept_no = d.dept_no
+	JOIN
+	title t ON e.title_no = t.title_no
+	JOIN
+	vacation v ON e.emp_no = v.emp_no
+	LEFT JOIN
+	profile_photo pp ON e.emp_no = pp.emp_no
+	WHERE
+	e.emp_no = #{param1}
+    </select>
+    
+    <update id="updateEmp" parameterType="emp">
+    UPDATE employee
+	SET
+    dept_no = #{dept_no},
+    title_no = #{title_no},
+    emp_level = #{emp_level}
+	WHERE emp_no = #{emp_no};
+    </update>
+    
+    
+    
+    <update id="updateEmpRetried" parameterType="emp">
+    UPDATE employee
+	SET
+    dept_no = #{dept_no},
+    title_no = #{title_no},
+    emp_level = #{emp_level},
+    emp_employment_status = 0,
+    emp_retired_date = CURDATE()
+	WHERE emp_no = #{emp_no};
+    </update>
+    
+    
     
 
 

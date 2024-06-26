@@ -41,6 +41,30 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
     <style>
+        .start-message-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        .alert-placeholder {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1050;
+            margin: 0;
+            padding: 10px;
+            text-align: center;
+        }
+
         .dot {
             overflow: hidden;
             float: left;
@@ -52,12 +76,12 @@
         .dotOverlay {
             position: relative;
             bottom: 10px;
-            /*border-radius: 6px;*/
-            /*border: 1px solid #ccc;*/
-            /*border-bottom: 2px solid #ddd;*/
-            /*float: left;*/
-            /*font-size: 12px;*/
-            /*padding: 5px;*/
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            border-bottom: 2px solid #ddd;
+            float: left;
+            font-size: 12px;
+            padding: 10px;
             background: #fff;
         }
 
@@ -88,17 +112,34 @@
             left: 5px;
             list-style: none;
             margin: 0;
+            padding: 0;
+        }
+
+        .distanceInfo li {
+            margin-bottom: 5px;
         }
 
         .distanceInfo .label {
             display: inline-block;
-            width: 50px;
+            width: 80px;
         }
 
-        .distanceInfo:after {
-            content: none;
+        table.table th, table.table td {
+            text-align: center;
+            vertical-align: middle;
         }
 
+        .driver-photo-placeholder {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 2px dashed #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ccc;
+            font-size: 14px;
+        }
     </style>
 
 
@@ -177,61 +218,131 @@
                                     <h4 class="card-title">택시 시뮬레이터</h4>
                                 </div>
                                 <div class="card-body">
-                                    <h1>GPS 현재 위치 확인</h1>
-                                    <p id="location">위치 정보가 여기에 표시됩니다.</p>
+                                    <div class="row d-flex align-items-center">
+                                        <div>
+                                            <img id="driver_photo" src="" alt="기사사진" class="rounded-circle me-2"
+                                                 style="width: 100px; height: 100px; display: none">
+                                        </div>
+                                        <div>
+                                            <h2 id="driver_name" class="me-2">님 안녕하세요!</h2>
+                                        </div>
+                                    </div>
                                     <div class="row mb-3">
                                         <div class="col-3">
-                                            <select class="form-select">
-                                                <option value="">기사 선택</option>
-                                            </select>
+                                            <button class="btn btn-outline-primary" data-bs-toggle="modal"
+                                                    data-bs-target="#driverSelectionModal">기사 선택
+                                            </button>
                                         </div>
-                                        <div class="col-6">
-
-                                        </div>
+                                        <div class="col-6"></div>
                                         <div class="col-3 text-end">
                                             <input type="button" class="btn btn-primary" id="startBtn" value="운행 시작">
                                         </div>
                                     </div>
-                                    <div id="map" style="width:100%;height:350px;">
-
+                                    <div id="map" style="position:relative; width:100%;height:350px;">
+                                        <div id="startMessageOverlay" class="start-message-overlay">
+                                            운행 시작을 해주세요.
+                                        </div>
                                     </div>
-                                    <hr>
-                                    <h1>Route Finder</h1>
-                                    <form id="routeForm" onsubmit="calculateRoute(); return false;">
-                                        <label for="origin">Origin:</label>
-                                        <input type="text" id="origin" name="origin" required>
-                                        <br><br>
-                                        <label for="destination">Destination:</label>
-                                        <input type="text" id="destination" name="destination" required>
-                                        <br><br>
-                                        <input type="submit" value="Find Route">
-                                    </form>
-                                    <div id="searchMap"></div>
+
                                 </div>
+                                <hr>
+                                <table class="table mb-5">
+                                    <thead>
+                                    <tr>
+                                        <th>운행 회차</th>
+                                        <th>운행 출발지</th>
+                                        <th>운행 도착지</th>
+                                        <th>운행 거리</th>
+                                        <th>운행 요금</th>
+                                        <th>운행 시간</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="trip-body">
+
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
-                    <!-- Row end -->
                 </div>
-                <!-- Container ends -->
-
+                <!-- Row end -->
             </div>
-            <!-- App body ends -->
-
-            <!-- App footer start -->
-            <div class="app-footer">
-                <span>GDJ78FINALPROJECTMYCAB</span>
-            </div>
-            <!-- App footer end -->
+            <!-- Container ends -->
 
         </div>
-        <!-- App container ends -->
+        <!-- App body ends -->
+
+        <!-- App footer start -->
+        <div class="app-footer">
+            <span>GDJ78FINALPROJECTMYCAB</span>
+        </div>
+        <!-- App footer end -->
 
     </div>
-    <!-- Main container end -->
+    <!-- App container ends -->
+
+</div>
+<!-- Main container end -->
 
 </div>
 <!-- Page wrapper end -->
+]
+<!-- Driver Selection Modal -->
+<div class="modal fade" id="driverSelectionModal" tabindex="-1" aria-labelledby="driverSelectionModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="driverSelectionModalLabel">기사 선택</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="searchDriverInput" placeholder="기사 이름 검색">
+                </div>
+                <div class="driver-list" style="max-height: 300px; overflow-y: auto;">
+                    <ul class="list-group">
+                        <c:forEach var="driver" items="${drivers}">
+                            <li class="list-group-item driver-item d-flex align-items-center"
+                                data-driver-id="${driver.driver_idx}">
+                                <img src="/upload/${driver.driver_photo}" alt="${driver.driver_name}"
+                                     class="rounded-circle me-2"
+                                     style="width: 40px; height: 40px;">
+                                <span>${driver.driver_name}</span>
+                            </li>
+                        </c:forEach>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                <button type="button" class="btn btn-primary" id="selectDriverBtn">선택</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Settlement Modal -->
+<div class="modal fade" id="settlementModal" tabindex="-1" aria-labelledby="settlementModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="settlementModalLabel">운행 정산</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group">
+                    <li class="list-group-item">총 운행 횟수: <span id="totalTrips"></span></li>
+                    <li class="list-group-item">총 운행 거리: <span id="totalDistance"></span> km</li>
+                    <li class="list-group-item">총 운행 요금: <span id="totalFare"></span> 원</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 <!-- *************
         ************ JavaScript Files *************
@@ -262,16 +373,36 @@
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6a9392fb6c3d719802f976bbff4678eb&libraries=services"></script>
 
 <script>
+    // 구디 아카데미 좌표
     var latitude = 37.4763;
     var longitude = 126.8798;
+    var tripStartLocation;
+    var tripEndLocation;
+    var tripCount = 1;
 
+    var tripRecord = {
+        recordLat: [],
+        recordLng: []
+    };
+
+
+    var selectedDriverId;
+    var selectedDriverPhoto;
+    var selectedDriverName;
+    var geocoder;
+    var distance;
+    var timeString = '';
+    var money = 0;
+    var lng = 0;
+    var lat = 0;
+    var startBtnClicked = false;
     var mapContainer = document.getElementById('map'), // 지도를 표시할 div
         mapOption = {
             center: new kakao.maps.LatLng(latitude, longitude), // 지도의 중심좌표
             level: 1 // 지도의 확대 레벨
         };
 
-    var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+    var map;
 
     var drawingFlag = false; // 선이 그려지고 있는 상태를 가지고 있을 변수입니다
     var moveLine; // 선이 그려지고 있을때 마우스 움직임에 따라 그려질 선 객체 입니다
@@ -279,24 +410,213 @@
     var distanceOverlay; // 선의 거리정보를 표시할 커스텀오버레이 입니다
     var dots = []; // 선이 그려지고 있을때 클릭할 때마다 클릭 지점과 거리를 표시하는 커스텀 오버레이 배열입니다.
 
-    document.getElementById('startBtn').addEventListener('click', function (evt) {
-        var clickPosition = new kakao.maps.LatLng(latitude, longitude);
-        start({latLng: clickPosition});
+    var totalTrips = 0;
+    var totalDistance = 0;
+    var totalFare = 0;
+
+    $('#startBtn').click(function () {
+        if (!selectedDriverId) {
+            showAlert('danger', '기사를 선택 후 운행을 시작해 주세요.');
+            return;
+        }
+        showAlert('success', '운행을 시작 합니다.');
+
+        if (!startBtnClicked) {
+            startBtnClicked = true;
+            $('#startMessageOverlay').hide();
+            map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+            // 버튼 텍스트와 클래스 변경
+            $(this).val('운행 종료').removeClass('btn-primary').addClass('btn-secondary');
+
+            // 지도 확대 레벨 변경
+            // 지도 확대 레벨 순차적 변경
+            setTimeout(function () {
+                map.setLevel(2);
+            }, 1000);
+            setTimeout(function () {
+                map.setLevel(3);
+            }, 1300); // 2초 후 레벨 3으로 변경
+            setTimeout(function () {
+                map.setLevel(4);
+            }, 1600); // 4초 후 레벨 4으로 변경
+            setTimeout(function () {
+                map.setLevel(5);
+                // 지도에 클릭 이벤트를 등록합니다
+                // 지도를 클릭하면 선 그리기가 시작됩니다 그려진 선이 있으면 지우고 다시 그립니다
+                kakao.maps.event.addListener(map, 'click', function (evt) {
+                    if (!startBtnClicked) {
+                        return; // 운행 시작 전에는 클릭 이벤트 무시
+                    }
+                    start(evt);
+                });
+
+                // 지도에 마우스무브 이벤트를 등록합니다
+                // 선을 그리고있는 상태에서 마우스무브 이벤트가 발생하면 그려질 선의 위치를 동적으로 보여주도록 합니다
+                kakao.maps.event.addListener(map, 'mousemove', function (mouseEvent) {
+                    // 지도 마우스무브 이벤트가 발생했는데 선을 그리고있는 상태이면
+                    if (drawingFlag) {
+                        // 마우스 커서의 현재 위치를 얻어옵니다
+                        var mousePosition = mouseEvent.latLng;
+
+                        // 마우스 클릭으로 그려진 선의 좌표 배열을 얻어옵니다
+                        var path = clickLine.getPath();
+
+                        // 마우스 클릭으로 그려진 마지막 좌표와 마우스 커서 위치의 좌표로 선을 표시합니다
+                        var movepath = [path[path.length - 1], mousePosition];
+                        moveLine.setPath(movepath);
+                        moveLine.setMap(map);
+
+                        distance = Math.round(clickLine.getLength() + moveLine.getLength()); // 선의 총 거리를 계산합니다
+                    }
+                });
+
+                // 지도에 마우스 오른쪽 클릭 이벤트를 등록합니다
+                // 선을 그리고있는 상태에서 마우스 오른쪽 클릭 이벤트가 발생하면 선 그리기를 종료합니다
+                kakao.maps.event.addListener(map, 'rightclick', function (mouseEvent) {
+                    if (drawingFlag) {
+                        moveLine.setMap(null);
+                        moveLine = null;
+
+                        var path = clickLine.getPath();
+                        if (path.length > 1) {
+                            if (dots[dots.length - 1].distance) {
+                                dots[dots.length - 1].distance.setMap(null);
+                                dots[dots.length - 1].distance = null;
+                            }
+
+                            distance = Math.round(clickLine.getLength());
+                            var content = getTimeHTML(distance);
+
+                            showDistance(content, path[path.length - 1]);
+
+                            geocoder.coord2Address(parseFloat(lat), parseFloat(lng), function (result, status) {
+                                if (status === kakao.maps.services.Status.OK) {
+                                    tripEndLocation = result[0].address.address_name;
+                                    processTripEnd(); // 주소 값이 설정된 후 호출
+
+                                    $.ajax({
+                                        url: '/triprecord/insertTripRecord.ajax',
+                                        type: 'POST',
+                                        contentType: 'application/json',
+                                        data: JSON.stringify({
+                                            'trip_record_driver_id': selectedDriverId,
+                                            'trip_record_start_location': tripStartLocation,
+                                            'trip_record_end_location': tripEndLocation,
+                                            'trip_record_distance': distance,
+                                            'trip_record_fare': money,
+                                            'recordLats': tripRecord.recordLat,
+                                            'recordLngs': tripRecord.recordLng
+                                        }),
+                                        dataType: 'JSON',
+                                        success: function (data) {
+                                            console.log(data);
+                                        },
+                                        error: function (error) {
+                                            console.log(error);
+                                        },
+                                    });
+
+                                    // Update global variables with the current trip values
+                                    totalTrips++;
+                                    totalDistance += distance;
+                                    totalFare += money;
+                                } else {
+                                    console.error('Failed to get address: ' + status);
+                                }
+                            });
+
+                        } else {
+                            deleteClickLine();
+                            deleteCircleDot();
+                            deleteDistance();
+                        }
+
+                        drawingFlag = false;
+                    }
+                });
+
+            }, 1900); // 6초 후 레벨 5으로 변경
+
+        } else {
+            startBtnClicked = false;
+
+            var totalDistanceInKm = Math.floor((totalDistance / 100) / 10); // 거리 소숫점 1자리 남기고 버리기
+
+            // Show the settlement modal with the total values
+            $('#totalTrips').text(totalTrips);
+            $('#totalDistance').text(totalDistanceInKm);
+            $('#totalFare').text(totalFare.toLocaleString());
+            $('#settlementModal').modal('show');
+
+            // 버튼 텍스트와 클래스 변경
+            $(this).val('운행 시작').removeClass('btn-secondary').addClass('btn-primary');
+        }
+    });
+    $('#settlementModal').on('hidden.bs.modal', function () {
+        location.reload();
+    });
+    $('#selectDriverBtn').click(function () {
+        if (selectedDriverId) {
+            // 선택된 기사의 정보를 처리합니다.
+            $('#driver_photo').attr('src', selectedDriverPhoto).show();
+            $('#driver_name').text(selectedDriverName + ' 님 안녕하세요!');
+            $('#driverSelectionModal').modal('hide');
+
+        } else {
+            alert('기사를 선택하세요.');
+        }
     });
 
-    // 지도에 클릭 이벤트를 등록합니다
-    // 지도를 클릭하면 선 그리기가 시작됩니다 그려진 선이 있으면 지우고 다시 그립니다
-    kakao.maps.event.addListener(map, 'click', function (evt) {
-        start(evt);
+    $(document).on('click', '.driver-item', function () {
+        $('.driver-item').removeClass('active');
+        $(this).addClass('active');
+        selectedDriverId = $(this).data('driver-id');
+        selectedDriverPhoto = $(this).find('img').attr('src');
+        selectedDriverName = $(this).find('span').text();
     });
+
+    $('#searchDriverInput').on('input', function () {
+        var searchValue = $(this).val().toLowerCase();
+        $('.driver-item').each(function () {
+            var driverName = $(this).text().toLowerCase();
+            if (driverName.includes(searchValue)) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    });
+
 
     function start(mouseEvent) {
+
+        if (!selectedDriverId) {
+            showAlert('danger', '기사를 선택후 운행을 시작해 주세요.');
+            return;
+        }
+
         // 마우스로 클릭한 위치입니다
         var clickPosition = mouseEvent.latLng;
-        console.log(mouseEvent);
+        lat = clickPosition.La.toFixed(4);
+        lng = clickPosition.Ma.toFixed(4);
+
+        tripRecord.recordLat.push(lat);
+        tripRecord.recordLng.push(lng);
+
+        // console.log(tripRecord);
+
 
         // 지도 클릭이벤트가 발생했는데 선을 그리고있는 상태가 아니면
         if (!drawingFlag) {
+            geocoder = new kakao.maps.services.Geocoder();
+
+            geocoder.coord2Address(lat, lng, function (result, status) {
+                if (status === kakao.maps.services.Status.OK) {
+                    tripStartLocation = result[0].address.address_name;
+                    // console.log(tripStartLocation);
+                }
+            });
             // 상태를 true로, 선이 그리고있는 상태로 변경합니다
             drawingFlag = true;
 
@@ -341,74 +661,28 @@
             // 다시 선에 좌표 배열을 설정하여 클릭 위치까지 선을 그리도록 설정합니다
             clickLine.setPath(path);
 
-            var distance = Math.round(clickLine.getLength());
+            distance = Math.round(clickLine.getLength());
             displayCircleDot(clickPosition, distance);
         }
     }
 
-    // 지도에 마우스무브 이벤트를 등록합니다
-    // 선을 그리고있는 상태에서 마우스무브 이벤트가 발생하면 그려질 선의 위치를 동적으로 보여주도록 합니다
-    kakao.maps.event.addListener(map, 'mousemove', function (mouseEvent) {
-        // 지도 마우스무브 이벤트가 발생했는데 선을 그리고있는 상태이면
-        if (drawingFlag) {
-            // 마우스 커서의 현재 위치를 얻어옵니다
-            var mousePosition = mouseEvent.latLng;
-
-            // 마우스 클릭으로 그려진 선의 좌표 배열을 얻어옵니다
-            var path = clickLine.getPath();
-
-            // 마우스 클릭으로 그려진 마지막 좌표와 마우스 커서 위치의 좌표로 선을 표시합니다
-            var movepath = [path[path.length - 1], mousePosition];
-            moveLine.setPath(movepath);
-            moveLine.setMap(map);
-
-            var distance = Math.round(clickLine.getLength() + moveLine.getLength()); // 선의 총 거리를 계산합니다
-            //     content = '<div class="dotOverlay distanceInfo">총거리 <span class="number">' + distance + '</span>m</div>'; // 커스텀오버레이에 추가될 내용입니다
-
-            // 거리정보를 지도에 표시합니다
-            // showDistance(content, mousePosition);
-        }
-    });
-
-    // 지도에 마우스 오른쪽 클릭 이벤트를 등록합니다
-    // 선을 그리고있는 상태에서 마우스 오른쪽 클릭 이벤트가 발생하면 선 그리기를 종료합니다
-    kakao.maps.event.addListener(map, 'rightclick', function (mouseEvent) {
-        // 지도 오른쪽 클릭 이벤트가 발생했는데 선을 그리고있는 상태이면
-        if (drawingFlag) {
-            // 마우스무브로 그려진 선은 지도에서 제거합니다
-            moveLine.setMap(null);
-            moveLine = null;
-
-            // 마우스 클릭으로 그린 선의 좌표 배열을 얻어옵니다
-            var path = clickLine.getPath();
-
-            // 선을 구성하는 좌표의 개수가 2개 이상이면
-            if (path.length > 1) {
-                // 마지막 클릭 지점에 대한 거리 정보 커스텀 오버레이를 지웁니다
-                if (dots[dots.length - 1].distance) {
-                    dots[dots.length - 1].distance.setMap(null);
-                    dots[dots.length - 1].distance = null;
-                }
-
-                var distance = Math.round(clickLine.getLength()), // 선의 총 거리를 계산합니다
-                    content = getTimeHTML(distance); // 커스텀오버레이에 추가될 내용입니다
-
-                // 그려진 선의 거리정보를 지도에 표시합니다
-                showDistance(content, path[path.length - 1]);
-
-            } else {
-                // 선을 구성하는 좌표의 개수가 1개 이하이면
-                // 지도에 표시되고 있는 선과 정보들을 지도에서 제거합니다.
-                deleteClickLine();
-                deleteCircleDot();
-                deleteDistance();
-            }
-
-            // 상태를 false로, 그리지 않고 있는 상태로 변경합니다
-            drawingFlag = false;
-
-        }
-    });
+    // 테이블 추가
+    function processTripEnd() {
+        var content = ''
+            + '<tr>'
+            + '<td>' + tripCount + '</td>'
+            + '<td>' + tripStartLocation + '</td>'
+            + '<td>' + tripEndLocation + '</td>'
+            + '<td>' + distance + 'm' + '</td>'
+            + '<td>' + money.toLocaleString() + '원' + '</td>'
+            + '<td>' + timeString + '</td>';
+        $('#trip-body').append(content);
+        tripCount++;
+        // console.log(lat, ' ', lng);
+        // var endPosition = new kakao.maps.LatLng(lat, lng);
+        // console.log(endPosition);
+        // map.setCenter(endPosition);
+    }
 
     // 클릭으로 그려진 선을 지도에서 제거하는 함수입니다
     function deleteClickLine() {
@@ -488,49 +762,43 @@
                 dots[i].distance.setMap(null);
             }
         }
-
         dots = [];
     }
 
     function getTimeHTML(distance) {
-        // 자동차 서울시 평균 시속 30km/h 이고, 초속은 30 * 1000 / 3600 = 8.33m/s 입니다
         var carSpeed = 30 * 1000 / 3600; // meters per second
-        var totalTimeInSeconds = distance / carSpeed | 0; // 초 단위로 시간 계산
-        console.log(totalTimeInSeconds);
+        var totalTimeInSeconds = Math.floor(distance / carSpeed); // 초 단위로 시간 계산
 
         var hours = Math.floor(totalTimeInSeconds / 3600);
         var minutes = Math.floor((totalTimeInSeconds % 3600) / 60);
         var seconds = totalTimeInSeconds % 60;
 
-        var timeString = '';
+        timeString = '';
         if (hours > 0) {
-            timeString += hours + ' 시간 ';
+            timeString += '<span class="number">' + hours + '</span> 시간 ';
         }
-        if (minutes > 0 || hours > 0) { // 시간이 있으면 분도 표시, 분만 있을 경우에도 표시
-            timeString +=  minutes + '분 ';
-        }
-        timeString += seconds + '초';
+        timeString += '<span class="number">' + minutes + '</span> 분 ';
 
-        var money = 0;
-        console.log(distance);
+        //
+        // console.log(hours);
+        // console.log(minutes);
+        // console.log(seconds);
+        // console.log(timeString);
+
+        money = 0;
         if (distance < 1600) {
-            console.log(distance + ' <= 1600');
             money = 4800;
         } else {
-            console.log(distance + ' > 1600');
             var extraDistance = distance - 1600;
 
-            // 131m당 100원 추가
             var distanceCharges = Math.ceil(extraDistance / 131) * 100;
 
-            // 30초당 100원 추가
             var extraTimeInSeconds = extraDistance / carSpeed;
             var timeCharges = Math.ceil(extraTimeInSeconds / 30) * 100; // 30초당 100원
 
             money = 4800 + distanceCharges + timeCharges;
         }
 
-        // 거리와 시간을 가지고 HTML Content를 만들어 리턴합니다
         var content = '<ul class="dotOverlay distanceInfo">';
         content += '    <li>';
         content += '        <span class="label">총거리</span><span class="number">' + distance + '</span>m';
@@ -539,7 +807,7 @@
         content += '        <span class="label">예상 시간</span>' + timeString;
         content += '    </li>';
         content += '    <li>';
-        content += '        <span class="label">예상 금액</span>' + money + '원';
+        content += '        <span class="label">예상 금액</span><span class="number">' + money.toLocaleString() + '</span> 원';
         content += '    </li>';
         content += '</ul>';
 

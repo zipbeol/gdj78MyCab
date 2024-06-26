@@ -610,7 +610,7 @@
             for (item of list) {
                 var driver_is_retired = item.driver_is_retired === '0' ? '재직중' : '퇴사';
                 content += '<tr class="driver-list-tbody-tr" id="' + item.driver_idx + '">'
-                    + '<td class="text-center"><img src="' + uploadDir + item.driver_photo + '" style="width: 50px; height: 50px"></td>'
+                    + '<td class="text-center"><img class="rounded-circle" src="' + uploadDir + item.driver_photo + '" style="width: 50px; height: 50px"></td>'
                     + '<td class="text-center">' + item.driver_name + '</td>'
                     + '<td class="text-center">' + item.driver_registration_date + '</td>'
                     + '<td class="text-center">' + driver_is_retired + '</td>'

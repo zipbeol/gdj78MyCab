@@ -3,7 +3,16 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd"
 >
 
-<mapper namespace="com.my.cab.dao.">
+<mapper namespace="com.my.cab.dao.TripRecordDAO">
+	<insert id="insertTripRecord" parameterType="tripRecord" keyProperty="trip_record_idx" keyColumn="trip_record_idx" useGeneratedKeys="true">
+        INSERT INTO trip_record(trip_record_taxi_idx, trip_record_driver_id, trip_record_start_location,
+                                trip_record_end_location, trip_record_distance, trip_record_fare)
+        VALUES (#{trip_record_taxi_idx}, #{trip_record_driver_id}, #{trip_record_start_location},
+                #{trip_record_end_location}, #{trip_record_distance}, #{trip_record_fare})
+    </insert>
 
-
+    <insert id="insertTripRecordDetail" parameterType="String">
+        INSERT INTO trip_record_detail(trip_record_idx, trip_record_latitude, trip_record_longitude)
+        VALUES(#{param1},#{param2},#{param3})
+    </insert>
 </mapper>

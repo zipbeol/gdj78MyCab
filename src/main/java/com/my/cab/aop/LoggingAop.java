@@ -3,12 +3,10 @@ package com.my.cab.aop;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
-
-import java.util.Arrays;
 
 @Aspect
 @Order(2)
@@ -23,18 +21,20 @@ public class LoggingAop {
         // 파라메터 값 가져오기
         Object[] args = joinPoint.getArgs();
 
-        // 파라메터 이름 가져오기
-        String[] argNames = ((org.aspectj.lang.reflect.MethodSignature) joinPoint.getSignature()).getParameterNames();
+        // 파라메터 이름과 타입 가져오기
+        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+        String[] argNames = methodSignature.getParameterNames();
+        Class<?>[] argTypes = methodSignature.getParameterTypes();
 
-        System.out.println("Method called::: " + methodName);
+        System.out.println("메서드 호출::: " + methodName);
 
         // 파라메터 존재하면
         if (argNames != null && argNames.length > 0) {
             for (int i = 0; i < argNames.length; i++) {
-                System.out.println("Parameter name::: {" + argNames[i] + "}, value::: {" + args[i] + "}::: ");
+                System.out.println("파라메터:::  " + argTypes[i].getSimpleName() + " " + argNames[i] + " = " + args[i]);
             }
         } else { // 없으면
-            System.out.println("No parameters::: ");
+            System.out.println("파라메터 없음::: ");
         }
         Object result = null;
         try {
@@ -43,7 +43,7 @@ public class LoggingAop {
             return result;
         } finally {
             // 종료후 리턴값
-            System.out.println("Method Return::: " + result);
+            System.out.println("리턴값::: " + result);
         }
     }
 }

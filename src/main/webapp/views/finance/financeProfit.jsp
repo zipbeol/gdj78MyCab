@@ -315,6 +315,11 @@
     getTotalPages();
     refreshProfitList();
     
+    $('#filter').on('change',function(){
+        getTotalPages();
+        refreshExpensesList();
+    });
+    
     $('#go').on('click',function(){
         getTotalPages();
         refreshProfitList();

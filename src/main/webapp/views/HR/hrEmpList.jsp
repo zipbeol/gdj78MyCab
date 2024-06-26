@@ -91,10 +91,7 @@ th.sortable.desc::after {
 .button-position{
 	margin-left: 346px;
 }
-.resetPosition{
-	margin-left: 170px;
-    margin-bottom: 5px;
-}
+
 </style>
 
 
@@ -165,7 +162,7 @@ th.sortable.desc::after {
 					<!-- Container starts -->
 					<div class="container-fluid">
 						<!-- Alert placeholder start -->
-						<div id="alertPlaceholder" class="alert-placeholder"></div>
+						<div id="alertPlaceholder"></div>
 						<!-- Alert placeholder end -->
 						<!-- Row start -->
 						<div class="row">
@@ -177,33 +174,15 @@ th.sortable.desc::after {
 									<div class="card-body">
 										<!-- 여기에 코딩 -->
 										<!-- 검색창 시작 -->
-										<div
-											class="search-filter-container border border-2 p-3 rounded mb-3">
-											<div class="row mb-3">
-												<div class="col-10">
-													<div class="col-xxl-6 col-xl-12">
-														<div class="card mb-3">
-															<div class="card-header">
-																<h5 class="card-title">Line Graph</h5>
-															</div>
-															<div class="card-body">
-																<div id="lineGraph"></div>
-															</div>
-														</div>
-													</div>
-													<div class="row mb-3">
-													<div class="col-xxl-6 col-xl-12">
-														<div class="card mb-3">
-															<div class="card-header">
-																<h5 class="card-title">Line Graph</h5>
-															</div>
-															<div class="card-body">
-																<div id="barGraph"></div>
-															</div>
-														</div>
-													</div>
-													</div>
-
+										<div class="search-filter-container border border-2 p-3 rounded mb-3">
+										 <div class="row mb-3">
+                                            <div class="col-10">
+                                            </div>
+                                            <div class="col-2 text-end d-md-flex justify-content-md-end gap-2">
+													<input type="button" class="btn btn-secondary resetPosition"
+														onclick="filterReset()" value="초기화"> <input
+														type="button" class="btn btn-primary" onclick="getList()"
+														value="검색" style="display: none">
 												</div>
 											<div class="row">
 												<div class="col-4"></div>
@@ -217,11 +196,6 @@ th.sortable.desc::after {
 													<label for="filter-emp-is-retired" class="form-label">재직여부
 														필터</label>
 														
-													<input type="button" class="btn btn-secondary resetPosition"
-														onclick="filterReset()" value="초기화"> <input
-														type="button" class="btn btn-primary" onclick="getList()"
-														value="검색" style="display: none">
-												
 												</div>
 											</div>
 											<div class="row mb-3">
@@ -287,12 +261,12 @@ th.sortable.desc::after {
 							</div>
 						</div>
 						<!-- Row end -->
-						<!-- Modal -->
-						<div class="modal fade" id="empModal" tabindex="-1"
+						<!-- 정들었지만 죽은 모달 -->
+						<!-- <div class="modal fade" id="empModal" tabindex="-1"
 							aria-labelledby="registerModalLabel" aria-hidden="true">
-							<!-- Alert placeholder start -->
+							Alert placeholder start
 							<div id="alertModalPlaceholder" class="alert-placeholder"></div>
-							<!-- Alert placeholder end -->
+							Alert placeholder end
 							<div class="modal-dialog">
 								<div class="modal-content">
 									<div class="modal-header">
@@ -398,7 +372,7 @@ th.sortable.desc::after {
 								</div>
 							</div>
 						</div>
-
+ -->
 
 					</div>
 					<!-- Container ends -->
@@ -427,18 +401,6 @@ th.sortable.desc::after {
 <!-- Required jQuery first, then Bootstrap Bundle JS -->
 <script src="/assets/js/jquery.min.js"></script>
 <script src="/assets/js/bootstrap.bundle.min.js"></script>
-<script src="/assets/vendor/apex/custom/graphs/line.js"></script>
-<script src="/assets/vendor/apex/apexcharts.min.js"></script>
-<script src="/assets/vendor/apex/custom/graphs/area.js"></script>
-    <script src="/assets/vendor/apex/custom/graphs/line.js"></script>
-    <script src="/assets/vendor/apex/custom/graphs/bar.js"></script>
-    <script src="/assets/vendor/apex/custom/graphs/column-area.js"></script>
-    <script src="/assets/vendor/apex/custom/graphs/candlestick.js"></script>
-    <script src="/assets/vendor/apex/custom/graphs/heatmap.js"></script>
-    <script src="/assets/vendor/apex/custom/graphs/donut.js"></script>
-    <script src="/assets/vendor/apex/custom/graphs/pie.js"></script>
-    <script src="/assets/vendor/apex/custom/graphs/funnel.js"></script>
-    <script src="/assets/vendor/apex/custom/graphs/pyramid.js"></script>
 
 <!-- *************
         ************ Vendor Js Files *************
@@ -602,6 +564,10 @@ th.sortable.desc::after {
         $('#emp-list').html(content);
     }
     
+    $(document).on('click', '.emp-list-tbody-tr', function () {
+        location.href = './empDetail.go?emp_no=' + $(this).attr('id');
+    });
+    
     
     
 
@@ -615,8 +581,8 @@ th.sortable.desc::after {
     
     
     
-    
-    var myModal = new bootstrap.Modal(document.getElementById('empModal'));
+    /*정들었지만 죽은 모달*/
+   /*  var myModal = new bootstrap.Modal(document.getElementById('empModal'));
     
     
     
@@ -649,16 +615,13 @@ th.sortable.desc::after {
              	$('#semp-employment-status').show();
              	$('#editButton2').show();
              	
-             	
-             	
-                 
             	
             });
     	});
     
     function showModal(emp_no){
     	
-    	/* console.log(emp_no); */
+    	 console.log(emp_no); 
     	
     	getEmployeeById(emp_no).done(function(employee) {
     		var fileName = employee.profile_new;
@@ -801,7 +764,7 @@ th.sortable.desc::after {
         });
     }
     
-    
+     */
 
     
 

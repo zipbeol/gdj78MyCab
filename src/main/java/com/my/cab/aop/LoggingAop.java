@@ -26,15 +26,15 @@ public class LoggingAop {
         String[] argNames = methodSignature.getParameterNames();
         Class<?>[] argTypes = methodSignature.getParameterTypes();
 
-        System.out.println("메서드 호출::: " + methodName);
+        logger.info("메서드 호출::: " + methodName);
 
         // 파라메터 존재하면
         if (argNames != null && argNames.length > 0) {
             for (int i = 0; i < argNames.length; i++) {
-                System.out.println("파라메터:::  " + argTypes[i].getSimpleName() + " " + argNames[i] + " = " + args[i]);
+                logger.info("파라메터:::  " + argTypes[i].getSimpleName() + " " + argNames[i] + " = " + args[i]);
             }
         } else { // 없으면
-            System.out.println("파라메터 없음::: ");
+            logger.info("파라메터 없음::: ");
         }
         Object result = null;
         try {
@@ -43,7 +43,7 @@ public class LoggingAop {
             return result;
         } finally {
             // 종료후 리턴값
-            System.out.println("리턴값::: " + result);
+            logger.info("리턴값::: " + result);
         }
     }
 }

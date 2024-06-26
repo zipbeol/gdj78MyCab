@@ -31,6 +31,16 @@
     <link rel="stylesheet" href="/assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
   </head>
   <style>
+  .alert-placeholder {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1050;
+            margin: 0;
+            padding: 10px;
+            text-align: center;
+        }
   .input-size{
   	width: 755px;
   }
@@ -503,6 +513,9 @@
 
             <!-- Container starts -->
             <div class="container-fluid">
+            	<!-- Alert placeholder start -->
+					<div id="alertPlaceholder" class="alert-placeholder"></div>
+				<!-- Alert placeholder end -->
 			
               <!-- Row start -->
               
@@ -738,6 +751,7 @@
     <script src="/assets/js/custom.js"></script>
     <script src="/assets/js/validations.js"></script>
     <script src="/assets/js/localStorage.js"></script>
+    <script src="/assets/js/showAlert.js"></script>
   </body>
   <script>
   document.getElementById('domain-select').addEventListener('change', function() {
@@ -789,7 +803,7 @@
 		
 		if (email_id === '' || domain === '') {
 			
-			alert('이메일 또는 도메인 입력을 해주세요.');
+			showAlert('danger', '이메일 또는 도메인을 입력해주세요.');
 			
 		}else{
 			
@@ -804,11 +818,11 @@
 			//여기에 뿌려준다
 				console.log(data);
 				if(data.use > 0){
-					alert('이미 사용중인 이메일 입니다.');
+					showAlert('danger', '이미 사용중인 이메일입니다.');
 					$('input[name="email_id"]').val('');
 					$('input[name="domain"]').val('');
 				}else{
-					alert('사용 가능한 이메일 입니다.');
+					showAlert('success', '사용 가능한 이메일입니다.');
 					overChk = true;
 				}
 			}, 
@@ -823,7 +837,7 @@
  //이름을 예금주명에 넣기
  
  var emp_name = $('input[name="emp_name"]').val();
- var acc_name = 
+ var acc_name = $('input[name="acc_name"]').val();
  
  document.getElementById('emp_name').addEventListener('keyup', function() {
 	 console.log(this.value);
@@ -876,13 +890,13 @@
  // 폼 전송 시 overChk 확인
  function validateForm() {
      if (!overChk) {
-         alert('이메일 중복을 확인해주세요.');
+    	 showAlert('danger', '이메일 중복을 확인해주세요.');
          return false; // 폼 전송 취소
      }else{
     	 if (confirm("사원을 등록하시겠습니까?")) {
      		return true; // 폼 전송 허용
 		}else{
-				alert("사원 등록을 취소하였습니다.");
+			showAlert('danger', '사원 등록을 취소했습니다.');
 		}
      }
  }

@@ -261,12 +261,12 @@ th.sortable.desc::after {
 							</div>
 						</div>
 						<!-- Row end -->
-						<!-- Modal -->
-						<div class="modal fade" id="empModal" tabindex="-1"
+						<!-- 정들었지만 죽은 모달 -->
+						<!-- <div class="modal fade" id="empModal" tabindex="-1"
 							aria-labelledby="registerModalLabel" aria-hidden="true">
-							<!-- Alert placeholder start -->
+							Alert placeholder start
 							<div id="alertModalPlaceholder" class="alert-placeholder"></div>
-							<!-- Alert placeholder end -->
+							Alert placeholder end
 							<div class="modal-dialog">
 								<div class="modal-content">
 									<div class="modal-header">
@@ -372,7 +372,7 @@ th.sortable.desc::after {
 								</div>
 							</div>
 						</div>
-
+ -->
 
 					</div>
 					<!-- Container ends -->
@@ -564,6 +564,10 @@ th.sortable.desc::after {
         $('#emp-list').html(content);
     }
     
+    $(document).on('click', '.emp-list-tbody-tr', function () {
+        location.href = './empDetail.go?emp_no=' + $(this).attr('id');
+    });
+    
     
     
 
@@ -577,8 +581,8 @@ th.sortable.desc::after {
     
     
     
-    
-    var myModal = new bootstrap.Modal(document.getElementById('empModal'));
+    /*정들었지만 죽은 모달*/
+   /*  var myModal = new bootstrap.Modal(document.getElementById('empModal'));
     
     
     
@@ -611,16 +615,13 @@ th.sortable.desc::after {
              	$('#semp-employment-status').show();
              	$('#editButton2').show();
              	
-             	
-             	
-                 
             	
             });
     	});
     
     function showModal(emp_no){
     	
-    	/* console.log(emp_no); */
+    	 console.log(emp_no); 
     	
     	getEmployeeById(emp_no).done(function(employee) {
     		var fileName = employee.profile_new;
@@ -763,7 +764,7 @@ th.sortable.desc::after {
         });
     }
     
-    
+     */
 
     
 

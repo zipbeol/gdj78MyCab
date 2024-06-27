@@ -4,13 +4,29 @@
 >
 
 <mapper namespace="com.my.cab.dao.ApprovalDAO">
-	<select id="approvalWriteList" resultType="ApprovalWriteFrom">
-	SELECT approval_doc_type_item_idx, approval_doc_type_item_name, approval_doc_type_item_type FROM tb_approval_doc_type_item;
-	</select>
-    
+    <!-- 결재 문서 등록 fath 경로 저장 -->
     <insert id="save" parameterType="com.my.cab.dto.ApprovalDocDTO">
         INSERT INTO tb_doc_item_file (appr_file_path)
         VALUES (#{appr_file_path})
     </insert>
-   
+    
+    <!-- 결재자 모달창 결재자 리스트 비동기(ajax) 조회 -->
+    <select id="getAllEmployees" resultType="com.my.cab.dto.EmpDTO">
+        SELECT e.emp_no, e.emp_name, t.title_name, d.dept_name, e.emp_employment_status
+        FROM employee e
+        JOIN department d ON e.dept_no = d.dept_no
+        JOIN title t ON e.title_no = t.title_no
+    </select>
+    
+    <!-- 결재자 모달창 결재자 리스트 비동기(ajax) 검색 -->
+    <select id="searchEmployees" resultType="com.my.cab.dto.EmpDTO">
+        SELECT e.emp_no, e.emp_name, t.title_name, d.dept_name, e.emp_employment_status
+        FROM employee e
+        JOIN department d ON e.dept_no = d.dept_no
+        JOIN title t ON e.title_no = t.title_no
+        WHERE e.emp_name LIKE CONCAT('%', #{search}, '%')
+         OR t.title_name LIKE CONCAT('%', #{search}, '%')
+         OR d.dept_name LIKE CONCAT('%', #{search}, '%')
+    </select>
+
 </mapper>

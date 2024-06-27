@@ -100,14 +100,14 @@
             <li id="menu-approval" class="treeview">
                 <a href="#!">
                     <i class="bi bi-layout-text-window-reverse"></i>
-                    <span class="menu-text">전자결재</span>
+                    <span class="menu-text">전자 결재</span>
                 </a>
                 <ul class="treeview-menu">
                     <li>
                         <a id="menu-approval-1" href="/approval/approvalWriteForm.go">기안서 작성</a>
                     </li>
                     <li>
-                        <a id="menu-approval-2" href="/approval/list.go">내 결재 관리</a>
+                        <a id="menu-approval-2" href="/approval/myapproval.go">내 결재 관리</a>
                     </li>
                     <li>
                         <a id="menu-approval-3" href="/approval/list.go">결재 통합 관리</a>

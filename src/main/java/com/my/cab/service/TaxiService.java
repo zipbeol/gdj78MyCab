@@ -3,6 +3,7 @@ package com.my.cab.service;
 import com.my.cab.dao.TaxiDAO;
 import com.my.cab.dto.SearchDTO;
 import com.my.cab.dto.TaxiDTO;
+import com.my.cab.util.PageCalc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +23,13 @@ public class TaxiService {
 
     @Autowired
     TaxiDAO taxiDAO;
+    @Autowired
+    PageCalc pageCalc;
 
 
     public Map<String, Object> listAjax(SearchDTO searchDTO) {
         Map<String, Object> result = new HashMap<>();
-        int page = (searchDTO.getPage() - 1) * PAGE_SIZE;
+        int page = pageCalc.calculatePageOffset(searchDTO.getPage(), PAGE_SIZE);
         logger.info("page {}", page);
         logger.info("searchDTO page {}", searchDTO.getPage());
         searchDTO.setPage(page);
@@ -118,15 +121,14 @@ public class TaxiService {
         return taxiDAO.getTaxiRegFirstDate();
     }
 
+
     /**
-     * 페이지갯수 가져오는 메서드
-     *
+     * 페이지 계산
      * @param searchDTO
-     * @return {@code int}
+     * @return
      */
     public int getTotalPages(SearchDTO searchDTO) {
-        int taxiTotal = taxiDAO.getTaxiCount(searchDTO);
-        int totalPages = (int) Math.ceil((double) taxiTotal / PAGE_SIZE);
-        return totalPages = totalPages > 0 ? totalPages : 1;
+        int totalCount = taxiDAO.getTaxiCount(searchDTO);
+        return pageCalc.calculateTotalPages(totalCount, PAGE_SIZE);
     }
 }

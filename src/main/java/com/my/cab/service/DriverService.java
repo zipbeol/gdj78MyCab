@@ -3,6 +3,7 @@ package com.my.cab.service;
 import com.my.cab.dao.DriverDAO;
 import com.my.cab.dto.DriverDTO;
 import com.my.cab.dto.SearchDTO;
+import com.my.cab.util.PageCalc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,9 @@ public class DriverService {
     public DriverService(DriverDAO driverDAO) {
         this.driverDAO = driverDAO;
     }
+
+    @Autowired
+    PageCalc pageCalculator;
 
     /**
      * 택시기사 가장 오래된 등록일 가져오는 메서드
@@ -147,7 +151,7 @@ public class DriverService {
      */
     public Map<String, Object> getDriverList(SearchDTO searchDTO) {
         Map<String, Object> result = new HashMap<String, Object>();
-        int page = (searchDTO.getPage() - 1) * PAGE_SIZE;
+        int page = pageCalculator.calculatePageOffset(searchDTO.getPage(), PAGE_SIZE);
         searchDTO.setPage(page);
         searchDTO.setPageSize(PAGE_SIZE);
         logger.info("page {}", page);
@@ -166,9 +170,7 @@ public class DriverService {
      */
     public Map<String, Object> getDriverTotalPages(SearchDTO searchDTO) {
         int driverTotal = driverDAO.getDriverTotal(searchDTO);
-        int totalPages = (int) Math.ceil((double) driverTotal / PAGE_SIZE);
-        totalPages = totalPages > 0 ? totalPages : 1;
-        return Map.of("totalPages", totalPages);
+        return Map.of("totalPages", pageCalculator.calculateTotalPages(driverTotal, PAGE_SIZE));
     }
 
     public DriverDTO getDriverInfo(String driverIdx) {
@@ -223,6 +225,7 @@ public class DriverService {
 
     /**
      * 재직중인 택시기사 리스트 리턴
+     *
      * @return
      */
     public List<DriverDTO> getNotRetiredDriverList() {

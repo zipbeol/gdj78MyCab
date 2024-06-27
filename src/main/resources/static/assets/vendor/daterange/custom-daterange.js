@@ -4,7 +4,7 @@ $(".datepicker").daterangepicker({
 	startDate: moment().startOf("hour"),
 	endDate: moment().startOf("hour").add(32, "hour"),
 	locale: {
-		format: "DD/MM/YYYY",
+		format: "YYYY/MM/DD",
 	},
 });
 
@@ -15,7 +15,7 @@ $(".datepicker-opens-left").daterangepicker({
 	startDate: moment().startOf("hour"),
 	endDate: moment().startOf("hour").add(32, "hour"),
 	locale: {
-		format: "DD/MM/YYYY",
+		format: "YYYY/MM/DD",
 	},
 });
 
@@ -25,7 +25,7 @@ $(".datepicker-week-numbers").daterangepicker({
 	startDate: moment().startOf("hour"),
 	endDate: moment().startOf("hour").add(32, "hour"),
 	locale: {
-		format: "DD/MM/YYYY",
+		format: "YYYY/MM/DD",
 	},
 });
 
@@ -35,7 +35,7 @@ $(".datepicker-iso-week-numbers").daterangepicker({
 	startDate: moment().startOf("hour"),
 	endDate: moment().startOf("hour").add(32, "hour"),
 	locale: {
-		format: "DD/MM/YYYY",
+		format: "YYYY/MM/DD",
 	},
 });
 
@@ -45,7 +45,7 @@ $(".datepicker-time").daterangepicker({
 	startDate: moment().startOf("hour"),
 	endDate: moment().startOf("hour").add(32, "hour"),
 	locale: {
-		format: "DD/MM/YYYY hh:mm A",
+		format: "YYYY/MM/DD hh:mm A",
 	},
 });
 
@@ -57,7 +57,7 @@ $(".datepicker-time-24").daterangepicker({
 	startDate: moment().startOf("hour"),
 	endDate: moment().startOf("hour").add(32, "hour"),
 	locale: {
-		format: "DD/MM/YYYY hh:mm A",
+		format: "YYYY/MM/DD hh:mm A",
 	},
 });
 
@@ -69,7 +69,7 @@ $(".datepicker-time-seconds").daterangepicker({
 	startDate: moment().startOf("hour"),
 	endDate: moment().startOf("hour").add(32, "hour"),
 	locale: {
-		format: "DD/MM/YYYY hh:mm:ss A",
+		format: "YYYY/MM/DD hh:mm:ss A",
 	},
 });
 
@@ -89,7 +89,7 @@ $(".datepicker-range-week-numbers").daterangepicker({
 	startDate: moment().startOf("hour"),
 	endDate: moment().startOf("hour").add(32, "hour"),
 	locale: {
-		format: "DD/MM/YYYY",
+		format: "YYYY/MM/DD",
 	},
 });
 
@@ -101,7 +101,7 @@ $(".datepicker-range-iso-week-numbers").daterangepicker({
 	startDate: moment().startOf("hour"),
 	endDate: moment().startOf("hour").add(32, "hour"),
 	locale: {
-		format: "DD/MM/YYYY",
+		format: "YYYY/MM/DD",
 	},
 });
 
@@ -111,7 +111,7 @@ $(".datepicker-range-time").daterangepicker({
 	startDate: moment().startOf("hour"),
 	endDate: moment().startOf("hour").add(32, "hour"),
 	locale: {
-		format: "DD/MM/YYYY hh:mm A",
+		format: "YYYY/MM/DD hh:mm A",
 	},
 });
 
@@ -123,7 +123,7 @@ $(".datepicker-range-time-24").daterangepicker({
 	startDate: moment().startOf("hour"),
 	endDate: moment().startOf("hour").add(32, "hour"),
 	locale: {
-		format: "DD/MM/YYYY hh:mm A",
+		format: "YYYY/MM/DD hh:mm A",
 	},
 });
 
@@ -133,7 +133,7 @@ $(".datepicker-range-left").daterangepicker({
 	startDate: moment().startOf("hour"),
 	endDate: moment().startOf("hour").add(32, "hour"),
 	locale: {
-		format: "DD/MM/YYYY",
+		format: "YYYY/MM/DD",
 	},
 });
 
@@ -143,7 +143,7 @@ $(".datepicker-range-right").daterangepicker({
 	startDate: moment().startOf("hour"),
 	endDate: moment().startOf("hour").add(32, "hour"),
 	locale: {
-		format: "DD/MM/YYYY",
+		format: "YYYY/MM/DD",
 	},
 });
 
@@ -153,7 +153,7 @@ $(".datepicker-range-top-right").daterangepicker({
 	startDate: moment().startOf("hour"),
 	endDate: moment().startOf("hour").add(32, "hour"),
 	locale: {
-		format: "DD/MM/YYYY",
+		format: "YYYY/MM/DD",
 	},
 });
 
@@ -163,7 +163,7 @@ $(".datepicker-range-top-left").daterangepicker({
 	startDate: moment().startOf("hour"),
 	endDate: moment().startOf("hour").add(32, "hour"),
 	locale: {
-		format: "DD/MM/YYYY",
+		format: "YYYY/MM/DD",
 	},
 });
 
@@ -174,7 +174,7 @@ $(".datepicker-range-auto-apply").daterangepicker({
 	startDate: moment().startOf("hour"),
 	endDate: moment().startOf("hour").add(32, "hour"),
 	locale: {
-		format: "DD/MM/YYYY",
+		format: "YYYY/MM/DD",
 	},
 });
 

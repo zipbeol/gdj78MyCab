@@ -27,7 +27,7 @@
         <when test="pro_filter == 'manyProfit'">
             ORDER BY pro_cash DESC
         </when>
-        <when test="pro_filter == 'lessProfit">
+        <when test="pro_filter == 'lessProfit'">
             ORDER BY pro_cash ASC
         </when>
         <when test="pro_filter == 'orderByName'">
@@ -61,7 +61,8 @@
     
 	<!-- 수익 등록 쿼리 -->
 	<!-- 나중에 수정 필요 -->
-	<insert id="addProfit" parameterType="finance">
+	<insert id="addProfit" parameterType="finance" useGeneratedKeys="true" keyColumn="pro_idx"
+            keyProperty="pro_idx">
 		INSERT INTO profit
 		(pro_trip_id, pro_category, pro_content, pro_who,
 		pro_cash,
@@ -70,6 +71,7 @@
 		#{pro_who}, #{pro_cash},
 		#{pro_actual_date})
 	</insert>
+	
 
 	<!-- 지출 리스트 조회 쿼리 -->
 	<select id="getExpensesList" resultType="finance" parameterType="search">
@@ -96,7 +98,7 @@
         <when test="exp_filter == 'manyExpenses'">
             ORDER BY exp_cash ASC
         </when>
-        <when test="exp_filter == 'orderByName">
+        <when test="exp_filter == 'orderByName'">
             ORDER BY exp_who ASC
         </when>
         <!-- 초기화면 이후에는 기본적으로 exp_actual_date DESC 정렬을 유지 -->
@@ -109,7 +111,8 @@
 
 	<!-- 지출 등록 쿼리 -->
 	<!-- 나중에 수정 필요 -->
-	<insert id="addExpenses" parameterType="finance">
+	<insert id="addExpenses" parameterType="finance" useGeneratedKeys="true" keyColumn="exp_idx"
+            keyProperty="exp_idx">
 		INSERT INTO expenses
 		(exp_driver_salary_idx,exp_sal_idx, exp_category, exp_content, exp_who,
 		exp_cash,
@@ -119,6 +122,21 @@
 		#{exp_actual_date})
 	</insert>
 	
+	<!-- 거래 등록 쿼리 -->
+	<!-- 나중에 수정 필요 -->
+	<insert id="addDeal" parameterType="finance">
+		INSERT INTO deal_history
+		<choose>
+			<when test="isProfit">
+			(deal_pro_idx, deal_field)
+			VALUES (#{pro_idx}, #{deal_field})
+			</when>
+			<otherwise>
+			(deal_exp_idx, deal_field)
+			VALUES (#{exp_idx}, #{deal_field})
+			</otherwise>
+		</choose>
+	</insert>
 	
 	<select id="getExpensesCount" resultType="int" parameterType="search">
         SELECT COUNT(exp_idx)

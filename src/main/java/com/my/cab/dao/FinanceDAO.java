@@ -24,4 +24,7 @@ public interface FinanceDAO {
 
 	List<FinanceDTO> getDealList(SearchDTO searchDTO);
 
+	boolean addDeal(FinanceDTO profitDTO);
+
+
 }

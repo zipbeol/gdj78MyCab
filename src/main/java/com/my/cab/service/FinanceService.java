@@ -39,10 +39,14 @@ public class FinanceService {
 
 	@Transactional
 	public Map<String, Object> addProfit(FinanceDTO profitDTO) {
+        boolean result = false;
 		Map<String, Object> map = new HashMap<String, Object>();
 		logger.info("수익 등록 시작: {}", profitDTO.getPro_cash());
-
-		map.put("result", financeDAO.addProfit(profitDTO));
+		result = financeDAO.addProfit(profitDTO);
+		profitDTO.setDeal_field("수익");
+		profitDTO.setProfit(true);
+		result = financeDAO.addDeal(profitDTO);
+		map.put("result", result);
 
 		logger.info("수익 등록 완료: {}", profitDTO);
 		return map;
@@ -70,10 +74,14 @@ public class FinanceService {
 	
 	@Transactional
 	public Map<String, Object> addExpenses(FinanceDTO expensesDTO) {
+		boolean result = false;
 		Map<String, Object> map = new HashMap<String, Object>();
 		logger.info("지출 등록 시작: {}", expensesDTO.getExp_cash());
-
-		map.put("result", financeDAO.addExpenses(expensesDTO));
+		result = financeDAO.addExpenses(expensesDTO);
+		expensesDTO.setDeal_field("지출");
+		expensesDTO.setProfit(false);
+		result = financeDAO.addDeal(expensesDTO);
+		map.put("result", result);
 
 		logger.info("지출 등록 완료: {}", expensesDTO);
 		

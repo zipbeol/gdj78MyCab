@@ -18,4 +18,8 @@ public interface CalendarDAO {
 
 	CalendarDTO calendarDetail(int schedule_idx);
 
+	int deleteSchedule(int schedule_idx);
+
+	int editSchedule(CalendarDTO calendarDTO);
+
 }

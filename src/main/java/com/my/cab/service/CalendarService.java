@@ -91,4 +91,26 @@ public class CalendarService {
 		return null;
 	}
 
+	public Map<String, Object> deleteSchedule(int schedule_idx) {
+		int result = calendarDao.deleteSchedule(schedule_idx);
+			Map<String, Object> map = new HashMap<String, Object>();
+		if(result >0) {
+			map.put("success", true);
+		}else {
+			map.put("success", false);
+		}
+		return map;
+	}
+
+	public Map<String, Object> editSchedule(CalendarDTO calendarDTO) {
+		Map<String, Object>map = new HashMap<String, Object>();
+		int row = calendarDao.editSchedule(calendarDTO);
+		if(row >0) {
+			map.put("success", true);
+		}else {
+			map.put("success", false);
+		}
+		return map;
+	}
+
 }

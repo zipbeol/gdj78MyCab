@@ -351,24 +351,24 @@
                         <label class="input-group-text" for="detail-start-date">일정</label>
                         <input type="text" class="form-control datepicker" id="detail-start-date" name="detail-start-date" readonly>
                         <select id="detail-start-hour" name="detail-start-hour">
-                        	    <c:forEach var="a" begin="1" end="24" varStatus="i">
+                        	    <c:forEach var="a" begin="0" end="23" varStatus="i">
                         	    	<option value="${a}">${a}시</option>
                         	    </c:forEach>                    	
                         </select>
                         <select id="detail-start-min" name="detail-start-min">
-                        	    <c:forEach var="a" begin="1" end="59" varStatus="i">
+                        	    <c:forEach var="a" begin="0" end="59" varStatus="i">
                         	    	<option value="${a}">${a}분</option>
                         	    </c:forEach>                    	
                         </select>
                         <span class="input-group-text">~</span>
                         <input type="text" class="form-control datepicker" id="detail-end-date" name="detail-end-date" readonly>
                         <select id="detail-end-hour" name="detail-end-hour">
-                        	    <c:forEach var="a" begin="1" end="24" varStatus="i">
+                        	    <c:forEach var="a" begin="0" end="23" varStatus="i">
                         	    	<option value="${a}">${a}시</option>
                         	    </c:forEach>                    	
                         </select>
                         <select id="detail-end-min" name="detail-end-min">
-                        	    <c:forEach var="a" begin="1" end="59" varStatus="i">
+                        	    <c:forEach var="a" begin="0" end="59" varStatus="i">
                         	    	<option value="${a}">${a}분</option>
                         	    </c:forEach>                    	
                         </select>
@@ -388,8 +388,8 @@
                     </div>  
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary btn-lg" onclick="editSchedule()">수정</button>
-                    <button class="btn btn-danger btn-lg" onclick="deleteSchedule()">삭제</button>                 
+                    <button class="btn btn-primary btn-lg" onclick="editSchedule()" >수정</button>
+                    <button class="btn btn-danger btn-lg" onclick="deleteSchedule()" data-bs-dismiss="modal">삭제</button>                 
                     <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal">닫기</button>         
                 </div>
             </div>
@@ -433,6 +433,7 @@
     <script src="/assets/js/custom.js"></script>
     
   <script >
+  	var detailIdx;
 	var startStr;
 	var endStr;
 	var scheduleCategory = document.getElementById('create-category');
@@ -452,8 +453,8 @@
 		// 날짜 형식에 맞게 변환
 		var startDateTime = adjustDateTime(startDate,startHour,startMinute);
 		var endDateTime = adjustDateTime(endDate,endHour,startMinute);
-		// 종료 날짜 가져오기
-		var endHour = document
+		
+		//색깔 가져오기
 		
 		var selectedOption = scheduleCategory.options[scheduleCategory.selectedIndex];
         var color = selectedOption.style.color;
@@ -496,11 +497,18 @@
   moment.locale('ko');	
   
   
-  // 일정 형식변환 
+  // 일정 형식변환 0000-00-00 / 0~11 / 0~59
   function adjustDateTime(date,hour,min){
+	  
+	  
 	  var parseHour = hour.options[hour.selectedIndex].value;
 	  var parseMin = min.options[min.selectedIndex].value;
 	  var parseDate = date.value;
+	  console.log(parseHour);
+	  console.log(parseMin);
+	  console.log(parseDate);
+	  
+	  
 	  // 0시 -> 00시 / 1시 -> 01시 로 변환 
 	  parseHour = parseHour.padStart(2, '0');
 	  parseMin = parseMin.padStart(2, '0');
@@ -521,8 +529,91 @@
 	 console.log(getColor);
   }
   
-  //수정버튼
-  // unction 
+	//일정 삭제
+	function deleteSchedule(){
+		$.ajax({
+	        type: "GET",
+	        url: "/calendar/deleteSchedule.ajax",
+	        data: {
+	        	'schedule_idx': detailIdx        	
+	        },
+	        dataType: "json",
+			success: function(response) {
+				if (response.success){
+					alert("이벤트 삭제 성공");
+				}
+				calendar.refetchEvents();
+	        },
+	        error: function(xhr, status, error) {
+
+	        }
+	    });
+	}
+	function editSchedule(){
+		//현재 시간 가져오기 
+		var curTime = getCurrentDateTime();
+		// SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		// 시작일정 가져오기
+		var startHour = document.getElementById('detail-start-hour')
+		var startMinute = document.getElementById('detail-start-min')		
+		var startDate = document.getElementById("detail-start-date");
+		// 종료 일정 가져오기 
+		var endDate = document.getElementById("detail-end-date");
+		var endHour = document.getElementById("detail-end-hour");
+		var endMinute = document.getElementById("detail-end-min");
+		
+		// 날짜 형식에 맞게 변환
+		var startDateTime = adjustDateTime(startDate,startHour,startMinute);
+		var endDateTime = adjustDateTime(endDate,endHour,endMinute);
+		// 카테고리 가져오기 
+		var scheduleCategory = document.getElementById('detail-category');
+		// 카테고리 색 가져오기
+		var selectedOption = scheduleCategory.options[scheduleCategory.selectedIndex];
+        var color = selectedOption.style.color;
+		console.log(document.getElementById('detail-title').value);
+		var content = document.getElementById('detail-content').value;
+		console.log(content);
+		$.ajax({
+			type: 'GET',
+			url: '/calendar/editSchedule.ajax',
+			data:{
+				'schedule_idx': detailIdx,
+				'schedule_name': document.getElementById('detail-title').value,
+				'schedule_content': content,
+				'schedule_start_date': startDateTime,
+				'schedule_end_date': endDateTime,
+				'schedule_edit_date' : curTime,
+				'schedule_editor' : '30001', // 세션으로 가져오기
+				'schedule_category': document.getElementById('detail-category').value,
+				'schedule_color' : color
+			},
+			dataType :"json",
+			suceess: function(response){
+				if (reponse.suceess) {
+					alert("수정에 성공 했습니다")
+					calendar.refetchEvents();
+				}
+			},
+			error: function(e){
+				console.log(e);
+			}
+		});
+	}
+	
+	function getCurrentDateTime(){
+		  var now = new Date();
+		  var year = now.getFullYear();
+          var month = String(now.getMonth() + 1).padStart(2, '0');
+          var day = String(now.getDate()).padStart(2, '0');
+          var hours = String(now.getHours()).padStart(2, '0');
+          var minutes = String(now.getMinutes()).padStart(2, '0');
+          var seconds = String(now.getSeconds()).padStart(2, '0');
+          
+          var curTime = year+'-'+month+'-'+day+'T'+hours+':'+minutes+':'+seconds;
+          console.log(curTime);
+		   
+		return curTime;
+	}
   
 </script>
 

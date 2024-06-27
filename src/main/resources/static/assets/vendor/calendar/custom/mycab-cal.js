@@ -10,14 +10,6 @@ document.addEventListener("DOMContentLoaded", function(){
 				center: "title",
 				right: 'insertScheduleButton'
 			},
-			 eventDidMount: function(arg) {
-		       $(arg.el).tooltip({ 
-				    title: arg.event.extendedProps.content,
-				    placement: "top",
-				    trigger: "hover",
-				    container: "body"
-			  });
-		     },
 			customButtons: {
 	          insertScheduleButton: {
 	            text: '일정추가',
@@ -104,6 +96,8 @@ function addScheduleModal(arg,adjustedEnd){
 function scheduleDetail(arg){
 	myModal = new bootstrap.Modal(document.getElementById('scheduleDetailModal'));
 	console.log(arg);
+	detailIdx = arg.event.id
+	console.log(detailIdx);
 	document.getElementById('detail-title').value = arg.event.title;
     document.getElementById('detail-start-date').value = arg.event.startStr  
     document.getElementById('detail-end-date').value = arg.event.endStr

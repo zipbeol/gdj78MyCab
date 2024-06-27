@@ -67,5 +67,21 @@ public class CalendarController {
 		return calendarService.calendarDetail(schedule_idx);
 	}
 	
+	@RequestMapping(value = "calendar/deleteSchedule.ajax")
+	@ResponseBody
+	public Map<String, Object>deleteSchedule(int schedule_idx){
+			
+		return calendarService.deleteSchedule(schedule_idx);
+	}
+	
+	@RequestMapping(value = "calendar/editSchedule.ajax")
+	@ResponseBody
+	public Map<String, Object>editSchedule(CalendarDTO calendarDTO){
+		logger.info("컨트롤러에서 받은 값 : " + calendarDTO.getSchedule_content());
+		
+		
+		return calendarService.editSchedule(calendarDTO);
+	}
+	
 	
 }

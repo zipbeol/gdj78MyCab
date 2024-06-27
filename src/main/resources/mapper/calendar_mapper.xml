@@ -6,7 +6,7 @@
 <mapper namespace="com.my.cab.dao.CalendarDAO">
 
 	<select id="calListCall" resultType="map">
-		SELECT * FROM schedule
+		SELECT * FROM schedule WHERE schedule_del = '0'
 	</select>
 	
 	<select id="dayCalListCall" resultType="map">
@@ -22,5 +22,18 @@
 	<select id="calendarDetail" resultType="calendarDTO">
 		SELECT * FROM schedule WHERE schedule_idx = #{param1}
 	</select>
+	
+	<update id="deleteSchedule">
+		UPDATE schedule SET schedule_del ='1' WHERE schedule_idx= #{param1}
+	</update>
+	
+	<update id="editSchedule" parameterType="calendarDTO">
+		UPDATE schedule SET schedule_name = #{schedule_name},
+		schedule_content = #{schedule_content},schedule_start_date = #{schedule_start_date},
+		schedule_end_date = #{schedule_end_date},schedule_edit_date =#{schedule_edit_date},
+		schedule_editor= #{schedule_editor},schedule_category =#{schedule_category},
+		schedule_color = #{schedule_color} WHERE schedule_idx = #{schedule_idx}
+		
+	</update>
 
 </mapper>

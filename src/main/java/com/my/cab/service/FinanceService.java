@@ -85,4 +85,17 @@ public class FinanceService {
         int totalPages = (int) Math.ceil((double) expensesTotal / PAGE_SIZE);
         return totalPages = totalPages > 0 ? totalPages : 1;
 	}
+
+	public Map<String, Object> getDealList(Map<String, Object> param, SearchDTO searchDTO) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		int page = (searchDTO.getPage() - 1) * PAGE_SIZE;
+		logger.info("page {}", page);
+		logger.info("searchDTO page {}", searchDTO.getPage());
+		searchDTO.setPage(page);
+		searchDTO.setPageSize(PAGE_SIZE);
+		List<FinanceDTO> dealList = financeDAO.getDealList(searchDTO);
+		map.put("deal", dealList);
+		logger.info("거래내역리스트");
+		return map;
+	}
 }

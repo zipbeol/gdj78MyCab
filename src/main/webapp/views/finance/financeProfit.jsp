@@ -73,6 +73,9 @@
 	    background-color: #c82333;
 	    border-color: #bd2130;
 	}
+	td:hover{
+		cursor: pointer;
+	}
 	
 	
     </style>
@@ -179,9 +182,9 @@
 										<!-- 필터링 버튼 -->
 										 <select id="filter" name="filter" class="form-select" required>
                                             <option value="" selected disabled>필터 선택</option>
-                                            <option value="이름 순">이름 순</option>
-                                            <option value="많은 수익 순">많은 수익 순</option>
-                                            <option value="적은 수익 순">적은 수익 순</option>
+                                            <option value="orderByName">이름 순</option>
+                                            <option value="manyProfit">많은 수익 순</option>
+                                            <option value="lessProfit">적은 수익 순</option>
                                         </select>
                                         </div>
                                         <div class="col-10"></div>
@@ -440,7 +443,7 @@
                 row += '<tr class="clickable-row">' +
                     '<td>' + item.pro_actual_date + '</td>' +
                     '<td>' + item.pro_who + '</td>' +
-                    '<td>' + formatNumberWithCommas(item.pro_cash) + '</td>' +
+                    '<td>' + formatNumberWithCommas(item.pro_cash) + '&nbsp;<strong>원</strong></td>' +
                     '</tr>'+
                     '<tr class="detail-row">'+
                     '<td colspan="3" class="detail-content gap-2">'+

@@ -24,13 +24,13 @@
     </where>
     <!-- 초기화면은 수익 발생일(pro_actual_date) 순으로 정렬 -->
     <choose>
-        <when test="pro_filter == '많은 수익 순'">
+        <when test="pro_filter == 'manyProfit'">
             ORDER BY pro_cash DESC
         </when>
-        <when test="pro_filter == '적은 수익 순'">
+        <when test="pro_filter == 'lessProfit">
             ORDER BY pro_cash ASC
         </when>
-        <when test="pro_filter == '이름 순'">
+        <when test="pro_filter == 'orderByName'">
             ORDER BY pro_who ASC
         </when>
         <!-- 초기화면 이후에는 기본적으로 pro_actual_date DESC 정렬을 유지 -->
@@ -90,13 +90,13 @@
     </where>
     <!-- 초기화면은 지출 발생일(exp_actual_date) 순으로 정렬 -->
     <choose>
-        <when test="exp_filter == '많은 지출 순'">
+        <when test="exp_filter == 'manyExpenses'">
             ORDER BY exp_cash DESC
         </when>
-        <when test="exp_filter == '적은 지출 순'">
+        <when test="exp_filter == 'manyExpenses'">
             ORDER BY exp_cash ASC
         </when>
-        <when test="exp_filter == '이름 순'">
+        <when test="exp_filter == 'orderByName">
             ORDER BY exp_who ASC
         </when>
         <!-- 초기화면 이후에는 기본적으로 exp_actual_date DESC 정렬을 유지 -->

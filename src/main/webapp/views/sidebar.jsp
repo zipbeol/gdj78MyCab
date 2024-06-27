@@ -10,7 +10,7 @@
 <nav id="sidebar" class="sidebar-wrapper">
     <!-- App brand starts -->
     <div class="app-brand px-3 py-2 d-flex align-items-center">
-        <a href="">
+        <a href="/">
             <img src="/assets/images/logo.svg" class="logo" alt="Bootstrap Gallery">
         </a>
     </div>

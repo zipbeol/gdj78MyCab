@@ -22,4 +22,6 @@ public interface FinanceDAO {
 
 	int getExpensesCount(SearchDTO searchDTO);
 
+	List<FinanceDTO> getDealList(SearchDTO searchDTO);
+
 }

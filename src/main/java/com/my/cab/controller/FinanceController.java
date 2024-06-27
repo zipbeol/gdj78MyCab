@@ -111,4 +111,24 @@ public class FinanceController {
 
 		return map;
 	}
+	
+	// 거래 내역
+	@RequestMapping("/deal/list.go")
+	public String financeDeal(Model model) {
+		logger.info("재무관리 지출리스트");
+
+		return "finance/financeDeal"; // 뷰 경로: /WEB-INF/views/finance/financeProfit.jsp
+	}
+
+	@PostMapping("/deal/list.ajax")
+	@ResponseBody
+	public Map<String, Object> getDealList(SearchDTO searchDTO, @RequestParam Map<String, Object> param) {
+		logger.info("재무관리 거래내역리스트 - AJAX 요청");
+		logger.info("\nsearchDTO SearchText:" + searchDTO.getSearchText() + "\nsearchDTO Category:"
+				+ searchDTO.getCategory() + "\nsearchDTO filterStartDate:" + searchDTO.getFilterStartDate()
+				+ "\nsearchDTO filterEndDate:" + searchDTO.getFilterEndDate() + "\nsearchDTO page:"
+				+ searchDTO.getPage());
+		// 서비스 호출하여 리스트 데이터 가져오기
+		return financeService.getDealList(param, searchDTO);
+	}
 }

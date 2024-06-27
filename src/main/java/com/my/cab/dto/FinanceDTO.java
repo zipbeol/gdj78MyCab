@@ -23,6 +23,12 @@ public class FinanceDTO {
 	private int exp_cash;
 	private Date exp_actual_date;
 	
+	
+	private int deal_emp_no;
+	private int deal_pro_idx;
+	private int deal_exp_idx;
+	private String deal_field;
+	
 	public String getExp_category() {
 		return exp_category;
 	}
@@ -106,5 +112,29 @@ public class FinanceDTO {
 	}
 	public void setPro_actual_date(Date pro_actual_date) {
 		this.pro_actual_date = pro_actual_date;
+	}
+	public int getDeal_emp_no() {
+		return deal_emp_no;
+	}
+	public void setDeal_emp_no(int deal_emp_no) {
+		this.deal_emp_no = deal_emp_no;
+	}
+	public int getDeal_pro_idx() {
+		return deal_pro_idx;
+	}
+	public void setDeal_pro_idx(int deal_pro_idx) {
+		this.deal_pro_idx = deal_pro_idx;
+	}
+	public int getDeal_exp_idx() {
+		return deal_exp_idx;
+	}
+	public void setDeal_exp_idx(int deal_exp_idx) {
+		this.deal_exp_idx = deal_exp_idx;
+	}
+	public String getDeal_field() {
+		return deal_field;
+	}
+	public void setDeal_field(String deal_field) {
+		this.deal_field = deal_field;
 	}
 }

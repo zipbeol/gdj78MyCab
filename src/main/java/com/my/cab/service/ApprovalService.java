@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.my.cab.dao.ApprovalDAO;
 import com.my.cab.dto.ApprovalDocDTO;
 import com.my.cab.dto.ApprovalWriteFromDTO;
+import com.my.cab.dto.EmpDTO;
 
 
 @Service
@@ -30,5 +31,14 @@ public class ApprovalService {
         apprDAO.save(approvalDocDTO);
 		
 	}
+	
+	 public List<EmpDTO> getEmployees(String search) {
+	        if (search == null || search.isEmpty()) {
+	            return apprDAO.getAllEmployees();
+	        } else {
+	            return apprDAO.searchEmployees(search);
+	        }
+	    }
+
 
 }

@@ -552,7 +552,7 @@ th.sortable.desc::after {
                 
                 content += '<tr class="emp-list-tbody-tr" id="' + item.emp_no + '">'
                 	+ '<td class="text-center">' + item.emp_no + '</td>'
-                    + '<td class="text-center" data-emp-no="' + item.emp_no + '" onclick="showModal(' + item.emp_no + ')">' + item.emp_name + '</td>'
+                    + '<td class="text-center">' + item.emp_name + '</td>'
                     + '<td class="text-center">' + item.title_name + '</td>'
                     + '<td class="text-center">' + item.dept_name + '</td>'
                     + '<td class="text-center">' + emp_employment_status + '</td>'
@@ -587,7 +587,7 @@ th.sortable.desc::after {
     
     
     	$('#empModal').on('shown.bs.modal', function(){
-    		 $('#sdept-name').hide();
+    		$('#sdept-name').hide();
          	$('#stitle-name').hide();
          	$('#semp-level').hide();
          	$('#semp-employment-status').hide();

@@ -131,7 +131,7 @@
                         <a id="menu-emp-2" href="/emp/emp/create.go">사원 등록</a>
                     </li>
                     <li>
-                        <a id="menu-emp-3" href="/emp/hremp/list.go">사원 조회</a>
+                        <a id="menu-emp-3" href="/emp/hremp/list.go">사원 관리</a>
                     </li>
                     <li>
                         <a id="menu-emp-4" href="/emp/vac/list.go">연차 관리</a>

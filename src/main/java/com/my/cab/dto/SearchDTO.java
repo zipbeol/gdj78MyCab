@@ -15,24 +15,33 @@ public class SearchDTO {
     private String exp_filter;
     private String category;
     private int page;
-    
+    private String searchIdx;
+
+    public String getSearchIdx() {
+        return searchIdx;
+    }
+
+    public void setSearchIdx(String searchIdx) {
+        this.searchIdx = searchIdx;
+    }
+
     public String getPro_filter() {
-		return pro_filter;
-	}
+        return pro_filter;
+    }
 
-	public void setPro_filter(String pro_filter) {
-		this.pro_filter = pro_filter;
-	}
+    public void setPro_filter(String pro_filter) {
+        this.pro_filter = pro_filter;
+    }
 
-	public String getCategory() {
-		return category;
-	}
+    public String getCategory() {
+        return category;
+    }
 
-	public void setCategory(String category) {
-		this.category = category;
-	}
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
-	private int pageSize;
+    private int pageSize;
     private String filterIsRetired;
     private String filterForSearch;
 
@@ -116,20 +125,20 @@ public class SearchDTO {
         this.searchText = searchText;
     }
 
-	public String getExp_filter() {
-		return exp_filter;
-	}
+    public String getExp_filter() {
+        return exp_filter;
+    }
 
-	public void setExp_filter(String exp_filter) {
-		this.exp_filter = exp_filter;
-	}
+    public void setExp_filter(String exp_filter) {
+        this.exp_filter = exp_filter;
+    }
 
-	public String getFilterForSearch() {
-		return filterForSearch;
-	}
+    public String getFilterForSearch() {
+        return filterForSearch;
+    }
 
-	public void setFilterForSearch(String filterForSearch) {
-		this.filterForSearch = filterForSearch;
-	}
+    public void setFilterForSearch(String filterForSearch) {
+        this.filterForSearch = filterForSearch;
+    }
 
 }

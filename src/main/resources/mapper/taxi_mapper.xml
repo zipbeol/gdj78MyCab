@@ -22,32 +22,34 @@
                 AND taxi_registration_date BETWEEN #{filterStartDate} AND #{filterEndDate}
             </if>
         </where>
-            <choose>
-                <when test="sortColumn != null and sortColumn == 'taxi-license-plate'">
-                    ORDER BY taxi_license_plate
-                </when>
-                <when test="sortColumn != null and sortColumn == 'taxi-model'">
-                    ORDER BY taxi_model
-                </when>
-                <when test="sortColumn != null and sortColumn == 'taxi-reg-date'">
-                    ORDER BY taxi_registration_date
-                </when>
-                <when test="sortColumn != null and sortColumn == 'taxi-fuel-type'">
-                    ORDER BY taxi_fuel_type
-                </when>
-                <otherwise>
-                    ORDER BY taxi_idx
-                </otherwise>
-            </choose>
-            <choose>
-                <when test="sortOrder != null and sortOrder == 'desc'">
-                    DESC
-                </when>
-                <when test="sortOrder != null and sortOrder == 'asc'">
-                    ASC
-                </when>
-            </choose>
-        LIMIT #{pageSize} OFFSET #{page}
+        <choose>
+            <when test="sortColumn != null and sortColumn == 'taxi-license-plate'">
+                ORDER BY taxi_license_plate
+            </when>
+            <when test="sortColumn != null and sortColumn == 'taxi-model'">
+                ORDER BY taxi_model
+            </when>
+            <when test="sortColumn != null and sortColumn == 'taxi-reg-date'">
+                ORDER BY taxi_registration_date
+            </when>
+            <when test="sortColumn != null and sortColumn == 'taxi-fuel-type'">
+                ORDER BY taxi_fuel_type
+            </when>
+            <otherwise>
+                ORDER BY taxi_idx
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="sortOrder != null and sortOrder == 'desc'">
+                DESC
+            </when>
+            <when test="sortOrder != null and sortOrder == 'asc'">
+                ASC
+            </when>
+        </choose>
+        <if test="page != null">
+            LIMIT #{pageSize} OFFSET #{page}
+        </if>
     </select>
 
     <select id="getTaxiCount" resultType="int" parameterType="search">
@@ -121,7 +123,5 @@
             , taxi_year = #{taxi_year}
         WHERE taxi_idx = #{taxi_idx}
     </update>
-
-
 
 </mapper>

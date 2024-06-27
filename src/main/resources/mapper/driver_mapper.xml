@@ -70,7 +70,9 @@
                 ASC
             </when>
         </choose>
-        LIMIT #{pageSize} OFFSET #{page}
+        <if test="page != null">
+            LIMIT #{pageSize} OFFSET #{page}
+        </if>
     </select>
 
     <select id="getDriverTotal" resultType="int" parameterType="search">

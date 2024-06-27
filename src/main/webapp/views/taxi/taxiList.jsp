@@ -369,7 +369,7 @@
 <script src="/assets/js/jquery.twbsPagination.min.js"></script>
 
 <script>
-    var searchText = $('#search-taxi-license-plate').val();
+    var searchText = '';
     var today = moment().format('YYYY/MM/DD');
     var filterAllDay = '${taxiRegFirstDate}' + ' - ' + today;
     var filterEndDate = '';
@@ -409,19 +409,6 @@
         location.href = '/taxi/detail.go?taxi_idx=' + $(this).attr('id');
     });
 
-    // 페이지네이션
-    $('#pagination').twbsPagination({
-        totalPages: 10, // 총 페이지 수 (백엔드에서 가져와야 함)
-        visiblePages: 5, // 표시할 페이지 수
-        startPage: 1, // 시작 페이지
-        paginationClass: 'pagination align-items-center',
-        onPageClick: function (event, page) {
-            currentPage = page; // 현재 페이지 업데이트
-            getTaxiList(); // 택시 목록 갱신
-        }
-    });
-
-    // 필터기능
     $('#filter-taxi-reg-date').on('change', function () {
         currentPage = 1;
         getTotalPages();

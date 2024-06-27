@@ -1,0 +1,38 @@
+<!-- <?xml version="1.0" encoding="UTF-8"?> -->
+<!DOCTYPE mapper PUBLIC    "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
+        >
+
+<mapper namespace="com.my.cab.dao.MaintenanceDAO">
+
+    <select id="getMaintenanceList" parameterType="search" resultType="maintenance">
+        SELECT maintenance_history_idx,
+        maintenance_history_date,
+        maintenance_history_description,
+        maintenance_history_cost,
+        maintenance_history_workshop_name
+        FROM maintenance_history
+        <where>
+            maintenance_history_taxi_idx = #{searchIdx}
+        </where>
+        <if test="page != null">
+            LIMIT #{pageSize} OFFSET #{page}
+        </if>
+    </select>
+    <select id="getMaintenanceCount" parameterType="search" resultType="maintenance">
+        SELECT COUNT(maintenance_history_idx)
+        FROM maintenance_history
+        <where>
+            maintenance_history_taxi_idx = #{searchIdx}
+        </where>
+    </select>
+
+    <insert id="insertMaintenanceHistory" parameterType="maintenance">
+        INSERT INTO maintenance_history(maintenance_history_taxi_idx, maintenance_history_date,
+                                        maintenance_history_description, maintenance_history_cost,
+                                        maintenance_history_workshop_name)
+        VALUES (#{maintenance_history_taxi_idx}, #{maintenance_history_date}, #{maintenance_history_description},
+                #{maintenance_history_cost}, #{maintenance_history_workshop_name})
+    </insert>
+
+</mapper>

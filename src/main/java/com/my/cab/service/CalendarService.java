@@ -1,6 +1,9 @@
 package com.my.cab.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -74,21 +77,42 @@ public class CalendarService {
 			LocalDateTime startTime = dto.getSchedule_start_date();
 			LocalDateTime endTime = dto.getSchedule_end_date();
 			Map<String, Object> getStartTime= divideDateTime(startTime);
+			
 			Map<String, Object> getEndTime= divideDateTime(endTime);
-		return null;
+			map.put("dto", dto);
+			map.put("divideStartDate", getStartTime.get("dD"));
+			map.put("divideStartHour", getStartTime.get("dH"));
+			map.put("divideStartMin", getStartTime.get("dM"));
+			map.put("divideEndDate", getEndTime.get("dD"));
+			map.put("divideEndHour", getEndTime.get("dH"));
+			map.put("divideEndMin", getEndTime.get("dM"));
+			
+		return map;
 	}
 	
 	public Map<String, Object> divideDateTime(LocalDateTime date) {
 		Map<String, Object>map = new HashMap<String, Object>();
+			logger.info("divideDateTime getDate"+date);
 		if(date != null) {
-			/* String dateStr= date.getYear() */
+			DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			String devideDate = format.format(date);
+			logger.info("날짜" + devideDate);
+//			format = DateTimeFormatter.ofPattern("kk");
+//			String divideHour = format.format(date);
+//			logger.info("시간"+divideHour);
+//			format = DateTimeFormatter.ofPattern("mm");
+//			String divideMin = format.format(date);
+//			logger.info("분" +divideMin );
+			int divideHour = date.getHour();
+			int divideMin = date.getMinute();
 			
-			map.put("getHout", date.getHour());
-			map.put("getMin", date.getMinute());
+			map.put("dD", devideDate);
+			map.put("dH", divideHour);
+			map.put("dM", divideMin);
 			
 		}
 		
-		return null;
+		return map;
 	}
 
 	public Map<String, Object> deleteSchedule(int schedule_idx) {

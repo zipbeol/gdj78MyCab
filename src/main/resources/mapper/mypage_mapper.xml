@@ -3,7 +3,39 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd"
 >
 
-<mapper namespace="com.my.cab.dao.">
+<mapper namespace="com.my.cab.dao.MyPageDAO">
+
+<!-- @Alias(value="myPage") -->
+ <select id="getEmpDetail" resultType="myPage">
+	SELECT
+	e.emp_no,
+	e.emp_name,
+	e.dept_no,
+	e.title_no,
+	e.emp_email,
+	e.emp_hired_date,
+	e.emp_add,
+	e.emp_extension_number,
+	e.emp_level,
+	t.title_name,
+	d.dept_name,
+	v.vac_left,
+	pp.profile_new
+	FROM
+	employee e
+	JOIN
+	department d ON e.dept_no = d.dept_no
+	JOIN
+	title t ON e.title_no = t.title_no
+	JOIN
+	vacation v ON e.emp_no = v.emp_no
+	LEFT JOIN
+	profile_photo pp ON e.emp_no = pp.emp_no
+	WHERE
+	e.emp_no = #{param1}
+    </select>
+
+
 
 
 </mapper>

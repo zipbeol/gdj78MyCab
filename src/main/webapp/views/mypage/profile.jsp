@@ -131,11 +131,9 @@
 								class="bi bi-house lh-1"></i></a> <a href="/"
 							class="text-decoration-none">메인</a></li>
 						<li class="breadcrumb-item"><a href="#"
-							class="text-decoration-none">인사 관리</a></li>
-						<li class="breadcrumb-item"><a href="/emp/hremp/list.go"
-							class="text-decoration-none">사원 조회</a></li>
-							<li class="breadcrumb-item"><a href="#"
-							class="text-decoration-none">사원 상세 보기</a></li>
+							class="text-decoration-none">마이페이지</a></li>
+						<li class="breadcrumb-item"><a href="/mypage/profile.go"
+							class="text-decoration-none">프로필</a></li>
 					</ol>
                 <!-- Breadcrumb end -->
 
@@ -166,7 +164,7 @@
                                     <h1>${empDetail.emp_name} 사원 상세보기</h1>
                                 </div>
                                 <div class="col-4 text-end">
-                                    <input type="button" class="btn btn-primary" value="수정" id="edit-button" style="display: none;"> 
+                                    <input type="button" class="btn btn-primary" value="수정" id="edit-button"> 
                                     <input type="button" class="btn btn-success" value="저장" id="save-button" style="display: none;">
                                     <input type="button" class="btn btn-secondary" value="취소" id="cancel-button" style="display: none;">
                                 </div>
@@ -201,6 +199,12 @@
                                     </div>
                                     <div class="row info-section">
                                         <div class="col-md-12">
+                                            <dt>비밀번호</dt>
+                                            <dd><input type="text" class="form-control" id="emp-extension-number" value=""></dd>
+                                        </div>
+                                    </div>
+                                    <div class="row info-section">
+                                        <div class="col-md-12">
                                             <dt>이름</dt>
                                             <dd><input type="text" class="form-control" id="emp-name" value="${empDetail.emp_name}" readonly></dd>
                                         </div>
@@ -211,56 +215,28 @@
                                             <dd><input type="email" class="form-control" id="emp-email" value="${empDetail.emp_email}" readonly></dd>
                                         </div>
                                     </div>
-                                    <div class="row info-section">
-                                        <div class="col-md-12">
-                                            <dt>내선번호</dt>
-                                            <dd><input type="text" class="form-control" id="emp-extension-number" value="${empDetail.emp_extension_number}" readonly></dd>
-                                        </div>
-                                    </div>
+                                    
                                 </div>
                             </div>
                             <div class="row info-section">
                                 <div class="col-md-6">
                                     <dt>부서</dt>
                                     <dd><input type="text" class="form-control" id="dept-name" value="${empDetail.dept_name}" readonly></dd>
-                                    <select id="sdept-name" class="form-select dept-select" name="dept_name" style="display: none;">
-                                        <option value="1">인사부</option>
-                                        <option value="2">영업부</option>
-                                        <option value="3">영업지원부</option>
-                                        <option value="4">택시관리부</option>
-                                    </select>
                                 </div>
                                 <div class="col-md-6">
                                     <dt>직급</dt>
                                     <dd><input type="text" class="form-control" id="title-name" value="${empDetail.title_name}" readonly></dd>
-                                    <select id="stitle-name" class="form-select title-select" name="title_name" style="display: none;">
-                                        <option value="5">사원</option>
-                                        <option value="4">대리</option>
-                                        <option value="3">과장</option>
-                                        <option value="2">부장</option>
-                                        <option value="1">대표이사</option>
-                                    </select>
                                 </div>
                             </div>
                             <div class="row info-section">
                                 <div class="col-md-6">
                                     <dt>권한레벨</dt>
                                     <dd><input type="text" class="form-control" id="emp-level" value="${empDetail.emp_level}" readonly></dd>
-                                    <select id="semp-level" class="form-select level-select" name="emp_level" style="display: none;">
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                    </select>
                                 </div>
                                 <div class="col-md-6">
-                                    <dt>재직여부</dt>
-                                    <dd><input type="text" class="form-control" id="emp-employment-status" value="${empDetail.emp_employment_status ? '재직중' : '퇴사'}" readonly></dd>
-                                    <select id="semp-employment-status" class="form-select status-select" name="emp_employment_status" style="display: none;">
-                                        <option value="true">재직중</option>
-                                        <option value="false">퇴사</option>
-                                    </select>
-                                </div>
+                                    <dt>내선번호</dt>
+                                    <dd><input type="text" class="form-control" id="emp-extension-number" value="${empDetail.emp_extension_number}" readonly></dd>
+                            </div>
                             </div>
                             <div class="row info-section">
                                 <div class="col-md-12">
@@ -268,15 +244,7 @@
                                     <dd><input type="text" class="form-control" id="emp-add" value="${empDetail.emp_add}" readonly></dd>
                                 </div>
                             </div>
-                             <c:choose>
-                             <c:when test="${empDetail.emp_employment_status == false}">
-                            <div class="row info-section">
-                                <div class="col-md-12 text-center">
-                                    <dt id="emp-retired-date" data-value="${empDetail.emp_retired_date}">퇴사일 : ${empDetail.emp_retired_date}</dt>
-                                </div>
-                            </div>
-                                  </c:when>
-								</c:choose>
+                             
                         </form>
                     </div>
                 </div>
@@ -329,83 +297,17 @@
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 <script>
-	$('#sdept-name').hide();
-	$('#stitle-name').hide();
-	$('#semp-level').hide();
-	$('#semp-employment-status').hide();
-	$('#save-button').hide();
-	var isRetired = '${empDetail.emp_employment_status}' === 'false';
-
-	console.log('회사 다녀?? '+isRetired)
-
-	if (isRetired) {
-		
-		$('#emp-email').show();
-		$('#emp-add').show();
-        $('#emp-extension-number').show();
-		$('#emp-email').val('개인정보 보호법에 의거하여 열람 할 수 없습니다.');
-		$('#emp-add').val('개인정보 보호법에 의거하여 열람 할 수 없습니다.');
-        $('#emp-extension-number').val('존재하지 않는 내선번호입니다.');
-	}else if(!isRetired){
-		$('#edit-button').show();
-		$('#emp-email').show();
-		$('#emp-add').show();
-        $('#emp-extension-number').show();
-	}
-
-
-
-
+	
 	// 수정
 	 $('#edit-button').click(function () {
 		 
-		$('#dept-name').hide();
-     	$('#title-name').hide();
-     	$('#emp-level').hide();
-     	$('#emp-employment-status').hide();
-     
-     	
-     	$('#sdept-name').show();
-      	$('#stitle-name').show();
-      	$('#semp-level').show();
-      	$('#semp-employment-status').show();
-      	$('#edit-button').hide();
-        $('#save-button').show();
-        $('#cancel-button').show();
-        
-        $('#sdept-name').val(${empDetail.dept_no});
-      	$('#stitle-name').val(${empDetail.title_no});
-      	$('#semp-level').val(${empDetail.emp_level});
-        
+		
 	});
 
 
 	// 저장
 	$('#save-button').click(function() {
 		
-		var emp_employment_status = $('#semp-employment-status').val() === 'true';
-		var emp_no =  '${empDetail.emp_no}';
-		var dept_no = $('#sdept-name').val();
-		var title_no = $('#stitle-name').val();
-		var emp_level = $('#semp-level').val();
-		
-		console.log('재직여부는? :'+ emp_employment_status);
-		if (!emp_employment_status) {
-			if (confirm("재직 여부가 퇴사가 맞습니까?")) {
-				if (confirm('수정 하시겠습니까?')) {
-    				console.log('여기다 : '+emp_no);
-    				console.log('부서번호는? :'+dept_no);
-    				console.log('직위는? :'+title_no);
-    				console.log('재직여부는? :'+emp_employment_status);
-    				updateEmp(emp_no, dept_no, title_no, emp_level, emp_employment_status);
-    				
-			}else{
-				$('#cancel-button').click();
-			}
-		}else{
-			showAlert('warning', '재직 여부를 확인 부탁드립니다.');
-		}
-		}else{
 			if (confirm('수정 하시겠습니까?')) {
 				console.log('여기다 : '+emp_no);
 				console.log('부서번호는? :'+dept_no);
@@ -425,16 +327,8 @@
 		if (confirm('수정을 취소하겠습니까?')) {
 		
 			showAlert('danger', '수정이 취소되었습니다.');
-			$('#dept-name').show();
-     		$('#title-name').show();
-     		$('#emp-level').show();
-     		$('#emp-employment-status').show();
+			
      		$('#edit-button').show();
-     	
-     	 	$('#sdept-name').hide();
-      		$('#stitle-name').hide();
-      		$('#semp-level').hide();
-      		$('#semp-employment-status').hide();
         	$('#save-button').hide();
         	$('#cancel-button').hide();
 			

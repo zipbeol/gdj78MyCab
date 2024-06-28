@@ -35,7 +35,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li>
-                        <a id="menu-mypage-1" href="/mypage/detail.go">프로필</a>
+                        <a id="menu-mypage-1" href="/mypage/profile.go">프로필</a>
                     </li>
                     <li>
                         <a id="menu-mypage-2" href="/mypage/vac/list.go">연차 관리</a>

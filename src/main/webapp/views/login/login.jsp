@@ -74,7 +74,7 @@
   border: 1px;
   background-color:transparent;
   font-size: 16px;
-  color: rgba(255, 255, 255, 0.9);
+  color: black;
 }
 .incss::placeholder {
   color: #787878;

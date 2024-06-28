@@ -37,7 +37,7 @@
             <div class="text-white">
               <h1 class="fw-bold display-1">500</h1>
               <h3 class="mb-5 fw-lighter lh-2">
-                죄송합니다. <br/> 시스템 에러가 발생하여 페이지를 표시 할 수 없습니다. 
+                죄송합니다. <br/> 시스템 에러가 발생하여 페이지를 <br/> 표시 할 수 없습니다. 
               </h3>
               <a href="/" class="btn btn-danger rounded-5 px-4 py-3 shadow-lg fs-5">메인으로 돌아가기</a>
             </div>

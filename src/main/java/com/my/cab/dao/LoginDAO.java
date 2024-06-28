@@ -5,7 +5,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface LoginDAO {
 
-	int attDup(String emp_no);
 
 	boolean firstLogin(String emp_no);
 
@@ -14,5 +13,7 @@ public interface LoginDAO {
 	void addAtt(String emp_no);
 
 	int pwFirstChange(String emp_no, String password);
+
+	int addGetOff(String emp_no);
 
 }

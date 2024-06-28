@@ -6,6 +6,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -114,15 +115,15 @@ public class EmpController {
 	
 	
 	
-	
-	
-	@GetMapping(value="emp/hremp/getEmpDetail.ajax")
-	@ResponseBody
-	public Map<String, Object> getEmpDetail(EmpDTO empDTO){
-		logger.info(empDTO.getEmp_no() + "사원 상세보기 요청");
+	@RequestMapping(value="emp/hremp/empDetail.go")
+	public String empDetail(Model model, String emp_no) {
+		logger.info(emp_no+" 사원 상세보기 요청");
+		
+		EmpDTO empDTO = service.getEmpDetail(emp_no);
+		model.addAttribute("empDetail",empDTO);
 		
 		
-		return service.getEmpDetail(empDTO);
+		return "HR/empDetail";
 	}
 	
 	
@@ -140,7 +141,6 @@ public class EmpController {
 		return Map.of("isSuccess", isSuccess);
 		
 	}
-	
 	
 	
 	

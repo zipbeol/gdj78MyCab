@@ -164,11 +164,11 @@
     <div class="dropdown ms-2">
         <a id="userSettings" class="dropdown-toggle d-flex py-2 align-items-center text-decoration-none"
            href="#!" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="fs-3 bi bi-person-fill"></i>
+            <img src="/assets/user.png" class="rounded-2 img-3x" alt="user">
         </a>
         <div class="dropdown-menu dropdown-menu-end shadow-sm">
             <div class="p-3 border-bottom mb-2">
-                <h6 class="mb-1">Ella Lindsey</h6>
+                <h6 class="mb-1">${sessionScope.loginId}</h6>
                 <p class="m-0 small opacity-50">info@testing.com</p>
             </div>
             <a class="dropdown-item d-flex align-items-center" href="profile.go"><i
@@ -176,8 +176,27 @@
             <a class="dropdown-item d-flex align-items-center" href="settings.go"><i
                     class="bi bi-gear fs-4 me-2"></i>Settings</a>
             <div class="d-grid p-3 py-2">
-                <a class="btn btn-danger" href="login/logout.do">Logout</a>
+                <a class="btn btn-danger" href="/login/logout.do">로그아웃</a>
+                <a id="getOff" class="btn btn-danger" onclick="getOff()">로그아웃 및 퇴근</a>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+
+
+	function getOff(){
+	
+		location.href='login/logoutAndGetOff.do';
+	
+	};
+
+
+
+
+
+
+
+
+</script>

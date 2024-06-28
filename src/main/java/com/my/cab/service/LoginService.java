@@ -36,26 +36,14 @@ public class LoginService {
 				
 				result = 2;
 				
-			}else {
-				
-				int attDup  = dao.attDup(emp_no);//오늘 출근 중복 처리 방지 카운트
-				
-				if (attDup > 0) {//출근 데이터가 이미 있다면
-					logger.info("그냥 로그인");
-					
-					result = 1; //그냥 로그인만
-					
-				}else {
-					
+			}else {				
 					logger.info("로그인 및 출근 처리 함께");
 					
 					dao.addAtt(emp_no);
 					result = 1;
 					
 				}
-			}
-			
-		}else {//로그인 실패시
+			}else {//로그인 실패시
 			
 			logger.info("로그인 실패");
 			result = 0;
@@ -75,6 +63,16 @@ public class LoginService {
 		
 		
 		return row;
+	}
+
+
+
+	public int getOff(String emp_no) {
+		
+		int offCount = dao.addGetOff(emp_no); //1이면 퇴근 처리, 0이면 퇴근 이미 처리
+		
+		
+		return offCount;
 	}
 	
 }

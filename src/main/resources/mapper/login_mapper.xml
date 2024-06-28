@@ -18,18 +18,17 @@
         WHERE emp_no = #{emp_no}
     </select>
 
-    <!-- 오늘 날짜의 출근 중복 여부를 확인하는 쿼리 -->
-    <select id="attDup" resultType="int">
-        SELECT COUNT(*)
-        FROM attendance
-        WHERE emp_no = #{emp_no}
-          AND DATE(work_day) = CURDATE()
-    </select>
-
     <!-- 출근 시간을 추가하는 쿼리 -->
     <insert id="addAtt" >
-        INSERT INTO attendance (emp_no, att_time, work_day)
-        VALUES (#{emp_no}, NOW(), CURDATE())
+      	INSERT INTO attendance (emp_no, att_time, work_day)
+		SELECT #{emp_no}, NOW(), CURDATE()
+		FROM DUAL
+   		WHERE NOT EXISTS (
+        SELECT 1
+        FROM attendance
+        WHERE emp_no = #{emp_no}
+		AND DATE(work_day) = CURDATE()
+    )
     </insert>
 
 	<update id="pwFirstChange">
@@ -39,8 +38,17 @@
 	first_login = false
 	WHERE
 	emp_no = #{emp_no}
-	
 	</update>
+    
+    
+    <!-- 퇴근 시간을 추가하는 쿼리 -->
+    <insert id="addGetOff" >
+        UPDATE attendance
+   		SET leave_time = NOW()
+    	WHERE emp_no = #{emp_no}
+    	AND DATE(work_day) = CURDATE()
+    	AND leave_time IS NULL;
+    </insert>
 
 
 </mapper>

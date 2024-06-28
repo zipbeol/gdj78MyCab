@@ -381,95 +381,83 @@
 <script src="/assets/js/custom.js"></script>
 <script src="/assets/js/LocalStorage.js"></script>
 
-<!-- 양식 모달창 -->
-<div class="modal fade" id="approvalModal" tabindex="-1" role="dialog" aria-labelledby="approvalModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="approvalModalLabel">기안서 작성</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <label for="date">일자:</label>
-                        <input type="date" id="date" name="date" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="title">제목:</label>
-                        <input type="text" id="title" name="title" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="approverline">결재라인:</label>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex align-items-center">
-                                <button type="button" class="btn btn-secondary approver-select-btn" id="approverLineButton" data-toggle="modal" data-target="#approverLineModal" onclick="setApproverType('line')">결재라인 선택</button>
-                                <span id="approverLineName" class="ml-3"></span>
-                                <input type="hidden" id="approverLine" name="approverline">
+    <!-- 양식 모달창 -->
+    <div class="modal fade" id="approvalModal" tabindex="-1" role="dialog" aria-labelledby="approvalModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="approvalModalLabel">기안서 작성</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="date">일자:</label>
+                            <input type="date" id="date" name="date" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="title">제목:</label>
+                            <input type="text" id="title" name="title" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="approverline">결재라인:</label>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <button type="button" class="btn btn-secondary approver-select-btn" id="approverLineButton" data-toggle="modal" data-target="#approverLineModal" onclick="setApproverType('line')">결재라인 선택</button>
+                                    <span id="approverLineName" class="ml-3"></span>
+                                    <input type="hidden" id="approverLine" name="approverline">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group approver-container">
-                        <label class="approver-label">중간결재자:</label>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex align-items-center">
-                                <button type="button" class="btn btn-secondary approver-select-btn" id="midApproverButton" data-toggle="modal" data-target="#approverSelectModal" onclick="setApproverType('mid')">중간결재자 선택</button>
-                                <span id="midApproverName" class="ml-3"></span>
-                                <input type="hidden" id="midApprover" name="midApprover">
+                        <div class="form-group approver-container">
+                            <label class="approver-label">중간결재자:</label>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <button type="button" class="btn btn-secondary approver-select-btn" id="midApproverButton" data-toggle="modal" data-target="#approverSelectModal" onclick="setApproverType('mid')">중간결재자 선택</button>
+                                    <span id="midApproverName" class="ml-3"></span>
+                                    <input type="hidden" id="midApprover" name="midApprover">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group approver-container">
-                        <label class="approver-label">최종결재자:</label>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex align-items-center">
-                                <button type="button" class="btn btn-secondary approver-select-btn" id="finalApproverButton" data-toggle="modal" data-target="#approverSelectModal" onclick="setApproverType('final')">최종결재자 선택</button>
-                                <span id="finalApproverName" class="ml-3"></span>
-                                <input type="hidden" id="finalApprover" name="finalApprover">
+                        <div class="form-group approver-container">
+                            <label class="approver-label">최종결재자:</label>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <button type="button" class="btn btn-secondary approver-select-btn" id="finalApproverButton" data-toggle="modal" data-target="#approverSelectModal" onclick="setApproverType('final')">최종결재자 선택</button>
+                                    <span id="finalApproverName" class="ml-3"></span>
+                                    <input type="hidden" id="finalApprover" name="finalApprover">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="participator">참조자:</label>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex align-items-center">
-                                <button type="button" class="btn btn-secondary approver-select-btn" id="participatorButton" data-toggle="modal" data-target="#approverSelectModal" onclick="setApproverType('participator')">참조자 선택</button>
-                                <span id="participatorName" class="ml-3"></span>
-                                <input type="hidden" id="participator" name="participator">
+                        <div class="form-group">
+                            <label for="participator">참조자:</label>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <button type="button" class="btn btn-secondary approver-select-btn" id="participatorButton" data-toggle="modal" data-target="#approverSelectModal" onclick="setApproverType('participator')">참조자 선택</button>
+                                    <span id="participatorName" class="ml-3"></span>
+                                    <input type="hidden" id="participator" name="participator">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="category">구분:</label>
-                        <select id="category" name="category" class="form-control">
-                            <option value="02">1</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="format">출력 양식:</label>
-                        <select id="format" name="format" class="form-control">
-                            <option value="default">기본 양식</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="file">첨부:</label>
-                        <input type="file" id="file" name="file" class="form-control">
-                    </div>
-                </form>
-                <!-- 경로를 지정하여 HTML 파일을 로드 -->
-                <iframe id="documentFrame" src="" width="100%" height="500px"></iframe>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="sendHtmlToServer(true)">저장/결재</button>
-                <button type="button" class="btn btn-secondary" onclick="sendHtmlToServer(false)">임시 저장</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">닫기</button>
+						<div class="form-group">
+                            <label for="file">첨부:</label>
+                            <input type="file" id="file" name="file" class="form-control">
+                        </div>
+                    </form>
+                    <!-- 경로를 지정하여 HTML 파일을 로드 -->
+                    <iframe id="documentFrame" src="" width="100%" height="500px"></iframe>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="saveButton">저장/결재</button>
+                    <button type="button" class="btn btn-secondary" id="saveTempButton">임시 저장</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">닫기</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<!-- 양식 모달창 종료 -->
+    <!-- 양식 모달창 종료 -->
 
 <!-- 결재자 선택 모달 -->
 <div class="modal fade" id="approverSelectModal" tabindex="-1" role="dialog" aria-labelledby="approverSelectModalLabel" aria-hidden="true">
@@ -610,9 +598,19 @@ document.addEventListener('DOMContentLoaded', function() {
         alert('선택된 결재라인을 수정합니다.');
     });
 });
+0
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelector('#saveButton').addEventListener('click', function() {
+        sendHtmlToServer(true);
+    });
 
-// 서버로 HTML 파일을 전송하는 함수
-function sendHtmlToServer() {
+    document.querySelector('#saveTempButton').addEventListener('click', function() {
+        sendHtmlToServer(false);
+    });
+
+
+// 서버로 기안서 작성 내용 데이터 전송
+function sendHtmlToServer(isFinal) {
     const iframe = document.getElementById('documentFrame');
     const doc = iframe.contentDocument || iframe.contentWindow.document;
 
@@ -653,7 +651,26 @@ function sendHtmlToServer() {
     console.log(htmlContent); // HTML 콘텐츠를 콘솔에 출력
 
     const formData = new FormData();
+   
+
+    // 모달의 다른 입력 요소 값을 추가
+    formData.append('date', document.getElementById('date').value);
+    formData.append('title', document.getElementById('title').value);
+    formData.append('approverline', document.getElementById('approverLine').value);
+    formData.append('midApprover', document.getElementById('midApprover').value);
+    formData.append('finalApprover', document.getElementById('finalApprover').value);
+    formData.append('participator', document.getElementById('participator').value);
     formData.append('htmlContent', htmlContent); // FormData 객체에 HTML 콘텐츠 추가
+    
+    // 파일 입력 값 추가
+    const fileInput = document.getElementById('file');
+    
+    if (fileInput.files.length > 0) {
+        formData.append('file', fileInput.files[0]);
+    }
+
+    // 전송 타입 추가
+    formData.append('isFinal', isFinal);
 
     fetch('/approval/save-html.fetch', {
         method: 'POST',
@@ -668,6 +685,7 @@ function sendHtmlToServer() {
         console.error('Error:', error);
     });
 }
+});
 
 // 결재자 유형을 설정하는 함수
 function setApproverType(type) {

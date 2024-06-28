@@ -131,4 +131,25 @@ public class FinanceController {
 		// 서비스 호출하여 리스트 데이터 가져오기
 		return financeService.getDealList(param, searchDTO);
 	}
+	
+	// 거래 페이징 처리
+	@GetMapping("/deal/getTotalPages.ajax")
+	@ResponseBody
+	public Map<String, Object> getDealTotalPages(SearchDTO searchDTO) {
+		logger.info("\nsearchDTO SearchText:" + searchDTO.getSearchText() + "\nsearchDTO Category:"
+				+ searchDTO.getCategory() + "\nsearchDTO filterStartDate:" + searchDTO.getFilterStartDate()
+				+ "\nsearchDTO filterEndDate:" + searchDTO.getFilterEndDate() + "\nsearchDTO page:"
+				+ searchDTO.getPage());
+		logger.info("searchDTO = " + searchDTO);
+		Map<String, Object> map = new HashMap<>();
+		map.put("totalPages", financeService.getDealTotalPages(searchDTO));
+
+		return map;
+	}
+	
+	@GetMapping("/deal/totalAmounts.ajax")
+	    public Map<String, Object> getTotalAmounts(FinanceDTO financeDTO) {
+	        return financeService.getTotalAmounts(financeDTO);
+	    
+	}
 }

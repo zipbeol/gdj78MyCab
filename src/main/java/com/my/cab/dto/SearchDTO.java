@@ -13,6 +13,7 @@ public class SearchDTO {
     private String sortColumn;
     private String pro_filter;
     private String exp_filter;
+    private String deal_filter;
     private String category;
     private int page;
     private String searchIdx;
@@ -140,5 +141,13 @@ public class SearchDTO {
     public void setFilterForSearch(String filterForSearch) {
         this.filterForSearch = filterForSearch;
     }
+
+	public String getDeal_filter() {
+		return deal_filter;
+	}
+
+	public void setDeal_filter(String deal_filter) {
+		this.deal_filter = deal_filter;
+	}
 
 }

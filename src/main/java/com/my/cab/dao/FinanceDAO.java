@@ -1,6 +1,7 @@
 package com.my.cab.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -26,5 +27,7 @@ public interface FinanceDAO {
 
 	boolean addDeal(FinanceDTO profitDTO);
 
-
+	int getDealCount(SearchDTO searchDTO);
+	
+	Map<String, Object> getTotalAmounts(FinanceDTO financeDTO);
 }

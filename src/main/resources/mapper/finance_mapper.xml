@@ -6,64 +6,69 @@
 <mapper namespace="com.my.cab.dao.FinanceDAO">
 
 	<!-- 수익 리스트 조회 쿼리 -->
-	<select id="getProfitList" resultType="finance" parameterType="search">
-    SELECT pro_who, pro_cash, pro_actual_date, pro_date, pro_category,
-    pro_content, pro_cash
-    FROM profit
-    <where>
-        <if test="category != null and category != ''">
-            AND pro_category = #{category}
-        </if>
-        <if test="filterStartDate != null and filterEndDate != null and filterEndDate !='' and filterStartDate !=''">
-            AND pro_actual_date BETWEEN #{filterStartDate} AND
-            #{filterEndDate}
-        </if>
-        <if test="searchText != null and searchText != ''">
-            AND pro_who LIKE CONCAT('%', #{searchText}, '%')
-        </if>
-    </where>
-    <!-- 초기화면은 수익 발생일(pro_actual_date) 순으로 정렬 -->
-    <choose>
-        <when test="pro_filter == 'manyProfit'">
-            ORDER BY pro_cash DESC
-        </when>
-        <when test="pro_filter == 'lessProfit'">
-            ORDER BY pro_cash ASC
-        </when>
-        <when test="pro_filter == 'orderByName'">
-            ORDER BY pro_who ASC
-        </when>
-        <!-- 초기화면 이후에는 기본적으로 pro_actual_date DESC 정렬을 유지 -->
-        <otherwise>
-            ORDER BY pro_actual_date DESC
-        </otherwise>
-    </choose>
-    LIMIT #{pageSize} OFFSET #{page}
-	</select>
-
-
-    <select id="getProfitCount" resultType="int" parameterType="search">
-        SELECT COUNT(pro_idx)
-        FROM profit
+	<select id="getProfitList" resultType="finance"
+		parameterType="search">
+		SELECT pro_who, pro_cash, pro_actual_date, pro_date, pro_category,
+		pro_content, pro_cash
+		FROM profit
 		<where>
 			<if test="category != null and category != ''">
 				AND pro_category = #{category}
 			</if>
-			<if test="filterStartDate != null and filterEndDate != null and filterEndDate !='' and filterStartDate !=''">
+			<if
+				test="filterStartDate != null and filterEndDate != null and filterEndDate !='' and filterStartDate !=''">
 				AND pro_actual_date BETWEEN #{filterStartDate} AND
 				#{filterEndDate}
 			</if>
 			<if test="searchText != null and searchText != ''">
 				AND pro_who LIKE CONCAT('%', #{searchText}, '%')
 			</if>
-			</where>
-    </select>
-    
+		</where>
+		<!-- 초기화면은 수익 발생일(pro_actual_date) 순으로 정렬 -->
+		<choose>
+			<when test="pro_filter == 'manyProfit'">
+				ORDER BY pro_cash DESC
+			</when>
+			<when test="pro_filter == 'lessProfit'">
+				ORDER BY pro_cash ASC
+			</when>
+			<when test="pro_filter == 'orderByName'">
+				ORDER BY pro_who ASC
+			</when>
+			<!-- 초기화면 이후에는 기본적으로 pro_actual_date DESC 정렬을 유지 -->
+			<otherwise>
+				ORDER BY pro_actual_date DESC
+			</otherwise>
+		</choose>
+		LIMIT #{pageSize} OFFSET #{page}
+	</select>
+
+
+	<select id="getProfitCount" resultType="int"
+		parameterType="search">
+		SELECT COUNT(pro_idx)
+		FROM profit
+		<where>
+			<if test="category != null and category != ''">
+				AND pro_category = #{category}
+			</if>
+			<if
+				test="filterStartDate != null and filterEndDate != null and filterEndDate !='' and filterStartDate !=''">
+				AND pro_actual_date BETWEEN #{filterStartDate} AND
+				#{filterEndDate}
+			</if>
+			<if test="searchText != null and searchText != ''">
+				AND pro_who LIKE CONCAT('%', #{searchText}, '%')
+			</if>
+		</where>
+	</select>
+
 	<!-- 수익 등록 쿼리 -->
 	<!-- 나중에 수정 필요 -->
-	<insert id="addProfit" parameterType="finance" useGeneratedKeys="true" keyColumn="pro_idx"
-            keyProperty="pro_idx">
-		INSERT INTO profit
+	<insert id="addProfit" parameterType="finance"
+		useGeneratedKeys="true" keyColumn="pro_idx" keyProperty="pro_idx">
+		INSERT INTO
+		profit
 		(pro_trip_id, pro_category, pro_content, pro_who,
 		pro_cash,
 		pro_actual_date)
@@ -71,88 +76,272 @@
 		#{pro_who}, #{pro_cash},
 		#{pro_actual_date})
 	</insert>
-	
+
 
 	<!-- 지출 리스트 조회 쿼리 -->
-	<select id="getExpensesList" resultType="finance" parameterType="search">
-    SELECT exp_sal_idx, exp_driver_salary_idx, exp_category, exp_date, exp_content,
-    exp_who, exp_cash,exp_actual_date
-    FROM expenses
-    <where>
-        <if test="category != null and category != ''">
-            AND exp_category = #{category}
-        </if>
-        <if test="filterStartDate != null and filterEndDate != null and filterEndDate !='' and filterStartDate !=''">
-            AND exp_actual_date BETWEEN #{filterStartDate} AND
-            #{filterEndDate}
-        </if>
-        <if test="searchText != null and searchText != ''">
-            AND exp_who LIKE CONCAT('%', #{searchText}, '%')
-        </if>
-    </where>
-    <!-- 초기화면은 지출 발생일(exp_actual_date) 순으로 정렬 -->
-    <choose>
-        <when test="exp_filter == 'manyExpenses'">
-            ORDER BY exp_cash DESC
-        </when>
-        <when test="exp_filter == 'manyExpenses'">
-            ORDER BY exp_cash ASC
-        </when>
-        <when test="exp_filter == 'orderByName'">
-            ORDER BY exp_who ASC
-        </when>
-        <!-- 초기화면 이후에는 기본적으로 exp_actual_date DESC 정렬을 유지 -->
-        <otherwise>
-            ORDER BY exp_actual_date DESC
-        </otherwise>
-    </choose>
-    LIMIT #{pageSize} OFFSET #{page}
+	<select id="getExpensesList" resultType="finance"
+		parameterType="search">
+		SELECT exp_sal_idx, exp_driver_salary_idx, exp_category, exp_date,
+		exp_content,
+		exp_who, exp_cash,exp_actual_date
+		FROM expenses
+		<where>
+			<if test="category != null and category != ''">
+				AND exp_category = #{category}
+			</if>
+			<if
+				test="filterStartDate != null and filterEndDate != null and filterEndDate !='' and filterStartDate !=''">
+				AND exp_actual_date BETWEEN #{filterStartDate} AND
+				#{filterEndDate}
+			</if>
+			<if test="searchText != null and searchText != ''">
+				AND exp_who LIKE CONCAT('%', #{searchText}, '%')
+			</if>
+		</where>
+		<!-- 초기화면은 지출 발생일(exp_actual_date) 순으로 정렬 -->
+		<choose>
+			<when test="exp_filter == 'manyExpenses'">
+				ORDER BY exp_cash DESC
+			</when>
+			<when test="exp_filter == 'manyExpenses'">
+				ORDER BY exp_cash ASC
+			</when>
+			<when test="exp_filter == 'orderByName'">
+				ORDER BY exp_who ASC
+			</when>
+			<!-- 초기화면 이후에는 기본적으로 exp_actual_date DESC 정렬을 유지 -->
+			<otherwise>
+				ORDER BY exp_actual_date DESC
+			</otherwise>
+		</choose>
+		LIMIT #{pageSize} OFFSET #{page}
 	</select>
 
 	<!-- 지출 등록 쿼리 -->
 	<!-- 나중에 수정 필요 -->
-	<insert id="addExpenses" parameterType="finance" useGeneratedKeys="true" keyColumn="exp_idx"
-            keyProperty="exp_idx">
-		INSERT INTO expenses
-		(exp_driver_salary_idx,exp_sal_idx, exp_category, exp_content, exp_who,
+	<insert id="addExpenses" parameterType="finance"
+		useGeneratedKeys="true" keyColumn="exp_idx" keyProperty="exp_idx">
+		INSERT INTO
+		expenses
+		(exp_driver_salary_idx,exp_sal_idx, exp_category, exp_content,
+		exp_who,
 		exp_cash,
 		exp_actual_date)
-		VALUES (0, 0,#{exp_category}, #{exp_content},
+		VALUES (0, 0,#{exp_category},
+		#{exp_content},
 		#{exp_who}, #{exp_cash},
 		#{exp_actual_date})
 	</insert>
-	
+
 	<!-- 거래 등록 쿼리 -->
 	<!-- 나중에 수정 필요 -->
 	<insert id="addDeal" parameterType="finance">
 		INSERT INTO deal_history
 		<choose>
 			<when test="isProfit">
-			(deal_pro_idx, deal_field)
-			VALUES (#{pro_idx}, #{deal_field})
+				(deal_pro_idx, deal_category)
+				VALUES (#{pro_idx},
+				#{deal_category})
 			</when>
 			<otherwise>
-			(deal_exp_idx, deal_field)
-			VALUES (#{exp_idx}, #{deal_field})
+				(deal_exp_idx, deal_category)
+				VALUES (#{exp_idx},
+				#{deal_category})
 			</otherwise>
 		</choose>
 	</insert>
-	
-	<select id="getExpensesCount" resultType="int" parameterType="search">
-        SELECT COUNT(exp_idx)
-        FROM expenses
+
+	<select id="getExpensesCount" resultType="int"
+		parameterType="search">
+		SELECT COUNT(exp_idx)
+		FROM expenses
 		<where>
-        <if test="category != null and category != ''">
-            AND exp_category = #{category}
-        </if>
-        <if test="filterStartDate != null and filterEndDate != null and filterEndDate !='' and filterStartDate !=''">
-            AND exp_actual_date BETWEEN #{filterStartDate} AND
-            #{filterEndDate}
-        </if>
-        <if test="searchText != null and searchText != ''">
-            AND exp_who LIKE CONCAT('%', #{searchText}, '%')
-        </if>
-    </where>
-    </select>
+			<if test="category != null and category != ''">
+				AND exp_category = #{category}
+			</if>
+			<if
+				test="filterStartDate != null and filterEndDate != null and filterEndDate !='' and filterStartDate !=''">
+				AND exp_actual_date BETWEEN #{filterStartDate} AND
+				#{filterEndDate}
+			</if>
+			<if test="searchText != null and searchText != ''">
+				AND exp_who LIKE CONCAT('%', #{searchText}, '%')
+			</if>
+		</where>
+	</select>
+
+	<!-- 거래 리스트 조회 쿼리 -->
+	<!-- 나중에 수정 필요 -->
+	<select id="getDealList" resultType="finance">
+		SELECT
+		pro.pro_actual_date AS deal_actual_date,
+		pro.pro_date AS
+		deal_date,
+		'수익' AS deal_category,
+		pro.pro_category AS deal_field,
+		pro.pro_content AS deal_content,
+		pro.pro_who AS deal_who,
+		pro.pro_cash
+		AS deal_cash,
+		dh.deal_idx,
+		dh.deal_emp_no,
+		dh.deal_pro_idx,
+		dh.deal_exp_idx
+		FROM profit pro
+		JOIN deal_history dh ON dh.deal_pro_idx
+		= pro.pro_idx
+		<where>
+			<if test="category != null and category != ''">
+				AND '수익' IN
+				<foreach item="cat" collection="category.split(',')"
+					open="(" separator="," close=")">
+					#{cat}
+				</foreach>
+			</if>
+			<if
+				test="filterStartDate != null and filterEndDate != null and filterEndDate != '' and filterStartDate != ''">
+				AND pro.pro_actual_date BETWEEN #{filterStartDate} AND
+				#{filterEndDate}
+			</if>
+			<if test="searchText != null and searchText != ''">
+				AND pro.pro_who LIKE CONCAT('%', #{searchText}, '%')
+			</if>
+		</where>
+		UNION
+		SELECT
+		exp.exp_actual_date AS deal_actual_date,
+		exp.exp_date AS
+		deal_date,
+		'지출' AS deal_category,
+		exp.exp_category AS deal_field,
+		exp.exp_content AS deal_content,
+		exp.exp_who AS deal_who,
+		exp.exp_cash
+		AS deal_cash,
+		dh.deal_idx,
+		dh.deal_emp_no,
+		dh.deal_pro_idx,
+		dh.deal_exp_idx
+		FROM expenses exp
+		JOIN deal_history dh ON
+		dh.deal_exp_idx = exp.exp_idx
+		<where>
+			<if test="category != null and category != ''">
+				AND '지출' IN
+				<foreach item="cat" collection="category.split(',')"
+					open="(" separator="," close=")">
+					#{cat}
+				</foreach>
+			</if>
+			<if
+				test="filterStartDate != null and filterEndDate != null and filterEndDate != '' and filterStartDate != ''">
+				AND exp.exp_actual_date BETWEEN #{filterStartDate} AND
+				#{filterEndDate}
+			</if>
+			<if test="searchText != null and searchText != ''">
+				AND exp.exp_who LIKE CONCAT('%', #{searchText}, '%')
+			</if>
+		</where>
+		<choose>
+			<when test="deal_filter == 'manyDeal'">
+				ORDER BY deal_cash DESC
+			</when>
+			<when test="deal_filter == 'lessDeal'">
+				ORDER BY deal_cash ASC
+			</when>
+			<when test="deal_filter == 'byDealWho'">
+				ORDER BY deal_who ASC
+			</when>
+			<otherwise>
+				ORDER BY deal_actual_date DESC
+			</otherwise>
+		</choose>
+		LIMIT #{pageSize} OFFSET #{page}
+	</select>
+
+	<select id="getDealCount" resultType="int"
+		parameterType="search">
+		SELECT COUNT(deal_idx)
+		FROM (
+		SELECT pro.pro_idx AS deal_idx
+		FROM profit
+		pro
+		JOIN deal_history dh ON dh.deal_pro_idx = pro.pro_idx
+		<where>
+			<if test="category != null and category != ''">
+				AND pro.pro_category IN
+				<foreach item="cat" collection="category.split(',')"
+					open="(" separator="," close=")">
+					#{cat}
+				</foreach>
+			</if>
+			<if
+				test="filterStartDate != null and filterEndDate != null and filterEndDate != '' and filterStartDate != ''">
+				AND pro.pro_actual_date BETWEEN #{filterStartDate} AND
+				#{filterEndDate}
+			</if>
+			<if test="searchText != null and searchText != ''">
+				AND pro.pro_who LIKE CONCAT('%', #{searchText}, '%')
+			</if>
+		</where>
+		UNION
+		SELECT exp.exp_idx AS deal_idx
+		FROM expenses exp
+		JOIN deal_history
+		dh ON dh.deal_exp_idx = exp.exp_idx
+		<where>
+			<if test="category != null and category != ''">
+				AND exp.exp_category IN
+				<foreach item="cat" collection="category.split(',')"
+					open="(" separator="," close=")">
+					#{cat}
+				</foreach>
+			</if>
+			<if
+				test="filterStartDate != null and filterEndDate != null and filterEndDate != '' and filterStartDate != ''">
+				AND exp.exp_actual_date BETWEEN #{filterStartDate} AND
+				#{filterEndDate}
+			</if>
+			<if test="searchText != null and searchText != ''">
+				AND exp.exp_who LIKE CONCAT('%', #{searchText}, '%')
+			</if>
+		</where>
+		) AS deal_history
+	</select>
 	
+	<!-- 총 수익, 총 지출, 순수익 계산 쿼리 -->
+	<select id="getTotalAmounts" resultType="map">
+	    SELECT 
+	        IFNULL(SUM(profit_cash), 0) AS total_profit,
+	        IFNULL(SUM(expense_cash), 0) AS total_expense,
+	        (IFNULL(SUM(profit_cash), 0) - IFNULL(SUM(expense_cash), 0)) AS net_profit
+	    FROM (
+	        SELECT 
+	            pro.pro_cash AS profit_cash,
+	            0 AS expense_cash
+	        FROM profit pro
+	        JOIN deal_history dh ON pro.pro_idx = dh.deal_pro_idx
+	        <where>
+	            <if test="filterStartDate != null and filterEndDate != null and filterEndDate != '' and filterStartDate != ''">
+	                AND pro.pro_actual_date BETWEEN #{filterStartDate} AND #{filterEndDate}
+	            </if>
+	        </where>
+	        UNION ALL
+	        SELECT 
+	            0 AS profit_cash,
+	            exp.exp_cash AS expense_cash
+	        FROM expenses exp
+	        JOIN deal_history dh ON exp.exp_idx = dh.deal_exp_idx
+	        <where>
+	            <if test="filterStartDate != null and filterEndDate != null and filterEndDate != '' and filterStartDate != ''">
+	                AND exp.exp_actual_date BETWEEN #{filterStartDate} AND #{filterEndDate}
+	            </if>
+	        </where>
+	    ) AS deal_amounts
+	</select>
+
+
+
+
+
 </mapper>

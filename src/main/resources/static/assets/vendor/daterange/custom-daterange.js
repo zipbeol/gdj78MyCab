@@ -6,7 +6,9 @@ $(".datepicker").daterangepicker({
 	locale: {
 		format: "YYYY/MM/DD",
 	},
+	
 });
+	
 
 // Date Range Opens Left
 $(".datepicker-opens-left").daterangepicker({

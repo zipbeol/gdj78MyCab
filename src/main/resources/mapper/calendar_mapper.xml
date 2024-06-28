@@ -6,7 +6,11 @@
 <mapper namespace="com.my.cab.dao.CalendarDAO">
 
 	<select id="calListCall" resultType="map">
-		SELECT * FROM schedule WHERE schedule_del = '0'
+		SELECT s.*,d.dept_name
+		FROM schedule s
+		INNER JOIN employee e ON s.schedule_emp_no = e.emp_no
+		INNER JOIN department d ON e.dept_no = d.dept_no
+		WHERE e.dept_no = d.dept_no
 	</select>
 	
 	<select id="dayCalListCall" resultType="map">
@@ -15,8 +19,22 @@
 	
 	<insert id="createSchedule" parameterType="calendarDTO">
 		INSERT INTO schedule 
-		(schedule_name,schedule_content,schedule_start_date,schedule_end_date,schedule_emp_no,schedule_category,schedule_color)
-		VALUES (#{schedule_name},#{schedule_content},#{schedule_start_date},#{schedule_end_date},#{schedule_emp_no},#{schedule_category},#{schedule_color})
+    (schedule_name, schedule_content, schedule_start_date, schedule_end_date, schedule_emp_no, schedule_category, schedule_color,schedule_dept_name)
+	SELECT 
+	    #{schedule_name}, 
+	    #{schedule_content}, 
+	    #{schedule_start_date}, 
+	    #{schedule_end_date}, 
+	    #{schedule_emp_no}, 
+	    #{schedule_category}, 
+	    #{schedule_color}, 
+	    d.dept_name
+	FROM 
+	    employee e
+	JOIN 
+	    department d ON e.dept_no = d.dept_no
+	WHERE 
+	    e.emp_no = #{schedule_emp_no};
 	</insert>
 	
 	<select id="calendarDetail" resultType="calendarDTO">

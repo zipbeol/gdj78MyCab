@@ -91,7 +91,64 @@
 		.schedule-event td:last-child a:hover {
 		  text-decoration: underline;
 		}
-    	
+    	#editButton, #delButton{
+    		display: none;
+    	}
+    	#calendar-util-box{
+    		border: 1px solid lightGray;
+    		background-color : white;
+    		float: left;
+		    width: 223px;
+		    height: 500px;
+		    position: relative;
+		    top: 57px;
+		    margin-right: 15px;
+    	}
+    	.fc-insertScheduleButton-button{
+	    	float: left;
+		    left: -1026px;
+		    position: relative;
+		    width: 200px;
+    	}
+    	.fc .fc-toolbar-title{
+    		font-size: 20px;
+    	}
+    	.util-box-category{
+    		border: 1px solid lightGray;
+    		background-color : lightGray;
+    		width: 165px;
+    		height: 70px;
+    		margin-bottom: 15px;
+    		margin-left: 14px;
+    		cursor: pointer;
+    	}
+    	.util-box1{
+    		background-color: #ffec63;
+    	}
+    	.util-box2{
+    		background-color: #28b9ff;
+    	}
+    	.util-box3{
+    		background-color: #71f371;
+    	}
+    	.fc-day-sat .fc-daygrid-day-number {
+			color: blue;
+		}
+		
+		.fc-day-sun .fc-daygrid-day-number {
+			color: red;
+		}
+		.fc-day-sun .fc-col-header-cell-cushion {
+			color: red;
+		}
+		
+		.fc-day-sat .fc-col-header-cell-cushion {
+			color: blue;
+		}
+		/* util box 체크박스 위치 설정 */
+		.form-check-input[type=checkbox]{
+			float: right;
+		}
     </style>
   </head>
 
@@ -171,7 +228,21 @@
                     <div class="card-header">
                       <h4 class="card-title">일정관리</h4>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" style="width: 1500px">
+                    	<div id="calendar-util-box" class = "alert alert-secondary rounded-3">
+                    		<div class="util-box-category alert alert-secondary rounded-3 util-box1" onclick="utilBoxClk(this)">
+		                          <label class="form-check-label" for="firstCheckbox">개인</label>
+		                          <input class="form-check-input me-1" type="checkbox" value="" id="firstCheckbox">
+                    		</div>
+                    		<div class="util-box-category alert alert-secondary rounded-3 util-box2" onclick="utilBoxClk(this)">
+		                          <label class="form-check-label" for="secondCheckbox">부서</label>
+		                          <input class="form-check-input me-1" type="checkbox" value="" id="secondCheckbox" >
+                    		</div>
+                    		<div class="util-box-category alert alert-secondary rounded-3 util-box3" onclick="utilBoxClk(this)">
+		                          <label class="form-check-label" for="thirdCheckbox">전사</label>
+		                          <input class="form-check-input me-1" type="checkbox" value="" id="thirdCheckbox">
+                    		</div>
+                    	</div>
                       <div id="selectableCalendar"></div>
                     </div>
                   </div>
@@ -198,79 +269,8 @@
       <!-- Main container end -->
 
     </div>
-    
-    <!-- 일정 리스트 모달 -->
-	<div class="modal fade show" id="mycab-cal-modal" tabindex="-1" aria-labelledby="exampleModalCenteredScrollableTitle" aria-modal="true" role="dialog">
-                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="exampleModalCenteredScrollableTitle">
-                                일정관리
-                              </h5>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body" id = "cal-modal-content">
-                              <table id = "cal-modal-content2" class="schedule-table">
-                              
-                              </table>
-                              
-                     
-                              <br><br><br><br><br><br><br><br><br><br>
-                              <br><br><br><br><br><br><br><br><br><br>
-                              <p>Just like that.</p>
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-primary">
-                                일정추가
-                              </button>
-                              <button type="button" class="btn btn-primary">
-                                취소
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      
-    <!-- 일정리스트 모달 끝 -->                  
-    <!-- 일반모달 -->                  
-	<div class="modal fade show" id="exampleModalCenteredScrollable" tabindex="-1" aria-labelledby="exampleModalCenteredScrollableTitle" aria-modal="true" role="dialog" style="display: none;">
-                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="exampleModalCenteredScrollableTitle">
-                                Modal title
-                              </h5>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                              <p>
-                                This is some placeholder content to show a
-                                vertically centered modal. We've added some
-                                extra copy here to show how vertically centering
-                                the modal works when combined with scrollable
-                                modals. We also use some repeated line breaks to
-                                quickly extend the height of the content,
-                                thereby triggering the scrolling. When content
-                                becomes longer than the predefined max-height of
-                                modal, content will be cropped and scrollable
-                                within the modal.
-                              </p>
-                              <br><br><br><br><br><br><br><br><br><br>
-                              <br><br><br><br><br><br><br><br><br><br>
-                              <p>Just like that.</p>
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                Close
-                              </button>
-                              <button type="button" class="btn btn-primary">
-                                Save changes
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-	<!-- 일반모달 끝 -->
+                
+
 	<!-- 일정추가 모달 -->
 	<div class="modal fade" id="scheduleAddModal" tabindex="-1" aria-labelledby="exampleModalLgLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -286,7 +286,7 @@
                 </div>
                 <div class="input-group mb-3">
                     <label class="input-group-text" for="create-start-date">시작 일정</label>
-                    <input type="text" class="datepicker form-control" id="create-start-date" name="create-start-date">
+                    <input type="text" class="createDatepicker form-control" id="create-start-date" name="create-start-date">
                     <select id="create-start-hour" name="create-start-hour">
                         <c:forEach var="a" begin="0" end="23" varStatus="i">
                             <option value="${a}">${a}시</option>
@@ -298,7 +298,7 @@
                         </c:forEach>
                     </select>
                     <span class="input-group-text">~</span>
-                    <input type="text" class="datepicker form-control" id="create-end-date" name="create-end-date">
+                    <input type="text" class="createDatepicker form-control" id="create-end-date" name="create-end-date">
                     <select id="create-end-hour" name="create-end-hour">
                         <c:forEach var="a" begin="0" end="23" varStatus="i">
                             <option value="${a}">${a}시</option>
@@ -312,12 +312,12 @@
                 </div>
                 <div class="input-group mb-3">
                     <label class="input-group-text" for="create-category">일정 범위</label>
-                    <select class="form-select" id="create-category" onchange="changeCategoryColor()">
+                    <select class="form-select" id="create-category" onchange="changeCategoryColor(this)">
                         <c:if test="${sessionScope.loginId == '개인'}">
-                            <option value="개인" style="color: red;">개인</option>
+                            <option value="개인" style="color: #ffec63;">개인</option>
                         </c:if>
-                        <option value="부서" style="color: blue;">부서</option>
-                        <option value="전사" style="color: green;">전사</option>
+                        <option value="부서" style="color: #28b9ff;">부서</option>
+                        <option value="전사" style="color: #71f371;">전사</option>
                     </select>
                 </div>
                 <div class="input-group mb-3">
@@ -349,7 +349,7 @@
                     </div>                                    
                     <div class="input-group mb-3">
                         <label class="input-group-text" for="detail-start-date">일정</label>
-                        <input type="text" class="form-control datepicker" id="detail-start-date" name="detail-start-date" readonly>
+                        <input type="text" class="form-control detailDatepicker" id="detail-start-date" name="detail-start-date" readonly>
                         <select id="detail-start-hour" name="detail-start-hour">
                         	    <c:forEach var="a" begin="0" end="23" varStatus="i">
                         	    	<option value="${a}">${a}시</option>
@@ -361,7 +361,7 @@
                         	    </c:forEach>                    	
                         </select>
                         <span class="input-group-text">~</span>
-                        <input type="text" class="form-control datepicker" id="detail-end-date" name="detail-end-date" readonly>
+                        <input type="text" class="form-control detailDatepicker" id="detail-end-date" name="detail-end-date" readonly>
                         <select id="detail-end-hour" name="detail-end-hour">
                         	    <c:forEach var="a" begin="0" end="23" varStatus="i">
                         	    	<option value="${a}">${a}시</option>
@@ -375,10 +375,10 @@
                     </div>
                     <div class="input-group mb-3">
                         <label class="input-group-text" for="detail-category">일정범위</label>
-                        <select class="form-select" id="detail-category" disabled>
-                            <option value="개인">개인</option>
-                            <option value="부서">부서</option>
-                            <option value="전사">전사</option>
+                        <select class="form-select" id="detail-category" disabled onchange="changeCategoryColor(this)">
+                            <option value="개인" style="color: #ffec63">개인</option>
+                            <option value="부서" style="color: #28b9ff">부서</option>
+                            <option value="전사" style="color: #71f371">전사</option>
                         </select>
                     </div>
                     
@@ -388,8 +388,8 @@
                     </div>  
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary btn-lg" onclick="editSchedule()" >수정</button>
-                    <button class="btn btn-danger btn-lg" onclick="deleteSchedule()" data-bs-dismiss="modal">삭제</button>                 
+                    <button class="btn btn-primary btn-lg" onclick="editSchedule()" id="editButton">수정</button>
+                    <button class="btn btn-danger btn-lg" onclick="deleteSchedule()" data-bs-dismiss="modal" id="delButton">삭제</button>                 
                     <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal">닫기</button>         
                 </div>
             </div>
@@ -437,8 +437,170 @@
 	var startStr;
 	var endStr;
 	var scheduleCategory = document.getElementById('create-category');
+	var loginId = "${sessionScope.loginId}";
+	console.log(loginId);
+
+	document.addEventListener("DOMContentLoaded", function(){
+
+			var modal = document.getElementById('mycab-cal-modal');
+			var calendarEl = document.getElementById("selectableCalendar");
+		
+			calendar = new FullCalendar.Calendar(calendarEl, {
+				headerToolbar: {
+					left: "prev,next today",
+					center: "title",
+					right: 'insertScheduleButton'
+				},
+				customButtons: {
+		          insertScheduleButton: {
+		            text: '일정추가',
+		            click: function(arg) {
+		              addScheduleModal(arg);
+		            }
+		          }
+		        },
+				locale: 'ko',
+				initialDate: new Date(),
+				navLinks: true, // can click day/week names to navigate views
+				selectable: true,
+				selectMirror: true,
+				select: function (arg) {
+					var adjustedEnd = moment(arg.end).subtract(1, 'days').format("YYYY-MM-DD");
+					addScheduleModal(arg,adjustedEnd);		
+				},
+				eventClick: function (arg) {
+					scheduleDetail(arg);
+				},
+				eventDidMount: function(info) {
+			    	console.log(info);
+			    },
+				
+				editable: true,
+				dayMaxEvents: true,
+				
+				events: function(fetchInfo, successCallback, failureCallback){
+					console.log(fetchInfo);
+					console.log(successCallback);
+					console.log(failureCallback);
+					
+					$.ajax({
+					    type: "GET",
+					    url: "/calendar/listCall.ajax",
+					    data: {
+					    	'schedule_editor' : "${sessionScope.loginId}"
+					    },
+					    dataType: "json",
+						success: function(response) {
+							var events = [];
+					        
+					      	for (var i = 0; i < response.length; i++) {
+					            var res = response[i];
+					            var event = {
+					            	id: res.schedule_idx,
+					            	title: res.schedule_name,
+					                content: res.schedule_content,
+					                start: res.schedule_start_date,
+					                end: res.schedule_end_date,
+					                color:res.schedule_color,
+					                category:res.schedule_category
+					                }
+							events.push(event)
+						 	};
+						 console.log('Events:', events);
+						 successCallback(events);
+					         
+					    },
+					    error: function(xhr, status, error) {
+					    	alert("캘린더 불러오기에 실패했습니다.");
+					    }
+					});			
+				}
+			});
+		
+			calendar.render();
+	});
+
+
+
+	function addScheduleModal(arg,adjustedEnd){
+		console.log(arg)
+		var myModal = new bootstrap.Modal(document.getElementById('scheduleAddModal'));
+	  	startStr = arg.startStr;
+	  	endStr = adjustedEnd;
+	  	
+	  	
+	  	if(startStr != null){
+	      document.getElementById("create-start-date").value = startStr;
+	    }
+	    if(endStr != null){
+	      document.getElementById("create-end-date").value = endStr;
+	    }
+	    	
+	  // 모달을 표시
+	  myModal.show();
+	}
+
+	function scheduleDetail(arg){
+		myModal = new bootstrap.Modal(document.getElementById('scheduleDetailModal'));
+		console.log(arg);
+		$.ajax({
+		        type: "GET",
+		        url: "/calendar/calendarDetail.ajax",
+		        data: {
+		        	'schedule_idx': arg.event.id      	
+		        },
+		        dataType: "json",
+				success: function(response) {
+					var idx = response.dto.schedule_idx;
+					document.getElementById('detail-title').value = response.dto.schedule_name	;
+					document.getElementById('detail-content').value = response.dto.schedule_content	;
+					var startDate = response.dto.schedule_start_date	;
+					var endDate = response.dto.schedule_end_date	;
+					var registDate = response.dto.schedule_register_date	;
+					empNo = response.dto.schedule_emp_no;
+					console.log(response.dto.schedule_emp_no);
+					var editor = response.dto.schedule_editor	;
+					document.getElementById('detail-category').value = response.dto.schedule_category	;
+					var edit = response.dto.schedule_edit_date	;
+					var isDel = response.dto.schedule_del	;
+					document.getElementById('detail-start-date').value = response.divideStartDate;
+					document.getElementById('detail-start-hour').value = response.divideStartHour;
+					document.getElementById('detail-start-min').value = response.divideStartMin		;		
+					document.getElementById('detail-end-date').value = response.divideEndDate;
+					document.getElementById('detail-end-hour').value = response.divideEndHour;
+					document.getElementById('detail-end-min').value = response.divideEndMin;
+					
+					// 아이디 검사
+					chkLoginId("${sessionScope.loginId}",response.dto.schedule_emp_no);
+		        },
+		        error: function(xhr, status, error) {
+		            // 에러 처리
+		            $("#result").html("<p>There was an error: " + error + "</p>");
+		        }
+		    });
+		// 작성자 검사
+		
+		console.log(loginId);
+		document.getElementById('detail-title').value = arg.event.title;
+
+	    document.getElementById('detail-content').value = arg.event.extendedProps.content;
+		 myModal.show();
+		
+	}
+	
+	function chkLoginId(loginId,empNo){
+		console.log(loginId);
+		console.log(empNo);
+		if(loginId == empNo ){
+			console.log()
+			document.getElementById("editButton").style.display="block";
+			document.getElementById("delButton").style.display="block";
+		}
+	}
 	
 	function addSchedule(){
+		
+		
 		// 시작 날짜 밸류 가져오기
 		var startHour = document.getElementById('create-start-hour')
 		var startMinute = document.getElementById('create-start-min')		
@@ -459,34 +621,38 @@
 		var selectedOption = scheduleCategory.options[scheduleCategory.selectedIndex];
         var color = selectedOption.style.color;
        /* 	   아작스 안에 들어갈 값     	'schedule_end_date': document.getElementById("sel-end-date").value, */
+       
+       // 유효성 검사
+       var chkVal = checkValidation(document.getElementById('create-title'));
         console.log(color)
-		$.ajax({
-	        type: "GET",
-	        url: "/calendar/createSchedule.ajax",
-	        data: {
-	        	'schedule_name': document.getElementById("create-title").value,
-	        	'schedule_content': document.getElementById("create-content").value,
-	        	'schedule_start_date': startDateTime,
-	        	'schedule_end_date': endDateTime,
-	        	'schedule_category': document.getElementById("create-category").value,
-	        	'schedule_color': color,
-	        	'schedule_emp_no': '30001' //나중에 세션으로 처리
-	        },
-	        dataType: "json",
-			success: function(response) {
-				var myModal = new bootstrap.Modal(document.getElementById('scheduleAddModal'));
-				var modalCloseButton = document.getElementById('scheduleAddModalCloseButton');
-				console.log(calendar.refetchEvents());
-				console.log(calendar);
-				calendar.refetchEvents();
-				
-	        },
-	        error: function(xhr, status, error) {
-	            // 에러 처리
-	            $("#result").html("<p>There was an error: " + error + "</p>");
-	        }
-	    });
-		
+        if(chkVal){    
+			$.ajax({
+		        type: "GET",
+		        url: "/calendar/createSchedule.ajax",
+		        data: {
+		        	'schedule_name': document.getElementById("create-title").value,
+		        	'schedule_content': document.getElementById("create-content").value,
+		        	'schedule_start_date': startDateTime,
+		        	'schedule_end_date': endDateTime,
+		        	'schedule_category': document.getElementById("create-category").value,
+		        	'schedule_color': color,
+		        	'schedule_emp_no': "${sessionScope.loginId}" //나중에 세션으로 처리
+		        },
+		        dataType: "json",
+				success: function(response) {
+					var myModal = new bootstrap.Modal(document.getElementById('scheduleAddModal'));
+					var modalCloseButton = document.getElementById('scheduleAddModalCloseButton');
+					console.log(calendar.refetchEvents());
+					console.log(calendar);
+					calendar.refetchEvents();
+					
+		        },
+		        error: function(xhr, status, error) {
+		            // 에러 처리
+		            $("#result").html("<p>There was an error: " + error + "</p>");
+		        }
+		    });
+        }
 	};
   //일정 추가
   function scheduleDetailModalHide(){
@@ -519,15 +685,17 @@
   
   
   // 일정 카테고리 선택시 색생 변경
-  function changeCategoryColor(){
+  function changeCategoryColor(t){
 	  console.log("색깔변경할거지롱");
+	  console.log(t);
+	  
 	 var val = document.getElementById("create-category");
 	 var valOption = val.options[val.selectedIndex];
 	 var getColor = valOption.style.color;
 	 document.getElementById("create-category").style.color=getColor;	 
 	 
 	 console.log(getColor);
-  }
+  };
   
 	//일정 삭제
 	function deleteSchedule(){
@@ -570,35 +738,42 @@
 		// 카테고리 색 가져오기
 		var selectedOption = scheduleCategory.options[scheduleCategory.selectedIndex];
         var color = selectedOption.style.color;
+        // 유효성 검사
+        var chkVal = checkValidation(document.getElementById('detail-title'));
+        console.log(chkVal);
 		console.log(document.getElementById('detail-title').value);
-		var content = document.getElementById('detail-content').value;
+		
 		console.log(content);
-		$.ajax({
-			type: 'GET',
-			url: '/calendar/editSchedule.ajax',
-			data:{
-				'schedule_idx': detailIdx,
-				'schedule_name': document.getElementById('detail-title').value,
-				'schedule_content': content,
-				'schedule_start_date': startDateTime,
-				'schedule_end_date': endDateTime,
-				'schedule_edit_date' : curTime,
-				'schedule_editor' : '30001', // 세션으로 가져오기
-				'schedule_category': document.getElementById('detail-category').value,
-				'schedule_color' : color
-			},
-			dataType :"json",
-			suceess: function(response){
-				if (reponse.suceess) {
-					alert("수정에 성공 했습니다")
-					calendar.refetchEvents();
+		
+		if (chkVal) {
+			$.ajax({
+				type: 'GET',
+				url: '/calendar/editSchedule.ajax',
+				data:{
+					'schedule_idx': detailIdx,
+					'schedule_name': document.getElementById('detail-title').value,
+					'schedule_content': document.getElementById('detail-content'),
+					'schedule_start_date': startDateTime,
+					'schedule_end_date': endDateTime,
+					'schedule_edit_date' : curTime,
+					'schedule_editor' : '30001', // 세션으로 가져오기
+					'schedule_category': document.getElementById('detail-category').value,
+					'schedule_color' : color
+				},
+				dataType :"json",
+				suceess: function(response){
+					if (reponse.suceess) {
+						alert("수정에 성공 했습니다")
+						calendar.refetchEvents();
+					}
+				},
+				error: function(e){
+					console.log(e);
 				}
-			},
-			error: function(e){
-				console.log(e);
-			}
-		});
-	}
+			});
+		}
+		
+	};
 	
 	function getCurrentDateTime(){
 		  var now = new Date();
@@ -613,8 +788,45 @@
           console.log(curTime);
 		   
 		return curTime;
-	}
-  
+	};
+	// 밸류를 넣어 유효성 검사
+	function checkValidation(get){
+		if(get.value ===''){
+			alert(get.id+"에 입력된 값이 없습니다 다시 입력해 주세요.");
+			return false
+		}else{
+			return true
+		}
+	};
+	
+	// utilBox 클릭 이벤트 
+	function utilBoxClk(t){
+		var chkBox = t.querySelector('input[type="checkbox"]').checked;
+		var chkBoxVal = t.querySelector('label').innerText;
+		console.log(chkBoxVal);
+		console.log(chkBox);
+		if(chkBox){
+			var events = calendar.getEvents();
+			for (let e of events) {
+				if(e.extendedProps.category == chkBoxVal){
+					console.log("ㅋㅋㅋ",e);
+		            e.setProp('display', '');
+				}
+			}
+			
+		}else{
+			var events = calendar.getEvents();
+			for (let e of events) {
+				if(e.extendedProps.category == chkBoxVal){
+					console.log("ㅋㅋㅋ",e);
+		            e.setProp('display', 'none');
+				}
+			}
+		}
+
+	};
+	
+  	
 </script>
 
 </html>

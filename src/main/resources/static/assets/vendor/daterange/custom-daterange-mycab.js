@@ -1,5 +1,5 @@
 // Date Range
-$(".datepicker").daterangepicker({
+$(".createDatepicker").daterangepicker({
 	singleDatePicker: true,
 	showOtherMonths: true,
 	startDate: moment().startOf("hour"),
@@ -9,17 +9,45 @@ $(".datepicker").daterangepicker({
 		daysOfWeek: ['일', '월', '화', '수', '목', '금', '토'],
         monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']
 	},
-	onSelect: function(){
-		console.log("데이트피커 클릭됨");
-		var startStr = document.getElementsByName('sel-start-date')[0];
-	    var endStr = document.getElementsByName('sel-end-date')[0];
-	    console.log(startStr);
-	    console.log(endStr);
-	    if (startStr.value>endStr.value) {
-	      alert("시작일보다 종료일이 더 빠릅니다");
-	    }
-   		startStr.focus;
-	}
+	
+});
+
+$(".detailDatepicker").daterangepicker({
+	singleDatePicker: true,
+	showOtherMonths: true,
+	startDate: moment().startOf("hour"),
+	endDate: moment().startOf("hour").add(32, "hour"),
+	locale: {
+		format: "YYYY-MM-DD",
+		daysOfWeek: ['일', '월', '화', '수', '목', '금', '토'],
+        monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']
+	},
+	
+});
+
+
+$(".createDatepicker").on('apply.daterangepicker', function(ev, picker) {
+    // apply 버튼을 눌렀을 때 실행할 코드
+    var chkStartDateVal = document.getElementById("create-start-date").value;
+	var chkEndDateVal = document.getElementById("create-end-date").value;
+	console.log(chkStartDateVal);
+	console.log(chkEndDateVal);
+	if(chkStartDateVal>chkEndDateVal){
+		alert("시작날짜보다 종료날짜가 더 빠릅니다.");
+		document.getElementById("create-end-date").value = document.getElementById("create-start-date").value;
+	};
+});
+
+$(".detailDatepicker").on('apply.daterangepicker', function(ev, picker) {
+    // apply 버튼을 눌렀을 때 실행할 코드
+    var chkStartDateVal = document.getElementById("detail-start-date").value;
+	var chkEndDateVal = document.getElementById("detail-end-date").value;
+	console.log(chkStartDateVal);
+	console.log(chkEndDateVal);
+	if(chkStartDateVal>chkEndDateVal){
+		alert("시작날짜보다 종료날짜가 더 빠릅니다.");
+		document.getElementById("detail-end-date").value = document.getElementById("detail-start-date").value;
+	};
 });
 
 // Date Range Opens Left

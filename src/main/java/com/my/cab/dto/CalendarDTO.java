@@ -23,6 +23,7 @@ public class CalendarDTO {
 	private LocalDateTime schedule_edit_date;
 	private boolean schedule_del;
 	private String schedule_color;
+	
 	public int getSchedule_idx() {
 		return schedule_idx;
 	}

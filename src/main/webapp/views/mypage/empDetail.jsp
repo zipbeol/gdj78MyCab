@@ -47,43 +47,6 @@
             padding: 10px;
             text-align: center;
         }
-         .info-section {
-            border: 1px solid lightgray;
-            border-radius: 20px;
-            padding: 10px;
-            margin: 5px;
-            font-size: 16px;
-        }
-        .info-section input{
-            font-size: 17px;
-        }
-        .info-section dt, .info-section dd {
-            margin: 0;
-            padding: 5px;
-            
-        }
-        .profile-section {
-            border-radius: 20px;
-            text-align: center;
-            padding: 20px;
-            height: 400px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        .profile-pic {
-            
-            border-radius: 10%;
-            width: 400px;
-            height: 350px;
-            margin: 0 auto;
-        }
-        .form-control[readonly] {
-            
-            border: none;
-        }
-        
     </style>
 
 </head>
@@ -154,130 +117,147 @@
                     <!-- Alert placeholder start -->
                     <div id="alertPlaceholder" class="alert-placeholder"></div>
                     <!-- Alert placeholder end -->
-							
-							 <div class="row justify-content-center">
-            <div class="col-12">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <form id="driver-form" class="needs-validation" novalidate>
-                            <div class="row">
-                                <div class="col-8">
-                                    <h1>${empDetail.emp_name} 사원 상세보기</h1>
-                                </div>
-                                <div class="col-4 text-end">
-                                    <input type="button" class="btn btn-primary" value="수정" id="edit-button"> 
-                                    <input type="button" class="btn btn-success" value="저장" id="save-button" style="display: none;">
-                                    <input type="button" class="btn btn-secondary" value="취소" id="cancel-button" style="display: none;">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <hr />
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4 profile-section">
-                                    <div>
-                                        <c:choose>
-                                            <c:when test="${not empty empDetail.profile_new}">
-                                                <img src="/photo/${empDetail.profile_new}" class="profile-pic" id="emp-photo">
-                                            </c:when>
-                                            <c:otherwise>
-                                                <img src="/assets/user.png" class="profile-pic" id="emp-photo">
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </div>
-                                    <div class="mt-3">PROFILE</div>
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="row info-section">
-                                        <div class="col-md-6">
-                                            <dt>사번</dt>
-                                            <dd><input type="text" class="form-control" id="emp-no" value="${empDetail.emp_no}" readonly></dd>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <dt>입사일</dt>
-                                            <dd><input type="date" class="form-control" id="emp-hired-date" value="${empDetail.emp_hired_date}" readonly></dd>
-                                        </div>
-                                    </div>
-                                    <div class="row info-section">
-                                        <div class="col-md-12">
-                                            <dt>이름</dt>
-                                            <dd><input type="text" class="form-control" id="emp-name" value="${empDetail.emp_name}" readonly></dd>
-                                        </div>
-                                    </div>
-                                    <div class="row info-section">
-                                        <div class="col-md-12">
-                                            <dt>이메일</dt>
-                                            <dd><input type="email" class="form-control" id="emp-email" value="${empDetail.emp_email}" readonly></dd>
-                                        </div>
-                                    </div>
-                                    <div class="row info-section">
-                                        <div class="col-md-12">
-                                            <dt>내선번호</dt>
-                                            <dd><input type="text" class="form-control" id="emp-extension-number" value="${empDetail.emp_extension_number}" readonly></dd>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row info-section">
-                                <div class="col-md-6">
-                                    <dt>부서</dt>
-                                    <dd><input type="text" class="form-control" id="dept-name" value="${empDetail.dept_name}" readonly></dd>
-                                    <select id="sdept-name" class="form-select dept-select" name="dept_name" style="display: none;">
-                                        <option value="1">인사부</option>
-                                        <option value="2">영업부</option>
-                                        <option value="3">영업지원부</option>
-                                        <option value="4">택시관리부</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <dt>직급</dt>
-                                    <dd><input type="text" class="form-control" id="title-name" value="${empDetail.title_name}" readonly></dd>
-                                    <select id="stitle-name" class="form-select title-select" name="title_name" style="display: none;">
-                                        <option value="5">사원</option>
-                                        <option value="4">대리</option>
-                                        <option value="3">과장</option>
-                                        <option value="2">부장</option>
-                                        <option value="1">대표이사</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row info-section">
-                                <div class="col-md-6">
-                                    <dt>권한레벨</dt>
-                                    <dd><input type="text" class="form-control" id="emp-level" value="${empDetail.emp_level}" readonly></dd>
-                                    <select id="semp-level" class="form-select level-select" name="emp_level" style="display: none;">
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <dt>재직여부</dt>
-                                    <dd><input type="text" class="form-control" id="emp-employment-status" value="${empDetail.emp_employment_status ? '재직중' : '퇴사'}" readonly></dd>
-                                    <select id="semp-employment-status" class="form-select status-select" name="emp_employment_status" style="display: none;">
-                                        <option value="true">재직중</option>
-                                        <option value="false">퇴사</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row info-section">
-                                <div class="col-md-12">
-                                    <dt>주소</dt>
-                                    <dd><input type="text" class="form-control" id="emp-add" value="${empDetail.emp_add}" readonly></dd>
-                                </div>
-                            </div>
-                            <div class="row info-section">
-                                <div class="col-md-12 text-center">
-                                    <dt>퇴사일 : ${empDetail.emp_retired_date}</dt>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-						
+
+						<!-- Row start -->
+						<div class="row justify-content-center">
+							<div class="col-12">
+								<div class="card mb-3">
+									<div class="card-body">
+										<form id="driver-form" class="needs-validation" novalidate>
+											<div class="row">
+												<div class="col-8">
+													<h1>${empDetail.emp_name} 사원 상세보기</h1>
+												</div>
+												<div class="col-4 text-end">
+													<input type="button" class="btn btn-primary" value="수정"
+														id="edit-button" style="display: none;"> 
+														<input type="button"
+														class="btn btn-success" value="저장" id="save-button"
+														style="display: none;">
+														<input type="button"
+														class="btn btn-secondary" value="취소" id="cancel-button"
+														style="display: none;">
+												</div>
+											</div>
+											<div class="row">
+												<hr />
+											</div>
+											<div class="row justify-content-center">
+												<div class="col-md-8 offset-md-2">
+													<div class="row">
+														<div class="col-md-4 text-center">
+															<c:choose>
+																<c:when test="${not empty empDetail.profile_new}">
+																	<img src="/photo/${empDetail.profile_new}"
+																		style="width: 300px; height: 300px;" id="emp-photo">
+																	<div class="mb-3"></div>
+																	<dt class="col-12">프로필 사진</dt>
+																	<div class="mb-3"></div>
+																	<div>
+																		<button type="button" class="btn btn-outline-dark">
+																			<i class="bi bi-chat-left-text"></i> 메세지 보내기
+																		</button>
+																	</div>
+																</c:when>
+																<c:otherwise>
+																	<img src="/assets/user.png"
+																		style="width: 300px; height: 300px;" id="emp-photo">
+																	<br />
+																	<br />
+																	<dt class="col-12">프로필 사진</dt>
+																	<br />
+																	<div>
+																		<button type="button" class="btn btn-outline-dark">
+																			<i class="bi bi-chat-left-text"></i> 메세지 보내기
+																		</button>
+																	</div>
+																</c:otherwise>
+															</c:choose>
+														</div>
+														<div class="col-md-8">
+															<dl class="row">
+																<dt class="col-12">사번</dt>
+																<dd class="col-12 info-value mb-3" id="emp-no"
+																	data-value="${empDetail.emp_no}">${empDetail.emp_no}</dd>
+																<dt class="col-12">입사일</dt>
+																<dd class="col-12 info-value mb-3" id="emp-hired-date"
+																	data-value="${empDetail.emp_hired_date}">${empDetail.emp_hired_date}</dd>
+																<c:choose>
+																	<c:when
+																		test="${empDetail.emp_employment_status == false}">
+																		<dt class="col-12">퇴사일</dt>
+																		<dd class="col-12 info-value mb-3"
+																			id="emp-retired-date"
+																			data-value="${empDetail.emp_retired_date}">${empDetail.emp_retired_date}</dd>
+																	</c:when>
+																</c:choose>
+																<dt class="col-12">이름</dt>
+																<dd class="col-12 info-value mb-3" id="emp-name"
+																	data-value="${empDetail.emp_name}">${empDetail.emp_name}</dd>
+																<dt class="col-12">부서</dt>
+																<dd class="col-12 info-value mb-3" id="dept-name"
+																	data-value="${empDetail.dept_name}">${empDetail.dept_name}</dd>
+																	<select id="sdept-name" class="form-select dept-select" name="dept_name" style="display: none;">
+																	<option value="1">인사부</option>
+																	<option value="2">영업부</option>
+																	<option value="3">영업지원부</option>
+																	<option value="4">택시관리부</option>
+																	</select>
+																<dt class="col-12">직급</dt>
+																<dd class="col-12 info-value mb-3" id="title-name"
+																	data-value="${empDetail.title_name}">${empDetail.title_name}</dd>
+																	<select id="stitle-name" class="form-select title-select" name = "title_name" style="display: none;">
+												 					<option value="5">사원</option>
+												 					<option value="4">대리</option>
+												 					<option value="3">과장</option>
+												 					<option value="2">부장</option>
+												 					<option value="1">대표이사</option>
+																	</select>
+																<dt class="col-12">권한 레벨</dt>
+																<dd class="col-12 info-value mb-3" id="emp-level"
+																	data-value="${empDetail.emp_level}">${empDetail.emp_level}</dd>
+																	<select id="semp-level" class="form-select level-select" name="emp_level" style="display: none;">
+																	<option value="1">1</option>
+																	<option value="2">2</option>
+																	<option value="3">3</option>
+																	<option value="4">4</option>
+																	</select>
+																<dt class="col-12">사원 재직 여부</dt>
+																<dd class="col-12 info-value mb-3"
+																	id="emp-employment-status"
+																	data-value="${empDetail.emp_employment_status}">
+																	<c:choose>
+																		<c:when
+																			test="${empDetail.emp_employment_status == true}">재직중</c:when>
+																		<c:otherwise>퇴사</c:otherwise>
+																	</c:choose>
+																</dd>
+																<select id="semp-employment-status" class="form-select status-select" name="emp_employment_status" style="display: none;">
+																<option value="true">재직중</option>
+																<option value="false">퇴사</option>
+																</select>
+																<dt class="col-12">이메일</dt>
+																<dd class="col-12 info-value mb-3" id="emp-email"
+																	data-value="${empDetail.emp_email}" style="display: none;">${empDetail.emp_email}</dd>
+																<dt class="col-12">주소</dt>
+																<dd class="col-12 info-value mb-3" id="emp-add"
+																	data-value="${empDetail.emp_add}" style="display: none;">${empDetail.emp_add}</dd>
+																<dt class="col-12">내선번호</dt>
+																<dd class="col-12 info-value mb-3"
+																	id="emp-extension-number"
+																	data-value="${empDetail.emp_extension_number}" style="display: none;">${empDetail.emp_extension_number}</dd>
+															</dl>
+														</div>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Row end -->
                 </div>
                 <!-- Container ends -->
 

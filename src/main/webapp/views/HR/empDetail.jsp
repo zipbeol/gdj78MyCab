@@ -185,7 +185,7 @@
 																<c:choose>
 																	<c:when
 																		test="${empDetail.emp_employment_status == false}">
-																		<dt class="col-12 mb-3">퇴사일</dt>
+																		<dt class="col-12">퇴사일</dt>
 																		<dd class="col-12 info-value mb-3"
 																			id="emp-retired-date"
 																			data-value="${empDetail.emp_retired_date}">${empDetail.emp_retired_date}</dd>

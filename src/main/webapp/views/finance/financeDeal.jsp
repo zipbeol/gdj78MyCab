@@ -286,6 +286,7 @@ td:hover {
 	<script src="/assets/js/jquery.twbsPagination.min.js"></script>
 	<!-- AJAX 및 모달 스크립트 -->
 	<script>
+
     
     var currentPage = 1;
 	var searchFlag = false;
@@ -309,6 +310,7 @@ td:hover {
     $('#go').on('click', function() {
         getTotalPages();
         refreshDealList();
+        fetchTotalAmounts() ;
     });
  // 리셋 버튼 클릭 시 호출되는 함수
     function resetFilters() {
@@ -484,15 +486,24 @@ td:hover {
         
      // 총 수익, 총 지출, 총 순수익 가져오기
         function fetchTotalAmounts() {
+    	 var value = $('#startDate').val();
+        	console.log(value);
+        	console.log($('#endDate').val());
             $.ajax({
                 type: 'GET',
                 url: '/finance/deal/totalAmounts.ajax',
+                data: {
+                    'filterStartDate': $('#startDate').val(),
+                    'filterEndDate': $('#endDate').val()
+                },
                 dataType: 'json',
                 success: function(data) {
                     // 총 수익, 총 지출, 총 순수익 업데이트
-                    $('#totalProfit').html(formatNumberWithCommas(data.total_profit));
-                    $('#totalExpense').html(formatNumberWithCommas(data.total_expense));
-                    $('#netProfit').html(formatNumberWithCommas(data.net_profit));
+                    $('#totalProfit').html(formatNumberWithCommas(data.dto.total_profit));
+                    $('#totalExpense').html(formatNumberWithCommas(data.dto.total_expense));
+                    $('#netProfit').html(formatNumberWithCommas(data.dto.net_profit));
+                    console.log(data.dto);
+                    
                 },
                 error: function(error) {
                     console.error("AJAX 요청 실패:", error);

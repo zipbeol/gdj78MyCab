@@ -3,6 +3,7 @@ package com.my.cab.dto;
 import java.sql.Date;
 
 import org.apache.ibatis.type.Alias;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Alias(value = "finance")
 public class FinanceDTO {
@@ -45,6 +46,8 @@ public class FinanceDTO {
 	private int net_profit;
 	private int profit_cash;
 	private int expense_cash;
+	private Date filterStartDate;
+	private Date filterEndDate;
 	
 	public int getPro_idx() {
 		return pro_idx;
@@ -249,6 +252,18 @@ public class FinanceDTO {
 	}
 	public void setExpense_cash(int expense_cash) {
 		this.expense_cash = expense_cash;
+	}
+	public Date getFilterStartDate() {
+		return filterStartDate;
+	}
+	public void setFilterStartDate(Date filterStartDate) {
+		this.filterStartDate = filterStartDate;
+	}
+	public Date getFilterEndDate() {
+		return filterEndDate;
+	}
+	public void setFilterEndDate(Date filterEndDate) {
+		this.filterEndDate = filterEndDate;
 	}
 	
 	

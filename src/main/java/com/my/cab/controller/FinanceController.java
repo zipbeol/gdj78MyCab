@@ -148,8 +148,12 @@ public class FinanceController {
 	}
 	
 	@GetMapping("/deal/totalAmounts.ajax")
-	    public Map<String, Object> getTotalAmounts(FinanceDTO financeDTO) {
-	        return financeService.getTotalAmounts(financeDTO);
+	@ResponseBody
+	    public Map<String, Object> getTotalAmounts(@RequestParam Map<String, Object> financeDTO) {
+			Map<String, Object>map = new HashMap<String, Object>();
+			// financeService.getTotalAmounts(financeDTO);
+			logger.info("param : {}", financeDTO);
+	        return map;
 	    
 	}
 }

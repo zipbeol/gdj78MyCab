@@ -310,7 +310,7 @@
 	</select>
 	
 	<!-- 총 수익, 총 지출, 순수익 계산 쿼리 -->
-	<select id="getTotalAmounts" resultType="map">
+	<select id="getTotalAmounts" resultType="finance" parameterType="map">
 	    SELECT 
 	        IFNULL(SUM(profit_cash), 0) AS total_profit,
 	        IFNULL(SUM(expense_cash), 0) AS total_expense,

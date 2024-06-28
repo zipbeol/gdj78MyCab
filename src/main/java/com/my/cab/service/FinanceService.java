@@ -113,11 +113,14 @@ public class FinanceService {
 	}
 
 	public Map<String, Object> getTotalAmounts(FinanceDTO financeDTO) {
+		FinanceDTO dto = financeDAO.getTotalAmounts(financeDTO);
 		logger.info("********************총합계*********************");
 		logger.info("financeDTO profit {}", financeDTO.getTotal_profit());
 		logger.info("financeDTO expenses {}", financeDTO.getTotal_expense());
 		logger.info("financeDTO sum {}", financeDTO.getNet_profit());
 		logger.info("********************총합계*********************");
-        return financeDAO.getTotalAmounts(financeDTO);
+		Map<String , Object> map = new HashMap<String, Object>();
+		map.put("dto", dto);
+        return map;
     }
 }

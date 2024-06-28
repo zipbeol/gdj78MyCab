@@ -4,10 +4,23 @@
 >
 
 <mapper namespace="com.my.cab.dao.ApprovalDAO">
-    <!-- 결재 문서 등록 fath 경로 저장 -->
-    <insert id="save" parameterType="com.my.cab.dto.ApprovalDocDTO">
+    
+    <!-- 결재 문서 첨부파일 경로 저장 -->
+    <insert id="saveAttachedFilePath" parameterType="com.my.cab.dto.DocumentDTO">
         INSERT INTO tb_doc_item_file (appr_file_path)
         VALUES (#{appr_file_path})
+    </insert>
+    
+    <!-- 결재 문서 전체 저장 -->
+    <insert id="saveApprovalDoc" parameterType="com.my.cab.dto.ApprovalDocDTO">
+        INSERT INTO tb_approval_doc (approval_doc_path, approval_doc_write_date, approval_doc_title, approval_doc_assist_user, approval_doc_isFinal)
+        VALUES (#{approval_doc_path}, #{approval_doc_write_date}, #{approval_doc_title}, #{approval_doc_assist_user}, #{approval_doc_isFinal})
+    </insert>
+    
+    <!-- 결재라인, 중간, 최종결재자 저장 -->
+    <insert id="saveApproval" parameterType="com.my.cab.dto.ApprovalDTO">
+        INSERT INTO tb_approval (appr_line_bkmk_idx, appr_midapprover, appr_finalapprover)
+        VALUES (#{appr_line_bkmk_idx}, #{appr_midapprover}, #{appr_finalapprover})
     </insert>
     
     <!-- 결재자 모달창 결재자 리스트 비동기(ajax) 조회 -->

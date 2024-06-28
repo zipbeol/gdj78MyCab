@@ -12,5 +12,5 @@ public interface AccidentDAO {
 
     List<AccidentDTO> getAccidentList(SearchDTO searchDTO);
 
-    int getAccidentCount(String searchIdx);
+    int getAccidentCount(SearchDTO searchDTO);
 }

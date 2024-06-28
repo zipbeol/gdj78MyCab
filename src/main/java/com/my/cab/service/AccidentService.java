@@ -31,7 +31,7 @@ public class AccidentService {
     }
 
     public int getAccidentTotalPages(SearchDTO searchDTO) {
-        int totalCount = accidentDAO.getAccidentCount(searchDTO.getSearchIdx());
+        int totalCount = accidentDAO.getAccidentCount(searchDTO);
         return PageCalc.calculateTotalPages(totalCount, PAGE_SIZE);
     }
 }

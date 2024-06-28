@@ -471,9 +471,9 @@
                                                                         사고 내용
                                                                     </th>
                                                                     <th class="sortable"
-                                                                        id="th-accident-history-cost"
+                                                                        id="th-accident-history-driver-name"
                                                                         style="width: 10%;"
-                                                                        data-value="accident-history-cost">사고 기사
+                                                                        data-value="accident-history-driver-name">사고 기사
                                                                     </th>
                                                                 </tr>
                                                                 </thead>
@@ -602,6 +602,7 @@
     var today = moment().format('YYYY/MM/DD');
     var filterMaintenanceAllDay = '${maintenanceFirstDate}' + ' - ' + today;
     var filterAccidentAllDay = '${accidentFirstDate}' + ' - ' + today;
+    var filterStartDate = '${maintenanceFirstDate}';
     var filterEndDate = '';
     var currentPage = 1; // 현재 페이지 번호
     var sortOrder = 'asc';
@@ -618,12 +619,16 @@
     $('#accident-tab').on('click', function () {
         nowTab = 'accident'
         currentPage = 1;
+        filterStartDate = '${accidentFirstDate}';
+        $('#filter-accident-reg-date').val(filterAccidentAllDay);
         getTotalPages();
         getList();
     });
     $('#maintenance-tab').on('click', function () {
         nowTab = 'maintenance'
         currentPage = 1;
+        filterStartDate = '${maintenanceFirstDate}';
+        $('#filter-maintenance-reg-date').val(filterMaintenanceAllDay);
         getTotalPages();
         getList();
     });
@@ -700,10 +705,10 @@
         var maintenanceDate = $('#maintenanceDate').val();
         var maintenanceCost = $('#maintenanceCost').val().replace(/,/g, ''); // 쉼표 제거
 
-        console.log('정비 날짜:', maintenanceDate);
-        console.log('정비 비용:', maintenanceCost);
-        console.log('정비소 이름:', workshopName);
-        console.log('정비 내용:', maintenanceDescription);
+        // console.log('정비 날짜:', maintenanceDate);
+        // console.log('정비 비용:', maintenanceCost);
+        // console.log('정비소 이름:', workshopName);
+        // console.log('정비 내용:', maintenanceDescription);
 
         // 서버로 데이터 전송
         $.ajax({
@@ -754,11 +759,11 @@
         var taxiFuelType = $('#taxi-fuel-type input').val();
         var taxiYear = $('#taxi-year input').val();
 
-        console.log(taxiLicensePlate);
-        console.log(taxiModel);
-        console.log(taxiFuelType);
-        console.log(taxiYear);
-        console.log('${taxiDTO.taxi_idx}');
+        <%--console.log(taxiLicensePlate);--%>
+        <%--console.log(taxiModel);--%>
+        <%--console.log(taxiFuelType);--%>
+        <%--console.log(taxiYear);--%>
+        <%--console.log('${taxiDTO.taxi_idx}');--%>
         $.ajax({
             url: './update.ajax',
             type: 'POST',
@@ -858,6 +863,7 @@
             },
             dataType: 'JSON',
             success: function (data) {
+                console.log(data);
                 drawTaxiList(data.accidentList);
             },
             error: function (error) {
@@ -889,7 +895,7 @@
             },
             dataType: 'JSON',
             success: function (data) {
-                // console.log(data);
+                console.log(data);
                 $('#pagination').twbsPagination('destroy');
                 $('#pagination').twbsPagination({
                     totalPages: data.totalPages, // 서버에서 받은 총 페이지 수
@@ -910,6 +916,8 @@
     }
 
     function accidentTotalPagesAjax() {
+        console.log("ajax 직전", filterStartDate);
+        console.log("ajax 직전", filterEndDate);
         $.ajax({
             url: '/accident/getTotalPages.ajax',
             type: 'GET',
@@ -922,7 +930,7 @@
             },
             dataType: 'JSON',
             success: function (data) {
-                // console.log(data);
+                console.log(data);
                 $('#pagination').twbsPagination('destroy');
                 $('#pagination').twbsPagination({
                     totalPages: data.totalPages, // 서버에서 받은 총 페이지 수
@@ -944,26 +952,29 @@
 
     // 검색 값들 변수에 저장
     function getSearchValue() {
+        var filterDate = '';
+        var dates = '';
         if (nowTab === 'maintenance') {
-            var filterDate = $('#filter-maintenance-reg-date').val();
+            filterDate = $('#filter-maintenance-reg-date').val();
             if (filterDate) {
-                var dates = filterDate.split(' - ');
+                dates = filterDate.split(' - ');
                 filterStartDate = dates[0];
                 filterEndDate = dates[1];
             }
             searchCategory = $('#search-category-maintenance').val();
             searchText = $('#search-text-maintenance').val();
-        }else if (nowTab === 'accident') {
-            var filterDate = $('#filter-accident-reg-date').val();
+        } else if (nowTab === 'accident') {
+            filterDate = $('#filter-accident-reg-date').val();
             if (filterDate) {
-                var dates = filterDate.split(' - ');
+                dates = filterDate.split(' - ');
                 filterStartDate = dates[0];
                 filterEndDate = dates[1];
             }
             searchCategory = $('#search-category-accident').val();
             searchText = $('#search-text-accident').val();
         }
-
+        console.log(filterStartDate);
+        console.log(filterEndDate);
 
     }
 
@@ -971,7 +982,8 @@
     function drawTaxiList(list) {
         var content = '';
         if (nowTab === 'maintenance') {
-            if (list.length > 0) {
+            // console.log(list);
+            if (list) {
                 for (item of list) {
                     var formattedCost = Number(item.maintenance_history_cost).toLocaleString();
                     content += '<tr class="maintenance-list-tbody-tr" id="' + item.taxi_idx + '">'
@@ -985,8 +997,9 @@
                 content = '<tr><td colspan="4" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
             }
             $('#maintenance-list').html(content);
-        }else if (nowTab === 'accident') {
-            if (list.length > 0) {
+        } else if (nowTab === 'accident') {
+            // console.log(list);
+            if (list) {
                 for (item of list) {
                     content += '<tr class="maintenance-list-tbody-tr" id="' + item.taxi_idx + '">'
                         + '<td class="">' + item.accident_history_accident_date + '</td>'

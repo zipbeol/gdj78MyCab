@@ -23,12 +23,27 @@ public class AccidentController {
     @GetMapping("/list.ajax")
     @ResponseBody
     public Map<String, Object> getAccidentList(SearchDTO searchDTO) {
-        logger.info("SearchDTO: {}", searchDTO.getSearchIdx());
-        return Map.of("maintenanceList", accidentService.getAccidentList(searchDTO));
+//        logger.info("SearchDTO 'searchIdx': {}", searchDTO.getSearchIdx());
+//        logger.info("SearchDTO 'searchText': {}", searchDTO.getSearchText());
+//        logger.info("SearchDTO 'category': {}", searchDTO.getCategory());
+//        logger.info("SearchDTO 'filterStartDate': {}", searchDTO.getFilterStartDate());
+//        logger.info("SearchDTO 'filterEndDate' : {}", searchDTO.getFilterEndDate());
+//        logger.info("SearchDTO 'page' : {}", searchDTO.getPage());
+//        logger.info("SearchDTO 'sortColumn' : {}", searchDTO.getSortColumn());
+//        logger.info("SearchDTO 'sortOrder' : {}", searchDTO.getSortOrder());
+
+        return Map.of("accidentList", accidentService.getAccidentList(searchDTO));
     }
+
     @GetMapping("/getTotalPages.ajax")
     @ResponseBody
     public Map<String, Object> getAccidentTotalPages(SearchDTO searchDTO) {
+//        logger.info("taxiIdx: {}", searchDTO.getSearchIdx());
+        logger.info("startDate: {}", searchDTO.getFilterStartDate());
+        logger.info("endDate: {}", searchDTO.getFilterEndDate());
+//        logger.info("category: {}", searchDTO.getCategory());
+//        logger.info("searchText: {}", searchDTO.getSearchText());
+
         return Map.of("totalPages", accidentService.getAccidentTotalPages(searchDTO));
     }
 

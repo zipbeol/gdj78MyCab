@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.my.cab.service.LoginService;
 
@@ -20,10 +21,14 @@ public class LoginController {
 	public LoginController(LoginService service) {
 		this.service = service;
 	}
+	
+	
+	
+	
 
 	
 	@RequestMapping(value="emp/login.do")
-	public String login(String emp_no, String emp_password, HttpSession session, Model model) {
+	public String login(String emp_no, String emp_password, HttpSession session, Model model, RedirectAttributes rat) {
 		logger.info("로그인 실행");
 		logger.info("사번 : "+emp_no+"비밀번호 : "+emp_password);
 		
@@ -34,12 +39,13 @@ public class LoginController {
 		if (row == 1) {//로그인 성공, 최초 로그인이 아닐시
 			page = "redirect:/";
 			session.setAttribute("loginId", emp_no);
+			
 		} else if (row == 2) {//로그인 성공, 최초 로그인시
 			page = "redirect:/login/pwFirstChange.go";
 			session.setAttribute("loginId", emp_no);
 		}else {
-			model.addAttribute("message","사번 또는 비밀번호를 확인해주세요.");
-			page = "login/login";
+			rat.addFlashAttribute("message", "사번 또는 비밀번호를 확인해주세요.");
+			page = "redirect:/login/logout.do";
 		}
 		
 		return page;
@@ -55,18 +61,18 @@ public class LoginController {
 	}
 	
 	@RequestMapping(value="login/pwFirstChange.do")
-	public String pwFirstChange(String emp_no, String emp_password, Model model) {
+	public String pwFirstChange(String emp_no, String emp_password, RedirectAttributes rat) {
 		logger.info("비밀번호 최초 변경 실행");
 		logger.info("emp_no : "+emp_no);
 		
 		int row = service.pwFirstChange(emp_no, emp_password);
-		String page = "login/pwFirstChange";
+		String page = "redirect:/login/pwFirstChange";
 		
 		if (row ==1) {
-			page ="login/login";
-			model.addAttribute("message","비밀번호 변경에 성공했습니다. 로그인을 해주세요.");
+			page ="redirect:/login/logout.do";
+			rat.addFlashAttribute("message", "비밀번호 변경에 성공했습니다. 로그인을 해주세요.");
 		}else {
-			model.addAttribute("message","비밀번호 변경에 실패했습니다. 다시 변경해주세요.");
+			rat.addFlashAttribute("message", "비밀번호 변경에 실패했습니다. 다시 변경해주세요.");
 		}
 		
 
@@ -75,16 +81,36 @@ public class LoginController {
 	
 	
 	
-	
-	
-	
 	@RequestMapping(value="login/logout.do")
-	public String logout() {
-
+	public String logout(HttpSession session) {
 		logger.info("로그아웃 실행");
-
+		session.removeAttribute("loginId");
+		
 		return "login/login";
 	}
+	
+	
+	
+	@RequestMapping(value="login/logoutAndGetOff.do")
+	public String logoutAndGetOff(HttpSession session, Model model) {
+		String emp_no = (String) session.getAttribute("loginId");
+		logger.info("퇴근 처리 요청 사번 :"+emp_no);
+		
+		int result = service.getOff(emp_no);
+		
+		if (result == 1) {
+			session.removeAttribute("loginId");
+			model.addAttribute("message", "퇴근 및 로그아웃 완료되었습니다.");
+		}else {
+			session.removeAttribute("loginId");
+			model.addAttribute("message", "이미 처리된 퇴근 요청입니다.");
+		}
+		
+		
+		return "login/login";
+	}
+	
+	
 
 	@RequestMapping(value="login/pwFind.go")
 	public String pwFind() {

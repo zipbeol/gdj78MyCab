@@ -23,13 +23,11 @@ public class TaxiService {
 
     @Autowired
     TaxiDAO taxiDAO;
-    @Autowired
-    PageCalc pageCalc;
 
 
     public Map<String, Object> listAjax(SearchDTO searchDTO) {
         Map<String, Object> result = new HashMap<>();
-        int page = pageCalc.calculatePageOffset(searchDTO.getPage(), PAGE_SIZE);
+        int page = PageCalc.calculatePageOffset(searchDTO.getPage(), PAGE_SIZE);
         logger.info("page {}", page);
         logger.info("searchDTO page {}", searchDTO.getPage());
         searchDTO.setPage(page);
@@ -129,6 +127,6 @@ public class TaxiService {
      */
     public int getTotalPages(SearchDTO searchDTO) {
         int totalCount = taxiDAO.getTaxiCount(searchDTO);
-        return pageCalc.calculateTotalPages(totalCount, PAGE_SIZE);
+        return PageCalc.calculateTotalPages(totalCount, PAGE_SIZE);
     }
 }

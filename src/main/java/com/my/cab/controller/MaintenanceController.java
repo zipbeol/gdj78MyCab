@@ -25,12 +25,13 @@ public class MaintenanceController {
     @GetMapping("/list.ajax")
     @ResponseBody
     public Map<String, Object> getMaintenanceList(SearchDTO searchDTO) {
-        return Map.of("MaintenanceList", maintenanceService.getMaintenanaceList(searchDTO));
+        logger.info("SearchDTO: {}", searchDTO.getSearchIdx());
+        return Map.of("maintenanceList", maintenanceService.getMaintenanaceList(searchDTO));
     }
     @GetMapping("/getTotalPages.ajax")
     @ResponseBody
     public Map<String, Object> getMaintenanceTotalPages(SearchDTO searchDTO) {
-        return Map.of("totalPages", maintenanceService.getMaintenanaceList(searchDTO));
+        return Map.of("totalPages", maintenanceService.getMaintenanceTotalPages(searchDTO));
     }
 
     @PostMapping("/create.ajax")

@@ -37,7 +37,60 @@
     <link rel="stylesheet" href="/assets/vendor/daterange/daterange.css">
     <!-- 따로 적용한 CSS -->
     <link rel="stylesheet" href="/assets/css/default.css">
+    <!-- FontAwesome 추가 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
     <style>
+        .maintenance-list-tbody-tr td.ellipsis {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 1px; /* 추가: 텍스트가 잘릴 수 있도록 설정 */
+        }
+
+        .table-responsive {
+            overflow-x: initial; /* 스크롤 바 방지 */
+        }
+
+        table.table {
+            table-layout: fixed; /* 고정된 테이블 레이아웃 */
+            width: 100%;
+        }
+
+        table.table th, table.table td {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        th.sortable {
+            position: relative;
+            cursor: pointer;
+        }
+
+        th.sortable::after {
+            content: '\f0dc'; /* FontAwesome 기본 sort 아이콘 */
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 8px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        th.sortable:hover::after {
+            opacity: 0.3; /* 흐릿하게 설정 */
+        }
+
+        th.sortable.asc::after {
+            content: '\f0de'; /* FontAwesome sort up 아이콘 */
+            opacity: 1;
+        }
+
+        th.sortable.desc::after {
+            content: '\f0dd'; /* FontAwesome sort down 아이콘 */
+            opacity: 1;
+        }
+
         .alert-placeholder {
             position: fixed;
             top: 0;
@@ -235,54 +288,55 @@
                                                                 <input type="button" class="btn btn-secondary"
                                                                        onclick="filterReset()"
                                                                        value="초기화">
-                                                                <input type="button" class="btn btn-primary"
-                                                                       onclick="getTaxiList()"
-                                                                       value="검색" style="display: none">
                                                             </div>
                                                         </div>
                                                         <div class="row">
                                                             <div class="col-4">
-                                                                <label for="filter-taxi-reg-date" class="form-label">정비일
+                                                                <label for="filter-maintenance-reg-date"
+                                                                       class="form-label">정비일
                                                                     필터</label>
                                                             </div>
                                                             <div class="col-2">
                                                             </div>
                                                             <div class="col-2">
+                                                                <label for="search-category-maintenance"
+                                                                       class="form-label">검색 카테고리</label>
                                                             </div>
                                                             <div class="col-4">
-                                                                <label for="search-category-maintenance"
-                                                                       class="form-label">번호판 검색</label>
+                                                                <label for="search-text-maintenance"
+                                                                       class="form-label">검색</label>
                                                             </div>
                                                         </div>
                                                         <div class="row mb-3">
                                                             <div class="col-4">
-                                                                <div class="input-group" id="filter-taxi-reg-date-div">
+                                                                <div class="input-group"
+                                                                     id="filter-maintenance-reg-date-div">
                                                                     <input type="text"
-                                                                           class="form-control datepicker-range taxi-search-filter"
-                                                                           id="filter-taxi-reg-date">
+                                                                           class="form-control datepicker-range maintenance-search-filter"
+                                                                           id="filter-maintenance-reg-date">
                                                                     <span class="input-group-text"><i
                                                                             class="bi bi-calendar2-range"></i></span>
                                                                 </div>
                                                             </div>
                                                             <div class="col-2">
                                                             </div>
-                                                            <div class="col-2">
+                                                            <div class="col-2 d-flex">
+                                                                <select class="form-select maintenance-search-filter"
+                                                                        id="search-category-maintenance">
+                                                                    <option value="">카테고리</option>
+                                                                    <option value="maintenance_history_workshop_name">
+                                                                        정비소
+                                                                    </option>
+                                                                    <option value="maintenance_history_description">
+                                                                        정비 내용
+                                                                    </option>
+                                                                </select>
                                                             </div>
-                                                            <div class="col-4 text-end">
-                                                                <div class="input-group mb-3">
-                                                                    <select class="form-select"
-                                                                            id="search-category-maintenance">
-                                                                        <option value="">카테고리</option>
-                                                                        <option value="maintenance_history_workshop_name">
-                                                                            정비소
-                                                                        </option>
-                                                                        <option value="maintenance_history_description">
-                                                                            정비 내용
-                                                                        </option>
-                                                                    </select>
-                                                                    <input type="text" class="form-control"
-                                                                           placeholder="검색 단어를 입력해 주세요.">
-                                                                </div>
+                                                            <div class="col-4">
+                                                                <input type="text"
+                                                                       class="form-control maintenance-search-filter"
+                                                                       id="search-text-maintenance"
+                                                                       placeholder="검색 단어를 입력해 주세요.">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -293,27 +347,31 @@
                                                             <table class="table align-middle table-hover m-0">
                                                                 <thead>
                                                                 <tr>
-                                                                    <th class="text-center sortable"
-                                                                        id="th-taxi-license-plate"
+                                                                    <th class="sortable"
+                                                                        id="th-maintenance-history-date"
+                                                                        style="width: 10%;"
+                                                                        data-value="maintenance-history-date">정비일
+                                                                    </th>
+                                                                    <th class="sortable"
+                                                                        id="th-maintenance-history-workshop-name"
                                                                         style="width: 25%;"
-                                                                        data-value="taxi-license-plate">번호판
+                                                                        data-value="maintenance-history-workshop-name">
+                                                                        정비소
                                                                     </th>
-                                                                    <th class="text-center sortable" id="th-taxi-model"
-                                                                        style="width: 20%;" data-value="taxi-model">차종
+                                                                    <th class="sortable"
+                                                                        id="th-maintenance-history-description"
+                                                                        style="width: 50%;"
+                                                                        data-value="maintenance-history-description">
+                                                                        정비 내용
                                                                     </th>
-                                                                    <th class="text-center sortable"
-                                                                        id="th-taxi-reg-date"
-                                                                        style="width: 25%;" data-value="taxi-reg-date">
-                                                                        등록일
-                                                                    </th>
-                                                                    <th class="text-center sortable"
-                                                                        id="th-taxi-is-active"
-                                                                        style="width: 15%;" data-value="taxi-is-active">
-                                                                        폐차 여부
+                                                                    <th class="sortable"
+                                                                        id="th-maintenance-history-cost"
+                                                                        style="width: 15%;"
+                                                                        data-value="maintenance-history-cost">정비 비용
                                                                     </th>
                                                                 </tr>
                                                                 </thead>
-                                                                <tbody id="taxi-list">
+                                                                <tbody id="maintenance-list">
                                                                 </tbody>
                                                             </table>
                                                         </div>
@@ -325,99 +383,106 @@
                                                     <h2>사고 이력 내용</h2>
                                                     <!-- 사고 이력 내용을 여기에 추가 -->
                                                     <!-- 검색창 시작 -->
-                                                    <%--                                                    <div class="search-filter-container border border-2 p-3 rounded mb-3">--%>
-                                                    <%--                                                        <div class="row mb-3">--%>
-                                                    <%--                                                            <div class="col-10">--%>
-                                                    <%--                                                            </div>--%>
-                                                    <%--                                                            <div class="col-2 text-end d-md-flex justify-content-md-end gap-2">--%>
-                                                    <%--                                                                <input type="button" class="btn btn-secondary" onclick="filterReset()"--%>
-                                                    <%--                                                                       value="초기화">--%>
-                                                    <%--                                                                <input type="button" class="btn btn-primary" onclick="getTaxiList()"--%>
-                                                    <%--                                                                       value="검색" style="display: none">--%>
-                                                    <%--                                                            </div>--%>
-                                                    <%--                                                        </div>--%>
-                                                    <%--                                                        <div class="row">--%>
-                                                    <%--                                                            <div class="col-4">--%>
-                                                    <%--                                                                <label for="filter-taxi-reg-date" class="form-label">등록일 필터</label>--%>
-                                                    <%--                                                            </div>--%>
-                                                    <%--                                                            <div class="col-2">--%>
-                                                    <%--                                                                <label for="filter-taxi-model" class="form-label">차종 필터</label>--%>
-                                                    <%--                                                            </div>--%>
-                                                    <%--                                                            <div class="col-2">--%>
-
-                                                    <%--                                                                <label for="filter-taxi-is-active" class="form-label">폐차여부 필터</label>--%>
-                                                    <%--                                                            </div>--%>
-                                                    <%--                                                            <div class="col-1"></div>--%>
-                                                    <%--                                                            <div class="col-3">--%>
-
-                                                    <%--                                                                <label for="search-taxi-license-plate" class="form-label">번호판 검색</label>--%>
-                                                    <%--                                                            </div>--%>
-                                                    <%--                                                        </div>--%>
-                                                    <%--                                                        <div class="row mb-3">--%>
-                                                    <%--                                                            <div class="col-4">--%>
-                                                    <%--                                                                <div class="input-group" id="filter-taxi-reg-date-div">--%>
-                                                    <%--                                                                    <input type="text"--%>
-                                                    <%--                                                                           class="form-control datepicker-range taxi-search-filter"--%>
-                                                    <%--                                                                           id="filter-taxi-reg-date">--%>
-                                                    <%--                                                                    <span class="input-group-text"><i class="bi bi-calendar2-range"></i></span>--%>
-                                                    <%--                                                                </div>--%>
-                                                    <%--                                                            </div>--%>
-                                                    <%--                                                            <div class="col-2">--%>
-                                                    <%--                                                                <select id="filter-taxi-model" class="form-select taxi-search-filter">--%>
-                                                    <%--                                                                    <option value="">차종</option>--%>
-                                                    <%--                                                                    <c:forEach items="${taxiModelList}" var="taxiModel">--%>
-                                                    <%--                                                                        <option value="${taxiModel}">${taxiModel}</option>--%>
-                                                    <%--                                                                    </c:forEach>--%>
-                                                    <%--                                                                </select>--%>
-                                                    <%--                                                            </div>--%>
-                                                    <%--                                                            <div class="col-2">--%>
-                                                    <%--                                                                <select id="filter-taxi-is-active"--%>
-                                                    <%--                                                                        class="form-select taxi-search-filter">--%>
-                                                    <%--                                                                    <option value="">폐차 여부</option>--%>
-                                                    <%--                                                                    <option value="1">폐차아님</option>--%>
-                                                    <%--                                                                    <option value="0">폐차</option>--%>
-                                                    <%--                                                                </select>--%>
-                                                    <%--                                                            </div>--%>
-                                                    <%--                                                            <div class="col-1"></div>--%>
-                                                    <%--                                                            <div class="col-3 text-end">--%>
-                                                    <%--                                                                <input type="text" class="form-control taxi-search-filter bg-"--%>
-                                                    <%--                                                                       id="search-taxi-license-plate"--%>
-                                                    <%--                                                                       placeholder="번호판을 입력해 주세요">--%>
-                                                    <%--                                                            </div>--%>
-                                                    <%--                                                        </div>--%>
-                                                    <%--                                                    </div>--%>
+                                                    <div class="search-filter-container border border-2 p-3 rounded mb-3">
+                                                        <div class="row mb-3">
+                                                            <div class="col-10">
+                                                            </div>
+                                                            <div class="col-2 text-end d-md-flex justify-content-md-end gap-2">
+                                                                <input type="button" class="btn btn-secondary"
+                                                                       onclick="filterReset()"
+                                                                       value="초기화">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-4">
+                                                                <label for="filter-accident-reg-date"
+                                                                       class="form-label">사고 날짜
+                                                                    필터</label>
+                                                            </div>
+                                                            <div class="col-2">
+                                                            </div>
+                                                            <div class="col-2">
+                                                                <label for="search-category-accident"
+                                                                       class="form-label">검색 카테고리</label>
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <label for="search-text-accident"
+                                                                       class="form-label">검색</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mb-3">
+                                                            <div class="col-4">
+                                                                <div class="input-group"
+                                                                     id="filter-accident-reg-date-div">
+                                                                    <input type="text"
+                                                                           class="form-control datepicker-range accident-search-filter"
+                                                                           id="filter-accident-reg-date">
+                                                                    <span class="input-group-text"><i
+                                                                            class="bi bi-calendar2-range"></i></span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-2">
+                                                            </div>
+                                                            <div class="col-2 d-flex">
+                                                                <select class="form-select accident-search-filter"
+                                                                        id="search-category-accident">
+                                                                    <option value="">카테고리</option>
+                                                                    <option value="accident_history_location">
+                                                                        사고 장소
+                                                                    </option>
+                                                                    <option value="accident_history_description">
+                                                                        사고 내용
+                                                                    </option>
+                                                                    <option value="accident_history_driver_name">
+                                                                        사고 기사
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <input type="text"
+                                                                       class="form-control maintenance-search-filter"
+                                                                       id="search-text-accident"
+                                                                       placeholder="검색 단어를 입력해 주세요.">
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <!-- 검색창 종료 -->
                                                     <!-- 리스트 테이블 시작 -->
-                                                    <%--                                                    <div class="table-outer">--%>
-                                                    <%--                                                        <div class="table-responsive">--%>
-                                                    <%--                                                            <table class="table align-middle table-hover m-0">--%>
-                                                    <%--                                                                <thead>--%>
-                                                    <%--                                                                <tr>--%>
-                                                    <%--                                                                    <th class="text-center sortable" id="th-taxi-license-plate"--%>
-                                                    <%--                                                                        style="width: 25%;" data-value="taxi-license-plate">번호판--%>
-                                                    <%--                                                                    </th>--%>
-                                                    <%--                                                                    <th class="text-center sortable" id="th-taxi-model"--%>
-                                                    <%--                                                                        style="width: 20%;" data-value="taxi-model">차종--%>
-                                                    <%--                                                                    </th>--%>
-                                                    <%--                                                                    <th class="text-center sortable" id="th-taxi-reg-date"--%>
-                                                    <%--                                                                        style="width: 25%;" data-value="taxi-reg-date">등록일--%>
-                                                    <%--                                                                    </th>--%>
-                                                    <%--                                                                    <th class="text-center sortable" id="th-taxi-is-active"--%>
-                                                    <%--                                                                        style="width: 15%;" data-value="taxi-is-active">폐차 여부--%>
-                                                    <%--                                                                    </th>--%>
-                                                    <%--                                                                </tr>--%>
-                                                    <%--                                                                </thead>--%>
-                                                    <%--                                                                <tbody id="taxi-list">--%>
-                                                    <%--                                                                </tbody>--%>
-                                                    <%--                                                            </table>--%>
-                                                    <%--                                                        </div>--%>
-                                                    <%--                                                    </div>--%>
+                                                    <div class="table-outer">
+                                                        <div class="table-responsive">
+                                                            <table class="table align-middle table-hover m-0">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th class="sortable"
+                                                                        id="th-accident-history-date"
+                                                                        style="width: 15%;"
+                                                                        data-value="accident-history-date">사고 날짜
+                                                                    </th>
+                                                                    <th class="sortable"
+                                                                        id="th-accident-history-address"
+                                                                        style="width: 25%;"
+                                                                        data-value="accident-history-address">
+                                                                        사고 장소
+                                                                    </th>
+                                                                    <th class="sortable"
+                                                                        id="th-accident-history-description"
+                                                                        style="width: 50%;"
+                                                                        data-value="accident-history-description">
+                                                                        사고 내용
+                                                                    </th>
+                                                                    <th class="sortable"
+                                                                        id="th-accident-history-cost"
+                                                                        style="width: 10%;"
+                                                                        data-value="accident-history-cost">사고 기사
+                                                                    </th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody id="accident-list">
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
                                                     <!-- 리스트 테이블 종료 -->
-                                                    <!-- 페이지 네이션 시작 -->
-                                                    <%--                                                    <nav aria-label="Page navigation example" class="mt-3">--%>
-                                                    <%--                                                        <ul class="pagination justify-content-center" id="pagination"></ul>--%>
-                                                    <%--                                                    </nav>--%>
-                                                    <!-- 페이지 네이션 종료 -->
                                                 </div>
                                             </div>
 
@@ -460,6 +525,7 @@
 
 </div>
 <!-- Page wrapper end -->
+
 <!-- 정비 이력 등록 모달 시작 -->
 <div class="modal fade" id="maintenanceRegModal" tabindex="-1" aria-labelledby="maintenanceRegModalLabel"
      aria-hidden="true">
@@ -517,30 +583,91 @@
 <!-- Overlay Scroll JS -->
 <script src="/assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
 <script src="/assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
+<!-- Moment JS -->
+<script src="/assets/js/moment.min.js"></script>
+<!-- Date Range JS -->
+<script src="/assets/vendor/daterange/daterange.js"></script>
+<script src="/assets/vendor/daterange/custom-daterange.js"></script>
 <!-- Custom JS files -->
 <script src="/assets/js/custom.js"></script>
 <script src="/assets/js/LocalStorage.js"></script>
 <script src="/assets/js/showAlert.js"></script>
 <!-- 페이지네이션 -->
 <script src="/assets/js/jquery.twbsPagination.min.js"></script>
-<!-- Moment JS -->
-<script src="/assets/js/moment.min.js"></script>
-<!-- Date Range JS -->
-<script src="/assets/vendor/daterange/daterange.js"></script>
-<script src="/assets/vendor/daterange/custom-daterange.js"></script>
 
 <script>
     var searchText = '';
+    var searchCategory = '';
     var searchIdx = '${taxiDTO.taxi_idx}';
+    var today = moment().format('YYYY/MM/DD');
+    var filterMaintenanceAllDay = '${maintenanceFirstDate}' + ' - ' + today;
+    var filterAccidentAllDay = '${accidentFirstDate}' + ' - ' + today;
     var filterEndDate = '';
-    var filterTaxiModel = '';
-    var filterIsActive = '';
     var currentPage = 1; // 현재 페이지 번호
     var sortOrder = 'asc';
     var sortColumn = 'default';
+    var nowTab = 'maintenance';
+
+    $('#filter-maintenance-reg-date').val(filterMaintenanceAllDay);
+
+
+    getTotalPages();
+    getList();
+
+    // 현재 탭 구분
+    $('#accident-tab').on('click', function () {
+        nowTab = 'accident'
+        currentPage = 1;
+        getTotalPages();
+        getList();
+    });
+    $('#maintenance-tab').on('click', function () {
+        nowTab = 'maintenance'
+        currentPage = 1;
+        getTotalPages();
+        getList();
+    });
+
+    // 테이블 헤더 클릭 이벤트 설정
+    $('th.sortable').click(function () {
+        sortColumn = $(this).data('value');
+        // 현재 정렬 상태 확인
+        if ($(this).hasClass('asc')) {
+            $(this).removeClass('asc').addClass('desc');
+            sortOrder = 'desc';
+        } else if ($(this).hasClass('desc')) {
+            $(this).removeClass('desc').addClass('asc');
+            sortOrder = 'asc';
+        } else {
+            $('th.sortable').removeClass('asc desc');
+            $(this).addClass('asc');
+            sortOrder = 'asc';
+        }
+        getList();
+    });
+    $('#filter-accident-reg-date').on('change', function () {
+        currentPage = 1;
+        getTotalPages();
+        getList();
+    });
+    $('.accident-search-filter').on('input', function () {
+        currentPage = 1;
+        getTotalPages();
+        getList();
+    });
+    $('#filter-maintenance-reg-date').on('change', function () {
+        currentPage = 1;
+        getTotalPages();
+        getList();
+    });
+    $('.maintenance-search-filter').on('input', function () {
+        currentPage = 1;
+        getTotalPages();
+        getList();
+    });
 
     // 정비 비용 입력 필드에 대한 input 이벤트 리스너
-    $('#maintenanceCost').on('input', function(e) {
+    $('#maintenanceCost').on('input', function (e) {
         var value = $(this).val().replace(/,/g, '');
 
         // 숫자만 허용하고, 최대 10자리로 제한
@@ -578,7 +705,7 @@
         console.log('정비소 이름:', workshopName);
         console.log('정비 내용:', maintenanceDescription);
 
-        // 서버로 데이터 전송 예제
+        // 서버로 데이터 전송
         $.ajax({
             url: '/maintenance/create.ajax',
             type: 'POST',
@@ -595,8 +722,10 @@
                     // 성공 시 모달 닫기 및 메시지 표시
                     $('#maintenanceRegModal').modal('hide');
                     isModalAlert = false;
-                    location.reload();
                     showAlert('success', '정비 이력이 등록되었습니다.');
+                    currentPage = 1;
+                    getTotalPages();
+                    getList();
                 } else {
 
                     showAlert('danger', '정비 이력 등록에 실패했습니다.');
@@ -662,6 +791,216 @@
             }
         });
     });
+
+    // 필터 값 리셋
+    function filterReset() {
+        if (nowTab === 'maintenance') {
+            $('#search-category-maintenance').val('');
+            $('#search-text-maintenance').val('');
+            $('#filter-maintenance-reg-date').val(filterMaintenanceAllDay);
+        } else if (nowTab === 'accident') {
+            $('#search-category-accident').val('');
+            $('#search-text-accident').val('');
+            $('#filter-accident-reg-date').val(filterAccidentAllDay);
+        }
+        currentPage = 1; // 페이지 번호 초기화
+        getTotalPages();
+        getList(); // 목록 새로고침
+    }
+
+    // 리스트 호출
+    function getList() {
+        getSearchValue();
+        if (nowTab === 'maintenance') {
+            maintenanceListAjax();
+        } else if (nowTab === 'accident') {
+            accidentListAjax();
+        }
+    }
+
+    function maintenanceListAjax() {
+        $.ajax({
+            url: '/maintenance/list.ajax',
+            type: 'GET',
+            data: {
+                'searchIdx': searchIdx,
+                'searchText': searchText,
+                'category': searchCategory,
+                'filterStartDate': filterStartDate,
+                'filterEndDate': filterEndDate,
+                'page': currentPage,
+                'sortColumn': sortColumn,
+                'sortOrder': sortOrder
+            },
+            dataType: 'JSON',
+            success: function (data) {
+                drawTaxiList(data.maintenanceList);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function accidentListAjax() {
+        $.ajax({
+            url: '/accident/list.ajax',
+            type: 'GET',
+            data: {
+                'searchIdx': searchIdx,
+                'searchText': searchText,
+                'category': searchCategory,
+                'filterStartDate': filterStartDate,
+                'filterEndDate': filterEndDate,
+                'page': currentPage,
+                'sortColumn': sortColumn,
+                'sortOrder': sortOrder
+            },
+            dataType: 'JSON',
+            success: function (data) {
+                drawTaxiList(data.accidentList);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    // 토탈 페이지 호출
+    function getTotalPages() {
+        getSearchValue();
+        if (nowTab === 'maintenance') {
+            maintenanceTotalPagesAjax();
+        } else if (nowTab === 'accident') {
+            accidentTotalPagesAjax();
+        }
+    }
+
+    function maintenanceTotalPagesAjax() {
+        $.ajax({
+            url: '/maintenance/getTotalPages.ajax',
+            type: 'GET',
+            data: {
+                'searchText': searchText,
+                'filterStartDate': filterStartDate,
+                'filterEndDate': filterEndDate,
+                'category': searchCategory,
+                'searchIdx': searchIdx
+            },
+            dataType: 'JSON',
+            success: function (data) {
+                // console.log(data);
+                $('#pagination').twbsPagination('destroy');
+                $('#pagination').twbsPagination({
+                    totalPages: data.totalPages, // 서버에서 받은 총 페이지 수
+                    visiblePages: 5,
+                    startPage: currentPage,
+                    paginationClass: 'pagination align-items-center',
+                    onPageClick: function (event, page) {
+                        currentPage = page;
+                        getList();
+                    }
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+
+    }
+
+    function accidentTotalPagesAjax() {
+        $.ajax({
+            url: '/accident/getTotalPages.ajax',
+            type: 'GET',
+            data: {
+                'searchText': searchText,
+                'filterStartDate': filterStartDate,
+                'filterEndDate': filterEndDate,
+                'category': searchCategory,
+                'searchIdx': searchIdx
+            },
+            dataType: 'JSON',
+            success: function (data) {
+                // console.log(data);
+                $('#pagination').twbsPagination('destroy');
+                $('#pagination').twbsPagination({
+                    totalPages: data.totalPages, // 서버에서 받은 총 페이지 수
+                    visiblePages: 5,
+                    startPage: currentPage,
+                    paginationClass: 'pagination align-items-center',
+                    onPageClick: function (event, page) {
+                        currentPage = page;
+                        getList();
+                    }
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+
+    }
+
+    // 검색 값들 변수에 저장
+    function getSearchValue() {
+        if (nowTab === 'maintenance') {
+            var filterDate = $('#filter-maintenance-reg-date').val();
+            if (filterDate) {
+                var dates = filterDate.split(' - ');
+                filterStartDate = dates[0];
+                filterEndDate = dates[1];
+            }
+            searchCategory = $('#search-category-maintenance').val();
+            searchText = $('#search-text-maintenance').val();
+        }else if (nowTab === 'accident') {
+            var filterDate = $('#filter-accident-reg-date').val();
+            if (filterDate) {
+                var dates = filterDate.split(' - ');
+                filterStartDate = dates[0];
+                filterEndDate = dates[1];
+            }
+            searchCategory = $('#search-category-accident').val();
+            searchText = $('#search-text-accident').val();
+        }
+
+
+    }
+
+    // 리스트 보여주기
+    function drawTaxiList(list) {
+        var content = '';
+        if (nowTab === 'maintenance') {
+            if (list.length > 0) {
+                for (item of list) {
+                    var formattedCost = Number(item.maintenance_history_cost).toLocaleString();
+                    content += '<tr class="maintenance-list-tbody-tr" id="' + item.taxi_idx + '">'
+                        + '<td class="">' + item.maintenance_history_date + '</td>'
+                        + '<td class="">' + item.maintenance_history_workshop_name + '</td>'
+                        + '<td class="ellipsis">' + item.maintenance_history_description + '</td>'
+                        + '<td class="">' + formattedCost + ' 원</td>'
+                        + '</tr>';
+                }
+            } else {
+                content = '<tr><td colspan="4" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
+            }
+            $('#maintenance-list').html(content);
+        }else if (nowTab === 'accident') {
+            if (list.length > 0) {
+                for (item of list) {
+                    content += '<tr class="maintenance-list-tbody-tr" id="' + item.taxi_idx + '">'
+                        + '<td class="">' + item.accident_history_accident_date + '</td>'
+                        + '<td class="">' + item.accident_history_location + '</td>'
+                        + '<td class="ellipsis">' + item.accident_history_description + '</td>'
+                        + '<td class="">' + item.accident_history_driver_name + '</td>'
+                        + '</tr>';
+                }
+            } else {
+                content = '<tr><td colspan="4" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
+            }
+            $('#accident-list').html(content);
+        }
+    }
 </script>
 
 </html>

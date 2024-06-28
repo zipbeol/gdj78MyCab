@@ -14,16 +14,69 @@
         FROM maintenance_history
         <where>
             maintenance_history_taxi_idx = #{searchIdx}
+            <if test="category != null and category != ''">
+                <choose>
+                    <when test="searchText != null and searchText != '' and category == 'maintenance_history_workshop_name'">
+                        AND maintenance_history_workshop_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="searchText != null and searchText != '' and category == 'maintenance_history_description'">
+                        AND maintenance_history_description LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                </choose>
+            </if>
+            <if test="filterStartDate != null and filterStartDate !=  '' and filterEndDate != null and filterEndDate !=  ''">
+                AND maintenance_history_date BETWEEN #{filterStartDate} AND #{filterEndDate}
+            </if>
         </where>
+        <choose>
+            <when test="sortColumn != null and sortColumn == 'maintenance-history-date'">
+                ORDER BY maintenance_history_date
+            </when>
+            <when test="sortColumn != null and sortColumn == 'maintenance-history-workshop-name'">
+                ORDER BY maintenance_history_workshop_name
+            </when>
+            <when test="sortColumn != null and sortColumn == 'maintenance-history-description'">
+                ORDER BY maintenance_history_description
+            </when>
+            <when test="sortColumn != null and sortColumn == 'maintenance-history-cost'">
+                ORDER BY maintenance_history_cost
+            </when>
+            <otherwise>
+                ORDER BY maintenance_history_date
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="sortOrder != null and sortOrder == 'desc'">
+                DESC
+            </when>
+            <when test="sortOrder != null and sortOrder == 'asc'">
+                ASC
+            </when>
+        </choose>
         <if test="page != null">
             LIMIT #{pageSize} OFFSET #{page}
         </if>
     </select>
-    <select id="getMaintenanceCount" parameterType="search" resultType="maintenance">
+
+
+    <select id="getMaintenanceCount" parameterType="search" resultType="int">
         SELECT COUNT(maintenance_history_idx)
         FROM maintenance_history
         <where>
             maintenance_history_taxi_idx = #{searchIdx}
+            <if test="category != null and category != ''">
+                <choose>
+                    <when test="searchText != null and searchText != '' and category == 'maintenance_history_workshop_name'">
+                        AND maintenance_history_workshop_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="searchText != null and searchText != '' and category == 'maintenance_history_description'">
+                        AND maintenance_history_description LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                </choose>
+            </if>
+            <if test="filterStartDate != null and filterStartDate !=  '' and filterEndDate != null and filterEndDate !=  ''">
+                AND maintenance_history_date BETWEEN #{filterStartDate} AND #{filterEndDate}
+            </if>
         </where>
     </select>
 
@@ -34,5 +87,21 @@
         VALUES (#{maintenance_history_taxi_idx}, #{maintenance_history_date}, #{maintenance_history_description},
                 #{maintenance_history_cost}, #{maintenance_history_workshop_name})
     </insert>
+
+    <select id="getMaintenanceFirstDate" resultType="String">
+        SELECT maintenance_history_date
+        FROM maintenance_history
+        WHERE maintenance_history_taxi_idx = #{param1}
+        ORDER BY maintenance_history_date ASC
+        LIMIT 1
+    </select>
+
+    <select id="getAccidentFirstDate" resultType="String">
+        SELECT accident_history_accident_date
+        FROM accident_history
+        WHERE accident_history_taxi_idx = #{param1}
+        ORDER BY accident_history_accident_date ASC
+        LIMIT 1
+    </select>
 
 </mapper>

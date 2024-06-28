@@ -33,8 +33,8 @@ public class CalendarController {
 	
 	@GetMapping(value = "calendar/listCall.ajax")
 	@ResponseBody
-	public List<Map<String, Object>>calListCall(){
-		
+	public List<Map<String, Object>>calListCall(String schedule_editor){
+		logger.info("캘린더 리스트 불러오는 아이디 : " + schedule_editor);
 		logger.info("캘린더 리스트 불러오기 컨트롤러 도착");
 		
 		return calendarService.calListCall();

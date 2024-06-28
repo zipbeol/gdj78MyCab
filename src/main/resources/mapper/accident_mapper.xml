@@ -1,0 +1,96 @@
+<!-- <?xml version="1.0" encoding="UTF-8"?> -->
+<!DOCTYPE mapper PUBLIC    "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
+        >
+
+<mapper namespace="com.my.cab.dao.AccidentDAO">
+
+    <select id="getAccidentList" parameterType="search" resultType="maintenance">
+        SELECT a.accident_history_idx, (SELECT d.driver_name FROM driver d WHERE
+        d.driver_idx = a.accident_history_driver_id) AS accident_history_driver_name, a.accident_history_accident_date, a.accident_history_description,
+        a.accident_history_location
+        FROM accident_history a
+        <where>
+            a.accident_history_taxi_idx = #{searchIdx}
+            <if test="category != null and category != ''">
+                <choose>
+                    <when test="searchText != null and searchText != '' and category == 'accident_history_location'">
+                        AND a.accident_history_location LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="searchText != null and searchText != '' and category == 'accident_history_description'">
+                        AND a.accident_history_description LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="searchText != null and searchText != '' and category == 'accident_history_driver_name'">
+                        AND accident_history_driver_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                </choose>
+            </if>
+            <if test="filterStartDate != null and filterStartDate !=  '' and filterEndDate != null and filterEndDate !=  ''">
+                AND accident_history_accident_date BETWEEN #{filterStartDate} AND #{filterEndDate}
+            </if>
+        </where>
+        <choose>
+            <when test="sortColumn != null and sortColumn == 'maintenance-history-date'">
+                ORDER BY accident_history_accident_date
+            </when>
+            <when test="sortColumn != null and sortColumn == 'maintenance-history-workshop-name'">
+                ORDER BY maintenance_history_workshop_name
+            </when>
+            <when test="sortColumn != null and sortColumn == 'maintenance-history-description'">
+                ORDER BY maintenance_history_description
+            </when>
+            <when test="sortColumn != null and sortColumn == 'maintenance-history-cost'">
+                ORDER BY maintenance_history_cost
+            </when>
+            <otherwise>
+                ORDER BY maintenance_history_date
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="sortOrder != null and sortOrder == 'desc'">
+                DESC
+            </when>
+            <when test="sortOrder != null and sortOrder == 'asc'">
+                ASC
+            </when>
+        </choose>
+        <if test="page != null">
+            LIMIT #{pageSize} OFFSET #{page}
+        </if>
+    </select>
+
+
+    <select id="getAccidentCount" parameterType="search" resultType="int">
+        SELECT COUNT(accident_history_idx)
+        FROM accident_history
+        <where>
+            a.accident_history_taxi_idx = #{searchIdx}
+            <if test="category != null and category != ''">
+                <choose>
+                    <when test="searchText != null and searchText != '' and category == 'accident_history_location'">
+                        AND a.accident_history_location LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="searchText != null and searchText != '' and category == 'accident_history_description'">
+                        AND a.accident_history_description LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="searchText != null and searchText != '' and category == 'accident_history_driver_name'">
+                        AND accident_history_driver_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                </choose>
+            </if>
+            <if test="filterStartDate != null and filterStartDate !=  '' and filterEndDate != null and filterEndDate !=  ''">
+                AND accident_history_accident_date BETWEEN #{filterStartDate} AND #{filterEndDate}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="getAccidentFirstDate" resultType="String">
+        SELECT accident_history_accident_date
+        FROM accident_history
+        WHERE accident_history_taxi_idx = #{param1}
+        ORDER BY accident_history_accident_date ASC
+        LIMIT 1
+    </select>
+
+</mapper>

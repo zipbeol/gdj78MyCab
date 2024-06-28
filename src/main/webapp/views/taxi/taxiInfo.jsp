@@ -333,7 +333,9 @@
                                                                 </select>
                                                             </div>
                                                             <div class="col-4">
-                                                                <input type="text" class="form-control maintenance-search-filter" id="search-text-maintenance"
+                                                                <input type="text"
+                                                                       class="form-control maintenance-search-filter"
+                                                                       id="search-text-maintenance"
                                                                        placeholder="검색 단어를 입력해 주세요.">
                                                             </div>
                                                         </div>
@@ -380,7 +382,107 @@
                                                      aria-labelledby="accident-tab">
                                                     <h2>사고 이력 내용</h2>
                                                     <!-- 사고 이력 내용을 여기에 추가 -->
-
+                                                    <!-- 검색창 시작 -->
+                                                    <div class="search-filter-container border border-2 p-3 rounded mb-3">
+                                                        <div class="row mb-3">
+                                                            <div class="col-10">
+                                                            </div>
+                                                            <div class="col-2 text-end d-md-flex justify-content-md-end gap-2">
+                                                                <input type="button" class="btn btn-secondary"
+                                                                       onclick="filterReset()"
+                                                                       value="초기화">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-4">
+                                                                <label for="filter-accident-reg-date"
+                                                                       class="form-label">사고 날짜
+                                                                    필터</label>
+                                                            </div>
+                                                            <div class="col-2">
+                                                            </div>
+                                                            <div class="col-2">
+                                                                <label for="search-category-accident"
+                                                                       class="form-label">검색 카테고리</label>
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <label for="search-text-accident"
+                                                                       class="form-label">검색</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mb-3">
+                                                            <div class="col-4">
+                                                                <div class="input-group"
+                                                                     id="filter-accident-reg-date-div">
+                                                                    <input type="text"
+                                                                           class="form-control datepicker-range accident-search-filter"
+                                                                           id="filter-accident-reg-date">
+                                                                    <span class="input-group-text"><i
+                                                                            class="bi bi-calendar2-range"></i></span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-2">
+                                                            </div>
+                                                            <div class="col-2 d-flex">
+                                                                <select class="form-select accident-search-filter"
+                                                                        id="search-category-accident">
+                                                                    <option value="">카테고리</option>
+                                                                    <option value="accident_history_location">
+                                                                        사고 장소
+                                                                    </option>
+                                                                    <option value="accident_history_description">
+                                                                        사고 내용
+                                                                    </option>
+                                                                    <option value="accident_history_driver_name">
+                                                                        사고 기사
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <input type="text"
+                                                                       class="form-control maintenance-search-filter"
+                                                                       id="search-text-accident"
+                                                                       placeholder="검색 단어를 입력해 주세요.">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- 검색창 종료 -->
+                                                    <!-- 리스트 테이블 시작 -->
+                                                    <div class="table-outer">
+                                                        <div class="table-responsive">
+                                                            <table class="table align-middle table-hover m-0">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th class="sortable"
+                                                                        id="th-accident-history-date"
+                                                                        style="width: 15%;"
+                                                                        data-value="accident-history-date">사고 날짜
+                                                                    </th>
+                                                                    <th class="sortable"
+                                                                        id="th-accident-history-address"
+                                                                        style="width: 25%;"
+                                                                        data-value="accident-history-address">
+                                                                        사고 장소
+                                                                    </th>
+                                                                    <th class="sortable"
+                                                                        id="th-accident-history-description"
+                                                                        style="width: 50%;"
+                                                                        data-value="accident-history-description">
+                                                                        사고 내용
+                                                                    </th>
+                                                                    <th class="sortable"
+                                                                        id="th-accident-history-cost"
+                                                                        style="width: 10%;"
+                                                                        data-value="accident-history-cost">사고 기사
+                                                                    </th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody id="accident-list">
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    <!-- 리스트 테이블 종료 -->
                                                 </div>
                                             </div>
 
@@ -498,16 +600,33 @@
     var searchCategory = '';
     var searchIdx = '${taxiDTO.taxi_idx}';
     var today = moment().format('YYYY/MM/DD');
-    var filterAllDay = '${maintenanceFirstDate}' + ' - ' + today;
+    var filterMaintenanceAllDay = '${maintenanceFirstDate}' + ' - ' + today;
+    var filterAccidentAllDay = '${accidentFirstDate}' + ' - ' + today;
     var filterEndDate = '';
     var currentPage = 1; // 현재 페이지 번호
     var sortOrder = 'asc';
     var sortColumn = 'default';
+    var nowTab = 'maintenance';
 
-    $('#filter-maintenance-reg-date').val(filterAllDay);
+    $('#filter-maintenance-reg-date').val(filterMaintenanceAllDay);
+
 
     getTotalPages();
-    getMaintenanceList();
+    getList();
+
+    // 현재 탭 구분
+    $('#accident-tab').on('click', function () {
+        nowTab = 'accident'
+        currentPage = 1;
+        getTotalPages();
+        getList();
+    });
+    $('#maintenance-tab').on('click', function () {
+        nowTab = 'maintenance'
+        currentPage = 1;
+        getTotalPages();
+        getList();
+    });
 
     // 테이블 헤더 클릭 이벤트 설정
     $('th.sortable').click(function () {
@@ -524,18 +643,29 @@
             $(this).addClass('asc');
             sortOrder = 'asc';
         }
-        getMaintenanceList();
+        getList();
+    });
+    $('#filter-accident-reg-date').on('change', function () {
+        currentPage = 1;
+        getTotalPages();
+        getList();
+    });
+    $('.accident-search-filter').on('input', function () {
+        currentPage = 1;
+        getTotalPages();
+        getList();
     });
     $('#filter-maintenance-reg-date').on('change', function () {
         currentPage = 1;
         getTotalPages();
-        getMaintenanceList();
+        getList();
     });
     $('.maintenance-search-filter').on('input', function () {
         currentPage = 1;
         getTotalPages();
-        getMaintenanceList();
+        getList();
     });
+
     // 정비 비용 입력 필드에 대한 input 이벤트 리스너
     $('#maintenanceCost').on('input', function (e) {
         var value = $(this).val().replace(/,/g, '');
@@ -595,7 +725,7 @@
                     showAlert('success', '정비 이력이 등록되었습니다.');
                     currentPage = 1;
                     getTotalPages();
-                    getMaintenanceList();
+                    getList();
                 } else {
 
                     showAlert('danger', '정비 이력 등록에 실패했습니다.');
@@ -664,17 +794,31 @@
 
     // 필터 값 리셋
     function filterReset() {
-        $('#search-category-maintenance').val('');
-        $('#search-text-maintenance').val('');
-        $('#filter-maintenance-reg-date').val(filterAllDay);
+        if (nowTab === 'maintenance') {
+            $('#search-category-maintenance').val('');
+            $('#search-text-maintenance').val('');
+            $('#filter-maintenance-reg-date').val(filterMaintenanceAllDay);
+        } else if (nowTab === 'accident') {
+            $('#search-category-accident').val('');
+            $('#search-text-accident').val('');
+            $('#filter-accident-reg-date').val(filterAccidentAllDay);
+        }
         currentPage = 1; // 페이지 번호 초기화
         getTotalPages();
-        getMaintenanceList(); // 목록 새로고침
+        getList(); // 목록 새로고침
     }
 
     // 리스트 호출
-    function getMaintenanceList() {
+    function getList() {
         getSearchValue();
+        if (nowTab === 'maintenance') {
+            maintenanceListAjax();
+        } else if (nowTab === 'accident') {
+            accidentListAjax();
+        }
+    }
+
+    function maintenanceListAjax() {
         $.ajax({
             url: '/maintenance/list.ajax',
             type: 'GET',
@@ -698,9 +842,41 @@
         });
     }
 
+    function accidentListAjax() {
+        $.ajax({
+            url: '/accident/list.ajax',
+            type: 'GET',
+            data: {
+                'searchIdx': searchIdx,
+                'searchText': searchText,
+                'category': searchCategory,
+                'filterStartDate': filterStartDate,
+                'filterEndDate': filterEndDate,
+                'page': currentPage,
+                'sortColumn': sortColumn,
+                'sortOrder': sortOrder
+            },
+            dataType: 'JSON',
+            success: function (data) {
+                drawTaxiList(data.accidentList);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
     // 토탈 페이지 호출
     function getTotalPages() {
         getSearchValue();
+        if (nowTab === 'maintenance') {
+            maintenanceTotalPagesAjax();
+        } else if (nowTab === 'accident') {
+            accidentTotalPagesAjax();
+        }
+    }
+
+    function maintenanceTotalPagesAjax() {
         $.ajax({
             url: '/maintenance/getTotalPages.ajax',
             type: 'GET',
@@ -709,7 +885,7 @@
                 'filterStartDate': filterStartDate,
                 'filterEndDate': filterEndDate,
                 'category': searchCategory,
-                'searchIdx':searchIdx
+                'searchIdx': searchIdx
             },
             dataType: 'JSON',
             success: function (data) {
@@ -722,7 +898,7 @@
                     paginationClass: 'pagination align-items-center',
                     onPageClick: function (event, page) {
                         currentPage = page;
-                        getMaintenanceList();
+                        getList();
                     }
                 });
             },
@@ -730,39 +906,100 @@
                 console.log(error);
             }
         });
+
+    }
+
+    function accidentTotalPagesAjax() {
+        $.ajax({
+            url: '/accident/getTotalPages.ajax',
+            type: 'GET',
+            data: {
+                'searchText': searchText,
+                'filterStartDate': filterStartDate,
+                'filterEndDate': filterEndDate,
+                'category': searchCategory,
+                'searchIdx': searchIdx
+            },
+            dataType: 'JSON',
+            success: function (data) {
+                // console.log(data);
+                $('#pagination').twbsPagination('destroy');
+                $('#pagination').twbsPagination({
+                    totalPages: data.totalPages, // 서버에서 받은 총 페이지 수
+                    visiblePages: 5,
+                    startPage: currentPage,
+                    paginationClass: 'pagination align-items-center',
+                    onPageClick: function (event, page) {
+                        currentPage = page;
+                        getList();
+                    }
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+
     }
 
     // 검색 값들 변수에 저장
     function getSearchValue() {
-        var filterDate = $('#filter-maintenance-reg-date').val();
-        if (filterDate) {
-            var dates = filterDate.split(' - ');
-            filterStartDate = dates[0];
-            filterEndDate = dates[1];
+        if (nowTab === 'maintenance') {
+            var filterDate = $('#filter-maintenance-reg-date').val();
+            if (filterDate) {
+                var dates = filterDate.split(' - ');
+                filterStartDate = dates[0];
+                filterEndDate = dates[1];
+            }
+            searchCategory = $('#search-category-maintenance').val();
+            searchText = $('#search-text-maintenance').val();
+        }else if (nowTab === 'accident') {
+            var filterDate = $('#filter-accident-reg-date').val();
+            if (filterDate) {
+                var dates = filterDate.split(' - ');
+                filterStartDate = dates[0];
+                filterEndDate = dates[1];
+            }
+            searchCategory = $('#search-category-accident').val();
+            searchText = $('#search-text-accident').val();
         }
 
-        searchCategory = $('#search-category-maintenance').val();
-        searchText = $('#search-text-maintenance').val();
 
     }
 
     // 리스트 보여주기
     function drawTaxiList(list) {
         var content = '';
-        if (list.length > 0) {
-            for (item of list) {
-                var formattedCost = Number(item.maintenance_history_cost).toLocaleString();
-                content += '<tr class="maintenance-list-tbody-tr" id="' + item.taxi_idx + '">'
-                    + '<td class="">' + item.maintenance_history_date + '</td>'
-                    + '<td class="">' + item.maintenance_history_workshop_name + '</td>'
-                    + '<td class="ellipsis">' + item.maintenance_history_description + '</td>'
-                    + '<td class="">' + formattedCost + ' 원</td>'
-                    + '</tr>';
+        if (nowTab === 'maintenance') {
+            if (list.length > 0) {
+                for (item of list) {
+                    var formattedCost = Number(item.maintenance_history_cost).toLocaleString();
+                    content += '<tr class="maintenance-list-tbody-tr" id="' + item.taxi_idx + '">'
+                        + '<td class="">' + item.maintenance_history_date + '</td>'
+                        + '<td class="">' + item.maintenance_history_workshop_name + '</td>'
+                        + '<td class="ellipsis">' + item.maintenance_history_description + '</td>'
+                        + '<td class="">' + formattedCost + ' 원</td>'
+                        + '</tr>';
+                }
+            } else {
+                content = '<tr><td colspan="4" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
             }
-        } else {
-            content = '<tr><td colspan="4" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
+            $('#maintenance-list').html(content);
+        }else if (nowTab === 'accident') {
+            if (list.length > 0) {
+                for (item of list) {
+                    content += '<tr class="maintenance-list-tbody-tr" id="' + item.taxi_idx + '">'
+                        + '<td class="">' + item.accident_history_accident_date + '</td>'
+                        + '<td class="">' + item.accident_history_location + '</td>'
+                        + '<td class="ellipsis">' + item.accident_history_description + '</td>'
+                        + '<td class="">' + item.accident_history_driver_name + '</td>'
+                        + '</tr>';
+                }
+            } else {
+                content = '<tr><td colspan="4" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
+            }
+            $('#accident-list').html(content);
         }
-        $('#maintenance-list').html(content);
     }
 </script>
 

@@ -96,4 +96,12 @@
         LIMIT 1
     </select>
 
+    <select id="getAccidentFirstDate" resultType="String">
+        SELECT accident_history_accident_date
+        FROM accident_history
+        WHERE accident_history_taxi_idx = #{param1}
+        ORDER BY accident_history_accident_date ASC
+        LIMIT 1
+    </select>
+
 </mapper>

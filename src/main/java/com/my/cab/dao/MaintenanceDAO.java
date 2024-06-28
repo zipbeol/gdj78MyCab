@@ -12,4 +12,8 @@ public interface MaintenanceDAO {
     List<MaintenanceDTO> getMaintenanceList(SearchDTO searchDTO);
 
     boolean insertMaintenanceHistory(MaintenanceDTO maintenanceDTO);
+
+    String getMaintenanceFirstDate(String taxiIdx);
+
+    int getMaintenanceCount(SearchDTO searchDTO);
 }

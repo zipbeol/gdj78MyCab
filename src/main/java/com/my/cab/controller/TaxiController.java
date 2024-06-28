@@ -3,6 +3,7 @@ package com.my.cab.controller;
 
 import com.my.cab.dto.SearchDTO;
 import com.my.cab.dto.TaxiDTO;
+import com.my.cab.service.MaintenanceService;
 import com.my.cab.service.TaxiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,8 @@ public class TaxiController {
 
     @Autowired
     TaxiService taxiService;
+    @Autowired
+    private MaintenanceService maintenanceService;
 
     @RequestMapping("/list.go")
     public String listGo(Model model) {
@@ -61,7 +64,7 @@ public class TaxiController {
         TaxiDTO taxiInfo = taxiService.getTaxiInfo(taxiDTO.getTaxi_idx());
         taxiInfo.setTaxi_idx(taxiDTO.getTaxi_idx());
         model.addAttribute("taxiDTO", taxiInfo);
-
+        model.addAttribute("maintenanceFirstDate", maintenanceService.getMaintenanceFirstDate(taxiDTO.getTaxi_idx()));
         return "taxi/taxiInfo";
     }
 

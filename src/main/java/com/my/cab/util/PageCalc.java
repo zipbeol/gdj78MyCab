@@ -1,8 +1,6 @@
 package com.my.cab.util;
 
-import org.springframework.stereotype.Component;
 
-@Component
 public class PageCalc {
 
     /**
@@ -11,7 +9,7 @@ public class PageCalc {
      * @param pageSize 페이지 사이즈
      * @return {@code int}
      */
-    public int calculatePageOffset(int pageNum, int pageSize) {
+    public static int calculatePageOffset(int pageNum, int pageSize) {
         return (pageNum - 1) * pageSize;
     }
 
@@ -22,7 +20,7 @@ public class PageCalc {
      * @param pageSize 페이지 사이즈
      * @return 토탈 페이지
      */
-    public int calculateTotalPages(int totalCount, int pageSize) {
+    public static int calculateTotalPages(int totalCount, int pageSize) {
         int totalPages = (int) Math.ceil((double) totalCount / pageSize);
         return totalPages > 0 ? totalPages : 1;
     }

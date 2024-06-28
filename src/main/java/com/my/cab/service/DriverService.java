@@ -38,9 +38,6 @@ public class DriverService {
         this.driverDAO = driverDAO;
     }
 
-    @Autowired
-    PageCalc pageCalculator;
-
     /**
      * 택시기사 가장 오래된 등록일 가져오는 메서드
      *
@@ -151,7 +148,7 @@ public class DriverService {
      */
     public Map<String, Object> getDriverList(SearchDTO searchDTO) {
         Map<String, Object> result = new HashMap<String, Object>();
-        int page = pageCalculator.calculatePageOffset(searchDTO.getPage(), PAGE_SIZE);
+        int page = PageCalc.calculatePageOffset(searchDTO.getPage(), PAGE_SIZE);
         searchDTO.setPage(page);
         searchDTO.setPageSize(PAGE_SIZE);
         logger.info("page {}", page);
@@ -170,7 +167,7 @@ public class DriverService {
      */
     public Map<String, Object> getDriverTotalPages(SearchDTO searchDTO) {
         int driverTotal = driverDAO.getDriverTotal(searchDTO);
-        return Map.of("totalPages", pageCalculator.calculateTotalPages(driverTotal, PAGE_SIZE));
+        return Map.of("totalPages", PageCalc.calculateTotalPages(driverTotal, PAGE_SIZE));
     }
 
     public DriverDTO getDriverInfo(String driverIdx) {

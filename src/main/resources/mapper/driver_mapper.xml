@@ -129,14 +129,26 @@
     </update>
 
     <select id="getDriverPhotoName" resultType="String">
-        SELECT driver_photo FROM driver WHERE driver_idx = #{param1}
+        SELECT driver_photo
+        FROM driver
+        WHERE driver_idx = #{param1}
     </select>
     <select id="getDriverTaxiLicensePhotoName" resultType="String">
-        SELECT driver_taxi_license_photo FROM driver WHERE driver_idx = #{param1}
+        SELECT driver_taxi_license_photo
+        FROM driver
+        WHERE driver_idx = #{param1}
     </select>
     <select id="getNotRetiredDriverList" resultType="driver">
         SELECT driver_idx, driver_photo, driver_name
         FROM driver
         WHERE driver_is_retired = false
+    </select>
+    <select id="getSearchedNotRetiredDriverList" resultType="driver">
+        SELECT driver_idx, driver_photo, driver_name
+        FROM driver
+        WHERE driver_is_retired = false
+        <if test="searchText != null and searchText != ''">
+            AND driver_name LIKE CONCAT('%',#{searchText},'%')
+        </if>
     </select>
 </mapper>

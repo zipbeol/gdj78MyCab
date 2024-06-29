@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="ko">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -124,7 +125,8 @@
             width: 80px;
         }
 
-        table.table th, table.table td {
+        table.table th,
+        table.table td {
             text-align: center;
             vertical-align: middle;
         }
@@ -301,13 +303,12 @@
                     <input type="text" class="form-control" id="searchDriverInput" placeholder="기사 이름 검색">
                 </div>
                 <div class="driver-list" style="max-height: 300px; overflow-y: auto;">
-                    <ul class="list-group">
+                    <ul class="list-group" id="driverList">
                         <c:forEach var="driver" items="${drivers}">
                             <li class="list-group-item driver-item d-flex align-items-center"
                                 data-driver-id="${driver.driver_idx}">
                                 <img src="/upload/${driver.driver_photo}" alt="${driver.driver_name}"
-                                     class="rounded-circle me-2"
-                                     style="width: 40px; height: 40px;">
+                                     class="rounded-circle me-2" style="width: 40px; height: 40px;">
                                 <span>${driver.driver_name}</span>
                             </li>
                         </c:forEach>
@@ -577,15 +578,8 @@
     });
 
     $('#searchDriverInput').on('input', function () {
-        var searchValue = $(this).val().toLowerCase();
-        $('.driver-item').each(function () {
-            var driverName = $(this).text().toLowerCase();
-            if (driverName.includes(searchValue)) {
-                $(this).show();
-            } else {
-                $(this).hide();
-            }
-        });
+        let searchText = $(this).val();
+        getList(searchText);
     });
 
 
@@ -668,14 +662,14 @@
 
     // 테이블 추가
     function processTripEnd() {
-        var content = ''
-            + '<tr>'
-            + '<td>' + tripCount + '</td>'
-            + '<td>' + tripStartLocation + '</td>'
-            + '<td>' + tripEndLocation + '</td>'
-            + '<td>' + distance + 'm' + '</td>'
-            + '<td>' + money.toLocaleString() + '원' + '</td>'
-            + '<td>' + timeString + '</td>';
+        var content = '' +
+            '<tr>' +
+            '<td>' + tripCount + '</td>' +
+            '<td>' + tripStartLocation + '</td>' +
+            '<td>' + tripEndLocation + '</td>' +
+            '<td>' + distance + 'm' + '</td>' +
+            '<td>' + money.toLocaleString() + '원' + '</td>' +
+            '<td>' + timeString + '</td>';
         $('#trip-body').append(content);
         tripCount++;
         // console.log(lat, ' ', lng);
@@ -703,7 +697,7 @@
             // 커스텀 오버레이를 생성하고 지도에 표시합니다
             distanceOverlay = new kakao.maps.CustomOverlay({
                 map: map, // 커스텀오버레이를 표시할 지도입니다
-                content: content,  // 커스텀오버레이에 표시할 내용입니다
+                content: content, // 커스텀오버레이에 표시할 내용입니다
                 position: position, // 커스텀오버레이를 표시할 위치입니다.
                 xAnchor: 0,
                 yAnchor: 0,
@@ -748,7 +742,10 @@
         }
 
         // 배열에 추가합니다
-        dots.push({circle: circleOverlay, distance: distanceOverlay});
+        dots.push({
+            circle: circleOverlay,
+            distance: distanceOverlay
+        });
     }
 
     // 클릭 지점에 대한 정보 (동그라미와 클릭 지점까지의 총거리)를 지도에서 모두 제거하는 함수입니다
@@ -814,6 +811,31 @@
         return content;
     }
 
+    function getList(searchText) {
+        $.ajax({
+            url: './list.ajax',
+            type: 'GET',
+            data: {
+                'searchText': searchText
+            },
+            dataType: 'JSON',
+            success: function (data) {
+                console.log(data);
+                let content = '';
+                for (item of data.drivers) {
+                    content += ''
+                        + '<li class="list-group-item driver-item d-flex align-items-center" data-driver-id="' + item.driver_idx + '">'
+                        + '<img src="/upload/' + item.driver_photo + '" alt="" class="rounded-circle me-2" style="width: 40px; height: 40px;">'
+                        + '<span>' + item.driver_name + '</span>'
+                        + '</li>';
+                }
+                $('#driverList').html(content);
+            },
+            error: function (error) {
+                console.log(error);
+            },
+        });
+    }
 </script>
 
 </html>

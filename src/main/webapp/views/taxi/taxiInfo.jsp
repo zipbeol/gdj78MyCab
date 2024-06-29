@@ -612,6 +612,7 @@
     $('#filter-maintenance-reg-date').val(filterMaintenanceAllDay);
 
 
+
     getTotalPages();
     getList();
 

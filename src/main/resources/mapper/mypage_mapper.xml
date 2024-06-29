@@ -44,6 +44,47 @@
 	<select id="overlay" resultType="int">
 		select count(emp_email) from employee where emp_email = #{param1}
    </select>
+   
+   
+    <!-- 기존 프로필 파일명을 가져오는 쿼리 -->
+    <select id="getProfileByEmpNo" resultType="String">
+        SELECT profile_new
+        FROM profile_photo
+        WHERE emp_no = #{emp_no}
+    </select>
+    
+     <!-- 기존 프로필을 삭제하는 쿼리 -->
+    <delete id="deleteProfile">
+        DELETE FROM profile_photo
+        WHERE emp_no = #{emp_no}
+    </delete>
+    
+    
+     <!-- 새 프로필 파일명을 저장하는 쿼리 -->
+    <insert id="saveProfile">
+        INSERT INTO profile_photo (emp_no, profile_ori, profile_new)
+        VALUES (#{emp_no}, #{originalFileName}, #{fileName})
+    </insert>
+    
+    <!--  프로필 수정 쿼리 -->
+    <update id="profileUpdate" parameterType="myPage">
+        UPDATE employee
+        <set>
+            <if test="emp_email != null and emp_email != ''">
+                emp_email = #{emp_email},
+            </if>
+            <if test="emp_add != null and emp_add != ''">
+                emp_add = #{emp_add},
+            </if>
+            <if test="emp_extension_number != null and emp_extension_number != ''">
+                emp_extension_number = #{emp_extension_number},
+            </if>
+            <if test="emp_password != null and emp_password != ''">
+                emp_password = #{emp_password},
+            </if>
+        </set>
+        WHERE emp_no = #{emp_no}
+    </update>
 
 
 </mapper>

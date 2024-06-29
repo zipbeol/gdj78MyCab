@@ -25,6 +25,10 @@
     <!-- *************
             ************ Vendor Css Files *************
         ************ -->
+       
+	<!-- cropper 스크립트  -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 
     <!-- Scrollbar CSS -->
     <link rel="stylesheet" href="/assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
@@ -187,7 +191,8 @@
                                             </c:otherwise>
                                         </c:choose>
                                         <div class="mt-3">
-                                        <button type="button" id="emp-profile" class="btn btn-info">사진 변경</button>
+                                        <input type="file" id="inputImage" accept="image/*" style="display: none;">
+                                        <button type="button"  id="emp-profile" class="btn btn-info">사진 변경</button>
                                         </div>
                                     </div>
                                     <div class="mt-3"></div>
@@ -196,7 +201,7 @@
                                     <div class="row info-section">
                                         <div class="col-md-6">
                                             <dt>사번</dt>
-                                            <dd><input type="text" class="form-control" id="emp-no" value="${empDetail.emp_no}" readonly></dd>
+                                            <dd><input type="text" class="form-control" id="emp-no" value="${empDetail.emp_no}" name="emp_no" readonly></dd>
                                         </div>
                                         <div class="col-md-6">
                                             <dt>입사일</dt>
@@ -205,10 +210,11 @@
                                     </div>
                                     <div class="row info-section">
                                         <div class="col-md-12" >
-                                            <dt>새 비밀번호</dt>
-                                            <dd><input type="password" class="form-control" id="newPw"></dd>
+                                            <dt>새 비밀번호 (8자리 이상, 영문, 숫자, 특수문자를 (!@#$%^&*) 모두 포함해야 합니다.)</dt>
+                                            <dd><input type="password" oninput="pwCheck()" class="form-control" id="newPw" name="emp_password"></dd>
                                             <dt>새 비밀번호 확인</dt>
-                                            <dd><input type="password" class="form-control" id="newPwChk"></dd>
+                                            <dd><input type="password" oninput="pwCheck()" class="form-control" id="newPwChk" name="newPwChk"></dd>
+                                            <div id="pwChkValid"></div>
                                         </div>
                                     </div>
                                     <div class="row info-section">
@@ -247,14 +253,14 @@
                                 </div>
                                 <div class="col-md-6">
                                     <dt>내선번호</dt>
-                                    <dd><input type="text" class="form-control" id="emp-extension-number" value="${empDetail.emp_extension_number}" name="emp-extension-number" required pattern="^070([0-9]{7,8})$"></dd>
+                                    <dd><input type="text" class="form-control" id="emp-extension-number" value="${empDetail.emp_extension_number}" name="emp_extension_number"></dd>
                             </div>
                             </div>
                             <div class="row info-section">
                                 <div class="col-md-12">
                                     <dt>주소</dt>
-                                    <dd><input type="text" class="form-control" id="emp-add" name = "emp-add" value="${empDetail.emp_add}" readonly></dd>
-                                    <dd id="emp-addDetail" style="display: none;"><input type="text" class="form-control"  value="" placeholder="상세주소"></dd>
+                                    <dd><input type="text" class="form-control" id="emp-add" name = "emp_add" value="${empDetail.emp_add}" readonly></dd>
+                                    <dd id="emp-addDetail" style="display: none;"><input type="text" class="form-control"  value="" name="emp_addDetail" placeholder="상세주소"></dd>
                                     <div>
                         				<button type="button" id="searchPost" class="btn btn-primary button-position2">주소 검색</button>
                         			</div>
@@ -266,6 +272,31 @@
                 </div>
             </div>
         </div>
+        
+        
+        				<!-- Modal -->
+        			<div class="modal fade" id="cropModal" tabindex="-1" role="dialog" aria-labelledby="cropModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cropModalLabel">Crop Image</h5>
+                    <button type="button" class="close" data-dismiss="modal" id="close" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="img-container">
+                        <img id="image" src="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="close" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="cropButton">Crop</button>
+                </div>
+            </div>
+        </div>
+    </div>
+        			
         
         
         
@@ -315,6 +346,7 @@
 
 <!-- 다음 주소 api  -->
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	
 
 <script>
 var prEmail = '${empDetail.emp_email}';
@@ -414,6 +446,28 @@ $('#overlay').click(function overlay(){//이메일 중복 체크
 		 
 	 });
 	
+	var pwInput = document.querySelector('input[name="emp_password"]');
+	var pwChkInput = document.querySelector('input[name="newPwChk"]');
+	var pwChkValid = document.getElementById('pwChkValid');
+	var pwPass = true;
+
+	function validatePasswords() {
+	    var pw = pwInput.value;
+	    var pwChk = pwChkInput.value;
+
+	    if (pw === pwChk) {
+	        pwChkValid.textContent = '비밀번호가 일치합니다';
+	        pwChkValid.style.color = 'green';
+	        pwPass = true;
+	    } else {
+	        pwChkValid.textContent = '비밀번호가 일치하지 않습니다';
+	        pwChkValid.style.color = 'red';
+	        pwPass = false;
+	    }
+	}
+
+	pwChkInput.addEventListener('keyup', validatePasswords);
+	pwInput.addEventListener('keyup', validatePasswords);
 
 
 	
@@ -421,16 +475,20 @@ $('#overlay').click(function overlay(){//이메일 중복 체크
 	var form = document.getElementById("mypage-form");
 	//폼 전송 시 overChk 확인
 	function validateForm() {
-		var number = $('input[name="emp-extension-number"]').val();
+		var number = $('input[name="emp_extension_number"]').val();
 		var numberPattern = /^070([0-9]{7,8})$/;
-		var add = $('input[name="emp-add"]').val();
+		var add = $('input[name="emp_add"]').val();
+		var pwPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+		var pw = $('input[name="emp_password"]').val();
 		
     	if (!overChk) {
    	 	showAlert('danger', '이메일 중복을 확인해주세요.');
        
    	 }else if(!numberPattern.test(number)){
    		showAlert('danger', '내선번호를 올바르게 입력해주세요.');
-   	 }else if(add === ''){
+   	 }else if (!pwPass && !pwPattern.test(pw)) {
+   		showAlert('danger', '비밀번호를 올바른 형식으로 입력해주세요.');
+	}else if(add === ''){
    		showAlert('danger', '주소를 입력해주세요.');
    	 }else{
    	 	if (confirm("수정하시겠습니까?")) {
@@ -441,7 +499,77 @@ $('#overlay').click(function overlay(){//이메일 중복 체크
 			}
     	}
 	};
+	
+	
+	
 
+	
+	 var cropper;
+     var inputImage = document.getElementById('inputImage');
+
+     document.getElementById('emp-profile').addEventListener('click', function () {
+         inputImage.click();
+     });
+
+     inputImage.addEventListener('change', function (event) {
+         var files = event.target.files;
+         var done = function (url) {
+             inputImage.value = '';
+             document.getElementById('image').src = url;
+             $('#cropModal').modal('show');
+         };
+         var reader;
+         var file;
+
+         if (files && files.length > 0) {
+             file = files[0];
+
+             if (URL) {
+                 done(URL.createObjectURL(file));
+             } else if (FileReader) {
+                 reader = new FileReader();
+                 reader.onload = function (event) {
+                     done(reader.result);
+                 };
+                 reader.readAsDataURL(file);
+             }
+         }
+     });
+
+     $('#cropModal').on('shown.bs.modal', function () {
+         cropper = new Cropper(document.getElementById('image'), {
+             aspectRatio: 1,
+             viewMode: 1
+         });
+     }).on('hidden.bs.modal', function () {
+         cropper.destroy();
+         cropper = null;
+     });
+
+     document.getElementById('cropButton').addEventListener('click', function () {
+         var canvas = cropper.getCroppedCanvas();
+         canvas.toBlob(function (blob) {
+             var formData = new FormData();
+             formData.append('file', blob);
+
+             $.ajax({
+                 url: './profileUpload.ajax',
+                 method: 'POST',
+                 data: formData,
+                 processData: false,
+                 contentType: false,
+                 success: function (data) {
+                     $('#cropModal').modal('hide');
+                     document.getElementById('emp-photo').src = data.filePath;
+                     showAlert('success', '사진 변경이 성공적으로 처리되었습니다.');
+                 },
+                 error: function (error) {
+                     console.error(error);
+                     showAlert('danger', '사진 변경에 실패했습니다.');
+                 }
+             });
+         });
+     });
 	
 	
 	

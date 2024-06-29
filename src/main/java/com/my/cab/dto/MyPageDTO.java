@@ -14,7 +14,8 @@ public class MyPageDTO {
 	private String emp_name;
 	private String emp_email;
 	private Date emp_hired_date;
-	private String emp_add; //주소
+	private String emp_add;
+	private String emp_addDetail;//주소
 	private String emp_extension_number; //내선번호
 	private String emp_cell;
 	private String emp_bday;
@@ -118,6 +119,12 @@ public class MyPageDTO {
 	}
 	public void setProfile_new(String profile_new) {
 		this.profile_new = profile_new;
+	}
+	public String getEmp_addDetail() {
+		return emp_addDetail;
+	}
+	public void setEmp_addDetail(String emp_addDetail) {
+		this.emp_addDetail = emp_addDetail;
 	}
 	
 	

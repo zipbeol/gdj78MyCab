@@ -14,4 +14,14 @@ public interface MyPageDAO {
 
 	int overlay(String emp_email);
 
+	String getProfileByEmpNo(String emp_no);
+
+	void saveProfile(String emp_no, String originalFileName, String fileName);
+
+	void deleteProfile(String emp_no);
+
+	int profileUpdate(MyPageDTO mypageDTO);
+
+	
+
 }

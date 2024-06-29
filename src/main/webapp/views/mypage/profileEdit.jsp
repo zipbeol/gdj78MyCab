@@ -81,10 +81,14 @@
             /* margin: 0 auto; */
         }
         .form-control[readonly] {
-            
             border: none;
         }
-        
+        .button-position{
+        	margin-left: 890px;
+        }
+        .button-position2{
+        	margin-left: 1413px;
+        }
     </style>
 
 </head>
@@ -158,15 +162,14 @@
             <div class="col-12">
                 <div class="card mb-3">
                     <div class="card-body">
-                        <form id="driver-form" class="needs-validation" novalidate>
+                        <form id="mypage-form" class="needs-validation" action="/mypage/update.do" method="post">
                             <div class="row">
                                 <div class="col-8">
-                                    <h1>${empDetail.emp_name} 사원 상세보기</h1>
+                                    <h1>${empDetail.emp_name} 사원 수정</h1>
                                 </div>
                                 <div class="col-4 text-end">
-                                    <input type="button" class="btn btn-primary" value="수정" id="edit-button"> 
-                                    <input type="button" class="btn btn-success" value="저장" id="save-button" style="display: none;">
-                                    <input type="button" class="btn btn-secondary" value="취소" id="cancel-button" style="display: none;">
+                                    <input type="button" onclick= "validateForm()" class="btn btn-success" value="저장" id="save-button">
+                                    <input type="button" class="btn btn-secondary" value="취소" id="cancel-button">
                                 </div>
                             </div>
                             <div class="row">
@@ -183,6 +186,9 @@
                                                 <img src="/assets/user.png" class="profile-pic" id="emp-photo">
                                             </c:otherwise>
                                         </c:choose>
+                                        <div class="mt-3">
+                                        <button type="button" id="emp-profile" class="btn btn-info">사진 변경</button>
+                                        </div>
                                     </div>
                                     <div class="mt-3"></div>
                                 </div>
@@ -197,7 +203,7 @@
                                             <dd><input type="date" class="form-control" id="emp-hired-date" value="${empDetail.emp_hired_date}" readonly></dd>
                                         </div>
                                     </div>
-                                    <div class="row info-section" style="display: none;">
+                                    <div class="row info-section">
                                         <div class="col-md-12" >
                                             <dt>새 비밀번호</dt>
                                             <dd><input type="password" class="form-control" id="newPw"></dd>
@@ -214,7 +220,11 @@
                                     <div class="row info-section">
                                         <div class="col-md-12">
                                             <dt>이메일</dt>
-                                            <dd><input type="email" class="form-control" id="emp-email" value="${empDetail.emp_email}" readonly></dd>
+                                            <dd><input type="email" class="form-control" id="emp-email" value="${empDetail.emp_email}" onchange="overlayShow()" name="emp_email" required></dd>
+                                            <div class="invalid-feedback">이메일을 올바른 형식으로 입력해주세요.</div>
+                                            <div>
+                        						<button type="button" id="overlay" class="btn btn-primary button-position" style="display: none;">중복확인</button>
+                        					</div>
                                         </div>
                                     </div>
                                     
@@ -237,13 +247,17 @@
                                 </div>
                                 <div class="col-md-6">
                                     <dt>내선번호</dt>
-                                    <dd><input type="text" class="form-control" id="emp-extension-number" value="${empDetail.emp_extension_number}" readonly></dd>
+                                    <dd><input type="text" class="form-control" id="emp-extension-number" value="${empDetail.emp_extension_number}" name="emp-extension-number" required pattern="^070([0-9]{7,8})$"></dd>
                             </div>
                             </div>
                             <div class="row info-section">
                                 <div class="col-md-12">
                                     <dt>주소</dt>
-                                    <dd><input type="text" class="form-control" id="emp-add" value="${empDetail.emp_add}" readonly></dd>
+                                    <dd><input type="text" class="form-control" id="emp-add" name = "emp-add" value="${empDetail.emp_add}" readonly></dd>
+                                    <dd id="emp-addDetail" style="display: none;"><input type="text" class="form-control"  value="" placeholder="상세주소"></dd>
+                                    <div>
+                        				<button type="button" id="searchPost" class="btn btn-primary button-position2">주소 검색</button>
+                        			</div>
                                 </div>
                             </div>
                              
@@ -254,30 +268,7 @@
         </div>
         
         
-        <div class="modal fade" id="empModal" tabindex="-1"aria-labelledby="registerModalLabel" aria-hidden="true">
-							<!-- Alert placeholder start -->
-							<div id="alertModalPlaceholder" class="alert-placeholder"></div>
-							<!-- Alert placeholder end -->
-							<div class="modal-dialog">
-								<div class="modal-content">
-									<div class="modal-header">
-										<h5 class="modal-title" id="registerModalLabel">현재 비밀번호 확인</h5>
-										<button type="button" class="btn-close"
-											data-bs-dismiss="modal" aria-label="Close"></button>
-									</div>
-									<div class="modal-body">
-											<div class="mb-3">
-												<label for="emp-pw" class="form-label">비밀번호 (비밀번호 일치시 수정 페이지로 이동합니다.)</label>
-												<input type="password" class="form-control" id="emp-pw" name="emp_password" onchange="passChk()">
-												<div id="pwChk"></div>
-											</div>
-									</div>
-									<div class="modal-footer">
-										
-									</div>
-								</div>
-							</div>
-						</div>
+        
 						
                 </div>
                 <!-- Container ends -->
@@ -322,44 +313,134 @@
 <script src="/assets/js/localStorage.js"></script>
 <script src="/assets/js/showAlert.js"></script>
 
+<!-- 다음 주소 api  -->
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
 <script>
+var prEmail = '${empDetail.emp_email}';
+var overChk = true;
+
+console.log(prEmail);
+
+$('#overlay').click(function overlay(){//이메일 중복 체크
+	var email = $('input[name="emp_email"]').val();
+	var emailPattern = /^[0-9a-zA-Z]([\-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([\-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
 	
-	// 수정
-	 $('#edit-button').click(function () {
-		 
-		 $('#empModal').modal('show');
-		 
+	if (email === '' || !emailPattern.test(email)) {
+		
+		showAlert('danger', '이메일을 올바른 형식으로 입력해주세요.');
+		
+	}else{
+	$.ajax({
+		type:'post', // method 방식
+		url:'./emailOverlay.ajax', // 요청한 주소
+		data:{'emp_email':email}, // 파라메터
+		success:function(data){ // 통신 성공했을경우
+		//ajax에서 XmlhttpRequest 객체를 통해 대신 받아와서
+		//여기에 뿌려준다
+			console.log(data);
+			if(data.use > 0){
+				showAlert('danger', '이미 사용중인 이메일입니다.');
+				$('input[name="emp_email"]').val('');
+				overChk = false;
+			}else{
+				showAlert('success', '사용 가능한 이메일입니다.');
+				overChk = true;
+			}
+		}, 
+		error:function(error){ // 통신 실패 시
+			console.log(error);
+		} 
+	});
+		
+	}
+	
+	
 		
 	});
+
+	function overlayShow(){
 	
-	
-	function passChk(){
-	
-		var emp_password = document.getElementById('emp-pw').value;
-		console.log('입력 비밀번호?'+emp_password);
+		var email = $('input[name="emp_email"]').val();
+		console.log('입력 이메일: ' + email);
 		
-	 $.ajax({
-			type:'get', // method 방식
-			url:'./pwChk.ajax', // 요청한 주소
-			data:{'emp_password':emp_password}, // 파라메터
-			success:function(data){ // 통신 성공했을경우
-			//ajax에서 XmlhttpRequest 객체를 통해 대신 받아와서
-			//여기에 뿌려준다
-				console.log(data);
-				if(data.passChk){
-					location.href='/mypage/profileEdit.go';
-				}else{
-					$('#pwChk').text('비밀번호가 일치하지 않습니다.').css('color','red');
-				}
-			}, 
-			error:function(error){ // 통신 실패 시
-				console.log(error);
-			} 
-		});
-			
+		if (prEmail == email) {
+			$('#overlay').hide();
+			overChk = true;
+		}else{
+			$('#overlay').show();
+			overChk = false;
 		}
 	
 	
+	};
+	
+	$('#searchPost').click(function (){
+		document.getElementById("emp-add").value = '';
+		
+		 new daum.Postcode({
+	         oncomplete: function(data) {
+	             // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+	             // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
+	             // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+	             var roadAddr = data.roadAddress; // 도로명 주소 변수
+	             var extraRoadAddr = ''; // 참고 항목 변수
+
+	             // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+	             // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+	             if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+	                 extraRoadAddr += data.bname;
+	             }
+	             // 건물명이 있고, 공동주택일 경우 추가한다.
+	             if(data.buildingName !== '' && data.apartment === 'Y'){
+	                extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+	             }
+	             // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+	             if(extraRoadAddr !== ''){
+	                 extraRoadAddr = ' (' + extraRoadAddr + ')';
+	             }
+
+	             // 우편번호와 주소 정보를 해당 필드에 넣는다.
+	             document.getElementById("emp-add").value = roadAddr;
+	            
+	             
+	         }
+	     }).open();
+		 
+			
+		 $('#emp-addDetail').show();
+		
+		 
+	 });
+	
+
+
+	
+	
+	var form = document.getElementById("mypage-form");
+	//폼 전송 시 overChk 확인
+	function validateForm() {
+		var number = $('input[name="emp-extension-number"]').val();
+		var numberPattern = /^070([0-9]{7,8})$/;
+		var add = $('input[name="emp-add"]').val();
+		
+    	if (!overChk) {
+   	 	showAlert('danger', '이메일 중복을 확인해주세요.');
+       
+   	 }else if(!numberPattern.test(number)){
+   		showAlert('danger', '내선번호를 올바르게 입력해주세요.');
+   	 }else if(add === ''){
+   		showAlert('danger', '주소를 입력해주세요.');
+   	 }else{
+   	 	if (confirm("수정하시겠습니까?")) {
+    		form.submit(); // 폼 전송 허용
+			}else{
+			showAlert('danger', '수정을 취소했습니다.');
+			return false;
+			}
+    	}
+	};
 
 	
 	

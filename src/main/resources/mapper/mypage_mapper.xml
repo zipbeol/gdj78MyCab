@@ -19,7 +19,6 @@
 	e.emp_level,
 	t.title_name,
 	d.dept_name,
-	v.vac_left,
 	pp.profile_new
 	FROM
 	employee e
@@ -34,8 +33,17 @@
 	WHERE
 	e.emp_no = #{param1}
     </select>
+    
+    
+    <select id="pwFind" resultType="String">
+        SELECT emp_password
+        FROM employee
+        WHERE emp_no = #{emp_no}
+    </select>
 
-
+	<select id="overlay" resultType="int">
+		select count(emp_email) from employee where emp_email = #{param1}
+   </select>
 
 
 </mapper>

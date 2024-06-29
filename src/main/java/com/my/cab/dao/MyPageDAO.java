@@ -10,4 +10,8 @@ public interface MyPageDAO {
 
 	MyPageDTO getEmpDetail(String emp_no);
 
+	String pwFind(String emp_no);
+
+	int overlay(String emp_email);
+
 }

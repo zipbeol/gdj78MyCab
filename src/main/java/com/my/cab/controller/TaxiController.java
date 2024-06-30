@@ -88,4 +88,10 @@ public class TaxiController {
         map.put("totalPages", taxiService.getTotalPages(searchDTO));
         return map;
     }
+
+    @GetMapping("/searchedList.ajax")
+    @ResponseBody
+    public Map<String, Object> searchedList(SearchDTO searchDTO) {
+        return Map.of("list", taxiService.getSearchedList(searchDTO));
+    }
 }

@@ -3,17 +3,26 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.my.cab.dao.AccidentDAO">
-
     <select id="getAccidentList" parameterType="search" resultType="accident">
         SELECT a.accident_history_idx AS accident_history_idx,
         d.driver_name AS accident_history_driver_name,
         a.accident_history_accident_date AS accident_history_accident_date,
         a.accident_history_description AS accident_history_description,
-        a.accident_history_location AS accident_history_location
+        a.accident_history_location AS accident_history_location,
+        a.accident_history_is_at_fault AS accident_history_is_at_fault,
+        t.taxi_license_plate AS accident_history_taxi_license_plate
         FROM accident_history a
         JOIN driver d ON d.driver_idx = a.accident_history_driver_id
+        JOIN taxi t ON a.accident_history_taxi_idx = t.taxi_idx
         <where>
-            a.accident_history_taxi_idx = #{searchIdx}
+            <choose>
+                <when test="whereCalled != null and whereCalled == 'taxiInfo'">
+                    a.accident_history_taxi_idx = #{searchIdx}
+                </when>
+                <otherwise>
+                    a.accident_history_driver_id = #{searchIdx}
+                </otherwise>
+            </choose>
             <if test="category != null and category != ''">
                 <choose>
                     <when test="searchText != null and searchText != '' and category == 'accident_history_location'">
@@ -22,10 +31,13 @@
                     <when test="searchText != null and searchText != '' and category == 'accident_history_description'">
                         AND a.accident_history_description LIKE CONCAT('%', #{searchText}, '%')
                     </when>
-                    <when test="searchText != null and searchText != '' and category == 'accident_history_driver_name'">
-                        AND d.driver_name LIKE CONCAT('%', #{searchText}, '%')
+                    <when test="searchText != null and searchText != '' and category == 'accident_history_taxi_license_plate'">
+                        AND t.taxi_license_plate LIKE CONCAT('%', #{searchText}, '%')
                     </when>
                 </choose>
+            </if>
+            <if test="filterIsDriverFault != null and filterIsDriverFault != ''">
+                AND a.accident_history_is_at_fault = #{filterIsDriverFault}
             </if>
             <if test="filterStartDate != null and filterStartDate != '' and filterEndDate != null and filterEndDate != ''">
                 AND a.accident_history_accident_date BETWEEN #{filterStartDate} AND #{filterEndDate}
@@ -65,8 +77,16 @@
         SELECT COUNT(a.accident_history_idx)
         FROM accident_history a
         JOIN driver d ON d.driver_idx = a.accident_history_driver_id
+        JOIN taxi t ON a.accident_history_taxi_idx = t.taxi_idx
         <where>
-            a.accident_history_taxi_idx = #{searchIdx}
+            <choose>
+                <when test="whereCalled != null and whereCalled == 'taxiInfo'">
+                    a.accident_history_taxi_idx = #{searchIdx}
+                </when>
+                <otherwise>
+                    a.accident_history_driver_id = #{searchIdx}
+                </otherwise>
+            </choose>
             <if test="category != null and category != ''">
                 <choose>
                     <when test="searchText != null and searchText != '' and category == 'accident_history_location'">
@@ -75,10 +95,13 @@
                     <when test="searchText != null and searchText != '' and category == 'accident_history_description'">
                         AND a.accident_history_description LIKE CONCAT('%', #{searchText}, '%')
                     </when>
-                    <when test="searchText != null and searchText != '' and category == 'accident_history_driver_name'">
-                        AND d.driver_name LIKE CONCAT('%', #{searchText}, '%')
+                    <when test="searchText != null and searchText != '' and category == 'accident_history_taxi_license_plate'">
+                        AND t.taxi_license_plate LIKE CONCAT('%', #{searchText}, '%')
                     </when>
                 </choose>
+            </if>
+            <if test="filterIsDriverFault != null and filterIsDriverFault != ''">
+                AND a.accident_history_is_at_fault = #{filterIsDriverFault}
             </if>
             <if test="filterStartDate != null and filterStartDate != '' and filterEndDate != null and filterEndDate != ''">
                 AND a.accident_history_accident_date BETWEEN #{filterStartDate} AND #{filterEndDate}
@@ -92,6 +115,23 @@
         WHERE accident_history_taxi_idx = #{param1}
         ORDER BY accident_history_accident_date ASC
         LIMIT 1
+    </select>
+
+    <insert id="createAccidentHistory" parameterType="accident">
+        INSERT INTO accident_history(accident_history_taxi_idx, accident_history_driver_id,
+                                     accident_history_accident_date, accident_history_description,
+                                     accident_history_location, accident_history_is_at_fault)
+        VALUES (#{accident_history_taxi_idx}, #{accident_history_driver_id},
+                #{accident_history_accident_date}, #{accident_history_description},
+                #{accident_history_location}, #{accident_history_is_at_fault})
+    </insert>
+
+    <select id="getDriverFirstAccidentDate" resultType="String">
+        SELECT accident_history_accident_date
+        FROM accident_history
+        WHERE accident_history_driver_id = #{parma1}
+        ORDER BY accident_history_accident_date ASC
+        LIMIT 1;
     </select>
 
 </mapper>

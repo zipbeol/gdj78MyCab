@@ -9,7 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AccidentService {
@@ -33,5 +35,16 @@ public class AccidentService {
     public int getAccidentTotalPages(SearchDTO searchDTO) {
         int totalCount = accidentDAO.getAccidentCount(searchDTO);
         return PageCalc.calculateTotalPages(totalCount, PAGE_SIZE);
+    }
+
+    public Map<String, Object> createAccidentHistory(AccidentDTO accidentDTO) {
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        map.put("result",  accidentDAO.createAccidentHistory(accidentDTO));
+        return map;
+    }
+
+    public String getDriverFirstAccidentDate(String driverIdx) {
+        return accidentDAO.getDriverFirstAccidentDate(driverIdx);
     }
 }

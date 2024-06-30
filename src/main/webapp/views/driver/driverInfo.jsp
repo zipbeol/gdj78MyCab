@@ -36,6 +36,9 @@
 
     <!-- 따로 적용한 CSS -->
     <link rel="stylesheet" href="/assets/css/default.css">
+    <!-- FontAwesome 추가 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
     <style>
         .alert-placeholder {
             position: fixed;
@@ -46,6 +49,56 @@
             margin: 0;
             padding: 10px;
             text-align: center;
+        }
+
+        .list-group-item {
+            display: flex;
+            justify-content: space-between; /* 각 span 사이에 공간 배분 */
+        }
+
+        .taxi-info {
+            flex: 1; /* 각 span이 동일한 공간을 차지하게 함 */
+            text-align: center; /* 각 span 내의 텍스트를 중앙 정렬 */
+            padding: 0 10px; /* 좌우 패딩 추가 */
+        }
+
+        table.table {
+            table-layout: fixed; /* 고정된 테이블 레이아웃 */
+            width: 100%;
+        }
+
+        table.table th, table.table td {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        th.sortable {
+            position: relative;
+            cursor: pointer;
+        }
+
+        th.sortable::after {
+            content: '\f0dc'; /* FontAwesome 기본 sort 아이콘 */
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 8px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        th.sortable:hover::after {
+            opacity: 0.3; /* 흐릿하게 설정 */
+        }
+
+        th.sortable.asc::after {
+            content: '\f0de'; /* FontAwesome sort up 아이콘 */
+            opacity: 1;
+        }
+
+        th.sortable.desc::after {
+            content: '\f0dd'; /* FontAwesome sort down 아이콘 */
+            opacity: 1;
         }
     </style>
 
@@ -162,11 +215,12 @@
                                                                data-value="driver-taxi-license-photo"
                                                                style="display: none;" class="form-control">
                                                     </dd>
-                                                    <dt class="col-12">기사 이름:</dt>
-                                                    <dd class="col-12 info-value mb-3" id="driver-name"
+                                                    <dt class="col-4">기사 이름:</dt>
+                                                    <dt class="col-4">기사 재직 여부:</dt>
+                                                    <dt class="col-4">기사 연락처:</dt>
+                                                    <dd class="col-4 info-value mb-3" id="driver-name"
                                                         data-value="${driverInfo.driver_name}">${driverInfo.driver_name}</dd>
-                                                    <dt class="col-12">기사 재직 여부:</dt>
-                                                    <dd class="col-12 info-value mb-3" id="driver-is-retired"
+                                                    <dd class="col-4 info-value mb-3" id="driver-is-retired"
                                                         data-value="${driverInfo.driver_is_retired}">
                                                         <c:choose>
                                                             <c:when test="${driverInfo.driver_is_retired == 0}">
@@ -177,8 +231,7 @@
                                                             </c:otherwise>
                                                         </c:choose>
                                                     </dd>
-                                                    <dt class="col-12">기사 연락처:</dt>
-                                                    <dd class="col-12 info-value mb-3" id="driver-phone"
+                                                    <dd class="col-4 info-value mb-3" id="driver-phone"
                                                         data-value="${driverInfo.driver_phone}">
                                                         ${fn:substring(driverInfo.driver_phone, 0, 3)}-${fn:substring(driverInfo.driver_phone, 3, 7)}-${fn:substring(driverInfo.driver_phone, 7, 11)}
                                                     </dd>
@@ -198,6 +251,139 @@
                                                     </dd>
                                                 </dl>
                                             </div>
+                                        </div>
+                                        <hr/>
+                                        <div class="row d-flex">
+                                            <div class="col-10 mb-2">
+                                                <h2>사고 이력</h2>
+                                            </div>
+                                            <div class="col-2 text-end">
+                                                <!-- 사고 이력 등록 버튼 -->
+                                                <input type="button" value="등록" class="btn btn-primary"
+                                                       onclick="getTaxiList()" data-bs-toggle="modal"
+                                                       data-bs-target="#accidentModal">
+                                            </div>
+                                            <!-- 검색창 시작 -->
+                                            <div class="search-filter-container border border-2 p-3 rounded mb-3">
+                                                <div class="row mb-3">
+                                                    <div class="col-10">
+                                                    </div>
+                                                    <div class="col-2 text-end d-md-flex justify-content-md-end gap-2">
+                                                        <input type="button" class="btn btn-secondary"
+                                                               onclick="filterReset()"
+                                                               value="초기화">
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-4">
+                                                        <label for="filter-accident-reg-date"
+                                                               class="form-label">사고일 필터</label>
+                                                    </div>
+                                                    <div class="col-2">
+                                                        <label for="filter-accident-is-driver-fault"
+                                                               class="form-label">기사책임 필터</label>
+                                                    </div>
+                                                    <div class="col-2">
+                                                        <label for="search-category-accident"
+                                                               class="form-label">검색 카테고리</label>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <label for="search-text-accident"
+                                                               class="form-label">검색</label>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col-4">
+                                                        <div class="input-group"
+                                                             id="filter-accident-reg-date-div">
+                                                            <input type="text"
+                                                                   class="form-control datepicker-range accident-search-filter"
+                                                                   id="filter-accident-reg-date">
+                                                            <span class="input-group-text"><i
+                                                                    class="bi bi-calendar2-range"></i></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-2">
+                                                        <select class="form-select accident-is-driver-fault accident-search-filter"
+                                                                id="filter-accident-is-driver-fault">
+                                                            <option value="">기사책임 여부</option>
+                                                            <option value="1">예</option>
+                                                            <option value="0">아니오</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-2 d-flex">
+                                                        <select class="form-select accident-search-filter"
+                                                                id="search-category-accident">
+                                                            <option value="">카테고리</option>
+                                                            <option value="accident_history_taxi_license_plate">
+                                                                사고 번호판
+                                                            </option>
+                                                            <option value="accident_history_location">
+                                                                사고 장소
+                                                            </option>
+                                                            <option value="accident_history_description">
+                                                                사고 내용
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <input type="text"
+                                                               class="form-control accident-search-filter"
+                                                               id="search-text-accident"
+                                                               placeholder="검색 단어를 입력해 주세요.">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- 검색창 종료 -->
+                                            <!-- 리스트 테이블 시작 -->
+                                            <div class="table-outer">
+                                                <div class="table-responsive">
+                                                    <table class="table align-middle table-hover m-0">
+                                                        <thead>
+                                                        <tr>
+                                                            <th class="sortable"
+                                                                id="th-accident-history-license-plate"
+                                                                style="width: 20%;"
+                                                                data-value="accident-history-license-plate">사고 택시
+                                                            </th>
+                                                            <th class="sortable"
+                                                                id="th-accident-history-reg-date"
+                                                                style="width: 15%;"
+                                                                data-value="accident-history-reg-date">
+                                                                사고일
+                                                            </th>
+                                                            <th class="sortable"
+                                                                id="th-accident-history-location"
+                                                                style="width: 25%;"
+                                                                data-value="accident-history-location">
+                                                                사고 장소
+                                                            </th>
+                                                            <th class="sortable"
+                                                                id="th-accident-history-description"
+                                                                style="width: 30%;"
+                                                                data-value="accident-history-description">
+                                                                사고 내용
+                                                            </th>
+                                                            <th class="sortable"
+                                                                id="th-accident-history-is-driver-fault"
+                                                                style="width: 10%;"
+                                                                data-value="accident-history-is-driver-fault">기사 책임
+                                                            </th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody id="accident-list">
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <!-- 리스트 테이블 종료 -->
+
+                                            <!-- 페이지 네이션 시작 -->
+                                            <nav aria-label="Page navigation example" class="mt-3">
+                                                <ul class="pagination justify-content-center"
+                                                    id="pagination"></ul>
+                                            </nav>
+                                            <!-- 페이지 네이션 종료 -->
                                         </div>
                                     </form>
                                 </div>
@@ -226,6 +412,68 @@
 
 </div>
 <!-- Page wrapper end -->
+<!-- Modal HTML -->
+<div class="modal fade" id="accidentModal" tabindex="-1" aria-labelledby="accidentModalLabel" aria-hidden="true">
+    <!-- Alert placeholder start -->
+    <div id="alertModalPlaceholder" class="alert alert-placeholder"></div>
+    <!-- Alert placeholder end -->
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="accidentModalLabel">사고 이력 등록</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="needs-validation" novalidate>
+                    <div class="mb-3">
+                        <label for="searchTaxiLicensePlate" class="form-label">사고 택시</label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id="searchTaxiLicensePlate" placeholder="번호판 검색">
+                        </div>
+                        <div class="taxi-list" style="max-height: 200px; overflow-y: auto;">
+                            <ul class="list-group" id="taxiList">
+                                <li class="list-group-item taxi-item d-flex align-items-center justify-content-between"
+                                    data-driver-id="taxiidx">
+                                    <span class="taxi-info">no</span>
+                                    <span class="taxi-info">번호판</span>
+                                    <span class="taxi-info">차종</span>
+                                    <span class="taxi-info">등록일</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <label for="accident-date" class="form-label">사고 날짜</label>
+                            <input type="date" class="form-control" id="accident-date" required>
+                        </div>
+                        <div class="col-6">
+                            <label for="accident-is-driver-fault" class="form-label">사고 기사책임 여부</label>
+                            <select class="form-select" id="accident-is-driver-fault" required>
+                                <option value="" selected disabled>선택하세요</option>
+                                <option value="true">예</option>
+                                <option value="false">아니오</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="accident-location" class="form-label">사고 장소</label>
+                        <input type="text" class="form-control" id="accident-location" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="accident-description" class="form-label">사고 내용</label>
+                        <textarea class="form-control" id="accident-description" rows="3" required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                <button type="button" class="btn btn-primary" id="save-accident">저장</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 <!-- *************
@@ -244,18 +492,152 @@
 <!-- Overlay Scroll JS -->
 <script src="/assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
 <script src="/assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
+<!-- Moment JS -->
+<script src="/assets/js/moment.min.js"></script>
 <!-- Custom JS files -->
 <script src="/assets/js/custom.js"></script>
 <script src="/assets/js/localStorage.js"></script>
 <script src="/assets/js/showAlert.js"></script>
+
+<!-- Date Range JS -->
+<script src="/assets/vendor/daterange/daterange.js"></script>
+<script src="/assets/vendor/daterange/custom-daterange.js"></script>
 <!-- 다음 주소 api -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<!-- 페이지네이션 -->
+<script src="/assets/js/jquery.twbsPagination.min.js"></script>
 
 <script>
-    // 수정
+    var taxiIdx = '';
+    var searchText = '';
+    var searchCategory = '';
+    var searchIdx = '${driverInfo.driver_idx}';
+    var today = moment().format('YYYY/MM/DD');
+    var filterAccidentAllDay = '${accidentFirstRegDate}' + ' - ' + today;
+    var filterStartDate = '${accidentFirstRegDate}';
+    var filterEndDate = '';
+    var currentPage = 1; // 현재 페이지 번호
+    var sortOrder = 'asc';
+    var sortColumn = 'default';
+    var filterIsDriverFault = '';
+
+    $('#filter-accident-reg-date').val(filterAccidentAllDay);
+
+    getTotalPages();
+    getList();
+
+
+    // 테이블 헤더 클릭 이벤트 설정
+    $('th.sortable').click(function () {
+        sortColumn = $(this).data('value');
+        // 현재 정렬 상태 확인
+        if ($(this).hasClass('asc')) {
+            $(this).removeClass('asc').addClass('desc');
+            sortOrder = 'desc';
+        } else if ($(this).hasClass('desc')) {
+            $(this).removeClass('desc').addClass('asc');
+            sortOrder = 'asc';
+        } else {
+            $('th.sortable').removeClass('asc desc');
+            $(this).addClass('asc');
+            sortOrder = 'asc';
+        }
+        getList();
+    });
+
+    $('#filter-accident-reg-date').on('change', function () {
+        currentPage = 1;
+        getTotalPages();
+        getList();
+    });
+    $('.accident-search-filter').on('input', function () {
+        currentPage = 1;
+        getTotalPages();
+        getList();
+    });
+
+
+    $(document).on('click', '.taxi-item', function () {
+        $('.taxi-item').removeClass('active');
+        $(this).addClass('active');
+        taxiIdx = $(this).data('taxi-id');
+        console.log(taxiIdx);
+    });
+
+    $('#accident-location').on('click', function () {
+
+        new daum.Postcode({
+            oncomplete: function (data) {
+                var roadAddr = data.roadAddress;
+                $('#accident-location').val(roadAddr);
+            },
+            focusInput: false
+        }).open();
+    });
+    // 모달 저장 버튼 클릭 시
+    $('#save-accident').click(function () {
+        isModalAlert = true;
+        var form = document.querySelector('.needs-validation');
+        if (!form.checkValidity()) {
+            form.classList.add('was-validated');
+            showAlert('danger', '입력 값이 올바르지 않습니다.');
+            return;
+        }
+        var accidentDate = $('#accident-date').val();
+        var accidentDescription = $('#accident-description').val();
+        var accidentIsDriverFault = $('#accident-is-driver-fault').val();
+        var accidentLocation = $('#accident-location').val();
+        var driverIdx = '${driverInfo.driver_idx}';
+
+        // console.log(accidentDate);
+        // console.log(accidentDescription);
+        // console.log(accidentIsDriverFault);
+        // console.log(accidentLocation);
+        // console.log(driverIdx);
+        // console.log(taxiIdx);
+
+        if (!accidentDate || !accidentDescription || !accidentIsDriverFault || !accidentLocation || !taxiIdx) {
+            showAlert('danger', '모든 값을 입력해 주세요.');
+            return;
+        }
+
+
+        $.ajax({
+            url: '/accident/create.ajax',
+            type: 'POST',
+            data: {
+                "accident_history_accident_date": accidentDate,
+                "accident_history_description": accidentDescription,
+                "accident_history_location": accidentLocation,
+                "accident_history_is_at_fault": accidentIsDriverFault,
+                "accident_history_driver_id": driverIdx,
+                "accident_history_taxi_idx": taxiIdx
+            },
+            dataType: 'JSON',
+            success: function (data) {
+                if (data.result) {
+                    $('#accidentModal').modal('hide');
+                    showAlert('success', '사고 이력이 등록되었습니다.');
+                    accidentTaxi = '';
+                    accidentDate = '';
+                    accidentDescription = '';
+                    accidentLocation = '';
+                    accidentIsDriverFault = '';
+                    driverIdx = '';
+                    taxiIdx = '';
+                } else {
+                    showAlert('danger', '사고 이력 등록에 실패했습니다.');
+                }
+            },
+            error: function (error) {
+                showAlert('danger', '사고 이력 등록에 실패했습니다.');
+            }
+        });
+    });
+    // 수정 버튼 클릭 시 입력 필드로 변환
     $('#edit-button').click(function () {
         $('.info-value').each(function () {
-            var value = $(this).data('value');
+            var value = $(this).data('value') + '';
             var id = $(this).attr('id');
             if (id === 'driver-address') {
                 $(this).html('<input type="text" class="form-control" id="' + id + '" value="' + value + '" onclick="searchAddress()" tabindex="-1" readonly>');
@@ -284,7 +666,8 @@
     });
 
     function formatPhoneNumber(phoneNumber) {
-        var formattedValue = '';
+        phoneNumber = phoneNumber.replace(/\D/g, '');
+        var formattedValue;
         if (phoneNumber.length > 10) {
             formattedValue = phoneNumber.substring(0, 3) + '-' + phoneNumber.substring(3, 7) + '-' + phoneNumber.substring(7);
         } else if (phoneNumber.length > 6) {
@@ -297,26 +680,14 @@
         return formattedValue;
     }
 
+    // 전화번호 입력 필드 변화 시 포맷팅
     $('#driver-phone').on('input', function (e) {
         var value = $(this).val().replace(/\D/g, '');
-        var formattedValue = '';
-
-        if (value.length > 10) {
-            value = value.substring(0, 11);
-        }
-
-        if (value.length > 7) {
-            formattedValue = value.substring(0, 3) + '-' + value.substring(3, 7) + '-' + value.substring(7);
-        } else if (value.length > 3) {
-            formattedValue = value.substring(0, 3) + '-' + value.substring(3);
-        } else {
-            formattedValue = value;
-        }
-
+        var formattedValue = formatPhoneNumber(value);
         $(this).val(formattedValue);
     });
 
-    // 파일 이미지인지 검사, 이미지 맞으면 미리보기
+    // 이미지 파일인지 검사하고 미리보기
     $('#driver-photo-input').on('change', function () {
         if (validateImageFile.call(this)) {
             previewImage.call(this);
@@ -328,7 +699,7 @@
         }
     });
 
-    // 저장
+    // 저장 버튼 클릭 시
     $('#save-button').click(function () {
         var form = document.querySelector('.needs-validation');
         if (!form.checkValidity()) {
@@ -336,9 +707,10 @@
             showAlert('danger', '입력 값이 올바르지 않습니다.');
             return;
         }
+
         var driverName = $('#driver-name input').val();
         var driverIsRetired = $('#driver-is-retired select').val();
-        var driverPhone = $('#driver-phone input').val();
+        var driverPhone = $('#driver-phone input').val().replace(/-/g, '');  // 하이픈 제거
         var driverAddress = $('#driver-address input').val();
         var driverAddressDetail = $('#driver-address-detail input').val();
         var driverIdx = '${driverInfo.driver_idx}';
@@ -415,13 +787,7 @@
         new daum.Postcode({
             oncomplete: function (data) {
                 var roadAddr = data.roadAddress;
-                var extraRoadAddr = '';
-                if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
-                    extraRoadAddr += data.bname;
-                }
-                if (data.buildingName !== '' && data.apartment === 'Y') {
-                    extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
-                }
+                // console.log($(this));
                 $('#driver-address input').val(roadAddr);
             },
             focusInput: false
@@ -465,6 +831,162 @@
         }
     }
 
+    function getTaxiList() {
+        var searchText = $('#searchTaxiLicensePlate').val();
+        $.ajax({
+            url: '/taxi/searchedList.ajax',
+            type: 'GET',
+            data: {'searchText': searchText},
+            dataType: 'JSON',
+            success: function (data) {
+                // console.log(data);
+                let content = '';
+                for (item of data.list) {
+                    content += ''
+                        + '<li class="list-group-item taxi-item d-flex align-items-center justify-content-between" data-taxi-id="' + item.taxi_idx + '">'
+                        + '<span class="taxi-info">' + item.taxi_idx + '</span>'
+                        + '<span class="taxi-info">' + item.taxi_license_plate + '</span>'
+                        + '<span class="taxi-info">' + item.taxi_model + '</span>'
+                        + '<span class="taxi-info">' + item.taxi_registration_date + '</span>'
+                        + '</li>';
+                }
+                $('#taxiList').html(content);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    $('#searchTaxiLicensePlate').on('input', getTaxiList);
+
+    // 필터 값 리셋
+    function filterReset() {
+        $('#search-category-accident').val('');
+        $('#search-text-accident').val('');
+        $('#filter-accident-is-driver-fault').val('');
+        $('#filter-accident-reg-date').val(filterAccidentAllDay);
+
+        currentPage = 1; // 페이지 번호 초기화
+        getTotalPages();
+        getList(); // 목록 새로고침
+    }
+
+    // 리스트 호출
+    function getList() {
+        getSearchValue();
+        accidentListAjax();
+    }
+
+    function accidentListAjax() {
+        console.log(filterStartDate);
+        console.log(filterEndDate);
+        $.ajax({
+            url: '/accident/list.ajax',
+            type: 'GET',
+            data: {
+                'searchIdx': searchIdx,
+                'searchText': searchText,
+                'category': searchCategory,
+                'filterStartDate': filterStartDate,
+                'filterEndDate': filterEndDate,
+                'page': currentPage,
+                'sortColumn': sortColumn,
+                'sortOrder': sortOrder,
+                'filterIsDriverFault': filterIsDriverFault,
+                'whereCalled': 'driverInfo'
+            },
+            dataType: 'JSON',
+            success: function (data) {
+                console.log(data);
+                drawTaxiList(data.accidentList);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    // 토탈 페이지 호출
+    function getTotalPages() {
+        getSearchValue();
+        accidentTotalPagesAjax();
+    }
+
+    function accidentTotalPagesAjax() {
+        $.ajax({
+            url: '/accident/getTotalPages.ajax',
+            type: 'GET',
+            data: {
+                'searchText': searchText,
+                'filterStartDate': filterStartDate,
+                'filterEndDate': filterEndDate,
+                'category': searchCategory,
+                'searchIdx': searchIdx,
+                'filterIsDriverFault': filterIsDriverFault,
+                'whereCalled': 'driverInfo'
+            },
+            dataType: 'JSON',
+            success: function (data) {
+                console.log(data);
+                $('#pagination').twbsPagination('destroy');
+                $('#pagination').twbsPagination({
+                    totalPages: data.totalPages, // 서버에서 받은 총 페이지 수
+                    visiblePages: 5,
+                    startPage: currentPage,
+                    paginationClass: 'pagination align-items-center',
+                    onPageClick: function (event, page) {
+                        currentPage = page;
+                        getList();
+                    }
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+
+    }
+
+    // 검색 값들 변수에 저장
+    function getSearchValue() {
+        var filterDate = '';
+        var dates = '';
+        filterDate = $('#filter-accident-reg-date').val();
+        if (filterDate) {
+            dates = filterDate.split(' - ');
+            filterStartDate = dates[0];
+            filterEndDate = dates[1];
+        }
+
+        searchCategory = $('#search-category-accident').val();
+        searchText = $('#search-text-accident').val();
+        filterIsDriverFault = $('#filter-accident-is-driver-fault').val();
+
+        // console.log(filterStartDate);
+        // console.log(filterEndDate);
+
+    }
+
+    // 리스트 보여주기
+    function drawTaxiList(list) {
+        var content = '';
+        if (list) {
+            for (item of list) {
+                content += '<tr class="maintenance-list-tbody-tr" id="' + item.accident_history_idx + '">'
+                    + '<td class="">' + item.accident_history_taxi_license_plate + '</td>'
+                    + '<td class="">' + item.accident_history_accident_date + '</td>'
+                    + '<td class="">' + item.accident_history_location + '</td>'
+                    + '<td class="ellipsis">' + item.accident_history_description + '</td>'
+                    + '<td class="">' + item.accident_history_is_at_fault + '</td>'
+                    + '</tr>';
+            }
+        } else {
+            content = '<tr><td colspan="4" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
+        }
+        $('#accident-list').html(content);
+
+    }
 </script>
 
 </html>

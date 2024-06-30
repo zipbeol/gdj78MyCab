@@ -17,14 +17,11 @@ public class SearchDTO {
     private String category;
     private int page;
     private String searchIdx;
-
-    public String getSearchIdx() {
-        return searchIdx;
-    }
-
-    public void setSearchIdx(String searchIdx) {
-        this.searchIdx = searchIdx;
-    }
+    private String filterIsDriverFault;
+    private String whereCalled;
+    private int pageSize;
+    private String filterIsRetired;
+    private String filterForSearch;
 
     public String getPro_filter() {
         return pro_filter;
@@ -42,9 +39,29 @@ public class SearchDTO {
         this.category = category;
     }
 
-    private int pageSize;
-    private String filterIsRetired;
-    private String filterForSearch;
+    public String getSearchIdx() {
+        return searchIdx;
+    }
+
+    public void setSearchIdx(String searchIdx) {
+        this.searchIdx = searchIdx;
+    }
+
+    public String getFilterIsDriverFault() {
+        return filterIsDriverFault;
+    }
+
+    public void setFilterIsDriverFault(String filterIsDriverFault) {
+        this.filterIsDriverFault = filterIsDriverFault;
+    }
+
+    public String getWhereCalled() {
+        return whereCalled;
+    }
+
+    public void setWhereCalled(String whereCalled) {
+        this.whereCalled = whereCalled;
+    }
 
     public String getFilterIsRetired() {
         return filterIsRetired;
@@ -142,12 +159,12 @@ public class SearchDTO {
         this.filterForSearch = filterForSearch;
     }
 
-	public String getDeal_filter() {
-		return deal_filter;
-	}
+    public String getDeal_filter() {
+        return deal_filter;
+    }
 
-	public void setDeal_filter(String deal_filter) {
-		this.deal_filter = deal_filter;
-	}
+    public void setDeal_filter(String deal_filter) {
+        this.deal_filter = deal_filter;
+    }
 
 }

@@ -1,5 +1,6 @@
 package com.my.cab.controller;
 
+import com.my.cab.dto.AccidentDTO;
 import com.my.cab.dto.SearchDTO;
 import com.my.cab.service.AccidentService;
 import org.slf4j.Logger;
@@ -7,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -47,4 +49,10 @@ public class AccidentController {
         return Map.of("totalPages", accidentService.getAccidentTotalPages(searchDTO));
     }
 
+    @PostMapping("/create.ajax")
+    @ResponseBody
+    public Map<String, Object> createAccidentHistory(AccidentDTO accidentDTO){
+
+        return accidentService.createAccidentHistory(accidentDTO);
+    }
 }

@@ -651,6 +651,7 @@
         }
         getList();
     });
+
     $('#filter-accident-reg-date').on('change', function () {
         currentPage = 1;
         getTotalPages();
@@ -860,7 +861,8 @@
                 'filterEndDate': filterEndDate,
                 'page': currentPage,
                 'sortColumn': sortColumn,
-                'sortOrder': sortOrder
+                'sortOrder': sortOrder,
+                'whereCalled': 'taxiInfo'
             },
             dataType: 'JSON',
             success: function (data) {
@@ -927,7 +929,8 @@
                 'filterStartDate': filterStartDate,
                 'filterEndDate': filterEndDate,
                 'category': searchCategory,
-                'searchIdx': searchIdx
+                'searchIdx': searchIdx,
+                'whereCalled': 'taxiInfo'
             },
             dataType: 'JSON',
             success: function (data) {

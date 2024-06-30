@@ -10,8 +10,17 @@ public class AccidentDTO {
     private String accident_history_accident_date;
     private String accident_history_description;
     private String accident_history_location;
-    private String accident_history_is_at_fault;
+    private boolean accident_history_is_at_fault;
     private String accident_history_driver_name;
+    private String accident_history_taxi_license_plate;
+
+    public String getAccident_history_taxi_license_plate() {
+        return accident_history_taxi_license_plate;
+    }
+
+    public void setAccident_history_taxi_license_plate(String accident_history_taxi_license_plate) {
+        this.accident_history_taxi_license_plate = accident_history_taxi_license_plate;
+    }
 
     public String getAccident_history_driver_name() {
         return accident_history_driver_name;
@@ -69,11 +78,11 @@ public class AccidentDTO {
         this.accident_history_location = accident_history_location;
     }
 
-    public String getAccident_history_is_at_fault() {
+    public boolean isAccident_history_is_at_fault() {
         return accident_history_is_at_fault;
     }
 
-    public void setAccident_history_is_at_fault(String accident_history_is_at_fault) {
+    public void setAccident_history_is_at_fault(boolean accident_history_is_at_fault) {
         this.accident_history_is_at_fault = accident_history_is_at_fault;
     }
 }

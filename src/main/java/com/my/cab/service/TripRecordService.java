@@ -30,12 +30,9 @@ public class TripRecordService {
         for (int i = 0; i < recordLats.length; i++) {
             result = tripRecordDAO.insertTripRecordDetail(tripRecordDTO.getTrip_record_idx(), recordLats[i], recordLngs[i]);
         }
-//
-//        FinanceDTO financeDTO = new FinanceDTO();
-//        financeDTO.setPro_cash(Integer.parseInt(tripRecordDTO.getTrip_record_fare()));
-//        financeDTO.setPro_category("택시");
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        financeDTO.setPro_actual_date(sdf.parse(tripRecordDTO.));
+
+
+
         return result;
     }
 }

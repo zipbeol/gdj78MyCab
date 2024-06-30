@@ -1,5 +1,6 @@
 package com.my.cab.service;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -68,17 +69,21 @@ public class MypageService {
         try {
             // 업로드 파일명에 emp_no를 추가하여 파일명이 겹치지 않도록 함
         	String originalFileName = file.getOriginalFilename();
-            String fileName = "profile"+ emp_no + "_" + file.getOriginalFilename();
+            String fileName = "profile"+ emp_no + "_" + System.currentTimeMillis() + ".jpg";
             byte[] bytes = file.getBytes();
             Path path = Paths.get(upload +"/"+ fileName);
-            Files.write(path, bytes);
 
          // 기존 파일 삭제 로직 추가
             String existingFile = myPageDAO.getProfileByEmpNo(emp_no);
+            logger.info("파일 이름 :" +existingFile);
+            File delFile = new File(upload + "/" + existingFile);
+            
             if (existingFile != null) {
+                delFile.delete();
                 myPageDAO.deleteProfile(emp_no);
             }
             
+            Files.write(path, bytes);
             myPageDAO.saveProfile(emp_no, originalFileName, fileName);
 
             response.put("message", "You successfully uploaded '" + fileName + "'");
@@ -94,13 +99,18 @@ public class MypageService {
 
 	public int profileUpdate(MyPageDTO mypageDTO) {
 		
-		String emp_add = mypageDTO.getEmp_add() + ", " + mypageDTO.getEmp_addDetail();
+		String emp_add = mypageDTO.getEmp_add() + " " + mypageDTO.getEmp_addDetail();
 		mypageDTO.setEmp_add(emp_add);
 		
+		String emp_password = mypageDTO.getEmp_password();
+		logger.info("emp_password ? :"+emp_password);
 		
-		String pw = mypageDTO.getEmp_password();
-		password = encoder.encode(pw);
-		mypageDTO.setEmp_password(password);
+		if (emp_password.length()>7) {
+			
+			password = encoder.encode(emp_password);
+			mypageDTO.setEmp_password(password);
+			
+		}
 		
 		int row = myPageDAO.profileUpdate(mypageDTO);
 		

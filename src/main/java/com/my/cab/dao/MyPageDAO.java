@@ -18,9 +18,9 @@ public interface MyPageDAO {
 
 	void saveProfile(String emp_no, String originalFileName, String fileName);
 
-	void deleteProfile(String emp_no);
-
 	int profileUpdate(MyPageDTO mypageDTO);
+
+	void deleteProfile(String emp_no);
 
 	
 

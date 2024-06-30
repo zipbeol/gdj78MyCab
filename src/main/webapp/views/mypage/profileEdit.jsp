@@ -450,6 +450,7 @@ $('#overlay').click(function overlay(){//이메일 중복 체크
 	var pwChkInput = document.querySelector('input[name="newPwChk"]');
 	var pwChkValid = document.getElementById('pwChkValid');
 	var pwPass = true;
+	console.log('비밀번호 입력칸? '+pwInput);
 
 	function validatePasswords() {
 	    var pw = pwInput.value;

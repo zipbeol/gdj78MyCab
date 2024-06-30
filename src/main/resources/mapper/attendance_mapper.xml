@@ -3,7 +3,15 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd"
 >
 
-<mapper namespace="com.my.cab.dao.">
+
+<!-- @Alias("att")  -->
+<mapper namespace="com.my.cab.dao.AttendanceDAO">
+
+	<select id="attHistoryListCall" resultType="att">
+	SELECT attendance_idx, att_time, leave_time, att_result, work_day
+	FROM attendance
+	WHERE emp_no = #{emp_no}
+	</select>
 
 
 </mapper>

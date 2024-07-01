@@ -22,7 +22,7 @@ public class FinanceService {
 	private static final int PAGE_SIZE = 10;
 
 	@Autowired
-	private FinanceDAO financeDAO;
+	FinanceDAO financeDAO;
 
 	public Map<String, Object> getProfitList(Map<String, Object> param, SearchDTO searchDTO) {
 		Map<String, Object> map = new HashMap<String, Object>();

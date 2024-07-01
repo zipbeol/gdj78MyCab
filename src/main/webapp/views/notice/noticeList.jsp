@@ -134,10 +134,8 @@ td:hover {
 						<li class="breadcrumb-item"><a href="/"><i
 								class="bi bi-house lh-1"></i></a> <a href="/"
 							class="text-decoration-none">메인</a></li>
-						<li class="breadcrumb-item"><a href="#!"
-							class="text-decoration-none">재무 관리</a></li>
-						<li class="breadcrumb-item"><a href="/finance/profit/list.go"
-							class="text-decoration-none">수익</a></li>
+						<li class="breadcrumb-item"><a href="notice/list.go"
+							class="text-decoration-none">공지사항</a></li>
 					</ol>
 					<!-- Breadcrumb end -->
 
@@ -157,10 +155,10 @@ td:hover {
 							<div class="col-12">
 								<div class="card mb-3">
 									<div class="card-header">
-										<h4 class="card-title">수익</h4>
+										<h4 class="card-title">공지사항</h4>
 									</div>
 									<div class="card-body">
-										
+										<button class="btn btn-secondary" onclick="resetFilters()">초기화</button>
 										<!-- 검색창 시작 -->
 										<div
 											class="search-filter-container border border-2 p-3 rounded mb-3">
@@ -178,9 +176,8 @@ td:hover {
 													<select id="filter" name="filter" class="form-select"
 														required>
 														<option value="" selected disabled>필터 선택</option>
-														<option value="orderByName">이름 순</option>
-														<option value="manyProfit">많은 수익 순</option>
-														<option value="lessProfit">적은 수익 순</option>
+														<option value="orderByWriter">작성자</option>
+														<option value="orderByTitle">제목</option>
 													</select>
 												</div>
 												<div class="col-10"></div>
@@ -193,35 +190,25 @@ td:hover {
 												<!-- 검색 버튼 -->
 												<button id="go" class="btn btn-outline-info">찾기</button>
 											</div>
+											<div class="row mt-3">
+									            <div class="col-12 text-end">
+									                <button id="registerButton" class="btn btn-primary">등록</button>
+									            </div>
+									        </div>
 										</div>
-										<button class="btn btn-secondary" onclick="resetFilters()">초기화</button>
-										<!-- 카테고리 필터링 버튼 -->
-										<div class="btn-group" role="group" aria-label="Basic example">
-											<button type="button" class="btn btn-primary filter-btn"
-												data-category="택시">택시 수익</button>
-											<button type="button" class="btn btn-primary filter-btn"
-												data-category="광고">광고 수익</button>
-											<button type="button" class="btn btn-primary filter-btn"
-												data-category="기타">기타 수익</button>
-										</div>
-										<!-- 수익 등록 버튼 -->
-										<div class="text-end mb-2">
-											<button id="myBtn" class="btn btn-primary"
-												data-bs-toggle="modal" data-bs-target="#exampleModal">수익
-												등록</button>
-										</div>
-										<!-- 수익 리스트 테이블 -->
+										<!-- 공지사항 리스트 테이블 -->
 										<div class="table-outer mt-3">
 											<table
 												class="table table-hover align-middle custom-table m-0">
 												<thead>
 													<tr>
-														<th>수익 발생일</th>
-														<th>수익자</th>
-														<th>수익 금액</th>
+														<th>종류</th>
+														<th>제목</th>
+														<th>작성자</th>
+														<th>작성 날짜</th>
 													</tr>
 												</thead>
-												<tbody id="profitTableBody">
+												<tbody id="noticeTableBody">
 													<!-- AJAX 요청으로 항목들이 여기에 추가됩니다 -->
 												</tbody>
 											</table>
@@ -232,67 +219,6 @@ td:hover {
 											</nav>
 											<!-- 페이지 네이션 종료 -->
 										</div>
-
-										<!-- 모달 창 -->
-										<div class="modal fade" id="exampleModal" tabindex="-1"
-											aria-labelledby="exampleModalLabel" aria-hidden="true">
-											<div class="modal-dialog">
-												<div class="modal-content">
-													<div class="modal-header">
-														<h5 class="modal-title" id="exampleModalLabel">수익 등록</h5>
-														<button type="button" class="btn-close"
-															data-bs-dismiss="modal" aria-label="Close"></button>
-													</div>
-													<div class="modal-body">
-														<form id="profitForm" class="needs-validation" novalidate>
-															<div class="mb-3">
-																<label for="pro_category" class="form-label">수익
-																	종류:</label> <select id="pro_category" name="pro_category"
-																	class="form-select" required>
-																	<option value="" selected disabled>수익 종류 선택</option>
-																	<option value="택시">택시 수익</option>
-																	<option value="광고">광고 수익</option>
-																	<option value="기타">기타 수익</option>
-																</select>
-																<div class="invalid-feedback">수익 종류를 입력해주세요</div>
-															</div>
-															<div class="mb-3">
-																<label for="pro_actual_date" class="form-label">수익
-																	발생일:</label> <input type="date" id="pro_actual_date"
-																	name="pro_actual_date" class="form-control" required>
-																<div class="invalid-feedback">수익 발생일을 입력해주세요</div>
-															</div>
-															<div class="mb-3">
-																<label for="pro_who" class="form-label">수익자:</label> <input
-																	type="text" id="pro_who" name="pro_who"
-																	class="form-control" required>
-																<div class="invalid-feedback">수익자를 입력해주세요</div>
-															</div>
-															<div class="mb-3">
-																<label for="pro_cash" class="form-label">수익 금액:</label>
-																<input type="text" id="pro_cash" name="pro_cash"
-																	class="form-control" maxlength="10" required>
-																<div class="invalid-feedback">수익 금액을 입력해주세요</div>
-															</div>
-															<div class="mb-3">
-																<label for="pro_content" class="form-label">수익
-																	내용:</label>
-																<textarea id="pro_content" name="pro_content"
-																	class="form-control" rows="3" maxlength="500" required></textarea>
-																<div class="invalid-feedback">수익 내용을 입력해주세요</div>
-															</div>
-															<div class="modal-footer">
-																<button type="button" class="btn btn-secondary"
-																	data-bs-dismiss="modal">취소</button>
-																<button type="button" class="btn btn-primary"
-																	id="submitBtn">등록</button>
-															</div>
-														</form>
-													</div>
-												</div>
-											</div>
-										</div>
-										<!-- 모달 창 끝 -->
 									</div>
 								</div>
 							</div>
@@ -342,7 +268,7 @@ td:hover {
 	var category = '';
     
     getTotalPages();
-    refreshProfitList();
+    refreshNoticeList();
     
     $('#filter').on('change',function(){
         getTotalPages();
@@ -351,7 +277,7 @@ td:hover {
     
     $('#go').on('click',function(){
         getTotalPages();
-        refreshProfitList();
+        refreshNoticeList();
     });
  // 리셋 버튼 클릭 시 호출되는 함수
     function resetFilters() {
@@ -375,8 +301,8 @@ td:hover {
         currentPage = 1;
         getTotalPages();
         
-        // 수익 리스트 다시 불러오기
-        refreshProfitList();
+        // 공지 리스트 다시 불러오기
+        refreshNoticeList();
 
         // 필터링 버튼 위치로 스크롤 이동 (선택하지 않은 경우)
         $('html, body').animate({
@@ -384,7 +310,12 @@ td:hover {
         }, 500);
     }
 
-    
+    $(document).ready(function() {
+        // 등록 버튼 클릭 시 등록 페이지로 이동
+        $('#registerButton').click(function() {
+            window.location.href = '/notice/register.go';
+        });
+    });
 
         // 모든 버튼 요소를 선택합니다.
         const buttons = document.querySelectorAll('.filter-btn');
@@ -400,86 +331,33 @@ td:hover {
                 category = this.getAttribute('data-category');
                 categoryName(category); // categoryName 함수 호출
                 getTotalPages();
-                refreshProfitList();
+                refreshNoticeList();
             });
         });
 
         // 카테고리 이름을 출력하는 함수
         function categoryName(category) {
             console.log('Selected category:', category);
-            // refreshProfitList();
+            // refreshNoticeList();
         }
         
-        // 등록 버튼 클릭 이벤트 처리
-        $('#submitBtn').click(function(event) {
-            var form = document.querySelector('.needs-validation');
-            if (!form.checkValidity()) {
-                form.classList.add('was-validated');
 
-                return;
-            }
-            $.ajax({
-                url: '/finance/profit/add.ajax', // 서버의 폼 처리 엔드포인트
-                type: 'POST',
-                data: {
-                    pro_category: $('#pro_category').val(),
-                    pro_date: $('#pro_date').val(),
-                    pro_actual_date: $('#pro_actual_date').val(),
-                    pro_who: $('#pro_who').val(),
-                    pro_cash: $('#pro_cash').val().replace(/,/g, ''),
-                    pro_content: $('#pro_content').val()
-                },
-                success: function(response) {
-                    // 성공적으로 저장되었음을 사용자에게 알리고 모달을 닫음
-                    alert('수익이 등록되었습니다.');
-                    $('#exampleModal').modal('hide');
-                    // 수익 리스트를 다시 불러옵니다
-                    refreshProfitList();
-                },
-                error: function(error) {
-                    console.error("AJAX 요청 실패:", error);
-                    alert('수익 등록 중 오류가 발생했습니다.');
-                }
-            });
-        });
 
-        // 숫자를 세 자리마다 쉼표가 포함된 형식으로 포맷하는 함수
-        function formatNumberWithCommas(number) {
-            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
 
-        // 수익 금액 입력 필드에서 키 입력 시 호출되는 함수
-        $('#pro_cash').on('input', function() {
-            var value = $(this).val(); // 입력된 값 가져오기
-            var number = parseInt(value.replace(/[^\d]/g, '')); // 숫자만 추출하여 정수로 변환
 
-            if (!isNaN(number)) {
-                var formattedValue = formatNumberWithCommas(number); // 포맷 함수 호출
-                $(this).val(formattedValue); // 포맷된 값으로 입력 필드 업데이트
-            }
-        });
-
-        // AJAX로 받은 수익 리스트를 테이블에 표시하는 함수
-        function displayProfitList(profitList) {
-            var tbody = $('#profitTableBody');
-            console.log(profitList);
+        // AJAX로 받은 공지 리스트를 테이블에 표시하는 함수
+        function displayNoticeList(noticeList) {
+            var tbody = $('#noticeTableBody');
+            console.log(noticeList);
             tbody.empty(); // 테이블 본문을 비웁니다.
             var row = '';
-            for (item of profitList) {
+            for (item of noticeList) {
                 row += '<tr class="clickable-row">' +
-                    '<td>' + item.pro_actual_date + '</td>' +
-                    '<td>' + item.pro_who + '</td>' +
-                    '<td>' + formatNumberWithCommas(item.pro_cash) + '&nbsp;<strong>원</strong></td>' +
-                    '</tr>'+
-                    '<tr class="detail-row">'+
-                    '<td colspan="3" class="detail-content gap-2">'+
-                    '<div class="mb-2 mt-2"><strong>수익 발생일:</strong> ' + item.pro_actual_date + '</div>' +
-                    '<div class="mb-2 mt-2"><strong>수익 등록일:</strong> ' + item.pro_date + '</div>' +
-                    '<div class="mb-2 mt-2"><strong>수익 종류:</strong> ' + item.pro_category + '</div>' +
-                    '<div class="mb-2 mt-2"><strong>수익 내용:</strong> ' + item.pro_content + '</div>' +
-                    '<div class="mb-2 mt-2"><strong>수익 금액:</strong> ' + formatNumberWithCommas(item.pro_cash) +
-                    '<strong>원</strong></div>' +
-                    '</td>'+
+                    '<td>' + item.notice_imp + '</td>' +
+                    '<td>' + item.notice_field + '</td>' +
+                    '<td>' + item.notice_title +'</td>' +
+                    '<td>' + item.notice_writer +'</td>' +
+                    '<td>' + item.notice_date +'</td>' +
                     '</tr>';
             }
             tbody.html(row);
@@ -491,24 +369,23 @@ td:hover {
 
         
         
-        // 수익 리스트 갱신 함수
-        function refreshProfitList() {
+        // 공지사항 리스트 갱신 함수
+        function refreshNoticeList() {
             // 카테고리 값이 없으면 기본 값을 설정 (예: 모든 카테고리)
             
             $.ajax({
                 type: 'POST',
-                url: '/finance/profit/list.ajax',
+                url: '/notice/list.ajax',
                 data: {
                     'category': category,
                     'filterStartDate': $('#startDate').val(),
                     'filterEndDate': $('#endDate').val(),
-                    'pro_filter': $('#filter').val(),
+                    'notice_filter': $('#filter').val(),
                     'searchText': $('#searchQuery').val(),
                     'page' : currentPage
                 },
                 dataType : 'json',
                 success: function(data) {
-                    displayProfitList(data.profit); // 갱신된 수익 리스트 표시
                     console.log($('#searchQuery').val());
                 },
                 error: function(error) {
@@ -516,13 +393,6 @@ td:hover {
                 }
             });
         }
-
-
-        // 모달이 닫힐 때 폼 초기화
-        $('#exampleModal').on('hidden.bs.modal', function (e) {
-            $('#profitForm')[0].reset();
-        });
-        
 
 /*         // 페이지네이션 확인용 ㅋ
         $('#pagination').twbsPagination({
@@ -532,7 +402,7 @@ td:hover {
             paginationClass: 'pagination align-items-center',
             onPageClick: function (event, page) {
                 currentPage = page; // 현재 페이지 업데이트
-                refreshProfitList(); // 수익 갱신
+                refreshNoticeList(); // 공지 갱신
             }
         }); */
 
@@ -559,7 +429,7 @@ td:hover {
                         paginationClass: 'pagination align-items-center',
                         onPageClick: function (event, page) {
                             currentPage = page;
-                            refreshProfitList();
+                            refreshNoticeList();
                         }
                     });
                 },

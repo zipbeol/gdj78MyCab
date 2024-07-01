@@ -1,5 +1,90 @@
 package com.my.cab.dto;
 
+import java.sql.Date;
+
+import org.apache.ibatis.type.Alias;
+
+@Alias("notice")
 public class NoticeDTO {
 
+	private int notice_idx;
+	private int notice_writer;
+	private String notice_field;
+	private String notice_imp;
+	private String notice_stat;
+	private String notice_title;
+	private String notice_content;
+	private Date notice_date;
+	
+	private int notice_attach_file_idx;
+	private String notice_file_name;
+	private String notice_attach_file;
+	
+	public int getNotice_idx() {
+		return notice_idx;
+	}
+	public void setNotice_idx(int notice_idx) {
+		this.notice_idx = notice_idx;
+	}
+	public int getNotice_writer() {
+		return notice_writer;
+	}
+	public void setNotice_writer(int notice_writer) {
+		this.notice_writer = notice_writer;
+	}
+	public String getNotice_field() {
+		return notice_field;
+	}
+	public void setNotice_field(String notice_field) {
+		this.notice_field = notice_field;
+	}
+	public String getNotice_imp() {
+		return notice_imp;
+	}
+	public void setNotice_imp(String notice_imp) {
+		this.notice_imp = notice_imp;
+	}
+	public String getNotice_stat() {
+		return notice_stat;
+	}
+	public void setNotice_stat(String notice_stat) {
+		this.notice_stat = notice_stat;
+	}
+	public String getNotice_title() {
+		return notice_title;
+	}
+	public void setNotice_title(String notice_title) {
+		this.notice_title = notice_title;
+	}
+	public String getNotice_content() {
+		return notice_content;
+	}
+	public void setNotice_content(String notice_content) {
+		this.notice_content = notice_content;
+	}
+	public Date getNotice_date() {
+		return notice_date;
+	}
+	public void setNotice_date(Date notice_date) {
+		this.notice_date = notice_date;
+	}
+	public int getNotice_attach_file_idx() {
+		return notice_attach_file_idx;
+	}
+	public void setNotice_attach_file_idx(int notice_attach_file_idx) {
+		this.notice_attach_file_idx = notice_attach_file_idx;
+	}
+	public String getNotice_file_name() {
+		return notice_file_name;
+	}
+	public void setNotice_file_name(String notice_file_name) {
+		this.notice_file_name = notice_file_name;
+	}
+	public String getNotice_attach_file() {
+		return notice_attach_file;
+	}
+	public void setNotice_attach_file(String notice_attach_file) {
+		this.notice_attach_file = notice_attach_file;
+	}
+	
 }

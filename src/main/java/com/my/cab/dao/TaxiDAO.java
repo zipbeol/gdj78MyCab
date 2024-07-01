@@ -27,4 +27,6 @@ public interface TaxiDAO {
     String getTaxiRegLastDate();
 
     int getTaxiCount(SearchDTO searchDTO);
+
+    List<TaxiDTO> getSearchedList(SearchDTO searchDTO);
 }

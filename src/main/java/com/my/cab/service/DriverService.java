@@ -228,4 +228,12 @@ public class DriverService {
     public List<DriverDTO> getNotRetiredDriverList() {
         return driverDAO.getNotRetiredDriverList();
     }
+    /**
+     * 검색된 재직중인 택시기사 리스트 리턴
+     *
+     * @return
+     */
+    public List<DriverDTO> getNotRetiredDriverList(SearchDTO searchDTO) {
+        return driverDAO.getSearchedNotRetiredDriverList(searchDTO);
+    }
 }

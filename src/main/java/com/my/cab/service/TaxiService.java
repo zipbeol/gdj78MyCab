@@ -129,4 +129,8 @@ public class TaxiService {
         int totalCount = taxiDAO.getTaxiCount(searchDTO);
         return PageCalc.calculateTotalPages(totalCount, PAGE_SIZE);
     }
+
+    public List<TaxiDTO> getSearchedList(SearchDTO searchDTO) {
+        return taxiDAO.getSearchedList(searchDTO);
+    }
 }

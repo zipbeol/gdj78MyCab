@@ -124,4 +124,13 @@
         WHERE taxi_idx = #{taxi_idx}
     </update>
 
+    <select id="getSearchedList" resultType="taxi" parameterType="search">
+        SELECT taxi_license_plate, taxi_model, taxi_idx, taxi_year, taxi_registration_date
+        FROM taxi
+        <where>
+            <if test="searchText != null and searchText != ''">
+                taxi_license_plate LIKE CONCAT('%', #{searchText}, '%')
+            </if>
+        </where>
+    </select>
 </mapper>

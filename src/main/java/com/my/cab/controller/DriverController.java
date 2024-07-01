@@ -3,6 +3,7 @@ package com.my.cab.controller;
 
 import com.my.cab.dto.DriverDTO;
 import com.my.cab.dto.SearchDTO;
+import com.my.cab.service.AccidentService;
 import com.my.cab.service.DriverService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,10 +21,12 @@ import java.util.Optional;
 public class DriverController {
 
     private final DriverService driverService;
+    private final AccidentService accidentService;
     Logger logger = LoggerFactory.getLogger(getClass());
 
-    public DriverController(DriverService driverService) {
+    public DriverController(DriverService driverService, AccidentService accidentService) {
         this.driverService = driverService;
+        this.accidentService = accidentService;
     }
 
     @RequestMapping("/list.go")
@@ -65,6 +68,7 @@ public class DriverController {
     public String detailGo(Model model, String driver_idx) {
         DriverDTO driverInfo = driverService.getDriverInfo(driver_idx);
         model.addAttribute("driverInfo", driverInfo);
+        model.addAttribute("accidentFirstRegDate", accidentService.getDriverFirstAccidentDate(driver_idx));
         return "driver/driverInfo";
     }
 

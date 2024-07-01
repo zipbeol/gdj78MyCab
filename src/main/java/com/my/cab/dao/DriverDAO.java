@@ -30,4 +30,6 @@ public interface DriverDAO {
     String getDriverTaxiLicensePhotoName(int driverIdx);
 
     List<DriverDTO> getNotRetiredDriverList();
+
+    List<DriverDTO> getSearchedNotRetiredDriverList(SearchDTO searchDTO);
 }

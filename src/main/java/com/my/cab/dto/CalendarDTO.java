@@ -23,6 +23,36 @@ public class CalendarDTO {
 	private LocalDateTime schedule_edit_date;
 	private boolean schedule_del;
 	private String schedule_color;
+	private String sechdule_emp_name;
+	
+	private String schedule_emp_email;
+	private String schedule_emp_extension_number;
+	private String schedule_dept_name;
+	
+	public String getSechdule_emp_name() {
+		return sechdule_emp_name;
+	}
+	public void setSechdule_emp_name(String sechdule_emp_name) {
+		this.sechdule_emp_name = sechdule_emp_name;
+	}
+	public String getSchedule_dept_name() {
+		return schedule_dept_name;
+	}
+	public void setSchedule_dept_name(String schedule_dept_name) {
+		this.schedule_dept_name = schedule_dept_name;
+	}
+	public String getSchedule_emp_email() {
+		return schedule_emp_email;
+	}
+	public void setSchedule_emp_email(String schedule_emp_email) {
+		this.schedule_emp_email = schedule_emp_email;
+	}
+	public String getSchedule_emp_extension_number() {
+		return schedule_emp_extension_number;
+	}
+	public void setSchedule_emp_extension_number(String schedule_emp_extension_number) {
+		this.schedule_emp_extension_number = schedule_emp_extension_number;
+	}
 	
 	public int getSchedule_idx() {
 		return schedule_idx;

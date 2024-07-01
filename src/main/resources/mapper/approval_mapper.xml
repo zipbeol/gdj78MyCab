@@ -12,15 +12,19 @@
     </insert>
     
     <!-- 결재 문서 전체 저장 -->
-    <insert id="saveApprovalDoc" parameterType="com.my.cab.dto.ApprovalDocDTO">
+    <insert id="saveApprovalDoc"
+    	useGeneratedKeys="true"
+    	keyColumn="approval_doc_idx"
+    	keyProperty="approval_doc_idx"
+    	parameterType="com.my.cab.dto.ApprovalDocDTO">
         INSERT INTO tb_approval_doc (approval_doc_path, approval_doc_write_date, approval_doc_title, approval_doc_assist_user, approval_doc_isFinal)
         VALUES (#{approval_doc_path}, #{approval_doc_write_date}, #{approval_doc_title}, #{approval_doc_assist_user}, #{approval_doc_isFinal})
     </insert>
     
     <!-- 결재라인, 중간, 최종결재자 저장 -->
     <insert id="saveApproval" parameterType="com.my.cab.dto.ApprovalDTO">
-        INSERT INTO tb_approval (appr_line_bkmk_idx, appr_midapprover, appr_finalapprover)
-        VALUES (#{appr_line_bkmk_idx}, #{appr_midapprover}, #{appr_finalapprover})
+        INSERT INTO tb_approval (approval_doc_idx, appr_midapprover, appr_finalapprover)
+        VALUES (#{approval_doc_idx}, #{appr_midapprover}, #{appr_finalapprover})
     </insert>
     
     <!-- 결재자 모달창 결재자 리스트 비동기(ajax) 조회 -->
@@ -40,6 +44,37 @@
         WHERE e.emp_name LIKE CONCAT('%', #{search}, '%')
          OR t.title_name LIKE CONCAT('%', #{search}, '%')
          OR d.dept_name LIKE CONCAT('%', #{search}, '%')
+    </select>
+    
+    <!-- 결재라인 리스트 조회 -->
+    <select id="selectApprovalLines" parameterType="ApprovalLineList" resultType="map">
+        SELECT appr_line_bkmk_idx, appr_line_bkmk_name
+        FROM tb_approval_doc_line_bkmk
+        WHERE appr_line_bkmk_name LIKE CONCAT('%', #{searchLine}, '%')
+    </select>
+    
+    <!--  결재라인에 맞는 중간결재자, 최종결재자 조회 -->
+    <select id="selectApproverDetails" parameterType="ApprovalLineList" resultType="map">
+	    SELECT appr_midapprover, appr_finalapprover
+	    FROM tb_approval_doc_line_bkmk
+	    WHERE appr_line_bkmk_idx = #{lineId}
+	</select>
+	
+	    <select id="getApprovalData" resultType="com.my.cab.dto.ApprovalDocDTO">
+        SELECT 
+            d.approval_doc_idx,
+            d.approval_doc_write_date,
+            d.approval_doc_title,
+            d.approval_doc_id,
+            a.appr_midapprover,
+            a.appr_finalapprover,
+            a.appr_mngr_updt,
+            d.approval_doc__state,
+            d.approval_doc_path
+        FROM 
+            tb_approval a
+        JOIN 
+            tb_approval_doc d ON a.approval_doc_idx = d.approval_doc_idx;
     </select>
 
 </mapper>

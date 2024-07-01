@@ -10,7 +10,7 @@ import com.my.cab.dto.CalendarDTO;
 @Mapper
 public interface CalendarDAO {
 
-	List<Map<String, Object>> calListCall();
+	List<Map<String, Object>> calListCall(String schedule_editor);
 
 	List<Map<String, Object>> dayCalListCall(String selectedDay);
 

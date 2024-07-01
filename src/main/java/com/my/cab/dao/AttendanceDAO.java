@@ -13,4 +13,8 @@ public interface AttendanceDAO {
 
 	List<AttendanceDTO> attHistoryListCall(String emp_no);
 
+	AttendanceDTO getAttDetail(String attendance_idx);
+
+	boolean attEditApply(AttendanceDTO attDTO);
+
 }

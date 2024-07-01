@@ -1,6 +1,5 @@
 package com.my.cab.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -9,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -36,10 +35,34 @@ public class AttendanceController {
 		return "mypage/myAttHistory";
 	}
 	
-	@RequestMapping(value = "attHistory.ajax")
+	@RequestMapping(value = "myAttHistory.ajax")
 	@ResponseBody
 	public Map<String, Object> attHistoryListCall(String emp_no){
 		
 		return attService.attHistoryListCall(emp_no);
 	}
+	
+	
+	@RequestMapping(value="myAttHistoryDetail.ajax")
+	@ResponseBody
+	public Map<String, Object> attHistoryDetail(String attendance_idx){
+		
+		return attService.attHistoryDetail(attendance_idx);
+	}
+	
+	
+	@GetMapping(value="myAttEditApply.ajax")
+	@ResponseBody
+	public Map<String, Object> attEditApply(AttendanceDTO attDTO){
+		
+		boolean isSuccess =  attService.attEditApply(attDTO);
+		
+		return Map.of("isSuccess", isSuccess);
+	}
+	
+	
+	
+	
+	
+	
 }

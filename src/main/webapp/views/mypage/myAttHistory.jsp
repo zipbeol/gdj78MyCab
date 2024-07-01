@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <html lang="ko">
 <head>
     <meta charset="utf-8">
@@ -118,6 +119,20 @@
             text-align: end; /* Align buttons to the right */
             margin-top: 10px; /* Add space above the buttons */
         }
+        .fc-day-sat .fc-daygrid-day-number {
+         color: blue;
+      }
+      
+      .fc-day-sun .fc-daygrid-day-number {
+         color: red;
+      }
+      .fc-day-sun .fc-col-header-cell-cushion {
+         color: red;
+      }
+      
+      .fc-day-sat .fc-col-header-cell-cushion {
+         color: blue;
+      }
     </style>
 
 </head>
@@ -219,8 +234,35 @@
                                       
                                     <div class="tab-pane fade" id="taxi-schedule" role="tabpanel"
                                          aria-labelledby="taxi-schedule-tab">
-                                        <h1>수정 요청 내역</h1>
+                                        <h2>수정 요청 내역</h2>
+                                        <div class="mt-3"></div>
                                         <!-- 택시 스케쥴 내용을 여기에 추가 -->
+                                        <div class="table-outer">
+											<div class="table-responsive">
+												<table class="table align-middle table-hover m-0">
+													<thead>
+														<tr>
+															<th class="text-center" id="th-emp-no"
+																style="width: 10%;" data-value="emp-no">No</th>
+															<th class="text-center" id="th-emp-name"
+																style="width: 20%;" data-value="emp-name">신청일</th>
+															<th class="text-center" id="th-dept-name"
+																style="width: 20%;" data-value="dept-name">승인 여부</th>
+														</tr>
+													</thead>
+													<tbody id="emp-list">
+													</tbody>
+												</table>
+											</div>
+										</div>
+
+										<!-- 리스트 테이블 종료 -->
+										<!-- 페이지 네이션 시작 -->
+										<nav aria-label="Page navigation example" class="mt-3">
+											<ul class="pagination justify-content-center" id="pagination"></ul>
+										</nav>
+										<!-- 페이지 네이션 종료 -->
+										
                                     </div>
                                 </div>
                             </div>
@@ -263,60 +305,51 @@
                 <div class="row">
                 	<div class="col-6">     
                     <div class="input-group mb-3">
-                        <label class="input-group-text" for="detail-title">사번</label>
-                        <input type="text" class="form-control" id="detail-title" name="emp_no" readonly>
+                        <label class="input-group-text" for="detail-no">사번</label>
+                        <input type="text" class="form-control" id="detail-no" name="emp_no" readonly>
+                        <input type="hidden" class="form-control" id="detail-idx" name="attendance_management" readonly>
                     </div>   
                     </div>  
                     <div class="col-6">  
                     <div class="input-group mb-3">
-                        <label class="input-group-text" for="detail-title">이름</label>
-                        <input type="text" class="form-control" id="detail-title" name="emp_no" readonly>
+                        <label class="input-group-text" for="detail-name">이름</label>
+                        <input type="text" class="form-control" id="detail-name" name="emp_name" readonly>
                     	</div> 
                     </div>  
                  </div>                                        
                     <div class="input-group mb-3">
-                        <label class="input-group-text" for="detail-start-date">일정</label>
-                        <input type="text" class="form-control detailDatepicker" id="detail-start-date" name="detail-start-date" readonly>
-                        <select id="detail-start-hour" name="detail-start-hour">
-                        	    <c:forEach var="a" begin="0" end="23" varStatus="i">
-                        	    	<option value="${a}">${a}시</option>
-                        	    </c:forEach>                    	
-                        </select>
-                        <select id="detail-start-min" name="detail-start-min">
-                        	    <c:forEach var="a" begin="0" end="59" varStatus="i">
-                        	    	<option value="${a}">${a}분</option>
-                        	    </c:forEach>                    	
-                        </select>
-                        <span class="input-group-text">~</span>
-                        <input type="text" class="form-control detailDatepicker" id="detail-end-date" name="detail-end-date" readonly>
-                        <select id="detail-end-hour" name="detail-end-hour">
-                        	    <c:forEach var="a" begin="0" end="23" varStatus="i">
-                        	    	<option value="${a}">${a}시</option>
-                        	    </c:forEach>                    	
-                        </select>
-                        <select id="detail-end-min" name="detail-end-min">
-                        	    <c:forEach var="a" begin="0" end="59" varStatus="i">
-                        	    	<option value="${a}">${a}분</option>
-                        	    </c:forEach>                    	
-                        </select>
+                        <label class="input-group-text" for="detail-workday">날짜</label>
+                        <input type="text" class="form-control" id="detail-workday" name="work_day" readonly>
                     </div>
+                     <div class="row">
+                	<div class="col-6">     
                     <div class="input-group mb-3">
-                        <label class="input-group-text" for="detail-category">일정범위</label>
-                        <select class="form-select" id="detail-category" disabled onchange="changeCategoryColor(this)">
-                            <option value="개인" style="color: #ffec63">개인</option>
-                            <option value="부서" style="color: #28b9ff">부서</option>
-                            <option value="전사" style="color: #71f371">전사</option>
-                        </select>
-                    </div>
-                    
-                    <div class="input-group mb-3">
-                        <label class="input-group-text" for="detail-content">수정 신청 사유</label>
-                        <textarea class="form-control" id="detail-content" name="detail-content" placeholder="Enter message" rows="3" style="height: 245px;"></textarea>
+                        <label class="input-group-text" for="detail-att-time">출근</label>
+                        <input type="text" class="form-control" id="detail-att" name="att_time" readonly>
+                    </div>   
                     </div>  
+                    <div class="col-6">  
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="detail-leave-time">퇴근</label>
+                        <input type="text" class="form-control" id="detail-leave" name="leave_time" readonly>
+                    	</div> 
+                    </div>  
+                 </div>                   
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="detail-result">현재 근태 결과</label>
+                        <input type="text" class="form-control" id="detail-result" name="att_modify_attresult" readonly>
+                        <input type="hidden" class="form-control" id="detail-modify-result" name="att_modify_attresult" value="근무" readonly>
+                    </div>
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="detail-reason">수정 신청 사유</label>
+                        <textarea class="form-control" id="detail-reason" name="att_reason" rows="3" style="height: 245px; resize:none;" ></textarea>
+                    </div> 
+                    <h4>🚨수정 요청 승인시 근태 결과는 근무로 변경됩니다.</h4> 
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary btn-lg" onclick="editSchedule()" id="editButton">수정 요청</button>
-                    <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal">닫기</button>         
+                    <button class="btn btn-primary btn-lg" onclick="attEdit()" id="editButton">수정 요청</button>
+                    <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal">닫기</button>
+                          
                 </div>
             </div>
         </div>
@@ -376,7 +409,7 @@ document.addEventListener("DOMContentLoaded", function() {
         selectMirror: false,
         select: function(arg) {
             var adjustedEnd = moment(arg.end).subtract(1, 'days').format("YYYY-MM-DD");
-            addScheduleModal(arg, adjustedEnd);
+            
         },
         eventClick: function(arg) {
             scheduleDetail(arg);
@@ -393,7 +426,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             $.ajax({
                 type: "GET",
-                url: "/attHistory.ajax",
+                url: "/myAttHistory.ajax",
                 data: {
                     'emp_no': "${sessionScope.loginId}"
                 },
@@ -410,7 +443,8 @@ document.addEventListener("DOMContentLoaded", function() {
                                 title: "출근",
                                 start: res.att_time,
                                 end: res.att_time,
-                                day: res.work_day
+                                day: res.work_day,
+                                color: "#38ff38"
                             };
                             events.push(event);
                                 if(res.leave_time != null){
@@ -420,15 +454,20 @@ document.addEventListener("DOMContentLoaded", function() {
                                             start: res.leave_time,
                                             end: res.leave_time,
                                             day: res.work_day,
-                                            color: "red"	
+                                            color: "#28d4c4"	
                                         };
                                 	events.push(event);
                                 	event={
+                                			id: res.attendance_idx,
                                             title: res.att_result,
-                                            start: res.leave_time,
+                                            start: res.att_time,
+                                            end: res.leave_time,
                                             allDay: true,
-                                            color: "green"
-                                	}
+                                            color: res.att_result === '지각' ? '#ff8d22' :
+                                            		 res.att_result === '결근' ? '#fd1616' :
+                                            		res.att_result === '근무' ? '#56ca31' :
+                                            		res.att_result === '연차' ? '#ff6820' : 'gray'
+                                	};
                                 	events.push(event);
                                 	
                                 }
@@ -450,95 +489,35 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // 캘린더 리스트 불러오기 끝
     
-    $('#filter-maintenance-reg-date').val(filterMaintenanceAllDay);
 
-
-    getTotalPages();
-    getList();
-
-   
-    $('#maintenance-tab').on('click', function () {
-        nowTab = 'maintenance'
-        currentPage = 1;
-        getTotalPages();
-        getList();
-    });
-
-    // 테이블 헤더 클릭 이벤트 설정
-    $('th.sortable').click(function () {
-        sortColumn = $(this).data('value');
-        // 현재 정렬 상태 확인
-        if ($(this).hasClass('asc')) {
-            $(this).removeClass('asc').addClass('desc');
-            sortOrder = 'desc';
-        } else if ($(this).hasClass('desc')) {
-            $(this).removeClass('desc').addClass('asc');
-            sortOrder = 'asc';
-        } else {
-            $('th.sortable').removeClass('asc desc');
-            $(this).addClass('asc');
-            sortOrder = 'asc';
-        }
-        getList();
-    });
-    $('#filter-accident-reg-date').on('change', function () {
-        currentPage = 1;
-        getTotalPages();
-        getList();
-    });
-    $('.accident-search-filter').on('input', function () {
-        currentPage = 1;
-        getTotalPages();
-        getList();
-    });
-    $('#filter-maintenance-reg-date').on('change', function () {
-        currentPage = 1;
-        getTotalPages();
-        getList();
-    });
-    $('.maintenance-search-filter').on('input', function () {
-        currentPage = 1;
-        getTotalPages();
-        getList();
-    });
-
-   
-    
     
     // 근태결과 모달창 생성
     function scheduleDetail(arg){
-		myModal = new bootstrap.Modal(document.getElementById('scheduleDetailModal'));
-		myModal.show();
-		console.log(arg);
+		
+    	
+    	myModal = new bootstrap.Modal(document.getElementById('scheduleDetailModal'));
+		
+		
+		console.log(arg.event.id);
 		$.ajax({
 		        type: "GET",
-		        url: "/calendar/calendarDetail.ajax",
+		        url: "/myAttHistoryDetail.ajax",
 		        data: {
-		        	'schedule_idx': arg.event.id      	
+		        	'attendance_idx': arg.event.id      	
 		        },
 		        dataType: "json",
 				success: function(response) {
-					var idx = response.dto.schedule_idx;
-					document.getElementById('detail-title').value = response.dto.schedule_name	;
-					document.getElementById('detail-content').value = response.dto.schedule_content	;
-					var startDate = response.dto.schedule_start_date	;
-					var endDate = response.dto.schedule_end_date	;
-					var registDate = response.dto.schedule_register_date	;
-					empNo = response.dto.schedule_emp_no;
-					console.log(response.dto.schedule_emp_no);
-					var editor = response.dto.schedule_editor	;
-					document.getElementById('detail-category').value = response.dto.schedule_category	;
-					var edit = response.dto.schedule_edit_date	;
-					var isDel = response.dto.schedule_del	;
-					document.getElementById('detail-start-date').value = response.divideStartDate;
-					document.getElementById('detail-start-hour').value = response.divideStartHour;
-					document.getElementById('detail-start-min').value = response.divideStartMin		;		
-					document.getElementById('detail-end-date').value = response.divideEndDate;
-					document.getElementById('detail-end-hour').value = response.divideEndHour;
-					document.getElementById('detail-end-min').value = response.divideEndMin;
+					console.log(response.dto.emp_no);
 					
-					// 아이디 검사
-					chkLoginId("${sessionScope.loginId}",response.dto.schedule_emp_no);
+					document.getElementById('detail-no').value = response.dto.emp_no	;
+					document.getElementById('detail-idx').value = response.dto.attendance_idx	;
+					document.getElementById('detail-name').value = response.dto.emp_name	;
+					document.getElementById('detail-workday').value = response.dto.work_day;
+					document.getElementById('detail-result').value = response.dto.att_result;
+					document.getElementById('detail-att').value = response.sTime;
+					
+					document.getElementById('detail-leave').value = response.eTime;
+					myModal.show();
 		        },
 		        error: function(xhr, status, error) {
 		            // 에러 처리
@@ -546,6 +525,129 @@ document.addEventListener("DOMContentLoaded", function() {
 		        }
 		    });
     }
+    
+    //근태 수정 요청
+    function attEdit(){
+    	
+    	var no = document.getElementById('detail-no').value;
+    	var idx = document.getElementById('detail-idx').value;
+    	var name = document.getElementById('detail-name').value;
+    	var workday = document.getElementById('detail-workday').value;
+    	var result = document.getElementById('detail-result').value;
+    	var modifyResult = document.getElementById('detail-modify-result').value;
+    	var reason = document.getElementById('detail-reason').value;
+    	
+    	
+    	if (reason === '' || reason.trim() === '') {
+    		alert('수정 사유를 입력해주세요!');
+			
+		}else{
+    	
+    	$.ajax({
+	        type: "GET",
+	        url: "/myAttEditApply.ajax",
+	        data: {
+	        	'attendance_management': idx,
+	        	'att_applicant': no,
+	        	'att_previous_attresult': result,
+	        	'att_modify_attresult': modifyResult,
+	        	'att_reason': reason,
+	        },
+	        dataType: "json",
+			success: function(data) {
+				if (data.isSuccess) {
+					$('#scheduleDetailModal').modal('hide');
+                    showAlert('success', '근태 수정 요청이 완료되었습니다.');
+                   
+                } else {
+                	$('#scheduleDetailModal').modal('hide');
+                    showAlert('danger', '근태 수정 요청에 실패했습니다.');
+                }  
+	        },
+	        error: function(xhr, status, error) {
+	            // 에러 처리
+	            $("#result").html("<p>There was an error: " + error + "</p>");
+	        }
+	    });
+		}
+    }
+    
+    
+    var showPage = 1; // 현재 페이지 번호
+    
+    
+    $(document).ready(function(){ // html 문서가 모두 읽히면 되면(준비되면) 다음 내용을 실행 해라
+    	listCall(showPage);
+    });
+
+    function listCall(page){
+        $.ajax({
+           type:'get',
+           url:'/attEditApply.ajax',
+           data:{
+              'page':page,
+              'cnt':5,
+              'emp_no': '${sessionScope.loginId}'
+           },
+           dataType:'json',
+           success:function(data){
+              drawList(data.list);
+              console.log(data);
+              //플러그인 추가
+              var startPage = data.currPage > data.totalPages? data.totalPages : data.currPage;
+              
+              $('#pagination').twbsPagination({
+            	  startPage:startPage, //시작페이지
+            	  totalPages:data.totalPages, //총 페이지 갯수
+            	  visiblePages:5, //보여줄 페이지 수 [1][2][3][4][5]
+             	  onPageClick:function(evt, pg){//페이지 클릭시 실행 함수
+            		  console.log(evt); // 이벤트 객체
+            		  console.log(pg); //클릭한 페이지 번호
+            		  showPage = pg;
+            		  listCall(pg);
+            	  }
+            	  
+              });
+              
+           },
+           error:function(error){
+              console.log(error)
+           }
+        });
+    }
+    
+    
+    
+ 
+    // 리스트 보여주기
+    function drawList(list) {
+        var content = '';
+        if (list.length > 0) {
+            for (item of list) {
+            	console.log(item.emp_employment_status);
+                var att_apply_status = item.att_apply_status === true ? 'Y' : 'N';
+              
+                
+                content += '<tr class="emp-list-tbody-tr" id="' + item.att_management_idx + '">'
+                for (var i = 0; i < list.length; i++) {
+					
+                	+ '<td class="text-center">' + i + '</td>'
+				}
+                    + '<td class="text-center">' + item.att_applicant_date + '</td>'
+                    + '<td class="text-center">' + att_apply_status + '</td>'
+                    + '</tr>';
+            }
+        } else {
+            content = '<tr><td colspan="7" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
+        }
+        $('#emp-list').html(content);
+    }
+    
+    $(document).on('click', '.emp-list-tbody-tr', function () {
+        location.href = './empDetail.go?emp_no=' + $(this).attr('id');
+    });
+    
+    
 </script>
 
 </html>

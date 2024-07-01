@@ -8,6 +8,7 @@ public class LoginDTO {
 	private String emp_no;
 	private String emp_password;
 	boolean first_login;
+	private String profile_new;
 	public String getEmp_no() {
 		return emp_no;
 	}

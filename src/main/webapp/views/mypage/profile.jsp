@@ -197,10 +197,12 @@
                                             <dd><input type="date" class="form-control" id="emp-hired-date" value="${empDetail.emp_hired_date}" readonly></dd>
                                         </div>
                                     </div>
-                                    <div class="row info-section">
-                                        <div class="col-md-12">
-                                            <dt>비밀번호</dt>
-                                            <dd><input type="text" class="form-control" id="emp-extension-number" value=""></dd>
+                                    <div class="row info-section" style="display: none;">
+                                        <div class="col-md-12" >
+                                            <dt>새 비밀번호</dt>
+                                            <dd><input type="password" class="form-control" id="newPw"></dd>
+                                            <dt>새 비밀번호 확인</dt>
+                                            <dd><input type="password" class="form-control" id="newPwChk"></dd>
                                         </div>
                                     </div>
                                     <div class="row info-section">
@@ -250,6 +252,32 @@
                 </div>
             </div>
         </div>
+        
+        
+        <div class="modal fade" id="empModal" tabindex="-1"aria-labelledby="registerModalLabel" aria-hidden="true">
+							<!-- Alert placeholder start -->
+							<div id="alertModalPlaceholder" class="alert-placeholder"></div>
+							<!-- Alert placeholder end -->
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="registerModalLabel">현재 비밀번호 확인</h5>
+										<button type="button" class="btn-close"
+											data-bs-dismiss="modal" aria-label="Close"></button>
+									</div>
+									<div class="modal-body">
+											<div class="mb-3">
+												<label for="emp-pw" class="form-label">비밀번호 (비밀번호 일치시 수정 페이지로 이동합니다.)</label>
+												<input type="password" class="form-control" id="emp-pw" name="emp_password" onchange="passChk()">
+												<div id="pwChk"></div>
+											</div>
+									</div>
+									<div class="modal-footer">
+										
+									</div>
+								</div>
+							</div>
+						</div>
 						
                 </div>
                 <!-- Container ends -->
@@ -293,91 +321,60 @@
 <script src="/assets/js/custom.js"></script>
 <script src="/assets/js/localStorage.js"></script>
 <script src="/assets/js/showAlert.js"></script>
-<!-- 다음 주소 api -->
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 <script>
+
+	var result = "${result}";
+		if (result>1) {
+			showAlert('success', '정보 수정이 완료되었습니다.');
+		}else if (result == 1) {
+			showAlert('danger', '정보 수정에 실패했습니다.');
+		}
+		
+		
+			
+	
 	
 	// 수정
 	 $('#edit-button').click(function () {
 		 
+		 $('#empModal').modal('show');
+		 
 		
-	});
-
-
-	// 저장
-	$('#save-button').click(function() {
-		
-			if (confirm('수정 하시겠습니까?')) {
-				console.log('여기다 : '+emp_no);
-				console.log('부서번호는? :'+dept_no);
-				console.log('직위는? :'+title_no);
-				console.log('재직여부는? :'+emp_employment_status);
-				updateEmp(emp_no, dept_no, title_no, emp_level, emp_employment_status);
-				
-		}else{
-			$('#cancel-button').click();
-		}
-		}
 	});
 	
-	//취소
-	$('#cancel-button').click(function() {
+	
+	function passChk(){
+	
+		var emp_password = document.getElementById('emp-pw').value;
+		console.log('입력 비밀번호?'+emp_password);
 		
-		if (confirm('수정을 취소하겠습니까?')) {
-		
-			showAlert('danger', '수정이 취소되었습니다.');
+	 $.ajax({
+			type:'get', // method 방식
+			url:'./pwChk.ajax', // 요청한 주소
+			data:{'emp_password':emp_password}, // 파라메터
+			success:function(data){ // 통신 성공했을경우
+			//ajax에서 XmlhttpRequest 객체를 통해 대신 받아와서
+			//여기에 뿌려준다
+				console.log(data);
+				if(data.passChk){
+					location.href='/mypage/profileEdit.go';
+				}else{
+					$('#pwChk').text('비밀번호가 일치하지 않습니다.').css('color','red');
+				}
+			}, 
+			error:function(error){ // 통신 실패 시
+				console.log(error);
+			} 
+		});
 			
-     		$('#edit-button').show();
-        	$('#save-button').hide();
-        	$('#cancel-button').hide();
-			
 		}
-		
-	});
 	
 	
-	function updateEmp(emp_no, dept_no, title_no, emp_level, emp_employment_status) {//사원 수정
-    	console.log('ajax: '+emp_no);
-        return $.ajax({
-            url: './updateEmp.ajax',
-            type: 'GET',
-            data: {
-                'emp_no': emp_no,
-                'dept_no': dept_no, 
-                'title_no' : title_no, 
-                'emp_level' : emp_level, 
-                'emp_employment_status' : emp_employment_status      
-            },
-            dataType: 'JSON',           
-            success: function(data) {
-            	if (data.isSuccess) {
-            		$('#dept-name').show();
-             		$('#title-name').show();
-             		$('#emp-level').show();
-             		$('#emp-employment-status').show();
-             		$('#edit-button').show();
-             	
-             	 	$('#sdept-name').hide();
-              		$('#stitle-name').hide();
-              		$('#semp-level').hide();
-              		$('#semp-employment-status').hide();
-                	$('#save-button').hide();
-                	$('#cancel-button').hide();
-                	
-                    showAlert('success', '사원 수정에 성공했습니다.');
-                    
-                    location.reload(true);
-                    
-                } else {
-                    showAlert('danger', '사원 수정에 실패했습니다.');
-                }  
-            },
-            error: function(xhr, status, error) {
-                console.error('사원 수정 오류 발생:', status, error);
-            }
-        });
-    }
+
+	
+	
+	
 					
 </script>
 

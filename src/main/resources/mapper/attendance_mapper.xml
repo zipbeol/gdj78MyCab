@@ -3,7 +3,27 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd"
 >
 
-<mapper namespace="com.my.cab.dao.">
+
+<!-- @Alias("att")  -->
+<mapper namespace="com.my.cab.dao.AttendanceDAO">
+
+	<select id="attHistoryListCall" resultType="att">
+	SELECT attendance_idx, att_time, leave_time, att_result, work_day
+	FROM attendance
+	WHERE emp_no = #{emp_no}
+	</select>
+	
+	<select id="getAttDetail" resultType="att">
+	SELECT a.attendance_idx, e.emp_name, a.emp_no, a.att_time, a.leave_time, a.att_result, a.work_day
+	FROM attendance a
+	JOIN employee e ON a.emp_no = e.emp_no
+	WHERE a.attendance_idx = #{attendance_idx}
+	</select>
+	
+	<insert id="attEditApply" parameterType="att"> 
+	INSERT INTO attendance_management (attendance_management, att_applicant, att_previous_attresult, att_modify_attresult, att_reason)
+	VALUES (#{attendance_management},${att_applicant},#{att_previous_attresult},#{att_modify_attresult},#{att_reason})
+	</insert>
 
 
 </mapper>

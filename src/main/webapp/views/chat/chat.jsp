@@ -23,12 +23,17 @@
     <!-- Vendor Css Files -->
     <link rel="stylesheet" href="/assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
 
+    <!-- Scrollbar CSS -->
+    <link rel="stylesheet" href="/assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
+
     <!-- 폰트 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
 
-    <!-- Custom CSS -->
+    <!-- Date Range CSS -->
+    <link rel="stylesheet" href="/assets/vendor/daterange/daterange.css">
+    <!-- 따로 적용한 CSS -->
     <link rel="stylesheet" href="/assets/css/default.css">
     <!-- FontAwesome 추가 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
@@ -51,19 +56,26 @@
             padding-bottom: 60px; /* 메시지 입력창 높이만큼 패딩 추가 */
         }
 
+        .chat-messages {
+            height: calc(60vh - 60px); /* 적절한 높이 설정 (전체 높이에서 여백과 입력창 높이를 뺀 값) */
+            overflow-y: auto;
+            padding-bottom: 10px; /* 메시지 입력창과 간격 */
+        }
+
         .message-input {
-            position: absolute;
+            position: relative; /* 'absolute'에서 'relative'로 변경 */
             bottom: 0;
             left: 0;
             width: 100%;
             height: 60px; /* 메시지 입력창 높이 */
             background-color: #f8f9fa;
+            border-top: 1px solid #dee2e6; /* 위쪽 경계선 추가 */
         }
 
         /* Custom Modal Size */
         .modal-dialog {
-            max-width: 80%;
-            max-height: 60vh;
+            max-width: 40vw;
+            max-height: 30vh;
         }
 
         .modal-content {
@@ -71,6 +83,7 @@
             overflow: auto;
         }
     </style>
+
 </head>
 
 <body>
@@ -113,6 +126,9 @@
                     <li class="breadcrumb-item">
                         <a href="/"><i class="bi bi-house lh-1"></i></a>
                         <a href="/" class="text-decoration-none">메인</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/chat/chat.go" class="text-decoration-none">채팅</a>
                     </li>
                 </ol>
                 <!-- Breadcrumb end -->
@@ -169,16 +185,17 @@
                                                     <div class="text-center text-muted small my-2">2024.7.1. (월)</div>
                                                     <div class="text-center text-muted small my-2">박채현님이 그룹 메시지방에 참여합니다.</div>
                                                 </div>
-                                            </div>
-                                            <div class="message-input p-3">
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control" placeholder="메시지를 입력해주세요. (Enter: 전송)">
-                                                    <div class="input-group-append">
-                                                        <button class="btn btn-secondary" type="button"><i class="far fa-smile"></i></button>
-                                                        <button class="btn btn-secondary" type="button"><i class="fas fa-paperclip"></i></button>
-                                                        <button class="btn btn-primary" type="button">전송</button>
+                                                <div class="message-input p-3">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" id="messageInput" placeholder="메시지를 입력해주세요. (Enter: 전송)">
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-secondary" type="button"><i class="far fa-smile"></i></button>
+                                                            <button class="btn btn-secondary" type="button"><i class="fas fa-paperclip"></i></button>
+                                                            <button class="btn btn-primary" type="button" onclick="sendMessage()">전송</button>
+                                                        </div>
                                                     </div>
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -222,32 +239,23 @@
             <div class="modal-body">
                 <form>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="searchMember" placeholder="이름, 부서, 이메일 검색">
+                        <input type="text" class="form-control" id="searchMember" placeholder="이름 검색">
                     </div>
                 </form>
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link active" id="favorites-tab" data-toggle="tab" href="#favorites" role="tab" aria-controls="favorites" aria-selected="true">즐겨찾기</a>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="organization-tab" data-toggle="tab" href="#organization" role="tab" aria-controls="organization" aria-selected="false">조직도</a>
+                        <a class="nav-link active" id="organization-tab" data-toggle="tab" href="#organization" role="tab" aria-controls="organization" aria-selected="true">개인</a>
                     </li>
                     <li class="nav-item" role="presentation">
                         <a class="nav-link" id="group-tab" data-toggle="tab" href="#group" role="tab" aria-controls="group" aria-selected="false">그룹</a>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="bot-tab" data-toggle="tab" href="#bot" role="tab" aria-controls="bot" aria-selected="false">Bot</a>
-                    </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="favorites" role="tabpanel" aria-labelledby="favorites-tab">
-                        <!-- 즐겨찾기 내용 -->
-                    </div>
                     <div class="tab-pane fade" id="organization" role="tabpanel" aria-labelledby="organization-tab">
                         <div class="row">
                             <div class="col-4">
                                 <ul class="list-group">
-                                    <li class="list-group-item">내회사</li>
+                                    <li class="list-group-item">My Cab</li>
                                 </ul>
                             </div>
                             <div class="col-8">
@@ -268,9 +276,6 @@
                     <div class="tab-pane fade" id="group" role="tabpanel" aria-labelledby="group-tab">
                         <!-- 그룹 내용 -->
                     </div>
-                    <div class="tab-pane fade" id="bot" role="tabpanel" aria-labelledby="bot-tab">
-                        <!-- Bot 내용 -->
-                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -285,7 +290,9 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+<!-- Overlay Scroll JS -->
+<script src="/assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
+<script src="/assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
 <!-- Vendor Js Files -->
 <script src="/assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
 <script src="/assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
@@ -293,5 +300,54 @@
 <!-- Custom JS files -->
 <script src="/assets/js/custom.js"></script>
 <script src="/assets/js/LocalStorage.js"></script>
+
+<script>
+    var ws;
+
+    function connect() {
+        ws = new WebSocket("ws://" + window.location.host + "/chat/test");
+
+        ws.onopen = function() {
+            console.log("Connected to the chat server");
+        };
+
+        ws.onmessage = function(event) {
+            var chatMessages = document.querySelector(".chat-messages");
+            var newMessage = document.createElement("div");
+            newMessage.textContent = event.data;
+            chatMessages.appendChild(newMessage);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        };
+
+        ws.onclose = function() {
+            console.log("Disconnected from the chat server");
+        };
+    }
+
+    function sendMessage() {
+        var messageInput = document.getElementById("messageInput");
+        var message = messageInput.value;
+
+        var chatMessage = {
+            type: "message",
+            message: message
+        };
+
+        ws.send(JSON.stringify(chatMessage));
+        messageInput.value = '';
+    }
+
+    window.onload = function() {
+        connect();
+
+        var messageInput = document.getElementById("messageInput");
+        messageInput.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        });
+    };
+</script>
+
 </body>
 </html>

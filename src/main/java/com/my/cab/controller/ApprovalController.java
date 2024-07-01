@@ -94,7 +94,7 @@ public class ApprovalController {
 	        approvalDoc.setApproval_doc_assist_user(participator); // 참조자
 	        approvalDoc.setApproval_doc_isFinal(isFinal); // 최종결재 여부
 	        approvalDoc.setApproval_doc_id(drafterId); // 기안자 ID
-	        apprservice.saveApprovalDoc(approvalDoc);
+	        apprservice.saveApprovalDoc(approvalDoc); // 14번 문서 등록 성공
 
 	        // 첨부 파일 저장
 	        String uploadFilePath = null;
@@ -112,6 +112,7 @@ public class ApprovalController {
 
 	        // 결재라인 등 데이터베이스에 저장 approvalDTO 테이블
 	        ApprovalDTO approval = new ApprovalDTO();
+	        approval.setApproval_doc_idx(approvalDoc.getApproval_doc_idx());
 	        approval.setAppr_line_bkmk_idx(approverLine); // 결재라인
 	        approval.setAppr_midapprover(midApprover); // 중간결재자
 	        approval.setAppr_finalapprover(finalApprover); // 최종결재자
@@ -142,6 +143,27 @@ public class ApprovalController {
 		logger.info("내 결재 관리 페이지 이동");		
 		return "approval/myapproval";
 	}
+	
+	// 결재라인 가져오기
+	@PostMapping("/getApprovalLines.ajax")
+	    @ResponseBody
+	    public List<Map<String, Object>> getApprovalLines(@RequestParam(required = false) String searchLine) {
+	        return apprservice.getApprovalLines(searchLine);
+	    }
+	
+	// 결재라인에 따라 중간결재자, 최종결재자 불러오기
+	@GetMapping("/getApproverDetails.ajax")
+	@ResponseBody
+	public Map<String, String> getApproverDetails(@RequestParam("lineId") String lineId) {
+	    return apprservice.getApproverDetails(lineId);
+	}
+	
+	// 내 결재 관리 결재문서 리스트 조회
+    @PostMapping("/getApprovalData.ajax")
+    @ResponseBody
+    public List<ApprovalDocDTO> getApprovalData() {
+        return apprservice.getApprovalData();
+    }
 	
 
     

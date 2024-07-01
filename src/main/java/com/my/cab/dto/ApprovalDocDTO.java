@@ -17,8 +17,34 @@ public class ApprovalDocDTO {
     private String approval_doc_path; // 문서파일경로
     private int approval_doc__state; // 문서상태
     private boolean approval_doc_isFinal; // 최종결재여부
+    
+    private String appr_midapprover; // 중간결재자
+    private String appr_finalapprover; // 최종결재자
+    private Date appr_mngr_updt;
+    
+    
+    
+    
 	
-    public String getApproval_doc_id() {
+    public Date getAppr_mngr_updt() {
+		return appr_mngr_updt;
+	}
+	public void setAppr_mngr_updt(Date appr_mngr_updt) {
+		this.appr_mngr_updt = appr_mngr_updt;
+	}
+	public String getAppr_midapprover() {
+		return appr_midapprover;
+	}
+	public void setAppr_midapprover(String appr_midapprover) {
+		this.appr_midapprover = appr_midapprover;
+	}
+	public String getAppr_finalapprover() {
+		return appr_finalapprover;
+	}
+	public void setAppr_finalapprover(String appr_finalapprover) {
+		this.appr_finalapprover = appr_finalapprover;
+	}
+	public String getApproval_doc_id() {
 		return approval_doc_id;
 	}
 	public void setApproval_doc_id(String drafterId) {
@@ -86,7 +112,8 @@ public class ApprovalDocDTO {
 				+ ", approval_doc_assist_user=" + approval_doc_assist_user + ", approval_doc_udt_id="
 				+ approval_doc_udt_id + ", approval_doc_udt_dt=" + approval_doc_udt_dt + ", approval_doc_path="
 				+ approval_doc_path + ", approval_doc__state=" + approval_doc__state + ", approval_doc_isFinal="
-				+ approval_doc_isFinal + "]";
+				+ approval_doc_isFinal + ", appr_midapprover=" + appr_midapprover + ", appr_finalapprover="
+				+ appr_finalapprover + ", appr_mngr_updt=" + appr_mngr_updt + "]";
 	}
 
 

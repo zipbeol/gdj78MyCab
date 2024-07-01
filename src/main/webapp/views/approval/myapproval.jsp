@@ -229,39 +229,17 @@
                                     <th><input type="checkbox" id="checkAll"></th>
                                     <th>기안일자</th>
                                     <th>제목</th>
-                                    <th>ERP전표(건)</th>
-                                    <th>구분</th>
                                     <th>기안자</th>
-                                    <th>결재자</th>
+                                    <th>중간결재자</th>
+                                    <th>최종결재자</th>
+                                    <th>결재일</th>
                                     <th>진행상태</th>
                                     <th>결재</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td><input type="checkbox" class="checkItem"></td>
-                                    <td>2024/06/24</td>
-                                    <td>주간업무 실행보고서입니다.</td>
-                                    <td>1.00</td>
-                                    <td>지출결의서</td>
-                                    <td>guest</td>
-                                    <td>백도경</td>
-                                    <td>진행중</td>
-                                    <td><a href="#" class="btn btn-link">보기</a></td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox" class="checkItem"></td>
-                                    <td>2024/06/17</td>
-                                    <td>임원의 법인카드 사용지침결의서입니다.</td>
-                                    <td>1.00</td>
-                                    <td>지출결의서</td>
-                                    <td>guest</td>
-                                    <td>백도경</td>
-                                    <td>진행중</td>
-                                    <td><a href="#" class="btn btn-link">보기</a></td>
-                                </tr>
-                                <!-- 필요한 만큼 행을 추가합니다. -->
-                            </tbody>
+                                <tbody id="approvalDataBody">
+        						<!-- 데이터가 동적으로 추가될 부분 -->
+   								</tbody>
                         </table>
                         <div class="btn-container">
                             <button class="btn btn-outline-primary">신규(F2)</button>
@@ -322,6 +300,65 @@
 <script src="/assets/js/LocalStorage.js"></script>
 </body>
 <script>
+$(document).ready(function() {
+    // 전체 선택 기능
+    $('#checkAll').on('change', function() {
+        const isChecked = $(this).is(':checked');
+        $('#approvalDataBody input[type="checkbox"]').prop('checked', isChecked);
+    });
+
+    // 데이터 가져오기 함수
+    function loadApprovalData() {
+        $.ajax({
+            url: '/getApprovalData.ajax', // 서버의 엔드포인트 URL
+            type: 'POST',
+            dataType: 'json', // 데이터 타입을 JSON으로 명시
+            success: function(response) {
+                $('#approvalDataBody').empty(); // 기존 데이터를 초기화
+
+                response.forEach(function(item) {
+                    // 테이블 행 생성
+                    const row = $('<tr></tr>');
+
+                    // 각 데이터 셀 생성
+                    const checkboxCell = $('<td></td>').append($('<input>', {
+                        type: 'checkbox',
+                        value: item.approval_doc_idx
+                    }));
+
+                    const writeDateCell = $('<td></td>').text(item.approval_doc_write_date);
+                    const titleCell = $('<td></td>').text(item.approval_doc_title);
+                    const idCell = $('<td></td>').text(item.approval_doc_id);
+                    const midApproverCell = $('<td></td>').text(item.appr_midapprover);
+                    const finalApproverCell = $('<td></td>').text(item.appr_finalapprover);
+                    const mngr_updt = $('<td></td>').text(item.appr_mngr_updt);
+                    const stateCell = $('<td></td>').text(item.approval_doc__state);
+                   
+                    
+                    const buttonCell = $('<td></td>').append($('<button>', {
+                        class: 'btn btn-primary',
+                        text: '결재',
+                        click: function() {
+                            approveDocument(item.approval_doc_idx);
+                        }
+                    }));
+
+                    // 행에 각 셀 추가
+                    row.append(checkboxCell, writeDateCell, titleCell, idCell, midApproverCell, finalApproverCell, mngr_updt, stateCell, buttonCell);
+
+                    // 테이블에 행 추가
+                    $('#approvalDataBody').append(row);
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error('데이터를 가져오는 중 오류 발생:', error);
+            }
+        });
+    }
+
+    // 페이지 로드 시 데이터 가져오기
+    loadApprovalData();
+});
 
 </script>
 </html>

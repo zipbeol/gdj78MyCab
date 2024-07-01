@@ -1,6 +1,7 @@
 package com.my.cab.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -23,11 +24,17 @@ public interface ApprovalDAO {
 
     void saveAttachedFilePath(DocumentDTO docItemFileDTO);
 
-    void saveApprovalDoc(ApprovalDocDTO approvalDoc);
+    int saveApprovalDoc(ApprovalDocDTO approvalDoc);
 
     void saveDocument(DocumentDTO doc);
 
     void saveApproval(ApprovalDTO approval);
+
+	List<Map<String, Object>> selectApprovalLines(String searchLine);
+
+	Map<String, String> selectApproverDetails(String lineId);
+
+	List<ApprovalDocDTO> getApprovalData();
 
 
 }

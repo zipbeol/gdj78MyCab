@@ -396,6 +396,7 @@
                         <div class="form-group">
                             <label for="date">일자:</label>
                             <input type="date" id="date" name="date" class="form-control">
+                            <input type="hidden" id="dateTime" name="dateTime">
                         </div>
                         <div class="form-group">
                             <label for="title">제목:</label>
@@ -431,16 +432,16 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="participator">참조자:</label>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <button type="button" class="btn btn-secondary approver-select-btn" id="participatorButton" data-toggle="modal" data-target="#approverSelectModal" onclick="setApproverType('participator')">참조자 선택</button>
-                                    <span id="participatorName" class="ml-3"></span>
-                                    <input type="hidden" id="participator" name="participator">
-                                </div>
-                            </div>
-                        </div>
+						<div class="form-group">
+						    <label for="participator">참조자:</label>
+						    <div class="d-flex justify-content-between align-items-center">
+						        <div class="d-flex align-items-center">
+						            <button type="button" class="btn btn-secondary approver-select-btn" id="participatorButton" data-toggle="modal" data-target="#approverSelectModal" onclick="setApproverType('participator')">참조자 선택</button>
+						            <div id="participatorNames" class="ml-3"></div>
+						            <input type="hidden" id="participator" name="participator">
+						        </div>
+						    </div>
+						</div>
 						<div class="form-group">
                             <label for="file">첨부:</label>
                             <input type="file" id="file" name="file" class="form-control">
@@ -514,16 +515,12 @@
                             <label class="form-check-label" for="approvalLine">결재라인</label>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="lineSelect">결재라인 명칭</label>
-                        <select id="lineSelect" name="lineSelect" class="form-control">
-                            <option>인사팀 결재라인</option>
-                            <option>영업팀 결재라인</option>
-                            <option>재무팀 결재라인</option>
-                            <option>경영관리부 결재라인</option>
-                            <option>신규(My 결재라인)</option>
-                        </select>
-                    </div>
+					<div class="form-group">
+					    <label for="lineSelect">결재라인 명칭</label>
+					    <select id="lineSelect" name="lineSelect" class="form-control">
+					        <!-- 옵션은 JavaScript를 통해 동적으로 추가됩니다 -->
+					    </select>
+					</div>
                     <div class="form-group text-center">
                         <button type="button" class="btn btn-primary mr-2" id="addLineButton">신규(F2)</button>
                         <button type="button" class="btn btn-secondary mr-2" id="editLineButton">수정</button>
@@ -538,8 +535,106 @@
 
 </body>
 <script>
+
+//결재라인에 따른 중간결재자, 최종결재자 양식모달창에 불러오기
+$(document).ready(function() {
+    loadApprovalLines();
+
+    $('#searchLine').on('input', function() {
+        loadApprovalLines($(this).val());
+    });
+
+    //결재 라인 선택시 중간,최종결재자 
+    function loadApprovalLines(searchQuery = '') {
+        $.ajax({
+            type: 'GET',
+            url: '/getApprovalLines.ajax',
+            data: { searchLine: searchQuery },
+            success: function(response) {
+                $('#lineSelect').empty();
+                response.forEach(function(line) {
+                    $('#lineSelect').append(new Option(line.appr_line_bkmk_name, line.appr_line_bkmk_idx));
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error('결재라인 데이터를 불러오는 중 오류 발생:', error);
+            }
+        });
+    }
+	
+    // 결재라인 조회
+    $('#lineSelect').on('change', function() {
+        var selectedLineId = $(this).val();
+        $.ajax({
+            type: 'GET',
+            url: '/getApproverDetails.ajax',
+            data: { lineId: selectedLineId },
+            success: function(response) {
+                $('#midApproverName').text(response.appr_midapprover);
+                $('#midApprover').val(response.appr_midapprover);
+                $('#finalApproverName').text(response.appr_finalapprover);
+                $('#finalApprover').val(response.appr_finalapprover);
+            },
+            error: function(xhr, status, error) {
+                console.error('결재자 데이터를 불러오는 중 오류 발생:', error);
+            }
+        });
+    });
+});
+
+// 결재라인 불러오기
+$(document).ready(function() {
+    // 페이지가 로드될 때 결재라인 데이터를 가져와서 드롭다운 메뉴에 추가
+    loadApprovalLines();
+
+    // 결재라인 검색 입력 시 처리
+    $('#searchLine').on('input', function() {
+        loadApprovalLines($(this).val());
+    });
+
+    function loadApprovalLines(searchQuery = '') {
+        $.ajax({
+            type: 'POST',
+            url: '/getApprovalLines.ajax', // 서버의 엔드포인트 URL을 설정합니다.
+            data: { searchLine: searchQuery },
+            success: function(response) {
+                // 기존 옵션을 제거합니다.
+                $('#lineSelect').empty();
+
+                // 응답 데이터로 옵션을 추가합니다.
+                response.forEach(function(line) {
+                    $('#lineSelect').append(new Option(line.appr_line_bkmk_name, line.appr_line_bkmk_idx));
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error('결재라인 데이터를 불러오는 중 오류 발생:', error);
+            }
+        });
+    }
+});
+
 //페이지가 로드될 때 실행되는 코드
 document.addEventListener('DOMContentLoaded', function() {
+	
+	// 제목명 자동 기입
+	 var links = document.querySelectorAll('a[data-toggle="modal"]');
+
+	    links.forEach(function(link) {
+	        link.addEventListener('click', function(event) {
+	            event.preventDefault();
+	            var docName = this.getAttribute('data-doc-name');
+	            if (docName) {
+	                document.getElementById('title').value = " OOO님의 " + docName + " 입니다";
+	            }
+	        });
+	    });
+	
+	
+	//제목 일시 자동 기입
+	 var dateInput = document.getElementById('date');
+     var today = new Date().toISOString().split('T')[0];
+     dateInput.value = today;
+     
     // 모든 링크 요소와 버튼을 선택하여 변수에 저장
     var links = document.querySelectorAll('a[data-toggle="modal"], button[data-toggle="modal"]');
 
@@ -598,7 +693,7 @@ document.addEventListener('DOMContentLoaded', function() {
         alert('선택된 결재라인을 수정합니다.');
     });
 });
-0
+
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('#saveButton').addEventListener('click', function() {
         sendHtmlToServer(true);
@@ -607,7 +702,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('#saveTempButton').addEventListener('click', function() {
         sendHtmlToServer(false);
     });
-
 
 // 서버로 기안서 작성 내용 데이터 전송
 function sendHtmlToServer(isFinal) {
@@ -753,8 +847,12 @@ $(document).ready(function() {
             $('#finalApproverName').text(employee.emp_name + ' ' + employee.title_name + '님');
             $('#finalApprover').val(employee.emp_name);
         } else if (approverType === 'participator') {
-            $('#participatorName').text(employee.emp_name + ' ' + employee.title_name + '님');
-            $('#participator').val(employee.emp_name);
+        	 const participatorNames = $('#participatorNames');
+             participatorNames.append('<span>' + employee.emp_name + ' ' + employee.title_name + '님, </span>');
+             
+             const participatorVal = $('#participator').val();
+             const newParticipatorVal = participatorVal ? participatorVal + ',' + employee.emp_name : employee.emp_name;
+             $('#participator').val(newParticipatorVal);
         }
 
         $('#approverSelectModal').modal('hide'); // 모달 닫기

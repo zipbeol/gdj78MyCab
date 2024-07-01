@@ -22,8 +22,26 @@ public class SearchDTO {
     private int pageSize;
     private String filterIsRetired;
     private String filterForSearch;
+    private String filterAttResult;
+    private String filterAttDate;
+    
+    public String getFilterAttResult() {
+		return filterAttResult;
+	}
 
-    public String getPro_filter() {
+	public void setFilterAttResult(String filterAttResult) {
+		this.filterAttResult = filterAttResult;
+	}
+
+	public String getFilterAttDate() {
+		return filterAttDate;
+	}
+
+	public void setFilterAttDate(String filterAttDate) {
+		this.filterAttDate = filterAttDate;
+	}
+
+	public String getPro_filter() {
         return pro_filter;
     }
 

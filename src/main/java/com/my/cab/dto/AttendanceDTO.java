@@ -27,8 +27,43 @@ public class AttendanceDTO {
 	private String emp_name;
 	private String att_previous_attresult;
 	private int att_management_idx;
+	private String title_name;
+	private String dept_name;
+	private int absentCount;
+    private int lateCount;
+    private int leaveCount;
 	
 	
+	public int getAbsentCount() {
+		return absentCount;
+	}
+	public void setAbsentCount(int absentCount) {
+		this.absentCount = absentCount;
+	}
+	public int getLateCount() {
+		return lateCount;
+	}
+	public void setLateCount(int lateCount) {
+		this.lateCount = lateCount;
+	}
+	public int getLeaveCount() {
+		return leaveCount;
+	}
+	public void setLeaveCount(int leaveCount) {
+		this.leaveCount = leaveCount;
+	}
+	public String getTitle_name() {
+		return title_name;
+	}
+	public void setTitle_name(String title_name) {
+		this.title_name = title_name;
+	}
+	public String getDept_name() {
+		return dept_name;
+	}
+	public void setDept_name(String dept_name) {
+		this.dept_name = dept_name;
+	}
 	public int getAtt_management_idx() {
 		return att_management_idx;
 	}

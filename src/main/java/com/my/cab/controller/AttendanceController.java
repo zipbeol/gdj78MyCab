@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.my.cab.dto.AttendanceDTO;
+import com.my.cab.dto.SearchDTO;
 import com.my.cab.service.AttendanceService;
 
 
@@ -82,10 +83,39 @@ public class AttendanceController {
 		return attService.attEditListDeatil(att_management_idx);
 	}
 	
+	@RequestMapping(value="attendance/attendance/list.go")
+	public String attList() {
+		
+		
+		return "HR/attendanceList";
+	}
+	
+	@GetMapping(value="/totalAttList.ajax")
+	@ResponseBody
+	public Map<String, Object> totalAttList(SearchDTO searchDTO){
+		 logger.info("\nsearchDTO SearchText:" + searchDTO.getSearchText()
+        + "\nsearchDTO filterAttResult:" + searchDTO.getFilterAttResult()
+       + "\nsearchDTO filterForSearch:" + searchDTO.getFilterForSearch()
+        + "\nsearchDTO page:" + searchDTO.getPage()+ "\nsearchDTO date:" + searchDTO.getFilterAttDate());
+		
+		return attService.totalAttList(searchDTO);
+		
+	}
+	
+	@GetMapping(value="/getTotalPages.ajax")
+	@ResponseBody
+public Map<String, Object> getTotalPages(SearchDTO searchDTO){
+		logger.info("페이지네이션?");
+		
+		return attService.getAttTotalPages(searchDTO);
+	} 
 	
 	
-	
-	
-	
-	
+	@GetMapping(value="/updateChar.ajax")
+	@ResponseBody
+	public Map<String, Object> getchart(SearchDTO searchDTO){
+		logger.info("차트?");
+		
+		return attService.getchart(searchDTO);
+	} 
 }

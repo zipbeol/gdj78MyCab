@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.my.cab.dto.AttendanceDTO;
+import com.my.cab.dto.SearchDTO;
 
 @Mapper
 public interface AttendanceDAO {
@@ -22,5 +23,11 @@ public interface AttendanceDAO {
 	int allCount(int pagePerCnt, int emp_no);
 
 	AttendanceDTO attEditListDetail(int att_management_idx);
+
+	List<AttendanceDTO> totalAttList(SearchDTO searchDTO);
+
+	int getAttTotal(SearchDTO searchDTO);
+
+	List<AttendanceDTO> getChart(SearchDTO searchDTO);
 
 }

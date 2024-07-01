@@ -52,6 +52,109 @@
 	WHERE a.att_management_idx = #{att_management_idx}
 	</select>
 	
+	<select id="totalAttList" resultType="att" parameterType="map">
+	SELECT 
+        e.emp_no,
+        e.emp_name,
+        t.title_name,
+        d.dept_name,
+        a.att_time,
+        a.leave_time,
+        a.att_result,
+        a.work_day
+	FROM 
+        attendance a
+	JOIN 
+        employee e ON a.emp_no = e.emp_no
+	JOIN 
+        title t ON e.title_no = t.title_no
+	JOIN 
+        department d ON e.dept_no = d.dept_no
+	<where>
+        <if test="filterAttDate != null and filterAttDate != ''">
+            AND a.work_day = #{filterAttDate}
+        </if>
+        <if test="filterAttResult != null and filterAttResult != ''">
+            AND a.att_result = #{filterAttResult}
+        </if>
+        <if test="searchText != null and searchText != ''">
+            <if test="filterForSearch != null and filterForSearch != ''">
+                <choose>
+                    <when test="filterForSearch == 'emp_no'">
+                        AND e.emp_no LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterForSearch == 'emp_name'">
+                        AND e.emp_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterForSearch == 'title_name'">
+                        AND t.title_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterForSearch == 'dept_name'">
+                        AND d.dept_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                </choose>
+            </if>
+        </if>
+    </where>
+</select>
+	
+	<select id="getAttTotal" resultType="int" parameterType="map">
+    SELECT COUNT(a.attendance_idx)
+    FROM attendance a 
+    JOIN employee e ON a.emp_no = e.emp_no 
+    JOIN department d ON e.dept_no = d.dept_no 
+    JOIN title t ON e.title_no = t.title_no
+    <where>
+        <if test="filterAttDate != null and filterAttDate != ''">
+            a.work_day = #{filterAttDate}
+        </if>
+        <if test="filterAttResult != null and filterAttResult != ''">
+            AND a.att_result = #{filterAttResult}
+        </if>
+        <if test="searchText != null and searchText != ''">
+            <if test="filterForSearch != null and filterForSearch != ''">
+                <choose>
+                    <when test="filterForSearch == 'emp_no'">
+                        AND e.emp_no LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterForSearch == 'emp_name'">
+                        AND e.emp_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterForSearch == 'title_name'">
+                        AND t.title_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterForSearch == 'dept_name'">
+                        AND d.dept_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                </choose>
+            </if>
+        </if>
+    </where>
+</select>
+
+<select id="getChart" resultType="att" parameterType="map">
+ SELECT
+    (SELECT COUNT(*)
+     FROM employee e
+     WHERE NOT EXISTS (
+         SELECT 1
+         FROM attendance a
+         WHERE a.emp_no = e.emp_no
+           AND a.work_day = #{filterAttDate}
+     )) AS absentCount,
+    (SELECT COUNT(*)
+     FROM attendance a
+     JOIN employee e ON a.emp_no = e.emp_no
+     WHERE a.att_time >= CONCAT(#{filterAttDate}, ' 09:00:00')
+       AND a.work_day = #{filterAttDate}
+     ) AS lateCount,
+    (SELECT COUNT(*)
+     FROM attendance a
+     JOIN employee e ON a.emp_no = e.emp_no
+     WHERE (a.att_result LIKE '%연차%' OR a.att_result LIKE '%반차%')
+       AND a.work_day = #{filterAttDate}
+     ) AS leaveCount
+</select>
 	
 
 </mapper>

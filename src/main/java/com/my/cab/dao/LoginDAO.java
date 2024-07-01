@@ -16,4 +16,6 @@ public interface LoginDAO {
 
 	int addGetOff(String emp_no);
 
+	String getProfile(String emp_no);
+
 }

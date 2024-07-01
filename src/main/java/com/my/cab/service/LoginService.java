@@ -34,6 +34,7 @@ public class LoginService {
 			if (firstLogin) {
 				logger.info("최초 로그인, 비밀번호 변경 필요");
 				
+				
 				result = 2;
 				
 			}else {				
@@ -73,6 +74,13 @@ public class LoginService {
 		
 		
 		return offCount;
+	}
+
+
+
+	public String getProfile(String emp_no) {
+		
+		return dao.getProfile(emp_no);
 	}
 	
 }

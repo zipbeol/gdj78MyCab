@@ -28,7 +28,7 @@ public class LoginController {
 
 	
 	@RequestMapping(value="emp/login.do")
-	public String login(String emp_no, String emp_password, HttpSession session, Model model, RedirectAttributes rat) {
+	public String login(String emp_no, String emp_password, String profile_new, HttpSession session, Model model, RedirectAttributes rat) {
 		logger.info("로그인 실행");
 		logger.info("사번 : "+emp_no+"비밀번호 : "+emp_password);
 		
@@ -38,11 +38,14 @@ public class LoginController {
 		
 		if (row == 1) {//로그인 성공, 최초 로그인이 아닐시
 			page = "redirect:/";
+			String profile = service.getProfile(emp_no);
 			session.setAttribute("loginId", emp_no);
+			session.setAttribute("profile", profile);
 			
 		} else if (row == 2) {//로그인 성공, 최초 로그인시
 			page = "redirect:/login/pwFirstChange.go";
 			session.setAttribute("loginId", emp_no);
+			session.setAttribute("profile", profile_new);
 		}else {
 			rat.addFlashAttribute("message", "사번 또는 비밀번호를 확인해주세요.");
 			page = "redirect:/login/logout.do";

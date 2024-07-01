@@ -50,7 +50,7 @@ public class EmpService {
 		logger.info(emp_email);
 		
 		
-		String emp_add = param.get("emp_roadAdd") +", "+  param.get("emp_addDetail");
+		String emp_add = param.get("emp_roadAdd") +" "+  param.get("emp_addDetail");
 		
 		
 		String emp_extension_number = (String) param.get("emp_extension_number");

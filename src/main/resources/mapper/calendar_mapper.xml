@@ -6,11 +6,13 @@
 <mapper namespace="com.my.cab.dao.CalendarDAO">
 
 	<select id="calListCall" resultType="map">
-		SELECT s.*,d.dept_name
+		SELECT s.*
 		FROM schedule s
-		INNER JOIN employee e ON s.schedule_emp_no = e.emp_no
+		INNER JOIN employee e ON #{param1} = e.emp_no
 		INNER JOIN department d ON e.dept_no = d.dept_no
-		WHERE e.dept_no = d.dept_no
+		WHERE s.schedule_del ='0' AND
+			(s.schedule_category = '전사' OR (s.schedule_category = '개인' AND s.schedule_emp_no = #{param1} )
+			OR(s.schedule_category = '부서' AND s.schedule_dept_no = d.dept_no))
 	</select>
 	
 	<select id="dayCalListCall" resultType="map">
@@ -19,7 +21,7 @@
 	
 	<insert id="createSchedule" parameterType="calendarDTO">
 		INSERT INTO schedule 
-    (schedule_name, schedule_content, schedule_start_date, schedule_end_date, schedule_emp_no, schedule_category, schedule_color,schedule_dept_name)
+    (schedule_name, schedule_content, schedule_start_date, schedule_end_date, schedule_emp_no, schedule_category, schedule_color,schedule_dept_no)
 	SELECT 
 	    #{schedule_name}, 
 	    #{schedule_content}, 
@@ -28,7 +30,7 @@
 	    #{schedule_emp_no}, 
 	    #{schedule_category}, 
 	    #{schedule_color}, 
-	    d.dept_name
+	    d.dept_no
 	FROM 
 	    employee e
 	JOIN 
@@ -38,7 +40,11 @@
 	</insert>
 	
 	<select id="calendarDetail" resultType="calendarDTO">
-		SELECT * FROM schedule WHERE schedule_idx = #{param1}
+		SELECT s.*, e.emp_name as sechdule_emp_name , e.emp_email as schedule_emp_email, e.emp_extension_number as schedule_emp_extension_number,d.dept_name as schedule_dept_name
+			FROM schedule s
+			inner join employee e on s.schedule_emp_no = e.emp_no
+			inner join department d on e.dept_no =d.dept_no 
+			WHERE schedule_idx = #{param1};
 	</select>
 	
 	<update id="deleteSchedule">

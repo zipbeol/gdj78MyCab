@@ -117,7 +117,7 @@
     		border: 1px solid lightGray;
     		background-color : lightGray;
     		width: 165px;
-    		height: 70px;
+    		height: 25px;
     		margin-bottom: 15px;
     		margin-left: 14px;
     		cursor: pointer;
@@ -148,6 +148,26 @@
 		/* util box 체크박스 위치 설정 */
 		.form-check-input[type=checkbox]{
 			float: right;
+		}
+		.app-body{
+			width: 1500px;
+		}
+		#detail-profile{
+			border: 1px solid black;
+			width: 100px;
+			height: 100px;
+		}
+		.form-check-input{
+		    text-align: center;
+		    margin: 0px;
+		    top: -6px;
+		    position: relative;	
+		}
+		.form-check-label{
+			text-align: center;
+		    margin: 0px;
+		    top: -9px;
+		    position: relative;	
 		}
     </style>
   </head>
@@ -232,15 +252,24 @@
                     	<div id="calendar-util-box" class = "alert alert-secondary rounded-3">
                     		<div class="util-box-category alert alert-secondary rounded-3 util-box1" onclick="utilBoxClk(this)">
 		                          <label class="form-check-label" for="firstCheckbox">개인</label>
-		                          <input class="form-check-input me-1" type="checkbox" value="" id="firstCheckbox">
+		                          <input class="form-check-input me-1" type="checkbox" value="" id="firstCheckbox" checked disabled="disabled">
                     		</div>
                     		<div class="util-box-category alert alert-secondary rounded-3 util-box2" onclick="utilBoxClk(this)">
 		                          <label class="form-check-label" for="secondCheckbox">부서</label>
-		                          <input class="form-check-input me-1" type="checkbox" value="" id="secondCheckbox" >
+		                          <input class="form-check-input me-1" type="checkbox" value="" id="secondCheckbox" checked disabled="disabled">
                     		</div>
-                    		<div class="util-box-category alert alert-secondary rounded-3 util-box3" onclick="utilBoxClk(this)">
+                    		<div class="util-box-category alert alert-secondary rounded-3 util-box3" onclick="utilBoxClk(this)" >
 		                          <label class="form-check-label" for="thirdCheckbox">전사</label>
-		                          <input class="form-check-input me-1" type="checkbox" value="" id="thirdCheckbox">
+		                          <input class="form-check-input me-1" type="checkbox" value="" id="thirdCheckbox" checked disabled="disabled">
+                    		</div>
+                    		<hr>
+                    		<div id="share-calendar">
+                    			<div class="util-box-category alert alert-secondary rounded-3 util-box3" onclick="utilBoxClk(this)" >
+		                          <label class="form-check-label" for="thirdCheckbox">공유 캘린더</label>
+		                          <button type="button" class="btn btn-outline-info">
+		                          	<i class="bi bi-plus-square"></i>
+		                          </button>
+                    			</div>
                     		</div>
                     	</div>
                       <div id="selectableCalendar"></div>
@@ -313,12 +342,13 @@
                 <div class="input-group mb-3">
                     <label class="input-group-text" for="create-category">일정 범위</label>
                     <select class="form-select" id="create-category" onchange="changeCategoryColor(this)">
-                        <c:if test="${sessionScope.loginId == '개인'}">
-                            <option value="개인" style="color: #ffec63;">개인</option>
-                        </c:if>
+                        <option value="개인" style="color: #ffec63;">개인</option>
                         <option value="부서" style="color: #28b9ff;">부서</option>
                         <option value="전사" style="color: #71f371;">전사</option>
                     </select>
+                    <label class="input-group-text" for="create-share">공유 상대선택</label>
+                    <input type="text" id="create-share" onclick="shareModalOpen()">
+                    
                 </div>
                 <div class="input-group mb-3">
                     <label class="input-group-text" for="create-content">내용</label>
@@ -342,53 +372,58 @@
                     <h5 class="modal-title h4" id="exampleModalLgLabel">일정 상세보기</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">                    
-                    <div class="input-group mb-3">
-                        <label class="input-group-text" for="detail-title">제목</label>
-                        <input type="text" class="form-control" id="detail-title" name="detail-title" readonly>
-                    </div>                                    
-                    <div class="input-group mb-3">
-                        <label class="input-group-text" for="detail-start-date">일정</label>
-                        <input type="text" class="form-control detailDatepicker" id="detail-start-date" name="detail-start-date" readonly>
-                        <select id="detail-start-hour" name="detail-start-hour">
-                        	    <c:forEach var="a" begin="0" end="23" varStatus="i">
-                        	    	<option value="${a}">${a}시</option>
-                        	    </c:forEach>                    	
-                        </select>
-                        <select id="detail-start-min" name="detail-start-min">
-                        	    <c:forEach var="a" begin="0" end="59" varStatus="i">
-                        	    	<option value="${a}">${a}분</option>
-                        	    </c:forEach>                    	
-                        </select>
-                        <span class="input-group-text">~</span>
-                        <input type="text" class="form-control detailDatepicker" id="detail-end-date" name="detail-end-date" readonly>
-                        <select id="detail-end-hour" name="detail-end-hour">
-                        	    <c:forEach var="a" begin="0" end="23" varStatus="i">
-                        	    	<option value="${a}">${a}시</option>
-                        	    </c:forEach>                    	
-                        </select>
-                        <select id="detail-end-min" name="detail-end-min">
-                        	    <c:forEach var="a" begin="0" end="59" varStatus="i">
-                        	    	<option value="${a}">${a}분</option>
-                        	    </c:forEach>                    	
-                        </select>
-                    </div>
-                    <div class="input-group mb-3">
-                        <label class="input-group-text" for="detail-category">일정범위</label>
-                        <select class="form-select" id="detail-category" disabled onchange="changeCategoryColor(this)">
-                            <option value="개인" style="color: #ffec63">개인</option>
-                            <option value="부서" style="color: #28b9ff">부서</option>
-                            <option value="전사" style="color: #71f371">전사</option>
-                        </select>
-                    </div>
-                    
-                    <div class="input-group mb-3">
-                        <label class="input-group-text" for="detail-content">내용</label>
-                        <textarea class="form-control" id="detail-content" name="detail-content" placeholder="Enter message" rows="3" style="height: 245px;" readonly></textarea>
-                    </div>  
+                	
+	                <div class="modal-body">
+		                <div >                   
+		                    <div class="input-group mb-3">
+		                        <label class="input-group-text" for="detail-title">제목</label>
+		                        <input type="text" class="form-control" id="detail-title" name="detail-title" disabled="disabled">
+		                        <label class="input-group-text" for="detail-writer">작성자</label>
+		                        <input type="text" class="form-control" id="detail-writer" name="detail-writer"  style="width: 30px;" disabled="disabled">
+		                    </div>                                    
+		                    <div class="input-group mb-3">
+		                        <label class="input-group-text" for="detail-start-date">일정</label>
+		                        <input type="text" class="form-control detailDatepicker" id="detail-start-date" name="detail-start-date" disabled="disabled">
+		                        <select id="detail-start-hour" name="detail-start-hour" disabled="disabled">
+		                        	    <c:forEach var="a" begin="0" end="23" varStatus="i">
+		                        	    	<option value="${a}">${a}시</option>
+		                        	    </c:forEach>                    	
+		                        </select>
+		                        <select id="detail-start-min" name="detail-start-min" disabled="disabled">
+		                        	    <c:forEach var="a" begin="0" end="59" varStatus="i">
+		                        	    	<option value="${a}">${a}분</option>
+		                        	    </c:forEach>                    	
+		                        </select>
+		                        <span class="input-group-text">~</span>
+		                        <input type="text" class="form-control detailDatepicker" id="detail-end-date" name="detail-end-date" disabled="disabled">
+		                        <select id="detail-end-hour" name="detail-end-hour" disabled="disabled">
+		                        	    <c:forEach var="a" begin="0" end="23" varStatus="i">
+		                        	    	<option value="${a}">${a}시</option>
+		                        	    </c:forEach>                    	
+		                        </select>
+		                        <select id="detail-end-min" name="detail-end-min" disabled="disabled">
+		                        	    <c:forEach var="a" begin="0" end="59" varStatus="i">
+		                        	    	<option value="${a}">${a}분</option>
+		                        	    </c:forEach>                    	
+		                        </select>
+		                    </div>
+	                    </div>
+	                    <div class="input-group mb-3">
+	                        <label class="input-group-text" for="detail-category">일정범위</label>
+	                        <select class="form-select" id="detail-category" disabled onchange="changeCategoryColor(this)">
+	                            <option value="개인" style="color: #ffec63">개인</option>
+	                            <option value="부서" style="color: #28b9ff">부서</option>
+	                            <option value="전사" style="color: #71f371">전사</option>
+	                        </select>
+	                    </div>
+	                    
+	                    <div class="input-group mb-3">
+	                        <label class="input-group-text" for="detail-content">내용</label>
+	                        <textarea class="form-control" id="detail-content" name="detail-content" placeholder="Enter message" rows="3" style="height: 245px;" disabled="disabled"></textarea>
+	                    </div>  
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary btn-lg" onclick="editSchedule()" id="editButton">수정</button>
+                    <button class="btn btn-primary btn-lg" onclick="editButton()" id="editButton">수정</button>
                     <button class="btn btn-danger btn-lg" onclick="deleteSchedule()" data-bs-dismiss="modal" id="delButton">삭제</button>                 
                     <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal">닫기</button>         
                 </div>
@@ -551,13 +586,13 @@
 		        },
 		        dataType: "json",
 				success: function(response) {
-					var idx = response.dto.schedule_idx;
+					detailIdx = response.dto.schedule_idx;
 					document.getElementById('detail-title').value = response.dto.schedule_name	;
 					document.getElementById('detail-content').value = response.dto.schedule_content	;
 					var startDate = response.dto.schedule_start_date	;
 					var endDate = response.dto.schedule_end_date	;
 					var registDate = response.dto.schedule_register_date	;
-					empNo = response.dto.schedule_emp_no;
+					document.getElementById("detail-writer").value = response.dto.schedule_dept_name+" "+response.dto.sechdule_emp_name;
 					console.log(response.dto.schedule_emp_no);
 					var editor = response.dto.schedule_editor	;
 					document.getElementById('detail-category').value = response.dto.schedule_category	;
@@ -587,14 +622,16 @@
 		 myModal.show();
 		
 	}
-	
+	// 상세보기 모달 버튼 
 	function chkLoginId(loginId,empNo){
-		console.log(loginId);
-		console.log(empNo);
+		console.log("버튼 체크 로그인된 아이디 : "+loginId);
+		console.log("작성자 아이디 : "+empNo);
 		if(loginId == empNo ){
-			console.log()
 			document.getElementById("editButton").style.display="block";
 			document.getElementById("delButton").style.display="block";
+		}else{
+			document.getElementById("editButton").style.display="none";
+			document.getElementById("delButton").style.display="none";
 		}
 	}
 	
@@ -718,6 +755,7 @@
 	    });
 	}
 	function editSchedule(){
+		console.log("수정버튼 클릭됨");
 		//현재 시간 가져오기 
 		var curTime = getCurrentDateTime();
 		// SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -743,7 +781,6 @@
         console.log(chkVal);
 		console.log(document.getElementById('detail-title').value);
 		
-		console.log(content);
 		
 		if (chkVal) {
 			$.ajax({
@@ -752,17 +789,17 @@
 				data:{
 					'schedule_idx': detailIdx,
 					'schedule_name': document.getElementById('detail-title').value,
-					'schedule_content': document.getElementById('detail-content'),
+					'schedule_content': document.getElementById('detail-content').value,
 					'schedule_start_date': startDateTime,
 					'schedule_end_date': endDateTime,
 					'schedule_edit_date' : curTime,
-					'schedule_editor' : '30001', // 세션으로 가져오기
+					'schedule_editor' : "${sessionScope.loginId}", // 세션으로 가져오기
 					'schedule_category': document.getElementById('detail-category').value,
 					'schedule_color' : color
 				},
 				dataType :"json",
 				suceess: function(response){
-					if (reponse.suceess) {
+					if (response.success) {
 						alert("수정에 성공 했습니다")
 						calendar.refetchEvents();
 					}
@@ -803,18 +840,9 @@
 	function utilBoxClk(t){
 		var chkBox = t.querySelector('input[type="checkbox"]').checked;
 		var chkBoxVal = t.querySelector('label').innerText;
-		console.log(chkBoxVal);
-		console.log(chkBox);
+		
 		if(chkBox){
-			var events = calendar.getEvents();
-			for (let e of events) {
-				if(e.extendedProps.category == chkBoxVal){
-					console.log("ㅋㅋㅋ",e);
-		            e.setProp('display', '');
-				}
-			}
-			
-		}else{
+			t.querySelector('input[type="checkbox"]').checked = false;
 			var events = calendar.getEvents();
 			for (let e of events) {
 				if(e.extendedProps.category == chkBoxVal){
@@ -822,10 +850,41 @@
 		            e.setProp('display', 'none');
 				}
 			}
+			
+		}else{
+			t.querySelector('input[type="checkbox"]').checked =true;
+			var events = calendar.getEvents();
+			for (let e of events) {
+				if(e.extendedProps.category == chkBoxVal){
+					console.log("ㅋㅋㅋ",e);
+		            e.setProp('display', '');
+				}
+			}
 		}
 
 	};
 	
+	// 수정버튼 버튼변경 (readOnly해제)
+	function editButton(){
+		var editBtn =  document.getElementById("editButton");
+		editBtn.innerHTML = '수정완료';
+		editBtn.setAttribute("click",editSchedule());
+		document.getElementById("detail-category").disabled = false;
+		document.getElementById("detail-end-min").disabled = false;
+		document.getElementById("detail-end-hour").disabled = false;
+		document.getElementById("detail-start-min").disabled= false;
+		document.getElementById("detail-start-hour").disabled =false;
+		document.getElementById("detail-title").disabled = false;
+		document.getElementById("detail-start-date").disabled = false;
+		document.getElementById("detail-end-date").disabled = false;
+		document.getElementById("detail-content").disabled = false;
+		document.getElementById("editButton").setAttribute('data-bs-dismiss',"modal");
+		
+	}
+	
+	function shareModalOpen(){
+		
+	}
   	
 </script>
 

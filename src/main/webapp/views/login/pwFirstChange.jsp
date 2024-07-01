@@ -82,37 +82,25 @@
     
     	    var pwInput = document.querySelector('input[name="emp_password"]');
     	    var pwChkInput = document.querySelector('input[name="emp_passwordChk"]');
-    	    var pwChkValidDiv = document.getElementById('pwChkValid');
+    	    var pwChkValid = document.getElementById('pwChkValid');
 
-    	    pwChkInput.addEventListener('focusout', function() {
-    	        var pw = pwInput.value;
-    	        var pwChk = pwChkInput.value;
+    		function validatePasswords() {
+    		    var pw = pwInput.value;
+    		    var pwChk = pwChkInput.value;
 
-    	        if (pw === pwChk) {
-    	           
-    	            pwChkValidDiv.textContent = '비밀번호가 일치합니다';
-    	            pwChkValidDiv.style.color = 'green';
-    	        } else {
-    	           
-    	            pwChkValidDiv.textContent = '비밀번호가 일치하지 않습니다';
-    	            pwChkValidDiv.style.color = 'red';
-    	        }
-    	    });
-    	    
-    	    pwInput.addEventListener('focusout', function() {
-    	        var pw = pwInput.value;
-    	        var pwChk = pwChkInput.value;
+    		    if (pw === pwChk) {
+    		        pwChkValid.textContent = '비밀번호가 일치합니다';
+    		        pwChkValid.style.color = 'green';
+    		        
+    		    } else {
+    		        pwChkValid.textContent = '비밀번호가 일치하지 않습니다';
+    		        pwChkValid.style.color = 'red';
+    		       
+    		    }
+    		}
 
-    	        if (pw === pwChk) {
-    	           
-    	            pwChkValidDiv.textContent = '비밀번호가 일치합니다';
-    	            pwChkValidDiv.style.color = 'green';
-    	        } else {
-    	           
-    	            pwChkValidDiv.textContent = '비밀번호가 일치하지 않습니다';
-    	            pwChkValidDiv.style.color = 'red';
-    	        }
-    	    });
+    		pwChkInput.addEventListener('keyup', validatePasswords);
+    		pwInput.addEventListener('keyup', validatePasswords);
 			
 			
 			function validateForm() {

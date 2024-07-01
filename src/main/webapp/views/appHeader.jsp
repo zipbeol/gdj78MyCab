@@ -164,7 +164,14 @@
     <div class="dropdown ms-2">
         <a id="userSettings" class="dropdown-toggle d-flex py-2 align-items-center text-decoration-none"
            href="#!" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+           <c:choose>
+          <c:when test="${not empty sessionScope.profile}">
+          	<img src="/photo/${sessionScope.profile}" class="rounded-2 img-3x" alt="user">
+          </c:when>
+          <c:otherwise>
             <img src="/assets/user.png" class="rounded-2 img-3x" alt="user">
+          </c:otherwise>
+          </c:choose>
         </a>
         <div class="dropdown-menu dropdown-menu-end shadow-sm">
             <div class="p-3 border-bottom mb-2">

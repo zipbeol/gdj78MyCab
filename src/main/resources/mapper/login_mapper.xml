@@ -6,8 +6,15 @@
 <mapper namespace="com.my.cab.dao.LoginDAO">
 
 	 <select id="pwfind" resultType="String">
-        SELECT emp_password
-        FROM employee
+        SELECT e.emp_password
+        FROM employee e
+        WHERE e.emp_no = #{emp_no}
+    </select>
+    
+    
+    <select id="getProfile" resultType="String">
+        SELECT profile_new
+        FROM profile_photo
         WHERE emp_no = #{emp_no}
     </select>
 

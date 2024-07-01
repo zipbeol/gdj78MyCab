@@ -27,8 +27,8 @@ public class CalendarService {
 		this.calendarDao = calendarDao;
 	}
 
-	public List<Map<String, Object>> calListCall() {
-		List<Map<String, Object>> getCalList = calendarDao.calListCall();
+	public List<Map<String, Object>> calListCall(String schedule_editor) {
+		List<Map<String, Object>> getCalList = calendarDao.calListCall(schedule_editor);
 
 		/*
 		 * for (Map<String, Object> map : getCalList) {
@@ -129,6 +129,7 @@ public class CalendarService {
 	public Map<String, Object> editSchedule(CalendarDTO calendarDTO) {
 		Map<String, Object>map = new HashMap<String, Object>();
 		int row = calendarDao.editSchedule(calendarDTO);
+		logger.info("수정 성공 여부 calendar : row : " + row);
 		if(row >0) {
 			map.put("success", true);
 		}else {

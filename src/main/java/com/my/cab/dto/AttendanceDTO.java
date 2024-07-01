@@ -9,7 +9,7 @@ import org.apache.ibatis.type.Alias;
 @Alias("att")
 public class AttendanceDTO {
 	
-	private String attendance_idx;
+	private int attendance_idx;
 	private int emp_no;
 	private Timestamp  att_time;
 	private Timestamp leave_time;
@@ -26,11 +26,19 @@ public class AttendanceDTO {
 	private boolean att_apply_status;
 	private String emp_name;
 	private String att_previous_attresult;
+	private int att_management_idx;
 	
-	public String getAttendance_idx() {
+	
+	public int getAtt_management_idx() {
+		return att_management_idx;
+	}
+	public void setAtt_management_idx(int att_management_idx) {
+		this.att_management_idx = att_management_idx;
+	}
+	public int getAttendance_idx() {
 		return attendance_idx;
 	}
-	public void setAttendance_idx(String attendance_idx) {
+	public void setAttendance_idx(int attendance_idx) {
 		this.attendance_idx = attendance_idx;
 	}
 	public int getEmp_no() {

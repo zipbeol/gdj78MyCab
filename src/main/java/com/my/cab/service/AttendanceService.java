@@ -35,7 +35,7 @@ public class AttendanceService {
 		return map;
 	}
 
-	public Map<String, Object> attHistoryDetail(String attendance_idx) {
+	public Map<String, Object> attHistoryDetail(int attendance_idx) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		AttendanceDTO dto = attDAO.getAttDetail(attendance_idx);
 		map.put("dto", dto);
@@ -70,6 +70,29 @@ public class AttendanceService {
 		
 		
 		return result;
+	}
+
+	public Map<String, Object> attEditList(int currPage, int pagePerCnt, int emp_no) {
+		int start = (currPage-1)*pagePerCnt;
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		List<AttendanceDTO> list = attDAO.attEditList(pagePerCnt, start, emp_no);
+		
+		result.put("list", list);
+		result.put("currPage", currPage);
+		result.put("totalPages", attDAO.allCount(pagePerCnt,emp_no));
+		
+		
+		return result;
+	}
+
+	public Map<String, Object> attEditListDeatil(int att_management_idx) {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		AttendanceDTO att = attDAO.attEditListDetail(att_management_idx);
+		map.put("att", att);
+		
+		return map;
 	}
 
 	

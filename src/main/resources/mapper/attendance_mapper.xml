@@ -24,6 +24,34 @@
 	INSERT INTO attendance_management (attendance_management, att_applicant, att_previous_attresult, att_modify_attresult, att_reason)
 	VALUES (#{attendance_management},${att_applicant},#{att_previous_attresult},#{att_modify_attresult},#{att_reason})
 	</insert>
-
+	
+	<select id="attEditList" resultType="att">
+	SELECT att_management_idx, att_applicant_date, att_apply_status
+	FROM attendance_management
+	WHERE att_applicant = #{param3}
+	ORDER BY att_management_idx DESC
+	LIMIT #{param2}, 10
+	</select>
+	
+	<select id="allCount" resultType="Integer">
+		SELECT CEIL(COUNT(att_management_idx)
+		/ #{param1}) AS pages
+		FROM attendance_management
+		WHERE att_applicant = #{param2}
+	</select>
+	
+	<select id="attEditListDetail" resultType="att">
+	SELECT 
+	a.att_applicant, e.emp_name, at.work_day, 
+	at.att_time, at.leave_time, a.att_previous_attresult, 
+	a.att_modify_attresult, a.att_reason, a.att_modify_reject, 
+	a.att_modifier, a.att_modify_date
+	FROM attendance_management a
+	JOIN employee e ON a.att_applicant = e.emp_no
+	JOIN attendance at ON a.attendance_management = at.attendance_idx
+	WHERE a.att_management_idx = #{att_management_idx}
+	</select>
+	
+	
 
 </mapper>

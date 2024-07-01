@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.my.cab.dto.AttendanceDTO;
@@ -45,7 +46,7 @@ public class AttendanceController {
 	
 	@RequestMapping(value="myAttHistoryDetail.ajax")
 	@ResponseBody
-	public Map<String, Object> attHistoryDetail(String attendance_idx){
+	public Map<String, Object> attHistoryDetail(int attendance_idx){
 		
 		return attService.attHistoryDetail(attendance_idx);
 	}
@@ -59,6 +60,28 @@ public class AttendanceController {
 		
 		return Map.of("isSuccess", isSuccess);
 	}
+	
+	@GetMapping(value="/attEditApplyList.ajax")
+	@ResponseBody
+	public Map<String, Object> attEditList(String page, @RequestParam(value="emp_no") int emp_no, @RequestParam(value="cnt", defaultValue ="5") String cnt){
+		
+		logger.info("사번? "+emp_no);
+		
+		int currPage = Integer.parseInt(page);
+		int pagePerCnt = Integer.parseInt(cnt);
+		Map<String, Object> map = attService.attEditList(currPage, pagePerCnt, emp_no);
+		
+		return map;
+	}
+	
+	@GetMapping(value="getAttEditListDetail.ajax")
+	@ResponseBody
+	public Map<String, Object>attEditListDetail(int att_management_idx){
+		logger.info("근태 수정 신청 번호? "+att_management_idx);
+		
+		return attService.attEditListDeatil(att_management_idx);
+	}
+	
 	
 	
 	

@@ -17,8 +17,8 @@
     	keyColumn="approval_doc_idx"
     	keyProperty="approval_doc_idx"
     	parameterType="com.my.cab.dto.ApprovalDocDTO">
-        INSERT INTO tb_approval_doc (approval_doc_path, approval_doc_write_date, approval_doc_title, approval_doc_assist_user, approval_doc_isFinal)
-        VALUES (#{approval_doc_path}, #{approval_doc_write_date}, #{approval_doc_title}, #{approval_doc_assist_user}, #{approval_doc_isFinal})
+        INSERT INTO tb_approval_doc (approval_doc_path, approval_doc_write_date, approval_doc_title, approval_doc_assist_user, approval_doc_isFinal,approval_doc_id)
+        VALUES (#{approval_doc_path}, #{approval_doc_write_date}, #{approval_doc_title}, #{approval_doc_assist_user}, #{approval_doc_isFinal},#{approval_doc_id})
     </insert>
     
     <!-- 결재라인, 중간, 최종결재자 저장 -->

@@ -331,20 +331,19 @@ $(document).ready(function() {
                     const idCell = $('<td></td>').text(item.approval_doc_id);
                     const midApproverCell = $('<td></td>').text(item.appr_midapprover);
                     const finalApproverCell = $('<td></td>').text(item.appr_finalapprover);
-                    const mngr_updt = $('<td></td>').text(item.appr_mngr_updt);
+                    const mngr_updtCell = $('<td></td>').text(item.appr_mngr_updt);
                     const stateCell = $('<td></td>').text(item.approval_doc__state);
-                   
-                    
+
                     const buttonCell = $('<td></td>').append($('<button>', {
                         class: 'btn btn-primary',
                         text: '결재',
                         click: function() {
-                            approveDocument(item.approval_doc_idx);
+                            approveDocument(item.approval_doc_path);
                         }
                     }));
 
                     // 행에 각 셀 추가
-                    row.append(checkboxCell, writeDateCell, titleCell, idCell, midApproverCell, finalApproverCell, mngr_updt, stateCell, buttonCell);
+                    row.append(checkboxCell, writeDateCell, titleCell, idCell, midApproverCell, finalApproverCell, mngr_updtCell, stateCell, buttonCell);
 
                     // 테이블에 행 추가
                     $('#approvalDataBody').append(row);
@@ -354,6 +353,12 @@ $(document).ready(function() {
                 console.error('데이터를 가져오는 중 오류 발생:', error);
             }
         });
+    }
+
+    // 결재 처리 함수
+    function approveDocument(docPath) {
+        // HTML 파일을 새로운 창에서 열기
+        window.open(docPath, '_blank');
     }
 
     // 페이지 로드 시 데이터 가져오기

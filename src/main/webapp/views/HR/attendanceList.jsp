@@ -476,7 +476,7 @@
                     <label class="input-group-text" for="detail-reason">수정 신청 사유</label>
                     <textarea class="form-control" id="ddetail-reason" name="att_reason" rows="3" style="height: 245px; resize: none;"readonly></textarea>
                 </div>
-                <div class="input-group mb-3">
+                <div class="input-group mb-3" id="attApproval" style="display: none;">
                     <label class="input-group-text" for="detail-reason">수정 승인 여부</label>
                     <select class="form-select" id="ddetail-approval">
 		    			<option value="">승인 여부</option>
@@ -484,7 +484,7 @@
   						<option value="false">거부</option>
                    </select>
                 </div>
-                <div class="input-group mb-3" id="ddetail-reject-reason" style="display: none;">
+                <div class="input-group mb-3" id="ddetail-reject-reason" >
                     <label class="input-group-text" for="detail-rejection-reason">수정 거부 사유</label>
                     <input type="text" class="form-control" id="ddetail-rejection-reason" placeholder="수정 거부 사유를 입력해주세요." name="rejection_reason">
                 </div>
@@ -504,7 +504,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="edit-maintenance-btn" onclick="attEdit()">등록</button>
+                <button type="button" class="btn btn-primary" id="edit-att-btn" onclick="attEdit()">등록</button>
             </div>
         </div>
     </div>
@@ -962,14 +962,35 @@ $(document).ready(function(){
             $('#ddetail-after-att').val(data.att.att_modify_attresult);
             $('#ddetail-reason').val(data.att.att_reason);
             
+          
+            
+            
+            
             const rejectionReason = data.att.att_modify_reject != null ? data.att.att_modify_reject : '';
             const handler = data.att.att_modifier != 0 ? data.att.att_modifier : '${sessionScope.loginId}';
             const processDate = data.att.att_modify_date ? formattedDate : today;
+            
+            
           
          
             $('#ddetail-rejection-reason').val(rejectionReason);
             $('#ddetail-handler').val(handler);
             $('#ddetail-process-date').val(processDate);
+            
+            console.log(data.att.att_apply_status);
+            
+            
+            if (data.att.att_modifier == '0') {
+                // 수정자 정보가 0이면 처리 전
+                $('#attApproval').show();
+                
+                $('#edit-att-btn').show();
+            } else {
+                // 이미 처리된 경우
+                $('#attApproval').hide();
+                $('#ddetail-rejection-reason').prop('readonly', true);
+                $('#edit-att-btn').hide();
+            }
           
             $('#attApplyModal').modal('show');
         }); 
@@ -993,14 +1014,15 @@ $(document).ready(function(){
     }
     
     
-    $('#ddetail-approval').change(function() {
-        var approvalStatus = $(this).val();
-        if (approvalStatus == 'false') {
-            // 거부일 경우 수정 거부 사유 입력 필드를 활성화
-            $('#ddetail-reject-reason').show();
+    $('#ddetail-approval').on('change', function() {
+        var approval = document.getElementById('ddetail-approval').value;
+        var isApproved = (approval === 'true');
+        var rejectionReasonInput = document.getElementById('ddetail-rejection-reason');
+
+        if (!isApproved && approval !== "") {
+            rejectionReasonInput.disabled = false;
         } else {
-            // 승인일 경우 수정 거부 사유 입력 필드를 비활성화
-            $('#ddetail-reject-reason').hide();
+            rejectionReasonInput.disabled = true;
         }
     });
     
@@ -1033,11 +1055,11 @@ $(document).ready(function(){
     	        dataType: "json",
     			success: function(data) {
     				if (data.isSuccess) {
-    					$('#scheduleDetailModal').modal('hide');
+    					$('#attApplyModal').modal('hide');
                         showAlert('success', '근태 수정 거부가 완료되었습니다.');
                        
                     } else {
-                    	$('#scheduleDetailModal').modal('hide');
+                    	$('#attApplyModal').modal('hide');
                         showAlert('danger', '근태 수정 거부에 실패했습니다.');
                     }  
     	        },
@@ -1062,11 +1084,11 @@ $(document).ready(function(){
     	        dataType: "json",
     			success: function(data) {
     				if (data.isSuccess) {
-    					$('#scheduleDetailModal').modal('hide');
+    					$('#attApplyModal').modal('hide');
                         showAlert('success', '근태 수정 승인이 완료되었습니다.');
                        
                     } else {
-                    	$('#scheduleDetailModal').modal('hide');
+                    	$('#attApplyModal').modal('hide');
                         showAlert('danger', '근태 수정 승인에 실패했습니다.');
                     }  
     	        },

@@ -251,7 +251,41 @@
     	WHERE 
         am.att_management_idx = #{att_management_idx}
 	</update>
-
+	
+	
+	
+    <update id="checkAtt">
+    	UPDATE attendance 
+        SET att_result = 
+        <set>
+            <if test="att_time &gt;= '09:01:00'">
+                att_result = '지각',
+            </if>
+            <if test="att_time &lt; '09:01:00' and leave_time != null">
+                att_result = '근무',
+            </if>
+            <if test="att_time &lt; '09:01:00' and leave_time == null">
+                att_result = '무단 조퇴',
+            </if>
+        </set>
+    	WHERE work_day = CURRENT_DATE
+        AND att_result IS NULL
+        AND emp_no IN (
+            SELECT emp_no 
+            FROM employee 
+            WHERE emp_employment_status = true)
+    </update>
+        
+    
+    
+    <insert id="insertAtt">
+        INSERT INTO attendance (emp_no, att_time, leave_time, att_result, work_day)
+        SELECT e.emp_no, NULL, NULL, '결근', CURRENT_DATE
+        FROM employee e
+        LEFT JOIN attendance a ON e.emp_no = a.emp_no AND a.work_day = CURRENT_DATE
+        WHERE a.emp_no IS NULL
+        AND e.emp_employment_status = true
+    </insert>
 	
 
 </mapper>

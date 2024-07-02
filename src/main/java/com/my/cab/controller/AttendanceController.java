@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -164,6 +165,10 @@ public Map<String, Object> getEditTotalPages(SearchDTO searchDTO){
 		return Map.of("isSuccess", isSuccess);
 	}
 	
+	@Scheduled(cron = "0 5 18 * * MON-FRI", zone = "Asia/Seoul")
+	public void checkAtt() {
+		attService.checkAtt();
+	}
 	
 	
 	

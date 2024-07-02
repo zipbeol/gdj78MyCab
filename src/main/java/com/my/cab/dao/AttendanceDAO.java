@@ -38,4 +38,8 @@ public interface AttendanceDAO {
 
 	boolean approvalPermit(AttendanceDTO attDTO);
 
+	void checkAtt();
+
+	void insertAtt();
+
 }

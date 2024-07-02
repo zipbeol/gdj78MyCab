@@ -43,12 +43,17 @@ public class AttendanceService {
 		
 		Timestamp startTime =  dto.getAtt_time();
 		Timestamp endTime =  dto.getLeave_time();
-		String sTime = setTimea(startTime);
-		String eTime = setTimea(endTime);
-		logger.info("시간변환 "+sTime);
-		logger.info("시간변환 "+eTime);
-		map.put("sTime", sTime);
-		map.put("eTime", eTime);
+		if (startTime != null) {
+	        String sTime = setTimea(startTime);
+	        map.put("sTime", sTime);
+	        logger.info("시간변환 " + sTime);
+	    }
+
+	    if (endTime != null) {
+	        String eTime = setTimea(endTime);
+	        map.put("eTime", eTime);
+	        logger.info("시간변환 " + eTime);
+	    }
 		return map;
 	}
 	
@@ -175,6 +180,12 @@ public class AttendanceService {
 		
 		
 		return result;
+	}
+
+	public void checkAtt() {
+		
+		attDAO.checkAtt();
+		attDAO.insertAtt();
 	}
 
 	

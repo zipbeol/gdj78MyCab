@@ -9,7 +9,7 @@ import org.apache.ibatis.type.Alias;
 @Alias("att")
 public class AttendanceDTO {
 	
-	private String attendance_idx;
+	private int attendance_idx;
 	private int emp_no;
 	private Timestamp  att_time;
 	private Timestamp leave_time;
@@ -26,11 +26,54 @@ public class AttendanceDTO {
 	private boolean att_apply_status;
 	private String emp_name;
 	private String att_previous_attresult;
+	private int att_management_idx;
+	private String title_name;
+	private String dept_name;
+	private int absentCount;
+    private int lateCount;
+    private int leaveCount;
 	
-	public String getAttendance_idx() {
+	
+	public int getAbsentCount() {
+		return absentCount;
+	}
+	public void setAbsentCount(int absentCount) {
+		this.absentCount = absentCount;
+	}
+	public int getLateCount() {
+		return lateCount;
+	}
+	public void setLateCount(int lateCount) {
+		this.lateCount = lateCount;
+	}
+	public int getLeaveCount() {
+		return leaveCount;
+	}
+	public void setLeaveCount(int leaveCount) {
+		this.leaveCount = leaveCount;
+	}
+	public String getTitle_name() {
+		return title_name;
+	}
+	public void setTitle_name(String title_name) {
+		this.title_name = title_name;
+	}
+	public String getDept_name() {
+		return dept_name;
+	}
+	public void setDept_name(String dept_name) {
+		this.dept_name = dept_name;
+	}
+	public int getAtt_management_idx() {
+		return att_management_idx;
+	}
+	public void setAtt_management_idx(int att_management_idx) {
+		this.att_management_idx = att_management_idx;
+	}
+	public int getAttendance_idx() {
 		return attendance_idx;
 	}
-	public void setAttendance_idx(String attendance_idx) {
+	public void setAttendance_idx(int attendance_idx) {
 		this.attendance_idx = attendance_idx;
 	}
 	public int getEmp_no() {

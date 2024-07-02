@@ -8,7 +8,7 @@ import org.apache.ibatis.type.Alias;
 public class ApprovalDocDTO {
 	
     private int approval_doc_idx; // 결재번호
-    private String approval_doc_id;
+    private String approval_doc_id; // 기안자 ID
     private String approval_doc_title; // 제목
     private String approval_doc_write_date; // 작성일
     private String approval_doc_assist_user; // 참조자

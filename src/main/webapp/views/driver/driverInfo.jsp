@@ -475,6 +475,50 @@
     </div>
 </div>
 
+<!-- 사고 이력 상세보기 모달 -->
+<div class="modal fade" id="accidentDetailModal" tabindex="-1" aria-labelledby="accidentDetailModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="accidentDetailModalLabel">사고 이력 상세보기</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- 사고 이력 상세 정보 -->
+                <div class="row mb-3">
+                    <div class="col-3"><strong>사고 날짜:</strong></div>
+                    <div class="col-9" id="accident-detail-date"></div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-3"><strong>사고 장소:</strong></div>
+                    <div class="col-9" id="accident-detail-location"></div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-3"><strong>사고 내용:</strong></div>
+                    <div class="col-9" id="accident-detail-description"></div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-3"><strong>사고 기사:</strong></div>
+                    <div class="col-9" id="accident-detail-driver"></div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-3"><strong>과실 여부:</strong></div>
+                    <div class="col-9" id="accident-detail-fault"></div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-3"><strong>택시 번호판:</strong></div>
+                    <div class="col-9" id="accident-detail-license-plate"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                <button type="button" class="btn btn-primary" id="edit-accident-btn">수정</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 <!-- *************
         ************ JavaScript Files *************
@@ -526,7 +570,27 @@
     getTotalPages();
     getList();
 
-
+    $(document).on('click', '.accident-list-tbody-tr', function () {
+        var id = $(this).attr('id');
+        $.ajax({
+            url: '/accident/detail.ajax',
+            type: 'GET',
+            data: {'accidentIdx': id},
+            dataType: 'JSON',
+            success: function (data) {
+                $('#accident-detail-date').text(data.info.accident_history_accident_date);
+                $('#accident-detail-location').text(data.info.accident_history_location);
+                $('#accident-detail-description').text(data.info.accident_history_description);
+                $('#accident-detail-driver').text(data.info.accident_history_driver_name);
+                $('#accident-detail-fault').text(data.info.accident_history_is_at_fault ? '과실 있음' : '과실 없음');
+                $('#accident-detail-license-plate').text(data.info.accident_history_taxi_license_plate);
+                $('#accidentDetailModal').modal('show');
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    });
     // 테이블 헤더 클릭 이벤트 설정
     $('th.sortable').click(function () {
         sortColumn = $(this).data('value');
@@ -973,7 +1037,7 @@
         var content = '';
         if (list) {
             for (item of list) {
-                content += '<tr class="maintenance-list-tbody-tr" id="' + item.accident_history_idx + '">'
+                content += '<tr class="accident-list-tbody-tr" id="' + item.accident_history_idx + '">'
                     + '<td class="">' + item.accident_history_taxi_license_plate + '</td>'
                     + '<td class="">' + item.accident_history_accident_date + '</td>'
                     + '<td class="">' + item.accident_history_location + '</td>'

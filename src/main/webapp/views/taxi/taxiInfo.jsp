@@ -568,7 +568,8 @@
 <!-- 정비 이력 등록 모달 끝 -->
 
 <!-- 정비 이력 상세보기 모달 -->
-<div class="modal fade" id="maintenanceDetailModal" tabindex="-1" aria-labelledby="maintenanceDetailModalLabel" aria-hidden="true">
+<div class="modal fade" id="maintenanceDetailModal" tabindex="-1" aria-labelledby="maintenanceDetailModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -597,6 +598,10 @@
                     <div class="col-3"><strong>택시 번호판:</strong></div>
                     <div class="col-9" id="maintenance-detail-license-plate"></div>
                 </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                <button type="button" class="btn btn-primary" id="edit-maintenance-btn">수정</button>
             </div>
         </div>
     </div>
@@ -638,6 +643,10 @@
                     <div class="col-3"><strong>택시 번호판:</strong></div>
                     <div class="col-9" id="accident-detail-license-plate"></div>
                 </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                <button type="button" class="btn btn-primary" id="edit-accident-btn">수정</button>
             </div>
         </div>
     </div>

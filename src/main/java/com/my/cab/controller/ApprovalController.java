@@ -1,5 +1,6 @@
 package com.my.cab.controller;
 
+import java.io.Console;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.sql.Date;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -78,7 +80,9 @@ public class ApprovalController {
 	        String fileName = "approval_file_" + timeStamp + ".html"; // session 에 저장 되는 loginId 이용하여 변경
 	        String filePath = UPLOAD_DIR + File.separator + fileName; // 저장 경로 수정
 	        
-	        String drafterId = (String) session.getAttribute("userId");
+	        String drafterId = (String)session.getAttribute("loginId");
+	        logger.info("아이디 추가 확인 : "+drafterId);
+	        
 	        
 	        // HTML 파일 저장
 	        File htmlFile = new File(filePath);

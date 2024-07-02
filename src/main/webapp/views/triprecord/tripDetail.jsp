@@ -223,38 +223,6 @@
     };
     var naviMap = new kakao.maps.Map(naviMapContainer, naviMapOption);
 
-    // 길찾기 API 호출
-    var directionsService = new kakao.maps.services.Places();
-
-    var callback = function(result, status) {
-        if (status === kakao.maps.services.Status.OK) {
-            var path = [];
-            var route = result.routes[0];
-            for (var i = 0; i < route.sections.length; i++) {
-                var section = route.sections[i];
-                for (var j = 0; j < section.roads.length; j++) {
-                    var road = section.roads[j];
-                    for (var k = 0; k < road.vertexes.length; k+=2) {
-                        path.push(new kakao.maps.LatLng(road.vertexes[k+1], road.vertexes[k]));
-                    }
-                }
-            }
-            var polyline = new kakao.maps.Polyline({
-                path: path,
-                strokeWeight: 5,
-                strokeColor: '#0000FF',
-                strokeOpacity: 0.7,
-                strokeStyle: 'solid'
-            });
-            polyline.setMap(naviMap); // 네비게이션 경로 지도에 표시
-        }
-    };
-
-    directionsService.route({
-        origin: new kakao.maps.LatLng(startLocation.lat, startLocation.lng),
-        destination: new kakao.maps.LatLng(endLocation.lat, endLocation.lng),
-        waypoints: []
-    }, callback);
 </script>
 
 </html>

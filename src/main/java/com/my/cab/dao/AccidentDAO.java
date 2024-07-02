@@ -19,4 +19,8 @@ public interface AccidentDAO {
     boolean createAccidentHistory(AccidentDTO accidentDTO);
 
     String getDriverFirstAccidentDate(String driverIdx);
+
+    AccidentDTO getAccidentDetail(String accidentIdx);
+
+    boolean updateAccidentHistory(AccidentDTO accidentDTO);
 }

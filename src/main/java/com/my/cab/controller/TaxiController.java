@@ -94,4 +94,29 @@ public class TaxiController {
     public Map<String, Object> searchedList(SearchDTO searchDTO) {
         return Map.of("list", taxiService.getSearchedList(searchDTO));
     }
+
+    @GetMapping("/scrapInfo.ajax")
+    @ResponseBody
+    public Map<String, Object> scrapInfo(SearchDTO searchDTO) {
+        return taxiService.getScrapInfoAndResult(searchDTO);
+
+    }
+
+    @PostMapping("/scrapRegister.ajax")
+    @ResponseBody
+    public Map<String, Object> scrapRegister(TaxiDTO taxiDTO) {
+        return Map.of("result", taxiService.scrapRegister(taxiDTO));
+    }
+
+    @PostMapping("/scrapUpdate.ajax")
+    @ResponseBody
+    public Map<String, Object> scrapUpdate(TaxiDTO taxiDTO) {
+        return Map.of("result", taxiService.scrapUpdate(taxiDTO));
+    }
+    
+    @PostMapping("/scrapDelete.ajax")
+    @ResponseBody
+    public Map<String, Object> scrapDelete(TaxiDTO taxiDTO) {
+        return Map.of("result", taxiService.scrapDelete(taxiDTO));
+    }
 }

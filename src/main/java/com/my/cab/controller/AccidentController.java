@@ -51,8 +51,21 @@ public class AccidentController {
 
     @PostMapping("/create.ajax")
     @ResponseBody
-    public Map<String, Object> createAccidentHistory(AccidentDTO accidentDTO){
+    public Map<String, Object> createAccidentHistory(AccidentDTO accidentDTO) {
 
         return accidentService.createAccidentHistory(accidentDTO);
+    }
+
+    @GetMapping("/detail.ajax")
+    @ResponseBody
+    public Map<String, Object> getAccidentDetail(String accidentIdx) {
+        return Map.of("info", accidentService.getAccidentDetail(accidentIdx));
+    }
+
+    @PostMapping("/update.ajax")
+    @ResponseBody
+    public Map<String, Object> updateAccident(AccidentDTO accidentDTO) {
+        logger.info("updateAccident: {}", accidentDTO.isAccident_history_is_at_fault());
+        return Map.of("result", accidentService.updateAccidentHistory(accidentDTO));
     }
 }

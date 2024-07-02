@@ -42,4 +42,12 @@ public class MaintenanceService {
 		int totalCount = maintenanceDAO.getMaintenanceCount(searchDTO);
 		return PageCalc.calculateTotalPages(totalCount, PAGE_SIZE);
 	}
+
+    public MaintenanceDTO getMaintenanceDetail(String maintenanceIdx) {
+		return maintenanceDAO.getMaintenanceDetail(maintenanceIdx);
+    }
+
+	public boolean updateMaintenance(MaintenanceDTO maintenanceDTO) {
+		return maintenanceDAO.updateMaintenance(maintenanceDTO);
+	}
 }

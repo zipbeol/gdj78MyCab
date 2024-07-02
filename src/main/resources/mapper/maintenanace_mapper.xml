@@ -1,7 +1,6 @@
 <!-- <?xml version="1.0" encoding="UTF-8"?> -->
 <!DOCTYPE mapper PUBLIC    "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
-        >
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.my.cab.dao.MaintenanceDAO">
 
@@ -103,5 +102,37 @@
         ORDER BY accident_history_accident_date ASC
         LIMIT 1
     </select>
+
+    <select id="getMaintenanceDetail" resultType="maintenance">
+        SELECT maintenance_history_idx,
+               (SELECT t.taxi_license_plate
+                FROM taxi t
+                WHERE t.taxi_idx = m.maintenance_history_taxi_idx) AS maintenance_taxi_license_plate,
+               maintenance_history_date,
+               maintenance_history_description,
+               maintenance_history_cost,
+               maintenance_history_workshop_name
+        FROM maintenance_history m
+        WHERE maintenance_history_idx = #{param1}
+    </select>
+
+    <update id="updateMaintenance" parameterType="maintenance">
+        UPDATE maintenance_history
+        <set>
+            <if test="maintenance_history_date != null and maintenance_history_date != ''">
+                maintenance_history_date = #{maintenance_history_date},
+            </if>
+            <if test="maintenance_history_cost != null and maintenance_history_cost != ''">
+                maintenance_history_cost = #{maintenance_history_cost},
+            </if>
+            <if test="maintenance_history_workshop_name != null and maintenance_history_workshop_name != ''">
+                maintenance_history_workshop_name = #{maintenance_history_workshop_name},
+            </if>
+            <if test="maintenance_history_description != null and maintenance_history_description != ''">
+                maintenance_history_description = #{maintenance_history_description},
+            </if>
+        </set>
+        WHERE maintenance_history_idx = #{maintenance_history_idx}
+    </update>
 
 </mapper>

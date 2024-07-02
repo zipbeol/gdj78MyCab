@@ -16,4 +16,8 @@ public interface MaintenanceDAO {
     String getMaintenanceFirstDate(String taxiIdx);
 
     int getMaintenanceCount(SearchDTO searchDTO);
+
+    MaintenanceDTO getMaintenanceDetail(String maintenanceIdx);
+
+    boolean updateMaintenance(MaintenanceDTO maintenanceDTO);
 }

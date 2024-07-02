@@ -134,4 +134,40 @@
         LIMIT 1;
     </select>
 
+    <select id="getAccidentDetail" resultType="accident">
+        SELECT accident_history_idx,
+               (SELECT t.taxi_license_plate
+                FROM taxi t
+                WHERE t.taxi_idx = a.accident_history_taxi_idx)    AS accident_history_taxi_license_plate,
+               (SELECT d.driver_name
+                FROM driver d
+                WHERE d.driver_idx = a.accident_history_driver_id) AS accident_history_driver_name,
+               accident_history_accident_date,
+               accident_history_description,
+               accident_history_location,
+               accident_history_is_at_fault
+        FROM accident_history a
+        WHERE accident_history_idx = ${param1}
+    </select>
+
+    <update id="updateAccidentHistory" parameterType="accident">
+        UPDATE accident_history
+        <set>
+            <if test="accident_history_accident_date != null and accident_history_accident_date != ''">
+                accident_history_accident_date = #{accident_history_accident_date},
+            </if>
+            <if test="accident_history_location != null and accident_history_location != ''">
+                accident_history_location = #{accident_history_location},
+            </if>
+            <if test="accident_history_description != null and accident_history_description != ''">
+                accident_history_description = #{accident_history_description},
+            </if>
+            <if test="accident_history_is_at_fault != null">
+                accident_history_is_at_fault = #{accident_history_is_at_fault},
+            </if>
+        </set>
+        WHERE accident_history_idx = #{accident_history_idx}
+    </update>
+
+
 </mapper>

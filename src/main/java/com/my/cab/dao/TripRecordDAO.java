@@ -1,5 +1,6 @@
 package com.my.cab.dao;
 
+import com.my.cab.dto.CoordinateDTO;
 import com.my.cab.dto.SearchDTO;
 import com.my.cab.dto.TripRecordDTO;
 import org.apache.ibatis.annotations.Mapper;
@@ -18,4 +19,8 @@ public interface TripRecordDAO {
     List<TripRecordDTO> getTripList(SearchDTO searchDTO);
 
     int getTripRecordCount(SearchDTO searchDTO);
+
+    TripRecordDTO getTripInfo(String tripRecordIdx);
+
+    List<CoordinateDTO> getTripLocationData(String tripRecordIdx);
 }

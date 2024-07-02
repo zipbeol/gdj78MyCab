@@ -4,8 +4,8 @@
         >
 
 <mapper namespace="com.my.cab.dao.TripRecordDAO">
-    <insert id="insertTripRecord" parameterType="tripRecord" keyProperty="trip_record_idx, trip_record_date"
-            keyColumn="trip_record_idx, trip_record_date" useGeneratedKeys="true">
+    <insert id="insertTripRecord" parameterType="tripRecord" keyProperty="trip_record_idx"
+            keyColumn="trip_record_idx" useGeneratedKeys="true">
         INSERT INTO trip_record(trip_record_taxi_idx, trip_record_driver_id, trip_record_start_location,
                                 trip_record_end_location, trip_record_distance, trip_record_fare)
         VALUES (#{trip_record_taxi_idx}, #{trip_record_driver_id}, #{trip_record_start_location},
@@ -124,5 +124,29 @@
                 AND tr.trip_record_fare &lt;= #{filterMaxFare}
             </if>
         </where>
+    </select>
+
+    <select id="getTripInfo" resultType="tripRecord">
+        select trip_record_idx,
+               (SELECT t.taxi_license_plate
+                FROM taxi t
+                WHERE t.taxi_idx = tr.trip_record_taxi_idx)    AS trip_license_plate,
+               (SELECT driver_name
+                FROM driver d
+                WHERE d.driver_idx = tr.trip_record_driver_id) AS trip_record_driver_name,
+               trip_record_date,
+               trip_record_start_location,
+               trip_record_end_location,
+               trip_record_distance,
+               trip_record_fare
+        FROM trip_record tr
+        WHERE trip_record_idx = #{param1}
+    </select>
+
+    <select id="getTripLocationData" resultType="coordinate">
+        SELECT trip_record_latitude AS latitude, trip_record_longitude AS longitude
+        FROM trip_record_detail
+        WHERE trip_record_idx = #{param1}
+        ORDER BY trip_record_detail_idx
     </select>
 </mapper>

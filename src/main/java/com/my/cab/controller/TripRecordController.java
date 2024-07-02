@@ -50,10 +50,17 @@ public class TripRecordController {
     public Map<String, Object> listTripRecord(SearchDTO searchDTO) {
         return tripRecordService.listTripRecord(searchDTO);
     }
+
     @GetMapping("/getTotalPages.ajax")
     @ResponseBody
     public Map<String, Object> totalPageTripRecord(SearchDTO searchDTO) {
         return tripRecordService.totalPageTripRecord(searchDTO);
     }
 
+    @RequestMapping("/detail.go")
+    public String detail(Model model, TripRecordDTO tripRecordDTO) {
+        model.addAttribute("info", tripRecordService.getTripInfo(tripRecordDTO.getTrip_record_idx()));
+        model.addAttribute("tripLocationData", tripRecordService.getTripLocationData(tripRecordDTO.getTrip_record_idx()));
+        return "triprecord/tripDetail";
+    }
 }

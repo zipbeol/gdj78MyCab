@@ -1,10 +1,7 @@
 package com.my.cab.service;
 
 import com.my.cab.dao.TripRecordDAO;
-import com.my.cab.dto.FinanceDTO;
-import com.my.cab.dto.SearchDTO;
-import com.my.cab.dto.TaxiDTO;
-import com.my.cab.dto.TripRecordDTO;
+import com.my.cab.dto.*;
 import com.my.cab.util.PageCalc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,5 +63,13 @@ public class TripRecordService {
     public Map<String, Object> totalPageTripRecord(SearchDTO searchDTO) {
         int totalCount = tripRecordDAO.getTripRecordCount(searchDTO);
         return Map.of("totalCount", PageCalc.calculateTotalPages(totalCount, PAGE_SIZE));
+    }
+
+    public TripRecordDTO getTripInfo(String tripRecordIdx) {
+        return tripRecordDAO.getTripInfo(tripRecordIdx);
+    }
+
+    public List<CoordinateDTO> getTripLocationData(String tripRecordIdx) {
+        return tripRecordDAO.getTripLocationData(tripRecordIdx);
     }
 }

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.my.cab.dao.CalendarDAO;
 import com.my.cab.dto.CalendarDTO;
+import com.my.cab.dto.EmpDTO;
 
 @Service
 public class CalendarService {
@@ -137,5 +138,71 @@ public class CalendarService {
 		}
 		return map;
 	}
+
+	public List<EmpDTO> getEmpInfo() {
+		
+		return calendarDao.getEmpInfo();
+	}
+
+	public List<String> getDeptInfo() {
+		
+		return calendarDao.getDeptInfo();
+	}
+
+	public Map<String, Object> createShareCalendar(Map<String, Object> shareCalInfo) {
+		//값 꺼내오기
+		String shareTitle = (String) shareCalInfo.get("shareTitle");
+		int id = Integer.parseInt((String) shareCalInfo.get("loginId"));
+		String shareColor = (String) shareCalInfo.get("shareColor");
+		CalendarDTO dto = new CalendarDTO();
+		// dto 에 값 저장
+		dto.setCalendar_emp_no(id);
+		dto.setCalendar_name(shareTitle);
+		dto.setCalendar_category("일정공유");
+		dto.setCalendar_color(shareColor);
+		logger.info("gasdgdsagsadg"+id);
+		// 캘린더 생성후 공유일정에 추가를위한 cal_idx 받아오기
+		calendarDao.createShareCalendar(dto);
+		int idx = dto.getCalendar_idx();
+		logger.info("생성하고 만들어진 idx : "+ idx);
+		List<Map<String, Object>> list = (List<Map<String, Object>>) shareCalInfo.get("empList");
+		for (Map<String, Object> map : list) {
+
+			logger.info("list 에서 꺼낸거"+map.get("empNo"));
+		}
+		// 일정공유 테이블에 idx ,emp no 넣기
+		int row = calendarDao.createSharedSchedule(idx,list);
+		logger.info("일정공유 테이블에 값 넣었지롱" + row);
+		return null;
+	}
+
+	public List<CalendarDTO> getShareCalInfo(String loginId) {
+		
+		return calendarDao.getShareCalInfo(loginId);
+	}
+
+	public Map<String, Object> createShareSchedule(CalendarDTO calendarDTO) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		LocalDateTime dateTime = calendarDTO.getSchedule_end_date();
+		logger.info("create-datetime" + dateTime.getHour() + "//" + dateTime.getMinute() + "" + dateTime.getSecond());
+		// 하루종일 일정 시간 수정
+		if (dateTime.getHour() == 0 & dateTime.getMinute() == 0) {
+
+			dateTime = dateTime.withSecond(1);
+			calendarDTO.setSchedule_end_date(dateTime);
+
+		}
+
+		int row = calendarDao.createShareSchedule(calendarDTO);
+		map.put("success", row);
+		
+		return null;
+	}
+
+	public List<Map<String, Object>> shareCalListCall(String schedule_editor) {
+		List<Map<String, Object>> shareCalList = calendarDao.shareCalListCall(schedule_editor);
+		return shareCalList;
+	}
+
 
 }

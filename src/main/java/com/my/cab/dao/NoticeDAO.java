@@ -17,7 +17,8 @@ public interface NoticeDAO {
 	void insertNotice(NoticeDTO noticeDTO);
 
 
-	void insertAttachment(int noticeIdx, String fileName, String fileUrl);
+
+	void insertAttachment(NoticeDTO noticeDTO);
 
 
 

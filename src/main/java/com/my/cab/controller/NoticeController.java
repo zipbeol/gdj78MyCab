@@ -64,11 +64,16 @@ public class NoticeController {
 		logger.info("DTO" + noticeDTO.getNotice_content());
 		logger.info("DTO" + noticeDTO.getNotice_imp());
 		
-        int noticeIdx = noticeService.registerNotice(noticeDTO); // 공지사항 등록
+        int row = noticeService.registerNotice(noticeDTO); // 공지사항 등록
         for (MultipartFile file : files) {
 			logger.info("fileName:{}", file.getOriginalFilename());			
 			if (!file.isEmpty()) {
-				noticeService.uploadAttachment(noticeIdx, file); // 첨부 파일 업로드
+				noticeService.uploadAttachment(noticeDTO, file); // 첨부 파일 업로드
+				try {
+					Thread.sleep(1);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
         return "redirect:/notice/register"; // 등록 후 페이지 리다이렉트

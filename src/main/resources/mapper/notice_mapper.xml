@@ -6,9 +6,10 @@
 <mapper namespace="com.my.cab.dao.NoticeDAO">
 
 	<!-- 공지사항 등록 쿼리 -->
-    <insert id="insertNotice" parameterType="notice">
+    <insert id="insertNotice" parameterType="notice"
+		useGeneratedKeys="true" keyColumn="notice_idx" keyProperty="notice_idx">
         INSERT INTO notice (notice_writer, notice_field, notice_imp, notice_stat, notice_title, notice_content)
-        VALUES (#{notice_writer}, #{notice_field}, #{notice_imp}, #{notice_stat}, #{notice_title}, #{notice_content})
+        VALUES (30002, #{notice_field}, #{notice_imp}, '공개', #{notice_title}, #{notice_content})
     </insert>
 
     <!-- 첨부 파일 등록 쿼리 -->

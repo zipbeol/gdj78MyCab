@@ -11,6 +11,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +29,9 @@ public class NoticeService {
 
 	private static final int PAGE_SIZE = 10;
 	
+    @Value("${spring.servlet.multipart.location}")
+    private String uploadDir;
+    
 	@Autowired
 	NoticeDAO noticeDAO;
 	
@@ -51,16 +55,21 @@ public class NoticeService {
         return noticeDTO.getNotice_idx(); // 등록된 공지사항의 notice_idx 반환
     }
 	
-	@Transactional
-    public void uploadAttachment(int noticeIdx, MultipartFile file) throws IOException {
+    public void uploadAttachment(NoticeDTO noticeDTO, MultipartFile file) throws IOException {
+
+    	// 이름 바꾸는거
+    	 String uploadFileName = "notice_" + noticeDTO.getNotice_idx()+"_"+System.currentTimeMillis()
+                 + file.getOriginalFilename()
+                 .substring(file.getOriginalFilename()
+                         .lastIndexOf("."));
         // 첨부 파일 업로드
         if (!file.isEmpty()) {
-            String uploadDir = "/path/to/upload/directory"; // 파일 업로드 디렉토리 경로
-            Path filePath = Paths.get(uploadDir, file.getOriginalFilename());
-            Files.copy(file.getInputStream(), filePath);
-            String fileName = file.getOriginalFilename();
-            String fileUrl = filePath.toString();
-            noticeDAO.insertAttachment(noticeIdx, fileName, fileUrl);
+        	byte[] bytes = file.getBytes();
+            Path filePath = Paths.get(uploadDir+"/"+uploadFileName);
+            Files.write(filePath, bytes);
+            noticeDTO.setNotice_file_name(file.getOriginalFilename());
+            noticeDTO.setNotice_attach_file(filePath.toString());
+            noticeDAO.insertAttachment(noticeDTO);
         }
     }
 

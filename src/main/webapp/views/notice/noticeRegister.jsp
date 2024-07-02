@@ -20,7 +20,7 @@
 <meta property="og:type" content="Website">
 <meta property="og:site_name" content="Bootstrap Gallery">
 <link rel="shortcut icon" href="/assets/images/favicon.svg">
-<script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/34.1.0/classic/ckeditor.js"></script>
 
 <!-- CSS Files -->
 <link rel="stylesheet"
@@ -189,7 +189,7 @@ td:hover {
 							                <!-- 파일 첨부 -->
 							                <div class="form-group">
 							                    <label for="fileAttachment" class="form-label">파일 첨부</label>
-							                    <input type="file" id="fileAttachment" name="fileAttachment" class="form-control">
+							                    <input type="file" id="fileAttachment" name="fileAttachment" class="form-control" multiple>
 							                </div>
 							
 							                <!-- 공지 내용 -->
@@ -256,32 +256,44 @@ td:hover {
     // CKEditor 초기화
 
 	ClassicEditor
-	    .create(document.querySelector('#noticeContent'), {
-	        toolbar: ['bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote'],
-	        language: 'kor',
-	        ckfinder: {
-	            uploadUrl: '/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files&responseType=json',
-	        }
-	    })
-	    .then(editor => {
-	    	editorInstence = editor;
-	        editor.ui.view.editable.element.style.height = '400px';  // 여기서 높이를 설정합니다.
-	        console.log('Editor was initialized', editor);
-	    })
-	    .catch(error => {
-	        console.error(error);
-	    });
+        .create(document.querySelector('#noticeContent'), {
+            toolbar: [
+                'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 
+                'imageUpload' // 이미지 업로드 버튼 추가
+            ],
+            language: 'ko',
+            ckfinder: {
+                uploadUrl: '/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&responseType=json',
+            },
+            image: {
+                toolbar: [
+                    'imageTextAlternative', 'imageStyle:full', 'imageStyle:side'
+                ]
+            }
+        })
+        .then(editor => {
+            editorInstence = editor;
+            editor.ui.view.editable.element.style.height = '400px';  // 여기서 높이를 설정합니다.
+            console.log('Editor was initialized', editor);
+        })
+        .catch(error => {
+            console.error(error);
+        });
 
 
  
 
     $(document).ready(function() {
+    	
         // 등록 버튼 클릭 시 등록 로직 실행
         $('#registerButton').click(function() {
             var formData = new FormData();
             formData.append('notice_title', $('#noticeTitle').val());
             formData.append('notice_field', $('#noticeTarget').val());
-            formData.append('fileAttachment', $('#fileAttachment')[0].files[0]);
+            var files = $('#fileAttachment')[0].files;
+            for (var i = 0; i < files.length; i++) {
+                formData.append('fileAttachment', files[i]);
+            }
             formData.append('notice_content', editorInstence.getData());
             formData.append('notice_imp', $('#importantCheckbox').prop('checked'));
             

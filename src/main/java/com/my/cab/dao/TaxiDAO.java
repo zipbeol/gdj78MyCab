@@ -29,4 +29,8 @@ public interface TaxiDAO {
     int getTaxiCount(SearchDTO searchDTO);
 
     List<TaxiDTO> getSearchedList(SearchDTO searchDTO);
+
+    boolean scrapUpdate(TaxiDTO taxiDTO);
+
+    boolean scrapDelete(TaxiDTO taxiDTO);
 }

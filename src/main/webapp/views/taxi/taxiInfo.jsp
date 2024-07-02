@@ -96,7 +96,7 @@
             top: 0;
             left: 0;
             right: 0;
-            z-index: 1050;
+            z-index: 9999; /* Set a high z-index value */
             margin: 0;
             padding: 10px;
             text-align: center;
@@ -268,6 +268,12 @@
                                                     <button class="nav-link" id="accident-tab" data-bs-toggle="tab"
                                                             data-bs-target="#accident" type="button" role="tab"
                                                             aria-controls="accident" aria-selected="false">사고 이력
+                                                    </button>
+                                                </li>
+                                                <li class="nav-item" role="presentation">
+                                                    <button class="nav-link" id="scrap-tab" data-bs-toggle="tab"
+                                                            data-bs-target="#scrap" type="button" role="tab"
+                                                            aria-controls="scrap" aria-selected="false">폐차 정보
                                                     </button>
                                                 </li>
                                             </ul>
@@ -484,6 +490,39 @@
                                                     </div>
                                                     <!-- 리스트 테이블 종료 -->
                                                 </div>
+                                                <div class="tab-pane fade" id="scrap" role="tabpanel"
+                                                     aria-labelledby="scrap-tab">
+                                                    <h2>폐차 정보</h2>
+                                                    <div class="row mb-3">
+                                                        <div class="col-3"><strong>폐차 날짜:</strong></div>
+                                                        <div class="col-9">
+                                                            <input type="text" class="form-control datepicker"
+                                                                   id="scrap-date" readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <div class="col-3"><strong>폐차 내용:</strong></div>
+                                                        <div class="col-9">
+                                                            <textarea class="form-control" id="scrap-description"
+                                                                      rows="3" placeholder="폐차가 아니거나 정보를 불러오는데 실패했습니다."
+                                                                      readonly></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <div class="col-12 text-end">
+                                                            <button class="btn btn-secondary" id="edit-scrap-btn"
+                                                                    style="display: none;">수정
+                                                            </button>
+                                                            <button class="btn btn-danger" id="delete-scrap-btn"
+                                                                    style="display: none;">삭제
+                                                            </button>
+                                                            <button class="btn btn-primary" id="register-scrap-btn"
+                                                                    style="display: none;">등록
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                             </div>
 
                                             <!-- 페이지 네이션 시작 -->
@@ -579,34 +618,48 @@
             <div class="modal-body">
                 <!-- 정비 이력 상세 정보 -->
                 <div class="row mb-3">
-                    <div class="col-3"><strong>정비일:</strong></div>
-                    <div class="col-9" id="maintenance-detail-date"></div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-3"><strong>정비소 이름:</strong></div>
-                    <div class="col-9" id="maintenance-detail-workshop"></div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-3"><strong>정비 내용:</strong></div>
-                    <div class="col-9" id="maintenance-detail-description"></div>
+                    <div class="col-3"><strong>정비 날짜:</strong></div>
+                    <div class="col-9">
+                        <input type="text" class="form-control datepicker" id="maintenance-detail-date" readonly>
+                    </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-3"><strong>정비 비용:</strong></div>
-                    <div class="col-9" id="maintenance-detail-cost"></div>
+                    <div class="col-9">
+                        <input type="text" class="form-control" id="maintenance-detail-cost" readonly>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-3"><strong>정비소 이름:</strong></div>
+                    <div class="col-9">
+                        <input type="text" class="form-control" id="maintenance-detail-workshop" readonly>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-3"><strong>정비 내용:</strong></div>
+                    <div class="col-9">
+                        <textarea class="form-control" id="maintenance-detail-description" rows="3" readonly></textarea>
+                    </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-3"><strong>택시 번호판:</strong></div>
-                    <div class="col-9" id="maintenance-detail-license-plate"></div>
+                    <div class="col-9">
+                        <input type="text" class="form-control" id="maintenance-detail-license-plate" readonly>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                 <button type="button" class="btn btn-primary" id="edit-maintenance-btn">수정</button>
+                <button type="button" class="btn btn-success" id="save-maintenance-detail-btn" style="display: none;">
+                    저장
+                </button>
+                <input type="hidden" id="maintenance-detail-id">
             </div>
         </div>
     </div>
 </div>
-
+<!-- 정비 이력 상세보기 모달 끝 -->
 
 <!-- 사고 이력 상세보기 모달 -->
 <div class="modal fade" id="accidentDetailModal" tabindex="-1" aria-labelledby="accidentDetailModalLabel"
@@ -621,32 +674,50 @@
                 <!-- 사고 이력 상세 정보 -->
                 <div class="row mb-3">
                     <div class="col-3"><strong>사고 날짜:</strong></div>
-                    <div class="col-9" id="accident-detail-date"></div>
+                    <div class="col-9">
+                        <input type="date" class="form-control" id="accident-detail-date" readonly>
+                    </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-3"><strong>사고 장소:</strong></div>
-                    <div class="col-9" id="accident-detail-location"></div>
+                    <div class="col-9">
+                        <input type="text" class="form-control" id="accident-detail-location" readonly>
+                    </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-3"><strong>사고 내용:</strong></div>
-                    <div class="col-9" id="accident-detail-description"></div>
+                    <div class="col-9">
+                        <textarea class="form-control" id="accident-detail-description" rows="3" readonly></textarea>
+                    </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-3"><strong>사고 기사:</strong></div>
-                    <div class="col-9" id="accident-detail-driver"></div>
+                    <div class="col-9">
+                        <input type="text" class="form-control" id="accident-detail-driver" readonly>
+                    </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-3"><strong>과실 여부:</strong></div>
-                    <div class="col-9" id="accident-detail-fault"></div>
+                    <div class="col-9">
+                        <select class="form-select" id="accident-detail-fault" disabled>
+                            <option value="true">과실 있음</option>
+                            <option value="false">과실 없음</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-3"><strong>택시 번호판:</strong></div>
-                    <div class="col-9" id="accident-detail-license-plate"></div>
+                    <div class="col-9">
+                        <input type="text" class="form-control" id="accident-detail-license-plate" readonly>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                 <button type="button" class="btn btn-primary" id="edit-accident-btn">수정</button>
+                <button type="button" class="btn btn-success" id="save-accident-detail-btn" style="display: none;">저장
+                </button>
+                <input type="hidden" id="accident-detail-id">
             </div>
         </div>
     </div>
@@ -694,7 +765,18 @@
     var sortOrder = 'asc';
     var sortColumn = 'default';
     var nowTab = 'maintenance';
-
+    var status = getParameterByName('status');
+    switch (status) {
+        case 'register_success':
+            showAlert('success', '정비 이력이 등록되었습니다.');
+            break;
+        case 'delete_success':
+            showAlert('success', '삭제에 성공했습니다.');
+            break;
+        default:
+            // 아무 작업도 하지 않음
+            break;
+    }
     $('#filter-maintenance-reg-date').val(filterMaintenanceAllDay);
 
 
@@ -702,22 +784,22 @@
     getList();
 
 
-    // 정비 이력 상세보기 버튼 클릭 이벤트
-    $(document).on('click', '.maintenance-list-tbody-tr', function () {
-        var id = $(this).attr('id');
+    // 등록 버튼 클릭 이벤트
+    $('#register-scrap-btn').on('click', function () {
+        var scrapDate = $('#scrap-date').val();
+        var scrapDescription = $('#scrap-description').val();
+
+        // TODO: 서버로 데이터 전송 (AJAX 요청)
         $.ajax({
-            url: '/maintenance/detail.ajax',
-            type: 'GET',
-            data: {'maintenanceIdx': id},
+            url: '/taxi/scrapRegister.ajax',
+            type: 'POST',
+            data: {'taxi_scrap_car_date': scrapDate, 'taxi_scrap_car_reason': scrapDescription, 'taxi_idx': searchIdx},
             dataType: 'JSON',
             success: function (data) {
                 console.log(data);
-                $('#maintenance-detail-date').text(data.info.maintenance_history_date);
-                $('#maintenance-detail-workshop').text(data.info.maintenance_history_workshop_name);
-                $('#maintenance-detail-description').text(data.info.maintenance_history_description);
-                $('#maintenance-detail-cost').text(Number(data.info.maintenance_history_cost).toLocaleString() + ' 원');
-                $('#maintenance-detail-license-plate').text(data.info.maintenance_taxi_license_plate);
-                $('#maintenanceDetailModal').modal('show');
+                if (data.result) {
+                    location.href = window.location.href.split('?')[0] + '?status=register_success&taxi_idx=' + searchIdx;
+                }
             },
             error: function (error) {
                 console.log(error);
@@ -725,7 +807,59 @@
         });
     });
 
-    // 사고 이력 상세보기 버튼 클릭 이벤트
+    // 수정 버튼 클릭 이벤트
+    $('#edit-scrap-btn').on('click', function () {
+        var scrapDate = $('#scrap-date').val();
+        var scrapDescription = $('#scrap-description').val();
+
+        // TODO: 저장 버튼을 표시하고, 수정 완료 후 다시 readOnly 설정
+        $.ajax({
+            url: '/taxi/scrapUpdate.ajax',
+            type: 'POST',
+            data: {'taxi_scrap_car_date': scrapDate, 'taxi_scrap_car_reason': scrapDescription, 'taxi_idx': searchIdx},
+            dataType: 'JSON',
+            success: function (data) {
+                console.log(data);
+                if (data.result) {
+                    showAlert('success', '수정에 성공했습니다.');
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+        console.log('수정 버튼 클릭됨');
+    });
+
+    // 삭제 버튼 클릭 이벤트
+    $('#delete-scrap-btn').on('click', function () {
+        // TODO: 서버로 삭제 요청 (AJAX 요청)
+        $.ajax({
+            url: '/taxi/scrapDelete.ajax',
+            type: 'POST',
+            data: {'taxi_idx': searchIdx},
+            dataType: 'JSON',
+            success: function (data) {
+                console.log(data);
+                if (data.result) {
+                    location.href = window.location.href.split('?')[0] + '?status=delete_success&taxi_idx=' + searchIdx;
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+        console.log('삭제 버튼 클릭됨');
+    });
+
+    // 모달창 닫은후
+    $('#accidentDetailModal').on('hidden.bs.modal', function () {
+        $('#edit-accident-btn').show();
+        $('#save-accident-detail-btn').hide();
+        $('#accidentDetailModal input, #accidentDetailModal textarea, #accident-detail-fault').prop('readonly', true).prop('disabled', true);
+    });
+
+    // 상세보기
     $(document).on('click', '.accident-list-tbody-tr', function () {
         var id = $(this).attr('id');
         $.ajax({
@@ -734,13 +868,13 @@
             data: {'accidentIdx': id},
             dataType: 'JSON',
             success: function (data) {
-                console.log(data);
-                $('#accident-detail-date').text(data.info.accident_history_accident_date);
-                $('#accident-detail-location').text(data.info.accident_history_location);
-                $('#accident-detail-description').text(data.info.accident_history_description);
-                $('#accident-detail-driver').text(data.info.accident_history_driver_name);
-                $('#accident-detail-fault').text(data.info.accident_history_is_at_fault ? '과실 있음' : '과실 없음');
-                $('#accident-detail-license-plate').text(data.info.accident_history_taxi_license_plate);
+                $('#accident-detail-date').val(data.info.accident_history_accident_date);
+                $('#accident-detail-location').val(data.info.accident_history_location);
+                $('#accident-detail-description').val(data.info.accident_history_description);
+                $('#accident-detail-driver').val(data.info.accident_history_driver_name);
+                $('#accident-detail-fault').val(data.info.accident_history_is_at_fault ? "true" : "false"); // 값 설정
+                $('#accident-detail-license-plate').val(data.info.accident_history_taxi_license_plate);
+                $('#accident-detail-id').val(data.info.accident_history_idx);
                 $('#accidentDetailModal').modal('show');
             },
             error: function (error) {
@@ -749,6 +883,50 @@
         });
     });
 
+    // 등록버튼
+    $('#edit-accident-btn').click(function () {
+        $('#accidentDetailModal input, #accidentDetailModal textarea, #accident-detail-fault').prop('readonly', false).prop('disabled', false);
+        // 기사와 번호판 필드는 수정하지 못하게 설정
+        $('#accident-detail-driver').prop('readonly', true);
+        $('#accident-detail-license-plate').prop('readonly', true);
+        $('#edit-accident-btn').hide();
+        $('#save-accident-detail-btn').show();
+    });
+
+    // 수정버튼
+    $('#save-accident-detail-btn').click(function () {
+        var accidentIdx = $('#accident-detail-id').val(); // 사고 이력의 고유 ID 값
+        var accidentDate = $('#accident-detail-date').val();
+        var accidentLocation = $('#accident-detail-location').val();
+        var accidentDescription = $('#accident-detail-description').val();
+        var accidentDriver = $('#accident-detail-driver').val();
+        var accidentFault = $('#accident-detail-fault').val();
+        var accidentLicensePlate = $('#accident-detail-license-plate').val();
+        $.ajax({
+            url: '/accident/update.ajax',
+            type: 'POST',
+            data: {
+                'accident_history_idx': accidentIdx,
+                'accident_history_accident_date': accidentDate,
+                'accident_history_location': accidentLocation,
+                'accident_history_description': accidentDescription,
+                'accident_history_is_at_fault': accidentFault
+            },
+            dataType: 'JSON',
+            success: function (data) {
+                if (data.result) {
+                    showAlert('success', '사고 이력이 수정되었습니다.');
+                    $('#accidentDetailModal').modal('hide');
+                    getList(); // 수정 후 리스트 갱신
+                } else {
+                    showAlert('danger', '사고 이력 수정에 실패했습니다.');
+                }
+            },
+            error: function (error) {
+                showAlert('danger', '사고 이력 수정에 실패했습니다.');
+            }
+        });
+    });
 
     // 현재 탭 구분
     $('#accident-tab').on('click', function () {
@@ -766,6 +944,40 @@
         $('#filter-maintenance-reg-date').val(filterMaintenanceAllDay);
         getTotalPages();
         getList();
+    });
+    $('#scrap-tab').on('click', function () {
+        nowTab = 'scrap';
+        $('#pagination').twbsPagination('destroy');
+        $.ajax({
+            url: '/taxi/scrapInfo.ajax',
+            type: "GET",
+            data: {'searchIdx': searchIdx},
+            dataType: 'JSON',
+            success: function (data) {
+                console.log(data);
+                if (data.result) {
+                    $('#scrap-date').val('').prop('readonly', false);
+                    $('#scrap-description').val('').prop('readonly', false);
+                    $('#scrap-date').val(data.info.taxi_scrap_car_date);
+                    $('#scrap-description').val(data.info.taxi_scrap_car_reason);
+                    $('#edit-scrap-btn').show();
+                    $('#delete-scrap-btn').show();
+                    $('#register-scrap-btn').hide();
+                } else {
+                    $('#scrap-date').val('').prop('readonly', false);
+                    $('#scrap-description').val('').prop('readonly', false).attr('placeholder', '폐차 정보가 없습니다.');
+                    $('#scrap-date').val('');
+                    $('#edit-scrap-btn').hide();
+                    $('#delete-scrap-btn').hide();
+                    $('#register-scrap-btn').show();
+                    showAlert('warning', '폐차 정보가 없습니다.');
+                }
+            },
+            error: function (error) {
+                console.log(error);
+                showAlert('danger', '폐차 정보를 불러오는데 실패했습니다.');
+            },
+        })
     });
 
     // 테이블 헤더 클릭 이벤트 설정
@@ -947,6 +1159,14 @@
         currentPage = 1; // 페이지 번호 초기화
         getTotalPages();
         getList(); // 목록 새로고침
+    }
+
+    // url 값 가져와서 얼럿띄우기 위해
+    function getParameterByName(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     }
 
     // 리스트 호출
@@ -1152,6 +1372,79 @@
             $('#accident-list').html(content);
         }
     }
+
+    // 정비 이력 상세보기 모달 닫은 후 초기화
+    $('#maintenanceDetailModal').on('hidden.bs.modal', function () {
+        $('#edit-maintenance-btn').show();
+        $('#save-maintenance-detail-btn').hide();
+        $('#maintenanceDetailModal input, #maintenanceDetailModal textarea').prop('readonly', true);
+    });
+
+    // 정비 이력 항목 클릭 시 상세보기 모달 표시
+    $(document).on('click', '.maintenance-list-tbody-tr', function () {
+        var id = $(this).attr('id');
+        $.ajax({
+            url: '/maintenance/detail.ajax',
+            type: 'GET',
+            data: {'maintenanceIdx': id},
+            dataType: 'JSON',
+            success: function (data) {
+                $('#maintenance-detail-date').val(data.info.maintenance_history_date);
+                $('#maintenance-detail-cost').val(data.info.maintenance_history_cost);
+                $('#maintenance-detail-workshop').val(data.info.maintenance_history_workshop_name);
+                $('#maintenance-detail-description').val(data.info.maintenance_history_description);
+                $('#maintenance-detail-license-plate').val(data.info.maintenance_taxi_license_plate);
+                $('#maintenance-detail-id').val(data.info.maintenance_history_idx);
+                $('#maintenanceDetailModal').modal('show');
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    });
+
+    // 정비 이력 수정 버튼 클릭 시 필드 활성화
+    $('#edit-maintenance-btn').click(function () {
+        $('#maintenanceDetailModal input, #maintenanceDetailModal textarea').prop('readonly', false);
+        // 번호판 필드는 수정하지 못하게 설정
+        $('#maintenance-detail-license-plate').prop('readonly', true);
+        $('#edit-maintenance-btn').hide();
+        $('#save-maintenance-detail-btn').show();
+    });
+
+    // 정비 이력 저장 버튼 클릭 시 수정된 데이터 저장
+    $('#save-maintenance-detail-btn').click(function () {
+        var maintenanceIdx = $('#maintenance-detail-id').val(); // 정비 이력의 고유 ID 값
+        var maintenanceDate = $('#maintenance-detail-date').val();
+        var maintenanceCost = $('#maintenance-detail-cost').val();
+        var maintenanceWorkshop = $('#maintenance-detail-workshop').val();
+        var maintenanceDescription = $('#maintenance-detail-description').val();
+        $.ajax({
+            url: '/maintenance/update.ajax',
+            type: 'POST',
+            data: {
+                'maintenance_history_idx': maintenanceIdx,
+                'maintenance_history_date': maintenanceDate,
+                'maintenance_history_cost': maintenanceCost,
+                'maintenance_history_workshop_name': maintenanceWorkshop,
+                'maintenance_history_description': maintenanceDescription
+            },
+            dataType: 'JSON',
+            success: function (data) {
+                if (data.result) {
+                    showAlert('success', '정비 이력이 수정되었습니다.');
+                    $('#maintenanceDetailModal').modal('hide');
+                    getList(); // 수정 후 리스트 갱신
+                } else {
+                    showAlert('danger', '정비 이력 수정에 실패했습니다.');
+                }
+            },
+            error: function (error) {
+                showAlert('danger', '정비 이력 수정에 실패했습니다.');
+            }
+        });
+    });
+
 </script>
 
 </html>

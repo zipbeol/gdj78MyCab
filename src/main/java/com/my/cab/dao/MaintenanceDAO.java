@@ -18,4 +18,6 @@ public interface MaintenanceDAO {
     int getMaintenanceCount(SearchDTO searchDTO);
 
     MaintenanceDTO getMaintenanceDetail(String maintenanceIdx);
+
+    boolean updateMaintenance(MaintenanceDTO maintenanceDTO);
 }

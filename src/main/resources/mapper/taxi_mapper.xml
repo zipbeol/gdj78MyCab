@@ -133,4 +133,24 @@
             </if>
         </where>
     </select>
+
+    <update id="scrapUpdate" parameterType="taxi">
+        UPDATE taxi
+        <set>
+            taxi_is_active = false,
+            <if test="taxi_scrap_car_date != null and taxi_scrap_car_date != ''">
+                taxi_scrap_car_date = #{taxi_scrap_car_date},
+            </if>
+            <if test="taxi_scrap_car_reason != null and taxi_scrap_car_reason != ''">
+                taxi_scrap_car_reason = #{taxi_scrap_car_reason},
+            </if>
+        </set>
+        WHERE taxi_idx = #{taxi_idx}
+    </update>
+
+    <update id="scrapDelete" parameterType="taxi">
+        UPDATE taxi
+        SET taxi_is_active = true
+        WHERE taxi_idx = #{taxi_idx}
+    </update>
 </mapper>

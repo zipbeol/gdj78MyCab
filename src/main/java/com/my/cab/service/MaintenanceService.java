@@ -46,4 +46,8 @@ public class MaintenanceService {
     public MaintenanceDTO getMaintenanceDetail(String maintenanceIdx) {
 		return maintenanceDAO.getMaintenanceDetail(maintenanceIdx);
     }
+
+	public boolean updateMaintenance(MaintenanceDTO maintenanceDTO) {
+		return maintenanceDAO.updateMaintenance(maintenanceDTO);
+	}
 }

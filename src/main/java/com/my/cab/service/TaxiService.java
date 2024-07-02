@@ -23,6 +23,8 @@ public class TaxiService {
 
     @Autowired
     TaxiDAO taxiDAO;
+    @Autowired
+    private AccidentService accidentService;
 
 
     public Map<String, Object> listAjax(SearchDTO searchDTO) {
@@ -122,6 +124,7 @@ public class TaxiService {
 
     /**
      * 페이지 계산
+     *
      * @param searchDTO
      * @return
      */
@@ -132,5 +135,31 @@ public class TaxiService {
 
     public List<TaxiDTO> getSearchedList(SearchDTO searchDTO) {
         return taxiDAO.getSearchedList(searchDTO);
+    }
+
+    public Map<String, Object> getScrapInfoAndResult(SearchDTO searchDTO) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        TaxiDTO dto = getTaxiInfo(searchDTO.getSearchIdx());
+        boolean result = false;
+        logger.info(dto.getTaxi_is_active());
+
+        if (dto.getTaxi_is_active() != null && dto.getTaxi_is_active().equals("0")) {
+            map.put("info", dto);
+            result = true;
+        }
+        map.put("result", result);
+        return map;
+    }
+
+    public boolean scrapRegister(TaxiDTO taxiDTO) {
+        return taxiDAO.scrapUpdate(taxiDTO);
+    }
+
+    public boolean scrapUpdate(TaxiDTO taxiDTO) {
+        return taxiDAO.scrapUpdate(taxiDTO);
+    }
+
+    public boolean scrapDelete(TaxiDTO taxiDTO) {
+        return taxiDAO.scrapDelete(taxiDTO);
     }
 }

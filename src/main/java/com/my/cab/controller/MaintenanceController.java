@@ -54,4 +54,10 @@ public class MaintenanceController {
     public Map<String, Object> getMaintenanceDetail(String maintenanceIdx) {
         return Map.of("info", maintenanceService.getMaintenanceDetail(maintenanceIdx));
     }
+
+    @PostMapping("/update.ajax")
+    @ResponseBody
+    public  Map<String, Object> updateMaintenance(MaintenanceDTO maintenanceDTO) {
+        return Map.of("result", maintenanceService.updateMaintenance(maintenanceDTO));
+    }
 }

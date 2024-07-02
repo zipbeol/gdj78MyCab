@@ -45,7 +45,7 @@
             top: 0;
             left: 0;
             right: 0;
-            z-index: 1050;
+            z-index: 9999; /* Set a high z-index value */
             margin: 0;
             padding: 10px;
             text-align: center;
@@ -99,6 +99,10 @@
         th.sortable.desc::after {
             content: '\f0dd'; /* FontAwesome sort down 아이콘 */
             opacity: 1;
+        }
+        /* 새로 추가할 스타일 */
+        #accident-detail-description {
+            resize: none;
         }
     </style>
 
@@ -413,10 +417,11 @@
 </div>
 <!-- Page wrapper end -->
 <!-- Modal HTML -->
+<!-- Alert placeholder start -->
+<div id="alertModalPlaceholder" class="alert alert-placeholder"></div>
+<!-- Alert placeholder end -->
 <div class="modal fade" id="accidentModal" tabindex="-1" aria-labelledby="accidentModalLabel" aria-hidden="true">
-    <!-- Alert placeholder start -->
-    <div id="alertModalPlaceholder" class="alert alert-placeholder"></div>
-    <!-- Alert placeholder end -->
+
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -488,32 +493,49 @@
                 <!-- 사고 이력 상세 정보 -->
                 <div class="row mb-3">
                     <div class="col-3"><strong>사고 날짜:</strong></div>
-                    <div class="col-9" id="accident-detail-date"></div>
+                    <div class="col-9">
+                        <input type="date" class="form-control" id="accident-detail-date" readonly>
+                    </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-3"><strong>사고 장소:</strong></div>
-                    <div class="col-9" id="accident-detail-location"></div>
+                    <div class="col-9">
+                        <input type="text" class="form-control" id="accident-detail-location" readonly>
+                    </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-3"><strong>사고 내용:</strong></div>
-                    <div class="col-9" id="accident-detail-description"></div>
+                    <div class="col-9">
+                        <textarea class="form-control" id="accident-detail-description" rows="3" readonly></textarea>
+                    </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-3"><strong>사고 기사:</strong></div>
-                    <div class="col-9" id="accident-detail-driver"></div>
+                    <div class="col-9">
+                        <input type="text" class="form-control" id="accident-detail-driver" readonly>
+                    </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-3"><strong>과실 여부:</strong></div>
-                    <div class="col-9" id="accident-detail-fault"></div>
+                    <div class="col-9">
+                        <select class="form-select" id="accident-detail-fault" disabled>
+                            <option value="true">과실 있음</option>
+                            <option value="false">과실 없음</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-3"><strong>택시 번호판:</strong></div>
-                    <div class="col-9" id="accident-detail-license-plate"></div>
+                    <div class="col-9">
+                        <input type="text" class="form-control" id="accident-detail-license-plate" readonly>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                 <button type="button" class="btn btn-primary" id="edit-accident-btn">수정</button>
+                <button type="button" class="btn btn-success" id="save-accident-detail-btn" style="display: none;">저장</button>
+                <input type="hidden" id="accident-detail-id">
             </div>
         </div>
     </div>
@@ -570,6 +592,14 @@
     getTotalPages();
     getList();
 
+    // 모달창 닫은후
+    $('#accidentDetailModal').on('hidden.bs.modal', function () {
+        $('#edit-accident-btn').show();
+        $('#save-accident-detail-btn').hide();
+        $('#accidentDetailModal input, #accidentDetailModal textarea, #accident-detail-fault').prop('readonly', true).prop('disabled', true);
+    });
+
+    // 상세보기
     $(document).on('click', '.accident-list-tbody-tr', function () {
         var id = $(this).attr('id');
         $.ajax({
@@ -578,12 +608,13 @@
             data: {'accidentIdx': id},
             dataType: 'JSON',
             success: function (data) {
-                $('#accident-detail-date').text(data.info.accident_history_accident_date);
-                $('#accident-detail-location').text(data.info.accident_history_location);
-                $('#accident-detail-description').text(data.info.accident_history_description);
-                $('#accident-detail-driver').text(data.info.accident_history_driver_name);
-                $('#accident-detail-fault').text(data.info.accident_history_is_at_fault ? '과실 있음' : '과실 없음');
-                $('#accident-detail-license-plate').text(data.info.accident_history_taxi_license_plate);
+                $('#accident-detail-date').val(data.info.accident_history_accident_date);
+                $('#accident-detail-location').val(data.info.accident_history_location);
+                $('#accident-detail-description').val(data.info.accident_history_description);
+                $('#accident-detail-driver').val(data.info.accident_history_driver_name);
+                $('#accident-detail-fault').val(data.info.accident_history_is_at_fault ? "true" : "false"); // 값 설정
+                $('#accident-detail-license-plate').val(data.info.accident_history_taxi_license_plate);
+                $('#accident-detail-id').val(data.info.accident_history_idx);
                 $('#accidentDetailModal').modal('show');
             },
             error: function (error) {
@@ -591,6 +622,52 @@
             }
         });
     });
+
+    // 등록버튼
+    $('#edit-accident-btn').click(function () {
+        $('#accidentDetailModal input, #accidentDetailModal textarea, #accident-detail-fault').prop('readonly', false).prop('disabled', false);
+        // 기사와 번호판 필드는 수정하지 못하게 설정
+        $('#accident-detail-driver').prop('readonly', true);
+        $('#accident-detail-license-plate').prop('readonly', true);
+        $('#edit-accident-btn').hide();
+        $('#save-accident-detail-btn').show();
+    });
+
+    // 수정버튼
+    $('#save-accident-detail-btn').click(function () {
+        var accidentIdx = $('#accident-detail-id').val(); // 사고 이력의 고유 ID 값
+        var accidentDate = $('#accident-detail-date').val();
+        var accidentLocation = $('#accident-detail-location').val();
+        var accidentDescription = $('#accident-detail-description').val();
+        var accidentDriver = $('#accident-detail-driver').val();
+        var accidentFault = $('#accident-detail-fault').val();
+        var accidentLicensePlate = $('#accident-detail-license-plate').val();
+        $.ajax({
+            url: '/accident/update.ajax',
+            type: 'POST',
+            data: {
+                'accident_history_idx': accidentIdx,
+                'accident_history_accident_date': accidentDate,
+                'accident_history_location': accidentLocation,
+                'accident_history_description': accidentDescription,
+                'accident_history_is_at_fault': accidentFault
+            },
+            dataType: 'JSON',
+            success: function (data) {
+                if (data.result) {
+                    showAlert('success', '사고 이력이 수정되었습니다.');
+                    $('#accidentDetailModal').modal('hide');
+                    getList(); // 수정 후 리스트 갱신
+                } else {
+                    showAlert('danger', '사고 이력 수정에 실패했습니다.');
+                }
+            },
+            error: function (error) {
+                showAlert('danger', '사고 이력 수정에 실패했습니다.');
+            }
+        });
+    });
+
     // 테이블 헤더 클릭 이벤트 설정
     $('th.sortable').click(function () {
         sortColumn = $(this).data('value');
@@ -609,6 +686,7 @@
         getList();
     });
 
+    // 필터 값 변경시 리스트 다시호출
     $('#filter-accident-reg-date').on('change', function () {
         currentPage = 1;
         getTotalPages();
@@ -620,7 +698,7 @@
         getList();
     });
 
-
+    // 클릭한 택시 활성화
     $(document).on('click', '.taxi-item', function () {
         $('.taxi-item').removeClass('active');
         $(this).addClass('active');
@@ -628,6 +706,7 @@
         console.log(taxiIdx);
     });
 
+    // 지역 선택
     $('#accident-location').on('click', function () {
 
         new daum.Postcode({
@@ -836,6 +915,8 @@
                     $('#save-button').hide();
                     $('#edit-button').show();
                     showAlert('success', '수정이 완료되었습니다.');
+                    getTotalPages();
+                    getList();
                 } else {
                     showAlert('danger', '수정에 실패했습니다.');
                 }
@@ -941,7 +1022,6 @@
         getSearchValue();
         accidentListAjax();
     }
-
     function accidentListAjax() {
         console.log(filterStartDate);
         console.log(filterEndDate);
@@ -976,7 +1056,6 @@
         getSearchValue();
         accidentTotalPagesAjax();
     }
-
     function accidentTotalPagesAjax() {
         $.ajax({
             url: '/accident/getTotalPages.ajax',

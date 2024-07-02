@@ -51,4 +51,8 @@ public class AccidentService {
     public AccidentDTO getAccidentDetail(String accidentIdx) {
         return accidentDAO.getAccidentDetail(accidentIdx);
     }
+
+    public boolean updateAccidentHistory(AccidentDTO accidentDTO) {
+        return accidentDAO.updateAccidentHistory(accidentDTO);
+    }
 }

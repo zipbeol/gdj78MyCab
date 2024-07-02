@@ -31,7 +31,7 @@ public class AttendanceController {
 	
 	
 	@RequestMapping(value="attendance/myAttendance/list.go")
-	public String myAttHistory(HttpSession session, Model model) {
+	public String myAttHistory() {
 		
 		
 		return "mypage/myAttHistory";
@@ -118,4 +118,37 @@ public Map<String, Object> getTotalPages(SearchDTO searchDTO){
 		
 		return attService.getchart(searchDTO);
 	} 
+	
+	
+	@RequestMapping(value="/empAttHistory.go")
+	public String empAttHistory(String emp_no, Model model) {
+		model.addAttribute("emp_no",emp_no);
+		
+		return "HR/empAttHistory";
+	}
+	
+	@GetMapping(value="/totalEditList.ajax")
+	@ResponseBody
+	public Map<String, Object> totalEditList(SearchDTO searchDTO){
+		 logger.info("\nsearchDTO SearchText:" + searchDTO.getSearchText()
+        + "\nsearchDTO filterAttResult:" + searchDTO.getFilterAttResult()
+       + "\nsearchDTO filterForSearch:" + searchDTO.getFilterForSearch()
+        + "\nsearchDTO page:" + searchDTO.getPage()+ "\nsearchDTO date:" + searchDTO.getFilterAttDate());
+		
+		return attService.totalEditList(searchDTO);
+		
+	}
+	
+	@GetMapping(value="/getEditTotalPages.ajax")
+	@ResponseBody
+public Map<String, Object> getEditTotalPages(SearchDTO searchDTO){
+		logger.info("페이지네이션?");
+		
+		return attService.getEditTotalPages(searchDTO);
+	} 
+	
+	
+	
+	
+	
 }

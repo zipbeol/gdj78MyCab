@@ -738,11 +738,17 @@ document.addEventListener("DOMContentLoaded", function() {
     
     
     function toKoreanTime(dateString) {
-        if (!dateString) return '';
+		if (!dateString) return '';
+        
+        // 입력된 문자열을 UTC 시간으로 변환
         const date = new Date(dateString);
-        date.setHours(date.getHours() + 9); // UTC+9 한국 시간으로 변환
-        const hours = ('0' + date.getHours()).slice(-2);
-        const minutes = ('0' + date.getMinutes()).slice(-2);
+
+        // UTC+9 시간으로 변환
+        const koreanTime = new Date(date.getTime() + 9 * 60 * 60 * 1000);
+
+        // 시간을 'hh:mm' 형식으로 변환
+        const hours = ('0' + koreanTime.getUTCHours()).slice(-2);
+        const minutes = ('0' + koreanTime.getUTCMinutes()).slice(-2);
         return hours + ':' + minutes;
     }
     

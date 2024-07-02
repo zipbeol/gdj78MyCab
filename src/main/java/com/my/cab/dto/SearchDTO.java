@@ -24,8 +24,44 @@ public class SearchDTO {
     private String filterForSearch;
     private String filterAttResult;
     private String filterAttDate;
+    private String searchEditText;
+    private String filterEditDate;
+    private String filterEditResult;
+    private String filterforsearchEdit;
     
-    public String getFilterAttResult() {
+    public String getSearchEditText() {
+		return searchEditText;
+	}
+
+	public void setSearchEditText(String searchEditText) {
+		this.searchEditText = searchEditText;
+	}
+
+	public String getFilterEditDate() {
+		return filterEditDate;
+	}
+
+	public void setFilterEditDate(String filterEditDate) {
+		this.filterEditDate = filterEditDate;
+	}
+
+	public String getFilterEditResult() {
+		return filterEditResult;
+	}
+
+	public void setFilterEditResult(String filterEditResult) {
+		this.filterEditResult = filterEditResult;
+	}
+
+	public String getFilterforsearchEdit() {
+		return filterforsearchEdit;
+	}
+
+	public void setFilterforsearchEdit(String filterforsearchEdit) {
+		this.filterforsearchEdit = filterforsearchEdit;
+	}
+
+	public String getFilterAttResult() {
 		return filterAttResult;
 	}
 

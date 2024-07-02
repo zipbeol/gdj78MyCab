@@ -129,5 +129,31 @@ public class AttendanceService {
 		return result;
 	}
 
+	public Map<String, Object> totalEditList(SearchDTO searchDTO) {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		int page = (searchDTO.getPage() - 1)*PAGE_SIZE;
+		searchDTO.setPage(page);
+		searchDTO.setPageSize(PAGE_SIZE);
+		logger.info("page {}",page);
+		logger.info("searchDTO page {}",searchDTO.getPage());
+		List<AttendanceDTO> empList = attDAO.totalEditList(searchDTO);
+		logger.info("empList {}", empList);
+		result.put("empList", empList);
+		
+		
+		return result;
+	}
+
+	public Map<String, Object> getEditTotalPages(SearchDTO searchDTO) {
+		
+		int empTotal = attDAO.getEditTotalPages(searchDTO);
+		int totalPages = (int) Math.ceil((double)empTotal/PAGE_SIZE);
+		totalPages = totalPages > 0? totalPages : 1;
+		
+		return Map.of("totalPages", totalPages);
+
+	}
+
 	
 }

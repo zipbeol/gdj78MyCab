@@ -30,4 +30,8 @@ public interface AttendanceDAO {
 
 	List<AttendanceDTO> getChart(SearchDTO searchDTO);
 
+	List<AttendanceDTO> totalEditList(SearchDTO searchDTO);
+
+	int getEditTotalPages(SearchDTO searchDTO);
+
 }

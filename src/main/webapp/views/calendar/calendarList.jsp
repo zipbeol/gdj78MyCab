@@ -169,6 +169,14 @@
 		    top: -9px;
 		    position: relative;	
 		}
+		 .slide-toggle {
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            max-height: 0;
+        }
+        .slide-toggle.show {
+            max-height: 1000px; /* Adjust based on content height */
+        }
     </style>
   </head>
 
@@ -264,11 +272,17 @@
                     		</div>
                     		<hr>
                     		<div id="share-calendar">
-                    			<div class="util-box-category alert alert-secondary rounded-3 util-box3" onclick="utilBoxClk(this)" >
+                    			<div class="util-box-category alert alert-secondary rounded-3 util-box3">
 		                          <label class="form-check-label" for="thirdCheckbox">공유 캘린더</label>
-		                          <button type="button" class="btn btn-outline-info">
+		                          <button type="button" class="btn btn-outline-info" onclick="createShareModalOpen()">
 		                          	<i class="bi bi-plus-square"></i>
 		                          </button>
+		                          <c:forEach items="${shareCalList}" varStatus="status" var="item">
+		                          	<div class="util-box-category alert alert-secondary rounded-3 util-box${status.index+4}" onclick="utilBoxClk(this)" >
+				                          <label class="form-check-label" for="thirdCheckbox">${item.calendar_name}</label>
+				                          <input class="form-check-input me-1" type="checkbox" value="" id="thirdCheckbox" checked disabled="disabled">
+		                    		</div>
+		                          </c:forEach>
                     			</div>
                     		</div>
                     	</div>
@@ -345,6 +359,13 @@
                         <option value="개인" style="color: #ffec63;">개인</option>
                         <option value="부서" style="color: #28b9ff;">부서</option>
                         <option value="전사" style="color: #71f371;">전사</option>
+                        <option  disabled="disabled"> 공유 캘린더</option>
+                        <c:if test="${shareCalList.size()>0}">
+                        	<c:forEach items="${shareCalList}" varStatus="status" var="item">
+                        	 	<option value="전사" style="color: ${item.calendar_color};" data-idx ="${item.calendar_idx}">공유일정${item.calendar_name}</option>
+                        	 	
+                        	</c:forEach>
+                        </c:if>
                     </select>
                     <label class="input-group-text" for="create-share">공유 상대선택</label>
                     <input type="text" id="create-share" onclick="shareModalOpen()">
@@ -432,6 +453,82 @@
     </div>
 	<!-- 일정 상세보기 끝 -->
 	
+	<!-- 공유 캘린더 생성 모달창  시작-->
+	<div class="modal fade" id="addSharedCalendarModal" tabindex="-1" aria-labelledby="addSharedCalendarModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title h4" id="addSharedCalendarModalLabel">공유캘린더 생성</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div>
+						<div class="input-group mb-3">
+							<label class="input-group-text" for="calendar-name">캘린더이름</label> 
+							<input type="text" class="form-control" id="create-share-title"name="create-share-title">
+						</div>
+						<div class="input-group mb-3">
+							<label class="input-group-text" for="calendar-color">색상지정</label>
+							<input type="color" class="form-control form-control-color" id="create-share-color" name="create-share-color" value="#563d7c">
+						</div>
+						<div class="input-group mb-3">
+							<label class="input-group-text">공유할 사람</label>
+							<button class="btn btn-outline-secondary" type="button"
+								data-bs-toggle="collapse" data-bs-target="#shareWithList"
+								aria-expanded="false" 
+								aria-controls="shareWithList">사람선택</button>
+							<span id="selectedUsers" class="ms-2"></span>
+						</div>
+						<div class="collapse" id="shareWithList">
+							<div class="accordion" id="accordionPanelsStayOpenExample">
+
+								<c:forEach items="${deptList}" var="deptlist" varStatus="deptStatus">
+									<div class="accordion-item">
+										<h2 class="accordion-header" id="panelsStayOpen-heading${deptStatus.index}">
+											<button class="accordion-button collapsed" type="button"
+												data-bs-toggle="collapse"
+												data-bs-target="#panelsStayOpen-collapse${deptStatus.index}"
+												aria-expanded="false"
+												aria-controls="panelsStayOpen-collapse${deptStatus.index}">${deptlist}</button>
+										</h2>
+											<div id="panelsStayOpen-collapse${deptStatus.index}"
+												class="accordion-collapse collapse"
+												aria-labelledby="panelsStayOpen-heading${deptStatus.index}" style="">
+												<div class="accordion-body">
+													<div class="row gx-3">
+														
+														<c:forEach items="${empList}" varStatus="empStatus" var="emplist">
+															<c:if test="${deptlist eq emplist.dept_name}">
+																<button type="button" class="btn btn-primary" data-emp-no="${emplist.emp_no}"
+                                                                    onclick="selectEmployee('${emplist.emp_no}', '${emplist.title_name}', '${emplist.emp_name}')">
+                                                                ${emplist.title_name} ${emplist.emp_name}
+                                                            </button>
+															</c:if>										
+														</c:forEach>
+													</div>
+												</div>
+											</div>
+	
+	
+									</div>
+								</c:forEach>
+
+
+
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary"
+						onclick="createSharedCalendar()">생성하기</button>
+					<button type="button" class="btn btn-secondary"
+						data-bs-dismiss="modal">취소하기</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 공유 캘린더 생성 모달창  끝-->
 </body>
 
     <!-- Page wrapper end -->
@@ -517,38 +614,67 @@
 					console.log(fetchInfo);
 					console.log(successCallback);
 					console.log(failureCallback);
-					
-					$.ajax({
-					    type: "GET",
-					    url: "/calendar/listCall.ajax",
-					    data: {
-					    	'schedule_editor' : "${sessionScope.loginId}"
-					    },
-					    dataType: "json",
-						success: function(response) {
-							var events = [];
-					        
-					      	for (var i = 0; i < response.length; i++) {
-					            var res = response[i];
-					            var event = {
-					            	id: res.schedule_idx,
-					            	title: res.schedule_name,
-					                content: res.schedule_content,
-					                start: res.schedule_start_date,
-					                end: res.schedule_end_date,
-					                color:res.schedule_color,
-					                category:res.schedule_category
-					                }
-							events.push(event)
-						 	};
-						 console.log('Events:', events);
-						 successCallback(events);
-					         
-					    },
-					    error: function(xhr, status, error) {
-					    	alert("캘린더 불러오기에 실패했습니다.");
-					    }
-					});			
+					$.when(
+						    $.ajax({
+						        type: "GET",
+						        url: "/calendar/listCall.ajax",
+						        data: {
+						            'schedule_editor': "${sessionScope.loginId}"
+						        },
+						        dataType: "json"
+						    }),
+						    $.ajax({
+						        type: "GET",
+						        url: "/calendar/shareCalListCall.ajax",
+						        data: {
+						            'schedule_editor': "${sessionScope.loginId}"
+						        },
+						        dataType: "json"
+						    })
+						).done(function(response1, response2) {
+							console.log("요청 끝났지롱");
+						    var events = [];
+						    
+						    // 첫 번째 AJAX 호출의 응답 처리
+						    var listResponse = response1[0]; // response1[0]에 실제 응답 데이터가 들어 있습니다.
+						    for (var i = 0; i < listResponse.length; i++) {
+						        var res = listResponse[i];
+						        var event = {
+						            id: res.schedule_idx,
+						            title: res.schedule_name,
+						            content: res.schedule_content,
+						            start: res.schedule_start_date,
+						            end: res.schedule_end_date,
+						            color: res.schedule_color,
+						            category: res.schedule_category
+						        };
+						        events.push(event);
+						    }
+
+						    // 두 번째 AJAX 호출의 응답 처리
+						    var shareCalListResponse = response2[0]; // response2[0]에 실제 응답 데이터가 들어 있습니다.
+						    for (var i = 0; i < shareCalListResponse.length; i++) {
+						        var res = shareCalListResponse[i];
+						        var event = {
+						            id: res.schedule_idx,
+						            title: res.schedule_name,
+						            content: res.schedule_content,
+						            start: res.schedule_start_date,
+						            end: res.schedule_end_date,
+						            color: res.schedule_color,
+						            category: res.schedule_category,
+						            shareIdx: res.calendar_idx,
+						            calName: res.calendar_name
+						        };
+						        events.push(event);
+						    }
+
+						    console.log('Events:', events);
+						    successCallback(events);
+
+						}).fail(function() {
+						    alert("캘린더 불러오기에 실패했습니다.");
+						});
 				}
 			});
 		
@@ -656,6 +782,8 @@
 		//색깔 가져오기
 		
 		var selectedOption = scheduleCategory.options[scheduleCategory.selectedIndex];
+		var shareCalIdx = selectedOption.dataset.idx;
+		console.log("공유선택시 뜨는 idx : "+shareCalIdx);
         var color = selectedOption.style.color;
        /* 	   아작스 안에 들어갈 값     	'schedule_end_date': document.getElementById("sel-end-date").value, */
        
@@ -673,7 +801,9 @@
 		        	'schedule_end_date': endDateTime,
 		        	'schedule_category': document.getElementById("create-category").value,
 		        	'schedule_color': color,
-		        	'schedule_emp_no': "${sessionScope.loginId}" //나중에 세션으로 처리
+		        	'schedule_emp_no': "${sessionScope.loginId}", //나중에 세션으로 처리
+		        	'calendar_idx' : shareCalIdx
+		        	
 		        },
 		        dataType: "json",
 				success: function(response) {
@@ -776,7 +906,7 @@
 		// 카테고리 색 가져오기
 		var selectedOption = scheduleCategory.options[scheduleCategory.selectedIndex];
         var color = selectedOption.style.color;
-        // 유효성 검사
+        // 유효성 검사"C:/Users/mh/OneDrive/바탕 화면/새 텍스트 문서 (2).txt"
         var chkVal = checkValidation(document.getElementById('detail-title'));
         console.log(chkVal);
 		console.log(document.getElementById('detail-title').value);
@@ -790,6 +920,7 @@
 					'schedule_idx': detailIdx,
 					'schedule_name': document.getElementById('detail-title').value,
 					'schedule_content': document.getElementById('detail-content').value,
+				
 					'schedule_start_date': startDateTime,
 					'schedule_end_date': endDateTime,
 					'schedule_edit_date' : curTime,
@@ -885,6 +1016,91 @@
 	function shareModalOpen(){
 		
 	}
+	
+	//공유 캘린더 생성 모달창 열기
+	function createShareModalOpen(){
+		var myModal = new bootstrap.Modal(document.getElementById('addSharedCalendarModal'));
+	  // 모달을 표시
+	  myModal.show();
+	}
+	
+	 var selectedEmployees = []; // 선택된 사원들을 저장할 배열
+
+	    // 사원 선택 버튼 클릭 시
+	   function selectEmployee(empNo,empTitleName, employeeName) {
+		 console.log(empNo)
+        // 이미 선택된 사원인지 확인
+        var alreadySelected = selectedEmployees.find(emp => emp.empNo === empNo);
+        if (!alreadySelected) {
+        	console.log("\${empNo}");
+            // 선택된 사원 배열에 추가
+            selectedEmployees.push({ empNo: empNo ,empTitle : empTitleName ,  empName : employeeName });
+            
+            // 선택된 사원을 화면에 표시 (버튼 형식으로 추가)
+            var selectedUsersElem = document.getElementById('selectedUsers');
+            selectedUsersElem.innerHTML += `<button type="button" class="btn btn-outline-primary me-2" 
+            data-emp-no="\${empNo}" onclick="deselectEmployee('\${empNo}','\${empTitleName}', '\${employeeName}')">\${empTitleName} \${employeeName}</button>`;
+            
+            // 선택된 사원을 리스트에서 제거
+            var buttons = document.querySelectorAll(`#accordionPanelsStayOpenExample button[data-emp-no='\${empNo}']`);
+			var sibal = document.querySelector(`button[data-emp-no='\${empNo}']`);
+			console.log(sibal);
+            buttons.forEach(button => button.disabled = true); // 선택된 사원 버튼 비활성화
+
+            buttons.forEach(button => {
+                console.log(button.textContent); // 해당 empId를 가진 모든 요소의 텍스트 내용 출력
+            });
+        }
+    }
+	 
+	   function deselectEmployee(empNo,empTitleName,employeeName) {
+		   console.log("공유일정 취소버튼 클릭됨",`\${empNo}`);
+		   console.log("공유일정 취소버튼 클릭됨",`\${empTitleName}`);
+		   console.log("공유일정 취소버튼 클릭됨",`\${employeeName}`);
+	        // 선택된 사원 배열에서 제거
+	        selectedEmployees = selectedEmployees.filter(emp => emp.empNo !== empNo);
+	        
+	        // 화면에서 선택 해제된 사원 버튼 제거
+	        var selectedUsersElem = document.getElementById('selectedUsers');
+	        selectedUsersElem.innerHTML = selectedEmployees.map(emp => `<button type="button" class="btn btn-outline-primary me-2" data-emp-id="\${emp.empNo}" onclick="deselectEmployee('\${emp.empNo}','\${emp.empTitle}','\${emp.empName}')"> \${emp.empTitle} \${emp.empName}</button>`).join('');
+
+	        // 선택 해제된 사원을 리스트에서 다시 활성화
+	        var buttons = document.querySelectorAll(`#accordionPanelsStayOpenExample button[data-emp-no='\${empNo}']`);
+	        buttons.forEach(button => button.disabled = false); // 선택 해제된 사원 버튼 활성화
+	    }
+	   
+
+	    // 캘린더 생성 버튼 클릭 시
+	    function createSharedCalendar() {
+	    		var infoList = {};
+	    		infoList.empList =selectedEmployees;
+	    		infoList.shareTitle = document.getElementById('create-share-title').value;
+	    		infoList.shareColor = document.getElementById('create-share-color').value;
+	    		infoList.loginId = '${sessionScope.loginId}';
+	    		console.log(document.getElementById('create-share-title').value);
+	    		console.log(document.getElementById('create-share-color').value);
+	    		//infoList = {"shareTitle" : document.getElementById('create-share-title').value};
+	    		//infoList = {"shareColor" : document.getElementById('create-share-color').value};	    			    		
+	    		var jsonData = JSON.stringify(infoList);
+	    	 $.ajax({
+	                type: "POST",
+	                url: "/calendar/createShareCalendar.ajax", // Update with your server endpoint
+	                data: jsonData,
+	            	contentType:'application/json; charset=utf-8',
+	                success: function(response) {
+	                    console.log("Success:", response);
+	                },
+	                error: function(error) {
+	                    console.error("Error:", error);
+	                }
+	            });
+	        // 여기에 선택된 사원들을 서버로 전송하거나 다른 작업을 수행할 수 있습니다.
+	        
+	        // 모달 닫기
+	        var addSharedCalendarModal = new bootstrap.Modal(document.getElementById('addSharedCalendarModal'));
+	        addSharedCalendarModal.hide();
+	    }
+	
   	
 </script>
 

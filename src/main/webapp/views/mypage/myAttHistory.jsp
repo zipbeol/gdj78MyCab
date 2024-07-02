@@ -250,7 +250,7 @@
 																style="width: 20%;" data-value="dept-name">승인 여부</th>
 														</tr>
 													</thead>
-													<tbody id="emp-list">
+													<tbody id="att-Edit-list">
 													</tbody>
 												</table>
 											</div>
@@ -355,6 +355,95 @@
         </div>
     </div>
 <!-- 캘린더 상세보기 모달 끝-->
+
+<!-- 근태 수정 내역 모달 시작 -->
+	<div class="modal fade" id="attApplyModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title h4" id="exampleModalLgLabel">근태 수정 요청 내역</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <div class="input-group">
+                            <label class="input-group-text" for="detail-no">사번</label>
+                            <input type="text" class="form-control" id="ddetail-no" name="emp_no" readonly>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="input-group">
+                            <label class="input-group-text" for="detail-name">이름</label>
+                            <input type="text" class="form-control" id="ddetail-name" name="emp_name" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <label class="input-group-text" for="detail-workday">날짜</label>
+                    <input type="text" class="form-control" id="ddetail-workday" name="work_day" readonly>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <div class="input-group">
+                            <label class="input-group-text" for="detail-att-time">출근</label>
+                            <input type="text" class="form-control" id="ddetail-att-time" name="att_time" readonly>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="input-group">
+                            <label class="input-group-text" for="detail-leave-time">퇴근</label>
+                            <input type="text" class="form-control" id="ddetail-leave-time" name="leave_time" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <div class="input-group">
+                            <label class="input-group-text" for="detail-before-att">수정 전 근태 결과</label>
+                            <input type="text" class="form-control" id="ddetail-before-att" name="before_att_time" readonly>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="input-group">
+                            <label class="input-group-text" for="detail-after-att">수정 요청 근태 결과</label>
+                            <input type="text" class="form-control" id="ddetail-after-att" name="after_att_time" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <label class="input-group-text" for="detail-reason">수정 신청 사유</label>
+                    <textarea class="form-control" id="ddetail-reason" name="att_reason" rows="3" style="height: 245px; resize: none;"readonly></textarea>
+                </div>
+                <div class="input-group mb-3">
+                    <label class="input-group-text" for="detail-rejection-reason">수정 거부 사유</label>
+                    <input type="text" class="form-control" id="ddetail-rejection-reason" name="rejection_reason" readonly>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <div class="input-group">
+                            <label class="input-group-text" for="detail-handler">담당자</label>
+                            <input type="text" class="form-control" id="ddetail-handler" name="handler" readonly>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="input-group">
+                            <label class="input-group-text" for="detail-process-date">처리일</label>
+                            <input type="text" class="form-control" id="ddetail-process-date" name="process_date" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 근태 수정 내역 모달 끝 -->
+
+			
+						
 
 </body>
 <!-- *************
@@ -583,10 +672,10 @@ document.addEventListener("DOMContentLoaded", function() {
     function listCall(page){
         $.ajax({
            type:'get',
-           url:'/attEditApply.ajax',
+           url:'/attEditApplyList.ajax',
            data:{
               'page':page,
-              'cnt':5,
+              'cnt':10,
               'emp_no': '${sessionScope.loginId}'
            },
            dataType:'json',
@@ -624,28 +713,104 @@ document.addEventListener("DOMContentLoaded", function() {
         var content = '';
         if (list.length > 0) {
             for (item of list) {
-            	console.log(item.emp_employment_status);
+            	console.log(item.att_apply_status);
                 var att_apply_status = item.att_apply_status === true ? 'Y' : 'N';
-              
                 
-                content += '<tr class="emp-list-tbody-tr" id="' + item.att_management_idx + '">'
-                for (var i = 0; i < list.length; i++) {
-					
-                	+ '<td class="text-center">' + i + '</td>'
-				}
-                    + '<td class="text-center">' + item.att_applicant_date + '</td>'
+                
+             // ISO 8601 날짜 문자열을 Date 객체로 변환
+                var date = new Date(item.att_applicant_date);
+                // 한국 시간으로 변환
+                var kstDate = new Date(date.getTime() + (9 * 60 * 60 * 1000));
+                // 날짜만 추출 (yyyy-mm-dd 형식)
+                var formattedDate = kstDate.toISOString().split('T')[0];
+              
+                content += '<tr class="att-Edit-list-tbody-tr" id="' + item.att_management_idx + '">'
+                	+ '<td class="text-center">' + item.att_management_idx+ '</td>'
+                    + '<td class="text-center">' + formattedDate  + '</td>'
                     + '<td class="text-center">' + att_apply_status + '</td>'
                     + '</tr>';
             }
         } else {
             content = '<tr><td colspan="7" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
         }
-        $('#emp-list').html(content);
+        $('#att-Edit-list').html(content);
     }
     
-    $(document).on('click', '.emp-list-tbody-tr', function () {
-        location.href = './empDetail.go?emp_no=' + $(this).attr('id');
+    
+    function toKoreanTime(dateString) {
+		if (!dateString) return '';
+        
+        // 입력된 문자열을 UTC 시간으로 변환
+        const date = new Date(dateString);
+
+        // UTC+9 시간으로 변환
+        const koreanTime = new Date(date.getTime() + 9 * 60 * 60 * 1000);
+
+        // 시간을 'hh:mm' 형식으로 변환
+        const hours = ('0' + koreanTime.getUTCHours()).slice(-2);
+        const minutes = ('0' + koreanTime.getUTCMinutes()).slice(-2);
+        return hours + ':' + minutes;
+    }
+    
+    
+    $(document).on('click', '.att-Edit-list-tbody-tr', function () {
+        console.log($(this).attr('id'));
+        var attidx = $(this).attr('id');
+        
+        
+       
+        getAttEditList(attidx).done(function(data) {
+        	console.log(data);
+        	
+        	// ISO 8601 날짜 문자열을 Date 객체로 변환
+            var date = new Date(data.att.att_modify_date);
+            // 한국 시간으로 변환
+            var kstDate = new Date(date.getTime() + (9 * 60 * 60 * 1000));
+            // 날짜만 추출 (yyyy-mm-dd 형식)
+            var formattedDate = kstDate.toISOString().split('T')[0];
+        	
+        	
+            $('#ddetail-no').val(data.att.att_applicant);
+            $('#ddetail-name').val(data.att.emp_name);
+            $('#ddetail-workday').val(data.att.work_day);
+            $('#ddetail-att-time').val(toKoreanTime(data.att.att_time));
+            $('#ddetail-leave-time').val(toKoreanTime(data.att.leave_time));
+            $('#ddetail-before-att').val(data.att.att_previous_attresult);
+            $('#ddetail-after-att').val(data.att.att_modify_attresult);
+            $('#ddetail-reason').val(data.att.att_reason);
+            
+            const rejectionReason = data.att.att_modify_reject != null ? data.att.att_modify_reject : '검토 전입니다';
+            const handler = data.att.att_modifier != 0 ? data.att.att_modifier : '검토 전입니다';
+            const processDate = data.att.att_modify_date ? formattedDate : '검토 전입니다';
+            
+            console.log("리젝트~"+rejectionReason);
+            console.log("핸들러~"+handler);
+            
+         // Null 체크 및 '검토 전입니다' 설정
+            $('#ddetail-rejection-reason').val(rejectionReason);
+            $('#ddetail-handler').val(handler);
+            $('#ddetail-process-date').val(processDate);
+          
+            $('#attApplyModal').modal('show');
+        }); 
     });
+    
+    function getAttEditList(attidx) {//사원 상세보기 
+        return $.ajax({
+            url: '/getAttEditListDetail.ajax',
+            type: 'GET',
+            data: {
+                'att_management_idx': attidx     
+            },
+            dataType: 'JSON',           
+            success: function(data) {
+                return data;
+            },
+            error: function(xhr, status, error) {
+                console.error('근태 수정 내역 데이터를 가져오는 중 오류 발생:', status, error);
+            }
+        });
+    }
     
     
 </script>

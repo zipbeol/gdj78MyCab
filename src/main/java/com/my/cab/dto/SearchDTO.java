@@ -22,8 +22,62 @@ public class SearchDTO {
     private int pageSize;
     private String filterIsRetired;
     private String filterForSearch;
+    private String filterAttResult;
+    private String filterAttDate;
+    private String searchEditText;
+    private String filterEditDate;
+    private String filterEditResult;
+    private String filterforsearchEdit;
+    
+    public String getSearchEditText() {
+		return searchEditText;
+	}
 
-    public String getPro_filter() {
+	public void setSearchEditText(String searchEditText) {
+		this.searchEditText = searchEditText;
+	}
+
+	public String getFilterEditDate() {
+		return filterEditDate;
+	}
+
+	public void setFilterEditDate(String filterEditDate) {
+		this.filterEditDate = filterEditDate;
+	}
+
+	public String getFilterEditResult() {
+		return filterEditResult;
+	}
+
+	public void setFilterEditResult(String filterEditResult) {
+		this.filterEditResult = filterEditResult;
+	}
+
+	public String getFilterforsearchEdit() {
+		return filterforsearchEdit;
+	}
+
+	public void setFilterforsearchEdit(String filterforsearchEdit) {
+		this.filterforsearchEdit = filterforsearchEdit;
+	}
+
+	public String getFilterAttResult() {
+		return filterAttResult;
+	}
+
+	public void setFilterAttResult(String filterAttResult) {
+		this.filterAttResult = filterAttResult;
+	}
+
+	public String getFilterAttDate() {
+		return filterAttDate;
+	}
+
+	public void setFilterAttDate(String filterAttDate) {
+		this.filterAttDate = filterAttDate;
+	}
+
+	public String getPro_filter() {
         return pro_filter;
     }
 

@@ -24,6 +24,240 @@
 	INSERT INTO attendance_management (attendance_management, att_applicant, att_previous_attresult, att_modify_attresult, att_reason)
 	VALUES (#{attendance_management},${att_applicant},#{att_previous_attresult},#{att_modify_attresult},#{att_reason})
 	</insert>
+	
+	<select id="attEditList" resultType="att">
+	SELECT att_management_idx, att_applicant_date, att_apply_status
+	FROM attendance_management
+	WHERE att_applicant = #{param3}
+	ORDER BY att_management_idx DESC
+	LIMIT #{param2}, 10
+	</select>
+	
+	<select id="allCount" resultType="Integer">
+		SELECT CEIL(COUNT(att_management_idx)
+		/ #{param1}) AS pages
+		FROM attendance_management
+		WHERE att_applicant = #{param2}
+	</select>
+	
+	<select id="attEditListDetail" resultType="att">
+	SELECT 
+	a.att_applicant, e.emp_name, at.work_day, 
+	at.att_time, at.leave_time, a.att_previous_attresult, 
+	a.att_modify_attresult, a.att_reason, a.att_modify_reject, 
+	a.att_modifier, a.att_modify_date
+	FROM attendance_management a
+	JOIN employee e ON a.att_applicant = e.emp_no
+	JOIN attendance at ON a.attendance_management = at.attendance_idx
+	WHERE a.att_management_idx = #{att_management_idx}
+	</select>
+	
+	<select id="totalAttList" resultType="att" parameterType="map">
+	SELECT 
+        e.emp_no,
+        e.emp_name,
+        t.title_name,
+        d.dept_name,
+        a.att_time,
+        a.leave_time,
+        a.att_result,
+        a.work_day
+	FROM 
+        attendance a
+	JOIN 
+        employee e ON a.emp_no = e.emp_no
+	JOIN 
+        title t ON e.title_no = t.title_no
+	JOIN 
+        department d ON e.dept_no = d.dept_no
+	<where>
+        <if test="filterAttDate != null and filterAttDate != ''">
+            AND a.work_day = #{filterAttDate}
+        </if>
+        <if test="filterAttResult != null and filterAttResult != ''">
+            AND a.att_result = #{filterAttResult}
+        </if>
+        <if test="searchText != null and searchText != ''">
+            <if test="filterForSearch != null and filterForSearch != ''">
+                <choose>
+                    <when test="filterForSearch == 'emp_no'">
+                        AND e.emp_no LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterForSearch == 'emp_name'">
+                        AND e.emp_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterForSearch == 'title_name'">
+                        AND t.title_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterForSearch == 'dept_name'">
+                        AND d.dept_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                </choose>
+            </if>
+        </if>
+    </where>
+</select>
+	
+	<select id="getAttTotal" resultType="int" parameterType="map">
+    SELECT COUNT(a.attendance_idx)
+    FROM attendance a 
+    JOIN employee e ON a.emp_no = e.emp_no 
+    JOIN department d ON e.dept_no = d.dept_no 
+    JOIN title t ON e.title_no = t.title_no
+    <where>
+        <if test="filterAttDate != null and filterAttDate != ''">
+            a.work_day = #{filterAttDate}
+        </if>
+        <if test="filterAttResult != null and filterAttResult != ''">
+            AND a.att_result = #{filterAttResult}
+        </if>
+        <if test="searchText != null and searchText != ''">
+            <if test="filterForSearch != null and filterForSearch != ''">
+                <choose>
+                    <when test="filterForSearch == 'emp_no'">
+                        AND e.emp_no LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterForSearch == 'emp_name'">
+                        AND e.emp_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterForSearch == 'title_name'">
+                        AND t.title_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterForSearch == 'dept_name'">
+                        AND d.dept_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                </choose>
+            </if>
+        </if>
+    </where>
+</select>
 
+<select id="getChart" resultType="att" parameterType="map">
+ SELECT
+    (SELECT COUNT(*)
+     FROM employee e
+     WHERE NOT EXISTS (
+         SELECT 1
+         FROM attendance a
+         WHERE a.emp_no = e.emp_no
+           AND a.work_day = #{filterAttDate}
+     )) AS absentCount,
+    (SELECT COUNT(*)
+     FROM attendance a
+     JOIN employee e ON a.emp_no = e.emp_no
+     WHERE a.att_time >= CONCAT(#{filterAttDate}, ' 09:00:00')
+       AND a.work_day = #{filterAttDate}
+     ) AS lateCount,
+    (SELECT COUNT(*)
+     FROM attendance a
+     JOIN employee e ON a.emp_no = e.emp_no
+     WHERE (a.att_result LIKE '%연차%' OR a.att_result LIKE '%반차%')
+       AND a.work_day = #{filterAttDate}
+     ) AS leaveCount
+</select>
+
+
+<select id="totalEditList" resultType="att" parameterType="map">
+	 SELECT 
+        a.att_management_idx, 
+        a.att_applicant_date, 
+        a.att_apply_status,
+        e.emp_name,
+        CASE
+            WHEN a.att_modifier IS NULL THEN '미처리'
+            ELSE '처리'
+        END AS 처리_여부
+    FROM attendance_management a
+    JOIN employee e ON e.emp_no = a.att_applicant
+    LEFT JOIN title t ON e.title_no = t.title_no
+    LEFT JOIN department d ON e.dept_no = d.dept_no
+    <where>
+        <if test="filterEditDate != null and filterEditDate != ''">
+            AND DATE(a.att_applicant_date) = #{filterEditDate}
+        </if>
+        <if test="filterEditResult != null and filterEditResult != ''">
+            <choose>
+                <when test="filterEditResult == '처리'">
+                    AND a.att_modifier IS NOT NULL
+                </when>
+                <when test="filterEditResult == '미처리'">
+                    AND a.att_modifier IS NULL
+                </when>
+                <when test="filterEditResult == '수정 승인'">
+                    AND a.att_apply_status = true
+                </when>
+                <when test="filterEditResult == '수정 거부'">
+                    AND a.att_apply_status = false
+                </when>
+            </choose>
+        </if>
+        <if test="searchEditText != null and searchEditText != ''">
+            <if test="filterforsearchEdit != null and filterforsearchEdit != ''">
+                <choose>
+                    <when test="filterforsearchEdit == 'emp_no'">
+                        AND e.emp_no LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterforsearchEdit == 'emp_name'">
+                        AND e.emp_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterforsearchEdit == 'title_name'">
+                        AND t.title_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterforsearchEdit == 'dept_name'">
+                        AND d.dept_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                </choose>
+            </if>
+        </if>
+    </where>
+</select>
+
+<select id="getEditTotalPages" resultType="int" parameterType="map">
+	SELECT COUNT(a.att_management_idx) AS count
+    FROM attendance_management a
+    JOIN employee e ON e.emp_no = a.att_applicant
+    LEFT JOIN title t ON e.title_no = t.title_no
+    LEFT JOIN department d ON e.dept_no = d.dept_no
+    <where>
+        <if test="filterEditDate != null and filterEditDate != ''">
+            AND DATE(a.att_applicant_date) = #{filterEditDate}
+        </if>
+        <if test="filterEditResult != null and filterEditResult != ''">
+            <choose>
+                <when test="filterEditResult == '처리'">
+                    AND a.att_modifier IS NOT NULL
+                </when>
+                <when test="filterEditResult == '미처리'">
+                    AND a.att_modifier IS NULL
+                </when>
+                <when test="filterEditResult == '수정 승인'">
+                    AND a.att_apply_status = true
+                </when>
+                <when test="filterEditResult == '수정 거부'">
+                    AND a.att_apply_status = false
+                </when>
+            </choose>
+        </if>
+        <if test="searchEditText != null and searchEditText != ''">
+            <if test="filterforsearchEdit != null and filterforsearchEdit != ''">
+                <choose>
+                    <when test="filterforsearchEdit == 'emp_no'">
+                        AND e.emp_no LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterforsearchEdit == 'emp_name'">
+                        AND e.emp_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterforsearchEdit == 'title_name'">
+                        AND t.title_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterforsearchEdit == 'dept_name'">
+                        AND d.dept_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                </choose>
+            </if>
+        </if>
+    </where>
+</select>
+	
 
 </mapper>

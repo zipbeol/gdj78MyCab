@@ -28,6 +28,7 @@ public class MaintenanceController {
         logger.info("SearchDTO: {}", searchDTO.getSearchIdx());
         return Map.of("maintenanceList", maintenanceService.getMaintenanaceList(searchDTO));
     }
+
     @GetMapping("/getTotalPages.ajax")
     @ResponseBody
     public Map<String, Object> getMaintenanceTotalPages(SearchDTO searchDTO) {
@@ -46,5 +47,11 @@ public class MaintenanceController {
         );
 
         return Map.of("result", maintenanceService.insertMaintenanceHistory(maintenanceDTO));
+    }
+
+    @GetMapping("/detail.ajax")
+    @ResponseBody
+    public Map<String, Object> getMaintenanceDetail(String maintenanceIdx) {
+        return Map.of("info", maintenanceService.getMaintenanceDetail(maintenanceIdx));
     }
 }

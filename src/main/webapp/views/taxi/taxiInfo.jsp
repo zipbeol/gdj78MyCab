@@ -582,7 +582,7 @@
                     <div class="col-9" id="maintenance-detail-date"></div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col-3"><strong>정비소:</strong></div>
+                    <div class="col-3"><strong>정비소 이름:</strong></div>
                     <div class="col-9" id="maintenance-detail-workshop"></div>
                 </div>
                 <div class="row mb-3">
@@ -593,13 +593,19 @@
                     <div class="col-3"><strong>정비 비용:</strong></div>
                     <div class="col-9" id="maintenance-detail-cost"></div>
                 </div>
+                <div class="row mb-3">
+                    <div class="col-3"><strong>택시 번호판:</strong></div>
+                    <div class="col-9" id="maintenance-detail-license-plate"></div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
+
 <!-- 사고 이력 상세보기 모달 -->
-<div class="modal fade" id="accidentDetailModal" tabindex="-1" aria-labelledby="accidentDetailModalLabel" aria-hidden="true">
+<div class="modal fade" id="accidentDetailModal" tabindex="-1" aria-labelledby="accidentDetailModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -683,7 +689,6 @@
     $('#filter-maintenance-reg-date').val(filterMaintenanceAllDay);
 
 
-
     getTotalPages();
     getList();
 
@@ -694,13 +699,15 @@
         $.ajax({
             url: '/maintenance/detail.ajax',
             type: 'GET',
-            data: { 'maintenanceIdx': id },
+            data: {'maintenanceIdx': id},
             dataType: 'JSON',
             success: function (data) {
-                $('#maintenance-detail-date').text(data.maintenance_history_date);
-                $('#maintenance-detail-workshop').text(data.maintenance_history_workshop_name);
-                $('#maintenance-detail-description').text(data.maintenance_history_description);
-                $('#maintenance-detail-cost').text(data.maintenance_history_cost.toLocaleString() + ' 원');
+                console.log(data);
+                $('#maintenance-detail-date').text(data.info.maintenance_history_date);
+                $('#maintenance-detail-workshop').text(data.info.maintenance_history_workshop_name);
+                $('#maintenance-detail-description').text(data.info.maintenance_history_description);
+                $('#maintenance-detail-cost').text(Number(data.info.maintenance_history_cost).toLocaleString() + ' 원');
+                $('#maintenance-detail-license-plate').text(data.info.maintenance_taxi_license_plate);
                 $('#maintenanceDetailModal').modal('show');
             },
             error: function (error) {
@@ -715,7 +722,7 @@
         $.ajax({
             url: '/accident/detail.ajax',
             type: 'GET',
-            data: { 'accidentIdx': id },
+            data: {'accidentIdx': id},
             dataType: 'JSON',
             success: function (data) {
                 console.log(data);

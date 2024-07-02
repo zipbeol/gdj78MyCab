@@ -10,7 +10,7 @@
 		FROM schedule s
 		INNER JOIN employee e ON #{param1} = e.emp_no
 		INNER JOIN department d ON e.dept_no = d.dept_no
-		WHERE s.schedule_del ='0' AND
+		WHERE s.schedule_del ='0' AND s.schedule_cal_idx is NULL AND
 			(s.schedule_category = '전사' OR (s.schedule_category = '개인' AND s.schedule_emp_no = #{param1} )
 			OR(s.schedule_category = '부서' AND s.schedule_dept_no = d.dept_no))
 	</select>
@@ -36,7 +36,7 @@
 	JOIN 
 	    department d ON e.dept_no = d.dept_no
 	WHERE 
-	    e.emp_no = #{schedule_emp_no};
+	    e.emp_no = #{schedule_emp_no}
 	</insert>
 	
 	<select id="calendarDetail" resultType="calendarDTO">
@@ -44,7 +44,7 @@
 			FROM schedule s
 			inner join employee e on s.schedule_emp_no = e.emp_no
 			inner join department d on e.dept_no =d.dept_no 
-			WHERE schedule_idx = #{param1};
+			WHERE schedule_idx = #{param1}
 	</select>
 	
 	<update id="deleteSchedule">
@@ -59,5 +59,66 @@
 		schedule_color = #{schedule_color} WHERE schedule_idx = #{schedule_idx}
 		
 	</update>
+	
+	<select id="getEmpInfo" resultType="emp">
+		select e.emp_no,e.emp_name,e.emp_email,e.emp_extension_number,e.emp_level,d.dept_name,t.title_name from employee e 
+		INNER JOIN department d on e.dept_no = d.dept_no 
+		INNER JOIN title t on e.title_no = t.title_no order by t.title_no asc
+	</select>
+	
+	<select id="getDeptInfo" resultType="String">
+		SELECT dept_name FROM department
+	</select>
+	
+	<insert id="createShareCalendar"
+		parameterType="calendarDTO"
+		useGeneratedKeys="true"
+		keyColumn="calendar_idx"
+		keyProperty="calendar_idx"
+	>
+		INSERT INTO calendar (calendar_emp_no,calendar_name,calendar_category,calendar_color) VALUES (#{calendar_emp_no},#{calendar_name},#{calendar_category},#{calendar_color})
+	
+	</insert>
+	
+	<insert id="createSharedSchedule" parameterType="map">
+			INSERT INTO share_calendar (share_cal_idx,shared_emp_no)
+			VALUES
+			<foreach collection="list" item="item" separator=",">
+				(#{idx},#{item.empNo})
+			</foreach>
+	</insert>
+	
+	<select id="getShareCalInfo" parameterType="calendarDTO">
+		SELECT * FROM calendar
+	</select>
+	
+	<insert id="createShareSchedule">
+		INSERT INTO schedule 
+	    (schedule_name, schedule_content, schedule_start_date, schedule_end_date, schedule_emp_no, schedule_category, schedule_color,schedule_dept_no,schedule_cal_idx)
+		SELECT 
+		    #{schedule_name}, 
+		    #{schedule_content}, 
+		    #{schedule_start_date}, 
+		    #{schedule_end_date}, 
+		    #{schedule_emp_no}, 
+		    '공유일정', 
+		    #{schedule_color}, 
+		    d.dept_no,
+		    #{calendar_idx}
+		FROM 
+		    employee e
+		JOIN 
+		    department d ON e.dept_no = d.dept_no
+		WHERE 
+		    e.emp_no = #{schedule_emp_no}
+	</insert>
+	
+	<select id="shareCalListCall" resultType="calendarDTO">
+		SELECT * FROM schedule s 
+		INNER JOIN share_calendar sc  ON sc.share_cal_idx = s.schedule_cal_idx
+		INNER JOIN calendar cal ON cal.calendar_idx = s.schedule_cal_idx 
+		WHERE sc.shared_emp_no = #{param1}
+		GROUP BY shared_emp_no 
+	</select>
 
 </mapper>

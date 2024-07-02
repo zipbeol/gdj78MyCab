@@ -29,6 +29,17 @@ public class CalendarDTO {
 	private String schedule_emp_extension_number;
 	private String schedule_dept_name;
 	
+	//캘린더
+	private int calendar_idx;	
+	private int calendar_emp_no;	
+	private String calendar_name;	
+	private String calendar_category;
+	private String calendar_color;
+	// 공유 캘린더
+	private int share_idx;	
+	private int share_cal_idx;
+	private int shared_emp_no;
+	
 	public String getSechdule_emp_name() {
 		return sechdule_emp_name;
 	}
@@ -125,6 +136,54 @@ public class CalendarDTO {
 	}
 	public void setSchedule_color(String schedule_color) {
 		this.schedule_color = schedule_color;
+	}
+	public int getCalendar_idx() {
+		return calendar_idx;
+	}
+	public void setCalendar_idx(int calendar_idx) {
+		this.calendar_idx = calendar_idx;
+	}
+	public int getCalendar_emp_no() {
+		return calendar_emp_no;
+	}
+	public void setCalendar_emp_no(int calendar_emp_no) {
+		this.calendar_emp_no = calendar_emp_no;
+	}
+	public String getCalendar_name() {
+		return calendar_name;
+	}
+	public void setCalendar_name(String calendar_name) {
+		this.calendar_name = calendar_name;
+	}
+	public String getCalendar_category() {
+		return calendar_category;
+	}
+	public void setCalendar_category(String calendar_category) {
+		this.calendar_category = calendar_category;
+	}
+	public int getShare_idx() {
+		return share_idx;
+	}
+	public void setShare_idx(int share_idx) {
+		this.share_idx = share_idx;
+	}
+	public int getShare_cal_idx() {
+		return share_cal_idx;
+	}
+	public void setShare_cal_idx(int share_cal_idx) {
+		this.share_cal_idx = share_cal_idx;
+	}
+	public int getShared_emp_no() {
+		return shared_emp_no;
+	}
+	public void setShared_emp_no(int shared_emp_no) {
+		this.shared_emp_no = shared_emp_no;
+	}
+	public String getCalendar_color() {
+		return calendar_color;
+	}
+	public void setCalendar_color(String calendar_color) {
+		this.calendar_color = calendar_color;
 	}
 	
 	

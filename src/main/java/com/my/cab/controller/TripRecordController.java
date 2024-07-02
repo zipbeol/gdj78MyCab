@@ -1,5 +1,6 @@
 package com.my.cab.controller;
 
+import com.my.cab.dto.SearchDTO;
 import com.my.cab.dto.TripRecordDTO;
 import com.my.cab.service.TripRecordService;
 import org.slf4j.Logger;
@@ -24,6 +25,7 @@ public class TripRecordController {
 
     @RequestMapping("/list.go")
     public String triprecordGo(Model model) {
+        model.addAttribute("tripFirstDate", tripRecordService.getFirstTripDate());
         return "triprecord/tripRecord";
     }
 
@@ -41,6 +43,17 @@ public class TripRecordController {
                 "\n::::::::::::::::::::::"
         );
         return Map.of("result", tripRecordService.insertTripRecord(tripRecordDTO));
+    }
+
+    @GetMapping("/list.ajax")
+    @ResponseBody
+    public Map<String, Object> listTripRecord(SearchDTO searchDTO) {
+        return tripRecordService.listTripRecord(searchDTO);
+    }
+    @GetMapping("/getTotalPages.ajax")
+    @ResponseBody
+    public Map<String, Object> totalPageTripRecord(SearchDTO searchDTO) {
+        return tripRecordService.totalPageTripRecord(searchDTO);
     }
 
 }

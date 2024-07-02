@@ -28,56 +28,119 @@ public class SearchDTO {
     private String filterEditDate;
     private String filterEditResult;
     private String filterforsearchEdit;
-    
+    private String filterDriverName;
+    private String filterStartLocation;
+    private String filterEndLocation;
+    private String filterMinDistance;
+    private String filterMaxDistance;
+    private String filterMinFare;
+    private String filterMaxFare;
+
+    public String getFilterDriverName() {
+        return filterDriverName;
+    }
+
+    public void setFilterDriverName(String filterDriverName) {
+        this.filterDriverName = filterDriverName;
+    }
+
+    public String getFilterStartLocation() {
+        return filterStartLocation;
+    }
+
+    public void setFilterStartLocation(String filterStartLocation) {
+        this.filterStartLocation = filterStartLocation;
+    }
+
+    public String getFilterEndLocation() {
+        return filterEndLocation;
+    }
+
+    public void setFilterEndLocation(String filterEndLocation) {
+        this.filterEndLocation = filterEndLocation;
+    }
+
+    public String getFilterMinDistance() {
+        return filterMinDistance;
+    }
+
+    public void setFilterMinDistance(String filterMinDistance) {
+        this.filterMinDistance = filterMinDistance;
+    }
+
+    public String getFilterMaxDistance() {
+        return filterMaxDistance;
+    }
+
+    public void setFilterMaxDistance(String filterMaxDistance) {
+        this.filterMaxDistance = filterMaxDistance;
+    }
+
+    public String getFilterMinFare() {
+        return filterMinFare;
+    }
+
+    public void setFilterMinFare(String filterMinFare) {
+        this.filterMinFare = filterMinFare;
+    }
+
+    public String getFilterMaxFare() {
+        return filterMaxFare;
+    }
+
+    public void setFilterMaxFare(String filterMaxFare) {
+        this.filterMaxFare = filterMaxFare;
+    }
+
     public String getSearchEditText() {
-		return searchEditText;
-	}
+        return searchEditText;
+    }
 
-	public void setSearchEditText(String searchEditText) {
-		this.searchEditText = searchEditText;
-	}
+    public void setSearchEditText(String searchEditText) {
+        this.searchEditText = searchEditText;
+    }
 
-	public String getFilterEditDate() {
-		return filterEditDate;
-	}
+    public String getFilterEditDate() {
+        return filterEditDate;
+    }
 
-	public void setFilterEditDate(String filterEditDate) {
-		this.filterEditDate = filterEditDate;
-	}
+    public void setFilterEditDate(String filterEditDate) {
+        this.filterEditDate = filterEditDate;
+    }
 
-	public String getFilterEditResult() {
-		return filterEditResult;
-	}
+    public String getFilterEditResult() {
+        return filterEditResult;
+    }
 
-	public void setFilterEditResult(String filterEditResult) {
-		this.filterEditResult = filterEditResult;
-	}
+    public void setFilterEditResult(String filterEditResult) {
+        this.filterEditResult = filterEditResult;
+    }
 
-	public String getFilterforsearchEdit() {
-		return filterforsearchEdit;
-	}
+    public String getFilterforsearchEdit() {
+        return filterforsearchEdit;
+    }
 
-	public void setFilterforsearchEdit(String filterforsearchEdit) {
-		this.filterforsearchEdit = filterforsearchEdit;
-	}
+    public void setFilterforsearchEdit(String filterforsearchEdit) {
+        this.filterforsearchEdit = filterforsearchEdit;
+    }
 
-	public String getFilterAttResult() {
-		return filterAttResult;
-	}
+    public String getFilterAttResult() {
+        return filterAttResult;
+    }
 
-	public void setFilterAttResult(String filterAttResult) {
-		this.filterAttResult = filterAttResult;
-	}
+    public void setFilterAttResult(String filterAttResult) {
+        this.filterAttResult = filterAttResult;
+    }
 
-	public String getFilterAttDate() {
-		return filterAttDate;
-	}
+    public String getFilterAttDate() {
+        return filterAttDate;
+    }
 
-	public void setFilterAttDate(String filterAttDate) {
-		this.filterAttDate = filterAttDate;
-	}
+    public void setFilterAttDate(String filterAttDate) {
+        this.filterAttDate = filterAttDate;
+    }
 
-	public String getPro_filter() {
+    public String getPro_filter() {
         return pro_filter;
     }
 

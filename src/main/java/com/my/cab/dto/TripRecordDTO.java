@@ -14,6 +14,15 @@ public class TripRecordDTO {
     private String trip_record_idx;
     private String[] recordLats;
     private String[] recordLngs;
+    private String trip_record_driver_name;
+
+    public String getTrip_record_driver_name() {
+        return trip_record_driver_name;
+    }
+
+    public void setTrip_record_driver_name(String trip_record_driver_name) {
+        this.trip_record_driver_name = trip_record_driver_name;
+    }
 
     public String[] getRecordLats() {
         return recordLats;

@@ -52,7 +52,7 @@ $(".datepicker-time").daterangepicker({
 });
 
 $(".datepicker-time-24").daterangepicker({
-	drops: "up",
+	drops: "down",
 	singleDatePicker: true,
 	timePicker: true,
 	timePicker24Hour: true,

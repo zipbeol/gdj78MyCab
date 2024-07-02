@@ -47,4 +47,8 @@ public class AccidentService {
     public String getDriverFirstAccidentDate(String driverIdx) {
         return accidentDAO.getDriverFirstAccidentDate(driverIdx);
     }
+
+    public AccidentDTO getAccidentDetail(String accidentIdx) {
+        return accidentDAO.getAccidentDetail(accidentIdx);
+    }
 }

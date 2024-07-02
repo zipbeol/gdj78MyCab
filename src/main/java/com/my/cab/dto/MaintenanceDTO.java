@@ -10,6 +10,15 @@ public class MaintenanceDTO {
     private String maintenance_history_description;
     private String maintenance_history_cost;
     private String maintenance_history_workshop_name;
+    private String maintenance_taxi_license_plate;
+
+    public String getMaintenance_taxi_license_plate() {
+        return maintenance_taxi_license_plate;
+    }
+
+    public void setMaintenance_taxi_license_plate(String maintenance_taxi_license_plate) {
+        this.maintenance_taxi_license_plate = maintenance_taxi_license_plate;
+    }
 
     public String getMaintenance_history_idx() {
         return maintenance_history_idx;

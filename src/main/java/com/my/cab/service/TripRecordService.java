@@ -20,6 +20,11 @@ public class TripRecordService {
     @Autowired
     TripRecordDAO tripRecordDAO;
 
+    /**
+     * 운행 기록 추가, 운행좌표들 저장
+     * @param tripRecordDTO
+     * @return
+     */
     @Transactional
     public boolean insertTripRecord(TripRecordDTO tripRecordDTO) {
         tripRecordDTO.setTrip_record_taxi_idx("3");

@@ -133,10 +133,22 @@ public class TaxiService {
         return PageCalc.calculateTotalPages(totalCount, PAGE_SIZE);
     }
 
+    /**
+     * 검색된 택시 기사 리스트 페이지 제한 X
+     *
+     * @param searchDTO
+     * @return
+     */
     public List<TaxiDTO> getSearchedList(SearchDTO searchDTO) {
         return taxiDAO.getSearchedList(searchDTO);
     }
 
+    /**
+     * 폐차 등록과 결과
+     *
+     * @param searchDTO
+     * @return
+     */
     public Map<String, Object> getScrapInfoAndResult(SearchDTO searchDTO) {
         Map<String, Object> map = new HashMap<String, Object>();
         TaxiDTO dto = getTaxiInfo(searchDTO.getSearchIdx());
@@ -151,14 +163,32 @@ public class TaxiService {
         return map;
     }
 
+    /**
+     * 사고 등록
+     *
+     * @param taxiDTO
+     * @return
+     */
     public boolean scrapRegister(TaxiDTO taxiDTO) {
         return taxiDAO.scrapUpdate(taxiDTO);
     }
 
+    /**
+     * 사고 수정
+     *
+     * @param taxiDTO
+     * @return
+     */
     public boolean scrapUpdate(TaxiDTO taxiDTO) {
         return taxiDAO.scrapUpdate(taxiDTO);
     }
 
+    /**
+     * 사고 삭제 ({@code is_active}비활성 처리)
+     *
+     * @param taxiDTO
+     * @return
+     */
     public boolean scrapDelete(TaxiDTO taxiDTO) {
         return taxiDAO.scrapDelete(taxiDTO);
     }

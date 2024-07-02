@@ -29,7 +29,7 @@ public class SearchDTO {
     private String filterEditResult;
     private String filterforsearchEdit;
     
-    public String getSearchEditText() {
+	public String getSearchEditText() {
 		return searchEditText;
 	}
 

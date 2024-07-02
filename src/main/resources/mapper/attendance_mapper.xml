@@ -164,9 +164,9 @@
         a.att_apply_status,
         e.emp_name,
         CASE
-            WHEN a.att_modifier IS NULL THEN '미처리'
-            ELSE '처리'
-        END AS 처리_여부
+            WHEN a.att_modifier IS NULL THEN 'false'
+            ELSE 'true'
+        END AS process_status
     FROM attendance_management a
     JOIN employee e ON e.emp_no = a.att_applicant
     LEFT JOIN title t ON e.title_no = t.title_no
@@ -177,10 +177,10 @@
         </if>
         <if test="filterEditResult != null and filterEditResult != ''">
             <choose>
-                <when test="filterEditResult == '처리'">
+                <when test="filterEditResult == 'true'">
                     AND a.att_modifier IS NOT NULL
                 </when>
-                <when test="filterEditResult == '미처리'">
+                <when test="filterEditResult == 'false'">
                     AND a.att_modifier IS NULL
                 </when>
                 <when test="filterEditResult == '수정 승인'">
@@ -192,22 +192,7 @@
             </choose>
         </if>
         <if test="searchEditText != null and searchEditText != ''">
-            <if test="filterforsearchEdit != null and filterforsearchEdit != ''">
-                <choose>
-                    <when test="filterforsearchEdit == 'emp_no'">
-                        AND e.emp_no LIKE CONCAT('%', #{searchText}, '%')
-                    </when>
-                    <when test="filterforsearchEdit == 'emp_name'">
-                        AND e.emp_name LIKE CONCAT('%', #{searchText}, '%')
-                    </when>
-                    <when test="filterforsearchEdit == 'title_name'">
-                        AND t.title_name LIKE CONCAT('%', #{searchText}, '%')
-                    </when>
-                    <when test="filterforsearchEdit == 'dept_name'">
-                        AND d.dept_name LIKE CONCAT('%', #{searchText}, '%')
-                    </when>
-                </choose>
-            </if>
+                        AND e.emp_name LIKE CONCAT('%', #{searchEditText}, '%')
         </if>
     </where>
 </select>
@@ -239,25 +224,34 @@
             </choose>
         </if>
         <if test="searchEditText != null and searchEditText != ''">
-            <if test="filterforsearchEdit != null and filterforsearchEdit != ''">
-                <choose>
-                    <when test="filterforsearchEdit == 'emp_no'">
-                        AND e.emp_no LIKE CONCAT('%', #{searchText}, '%')
-                    </when>
-                    <when test="filterforsearchEdit == 'emp_name'">
-                        AND e.emp_name LIKE CONCAT('%', #{searchText}, '%')
-                    </when>
-                    <when test="filterforsearchEdit == 'title_name'">
-                        AND t.title_name LIKE CONCAT('%', #{searchText}, '%')
-                    </when>
-                    <when test="filterforsearchEdit == 'dept_name'">
-                        AND d.dept_name LIKE CONCAT('%', #{searchText}, '%')
-                    </when>
-                </choose>
-            </if>
+             AND e.emp_name LIKE CONCAT('%', #{searchEditText}, '%')
         </if>
     </where>
 </select>
+
+	<update id="approvalReject">
+		UPDATE attendance_management
+    	SET 
+        att_modifier = #{att_modifier},
+        att_modify_reject = #{att_modify_reject},
+        att_apply_status = #{att_apply_status},
+        att_modify_date = NOW()
+    	WHERE 
+        att_management_idx = #{att_management_idx}
+	</update>
+
+	<update id="approvalPermit">
+		UPDATE attendance_management am
+    	JOIN attendance a ON am.attendance_management = a.attendance_idx
+    	SET 
+        am.att_modifier = #{att_modifier},
+        am.att_apply_status = #{att_apply_status},
+        am.att_modify_date = NOW(),
+        a.att_result = '근무'
+    	WHERE 
+        am.att_management_idx = #{att_management_idx}
+	</update>
+
 	
 
 </mapper>

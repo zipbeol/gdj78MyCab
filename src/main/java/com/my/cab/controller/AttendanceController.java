@@ -132,7 +132,6 @@ public Map<String, Object> getTotalPages(SearchDTO searchDTO){
 	public Map<String, Object> totalEditList(SearchDTO searchDTO){
 		 logger.info("\nsearchDTO SearchText:" + searchDTO.getSearchText()
         + "\nsearchDTO filterAttResult:" + searchDTO.getFilterAttResult()
-       + "\nsearchDTO filterForSearch:" + searchDTO.getFilterForSearch()
         + "\nsearchDTO page:" + searchDTO.getPage()+ "\nsearchDTO date:" + searchDTO.getFilterAttDate());
 		
 		return attService.totalEditList(searchDTO);
@@ -147,6 +146,23 @@ public Map<String, Object> getEditTotalPages(SearchDTO searchDTO){
 		return attService.getEditTotalPages(searchDTO);
 	} 
 	
+	@GetMapping(value="approvalReject.ajax")
+	@ResponseBody
+	public Map<String, Object> approvalReject(AttendanceDTO attDTO){
+		
+		boolean isSuccess =  attService.approvalReject(attDTO);
+		
+		return Map.of("isSuccess", isSuccess);
+	}
+	
+	@GetMapping(value="approvalPermit.ajax")
+	@ResponseBody
+	public Map<String, Object> approvalPermit(AttendanceDTO attDTO){
+		
+		boolean isSuccess =  attService.approvalPermit(attDTO);
+		
+		return Map.of("isSuccess", isSuccess);
+	}
 	
 	
 	

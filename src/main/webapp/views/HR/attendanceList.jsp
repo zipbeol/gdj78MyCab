@@ -299,7 +299,7 @@
                         </div>
                         <div class="row">
                         <div class="col-12 text-end d-md-flex justify-content-md-end gap-2">
-                        <input type="button" class="btn btn-secondary" onclick="filterReset()"
+                        <input type="button" class="btn btn-secondary" onclick="EditfilterReset()"
                                        value="초기화">
                                        </div></div>
                         <div class="row">
@@ -311,8 +311,7 @@
                                                             <div class="col-2">
                                                             </div>
                                                             <div class="col-2">
-                                                                <label for="search-category-maintenance"
-                                                                       class="form-label">카테고리</label>
+                                                                
                                                             </div>
                                                             <div class="col-4">
                                                                 <label for="search-text-maintenance"
@@ -337,13 +336,7 @@
                                                             <div class="col-2">
                                                             </div>
                                                             <div class="col-2 d-flex">
-                                                                <select class="form-select maintenance-search-filter"
-                                                                        id="filterforsearchEdit">
-                                                                    <option value="emp_no">사번</option>
-																	<option value="emp_name">이름</option>
-																	<option value="title_name">직급</option>
-																	<option value="dept_name">부서</option>
-                                                                </select>
+                                                                
                                                             </div>
                                                             <div class="col-4">
                                                                 <input type="text"
@@ -355,10 +348,10 @@
                                                                 <select class="form-select maintenance-search-filter"
                                                                         id="filter-edit-result">
                                                                    <option value="">처리 필터</option>
-   																	<option value="processed">처리</option>
-    																<option value="unprocessed">미처리</option>
-    																<option value="approved">수정 승인</option>
-   																	<option value="rejected">수정 거부</option>
+   																	<option value="true">처리</option>
+    																<option value="false">미처리</option>
+    																<option value="수정 승인">수정 승인</option>
+   																	<option value="수정 거부">수정 거부</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -391,7 +384,7 @@
 										<!-- 리스트 테이블 종료 -->
 										<!-- 페이지 네이션 시작 -->
 										<nav aria-label="Page navigation example" class="mt-3">
-											<ul class="pagination justify-content-center" id="pagination"></ul>
+											<ul class="pagination justify-content-center" id="pagination2"></ul>
 										</nav>
 										<!-- 페이지 네이션 종료 -->
                 </div>
@@ -437,6 +430,7 @@
                         <div class="input-group">
                             <label class="input-group-text" for="detail-no">사번</label>
                             <input type="text" class="form-control" id="ddetail-no" name="emp_no" readonly>
+                            <input type="hidden" class="form-control" id="ddetail-idx" name="emp_no" readonly>
                         </div>
                     </div>
                     <div class="col-6">
@@ -483,14 +477,22 @@
                     <textarea class="form-control" id="ddetail-reason" name="att_reason" rows="3" style="height: 245px; resize: none;"readonly></textarea>
                 </div>
                 <div class="input-group mb-3">
+                    <label class="input-group-text" for="detail-reason">수정 승인 여부</label>
+                    <select class="form-select" id="ddetail-approval">
+		    			<option value="">승인 여부</option>
+ 						<option value="true">승인</option>
+  						<option value="false">거부</option>
+                   </select>
+                </div>
+                <div class="input-group mb-3" id="ddetail-reject-reason" style="display: none;">
                     <label class="input-group-text" for="detail-rejection-reason">수정 거부 사유</label>
-                    <input type="text" class="form-control" id="ddetail-rejection-reason" name="rejection_reason" readonly>
+                    <input type="text" class="form-control" id="ddetail-rejection-reason" placeholder="수정 거부 사유를 입력해주세요." name="rejection_reason">
                 </div>
                 <div class="row mb-3">
                     <div class="col-6">
                         <div class="input-group">
                             <label class="input-group-text" for="detail-handler">담당자</label>
-                            <input type="text" class="form-control" id="ddetail-handler" name="handler" readonly>
+                            <input type="text" class="form-control" id="ddetail-handler" name="handler" value="${sessionScope.loginId}" readonly>
                         </div>
                     </div>
                     <div class="col-6">
@@ -502,7 +504,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                
+                <button type="button" class="btn btn-primary" id="edit-maintenance-btn" onclick="attEdit()">등록</button>
             </div>
         </div>
     </div>
@@ -548,11 +550,22 @@
 /* 전체 근태 내역 스크립트 시작  */
  
  
+ 
+$(document).ready(function(){
+	getTotalPages();
+	 getList();
+	 updateChart(filterAttDate);
+	
+	
+});
+ 
+ 
+ $('#taxi-detail-tab').on('click', function(e) {
 	 getTotalPages();
 	 getList();
 	 updateChart(filterAttDate);
-
-    
+});
+ 
     var searchText = '';
     var filterAttDate = '';
     var filterAttResult = '';
@@ -574,10 +587,12 @@
         $('#filter-att-result').val('');
         $('#search-emp').val('');
         $('#filterforsearch').val('emp_no');
-        $('#filter-att-date').val('today');
+        $('#filter-att-date').val(today);
+        filterAttDate = $('#filter-att-date').val(today);
         currentPage = 1; // 페이지 번호 초기화
         getTotalPages();
         getList(); // 목록 새로고침
+        updateChart(filterAttDate);
     }
     
     
@@ -782,7 +797,7 @@
    
     
     /* 수정 요청 내역 스크립트 시작  */
-  /*   $('#taxi-schedule-tab').on('click', function(e) {
+    $('#taxi-schedule-tab').on('click', function(e) {
     	getEditTotalPages();
         getEditList();
 });
@@ -791,25 +806,24 @@
     var searchEditText = '';
     var filterEditDate = '';
     var filterEditResult = '';
-    var filterforsearchEdit = '';
+   
     
     
   
     
     // 검색 값들 변수에 저장
-    function getSearchValue() {
+    function getEditSearchValue() {
     	filterEditResult = $('#filter-edit-result').val();
-    	filterforsearchEdit = $('#filterforsearchEdit').val();
 		searchEditText = $('#search-edit').val();
 		filterEditDate = $('#filter-edit-date').val();
     }
     
     // 필터 값 리셋
-    function filterReset() {
+    function EditfilterReset() {
         $('#filter-edit-result').val('');
         $('#search-edit').val('');
-        $('#filterforsearchEdit').val('emp_no');
-        $('#filter-edit-date').val('today');
+        $('#filter-edit-date').val(today);
+        filterEditDate = $('#filter-edit-date').val(today);
         currentPage = 1; // 페이지 번호 초기화
         getEditTotalPages();
         getEditList();
@@ -838,14 +852,13 @@
     
     // 근태수정리스트 호출
     function getEditList() {
-        getSearchValue();
+    	getEditSearchValue();
         $.ajax({
             url: '/totalEditList.ajax',
             type: 'GET',
             data: {
                 'searchEditText': searchEditText,
                 'filterEditResult': filterEditResult,
-                'filterforsearchEdit': filterforsearchEdit,
                 'filterEditDate':filterEditDate,
                 'page': currentPage
                
@@ -862,21 +875,20 @@
 
     // 토탈 페이지 호출
     function getEditTotalPages() {
-        getSearchValue();
+    	getEditSearchValue();
         $.ajax({
             url: '/getEditTotalPages.ajax',
             type: 'GET',
             data: {
             	 'searchEditText': searchEditText,
                  'filterEditResult': filterEditResult,
-                 'filterforsearchEdit': filterforsearchEdit,
                  'filterEditDate':filterEditDate,
             },
             dataType: 'JSON',
             success: function (data) {
                 console.log(data);
-                $('#pagination').twbsPagination('destroy');
-                $('#pagination').twbsPagination({
+                $('#pagination2').twbsPagination('destroy');
+                $('#pagination2').twbsPagination({
                     totalPages: data.totalPages, // 서버에서 받은 총 페이지 수
                     visiblePages: 5,
                     startPage: currentPage,
@@ -902,7 +914,7 @@
             for (item of list) {
             	
                 var att_apply_status = item.att_apply_status === true ? 'Y' : 'N';
-                var process_status = item.처리_여부 === '처리' ? 'Y' : 'N';
+                var process_status = item.process_status === 'true' ? 'Y' : 'N';
                 
                 
              // ISO 8601 날짜 문자열을 Date 객체로 변환
@@ -926,14 +938,7 @@
         $('#att-Edit-list').html(content);
     }
     
-     */
-    
-    
-    
-    
-    
-    
-    /* $(document).on('click', '.att-Edit-list-tbody-tr', function () {
+     $(document).on('click', '.att-Edit-list-tbody-tr', function () {
         console.log($(this).attr('id'));
         var attidx = $(this).attr('id');
         
@@ -947,7 +952,7 @@
             // 날짜만 추출 (yyyy-mm-dd 형식)
             var formattedDate = kstDate.toISOString().split('T')[0];
         	
-        	
+        	$('#ddetail-idx').val(attidx);
             $('#ddetail-no').val(data.att.att_applicant);
             $('#ddetail-name').val(data.att.emp_name);
             $('#ddetail-workday').val(data.att.work_day);
@@ -957,14 +962,11 @@
             $('#ddetail-after-att').val(data.att.att_modify_attresult);
             $('#ddetail-reason').val(data.att.att_reason);
             
-            const rejectionReason = data.att.att_modify_reject != null ? data.att.att_modify_reject : '검토 전입니다';
-            const handler = data.att.att_modifier != 0 ? data.att.att_modifier : '검토 전입니다';
-            const processDate = data.att.att_modify_date ? formattedDate : '검토 전입니다';
-            
-            console.log("리젝트~"+rejectionReason);
-            console.log("핸들러~"+handler);
-            
-         // Null 체크 및 '검토 전입니다' 설정
+            const rejectionReason = data.att.att_modify_reject != null ? data.att.att_modify_reject : '';
+            const handler = data.att.att_modifier != 0 ? data.att.att_modifier : '${sessionScope.loginId}';
+            const processDate = data.att.att_modify_date ? formattedDate : today;
+          
+         
             $('#ddetail-rejection-reason').val(rejectionReason);
             $('#ddetail-handler').val(handler);
             $('#ddetail-process-date').val(processDate);
@@ -989,7 +991,95 @@
             }
         });
     }
-     */
+    
+    
+    $('#ddetail-approval').change(function() {
+        var approvalStatus = $(this).val();
+        if (approvalStatus == 'false') {
+            // 거부일 경우 수정 거부 사유 입력 필드를 활성화
+            $('#ddetail-reject-reason').show();
+        } else {
+            // 승인일 경우 수정 거부 사유 입력 필드를 비활성화
+            $('#ddetail-reject-reason').hide();
+        }
+    });
+    
+ function attEdit(){
+    	
+    	var no = document.getElementById('ddetail-handler').value;
+    	var idx = document.getElementById('ddetail-idx').value;
+    	var previousResult = document.getElementById('ddetail-before-att').value;
+    	var modifyResult = document.getElementById('ddetail-after-att').value;
+    	var rejectReason = document.getElementById('ddetail-rejection-reason').value;
+    	var approval = document.getElementById('ddetail-approval').value;
+    	var isApproved = (approval === 'true');
+    	
+    	if (approval === false) {
+    		if (rejectReason === '' || rejectReason.trim() === '') {
+        		alert('수정 거부 사유를 입력해주세요!');
+    			
+    		}else{
+        	
+        	$.ajax({
+    	        type: "GET",
+    	        url: "/approvalReject.ajax",
+    	        data: {
+    	        	'att_management_idx': idx,
+    	        	'att_modifier': no,
+    	        	'att_modify_attresult': modifyResult,
+    	        	'att_modify_reject': rejectReason,
+    	        	'att_apply_status':isApproved
+    	        },
+    	        dataType: "json",
+    			success: function(data) {
+    				if (data.isSuccess) {
+    					$('#scheduleDetailModal').modal('hide');
+                        showAlert('success', '근태 수정 거부가 완료되었습니다.');
+                       
+                    } else {
+                    	$('#scheduleDetailModal').modal('hide');
+                        showAlert('danger', '근태 수정 거부에 실패했습니다.');
+                    }  
+    	        },
+    	        error: function(xhr, status, error) {
+    	            // 에러 처리
+    	            $("#result").html("<p>There was an error: " + error + "</p>");
+    	        }
+    	    });
+    		}
+			
+		}else{
+			
+			$.ajax({
+    	        type: "GET",
+    	        url: "/approvalPermit.ajax",
+    	        data: {
+    	        	'att_management_idx': idx,
+    	        	'att_modifier': no,
+    	        	'att_modify_attresult': modifyResult,
+    	        	'att_apply_status':isApproved
+    	        },
+    	        dataType: "json",
+    			success: function(data) {
+    				if (data.isSuccess) {
+    					$('#scheduleDetailModal').modal('hide');
+                        showAlert('success', '근태 수정 승인이 완료되었습니다.');
+                       
+                    } else {
+                    	$('#scheduleDetailModal').modal('hide');
+                        showAlert('danger', '근태 수정 승인에 실패했습니다.');
+                    }  
+    	        },
+    	        error: function(xhr, status, error) {
+    	            // 에러 처리
+    	            $("#result").html("<p>There was an error: " + error + "</p>");
+    	        }
+    	    });
+			
+			
+		}
+    	
+    }
     
 
 

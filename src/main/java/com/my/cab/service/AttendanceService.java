@@ -155,5 +155,27 @@ public class AttendanceService {
 
 	}
 
+	public boolean approvalReject(AttendanceDTO attDTO) {
+		boolean result = false;
+		
+		
+		
+		result = attDAO.approvalReject(attDTO);
+		
+		
+		
+		
+		return result;
+	}
+
+	public boolean approvalPermit(AttendanceDTO attDTO) {
+		boolean result = false;
+		
+		result = attDAO.approvalPermit(attDTO);
+		
+		
+		return result;
+	}
+
 	
 }

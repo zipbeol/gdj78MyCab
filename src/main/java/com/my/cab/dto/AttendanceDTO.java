@@ -32,6 +32,17 @@ public class AttendanceDTO {
 	private int absentCount;
     private int lateCount;
     private int leaveCount;
+    private String process_status;
+    
+    
+    public String getProcess_status() {
+		return process_status;
+	}
+
+	public void setProcess_status(String process_status) {
+		this.process_status = process_status;
+	}
+
 	
 	
 	public int getAbsentCount() {

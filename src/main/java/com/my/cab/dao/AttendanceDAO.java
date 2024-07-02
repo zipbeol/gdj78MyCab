@@ -34,4 +34,8 @@ public interface AttendanceDAO {
 
 	int getEditTotalPages(SearchDTO searchDTO);
 
+	boolean approvalReject(AttendanceDTO attDTO);
+
+	boolean approvalPermit(AttendanceDTO attDTO);
+
 }

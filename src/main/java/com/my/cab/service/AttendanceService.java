@@ -15,11 +15,12 @@ import org.springframework.stereotype.Service;
 
 import com.my.cab.dao.AttendanceDAO;
 import com.my.cab.dto.AttendanceDTO;
+import com.my.cab.dto.SearchDTO;
 
 
 @Service
 public class AttendanceService {
-	
+	private static final int PAGE_SIZE = 10;
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired AttendanceDAO attDAO;
 
@@ -35,7 +36,7 @@ public class AttendanceService {
 		return map;
 	}
 
-	public Map<String, Object> attHistoryDetail(String attendance_idx) {
+	public Map<String, Object> attHistoryDetail(int attendance_idx) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		AttendanceDTO dto = attDAO.getAttDetail(attendance_idx);
 		map.put("dto", dto);
@@ -70,6 +71,88 @@ public class AttendanceService {
 		
 		
 		return result;
+	}
+
+	public Map<String, Object> attEditList(int currPage, int pagePerCnt, int emp_no) {
+		int start = (currPage-1)*pagePerCnt;
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		List<AttendanceDTO> list = attDAO.attEditList(pagePerCnt, start, emp_no);
+		
+		result.put("list", list);
+		result.put("currPage", currPage);
+		result.put("totalPages", attDAO.allCount(pagePerCnt,emp_no));
+		
+		
+		return result;
+	}
+
+	public Map<String, Object> attEditListDeatil(int att_management_idx) {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		AttendanceDTO att = attDAO.attEditListDetail(att_management_idx);
+		map.put("att", att);
+		
+		return map;
+	}
+
+	public Map<String, Object> totalAttList(SearchDTO searchDTO) {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		int page = (searchDTO.getPage() - 1)*PAGE_SIZE;
+		searchDTO.setPage(page);
+		searchDTO.setPageSize(PAGE_SIZE);
+		logger.info("page {}",page);
+		logger.info("searchDTO page {}",searchDTO.getPage());
+		List<AttendanceDTO> empList = attDAO.totalAttList(searchDTO);
+		logger.info("empList {}", empList);
+		result.put("empList", empList);
+		
+		return result;
+	}
+
+	public Map<String, Object> getAttTotalPages(SearchDTO searchDTO) {
+		int empTotal = attDAO.getAttTotal(searchDTO);
+		int totalPages = (int) Math.ceil((double)empTotal/PAGE_SIZE);
+		totalPages = totalPages > 0? totalPages : 1;
+		
+		return Map.of("totalPages", totalPages);
+	}
+
+	public Map<String, Object> getchart(SearchDTO searchDTO) {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		List<AttendanceDTO> chart = attDAO.getChart(searchDTO);
+		result.put("chart", chart);
+		
+		
+		return result;
+	}
+
+	public Map<String, Object> totalEditList(SearchDTO searchDTO) {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		int page = (searchDTO.getPage() - 1)*PAGE_SIZE;
+		searchDTO.setPage(page);
+		searchDTO.setPageSize(PAGE_SIZE);
+		logger.info("page {}",page);
+		logger.info("searchDTO page {}",searchDTO.getPage());
+		List<AttendanceDTO> empList = attDAO.totalEditList(searchDTO);
+		logger.info("empList {}", empList);
+		result.put("empList", empList);
+		
+		
+		return result;
+	}
+
+	public Map<String, Object> getEditTotalPages(SearchDTO searchDTO) {
+		
+		int empTotal = attDAO.getEditTotalPages(searchDTO);
+		int totalPages = (int) Math.ceil((double)empTotal/PAGE_SIZE);
+		totalPages = totalPages > 0? totalPages : 1;
+		
+		return Map.of("totalPages", totalPages);
+
 	}
 
 	

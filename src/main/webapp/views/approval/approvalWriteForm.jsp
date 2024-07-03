@@ -395,7 +395,7 @@
                     <form>
                         <div class="form-group">
                             <label for="date">일자:</label>
-                            <input type="date" id="date" name="date" class="form-control">
+                            <input type="datetime-local" id="date" name="date" class="form-control">
                             <input type="hidden" id="dateTime" name="dateTime">
                         </div>
                         <div class="form-group">
@@ -630,10 +630,15 @@ document.addEventListener('DOMContentLoaded', function() {
 	    });
 	
 	
-	//제목 일시 자동 기입
-	 var dateInput = document.getElementById('date');
-     var today = new Date().toISOString().split('T')[0];
-     dateInput.value = today;
+	 // 제목 일시 자동 기입
+	    var dateInput = document.getElementById('date');
+	    var today = new Date();
+	    var formattedDate = today.getFullYear() + '-' + 
+	                        ('0' + (today.getMonth() + 1)).slice(-2) + '-' +
+	                        ('0' + today.getDate()).slice(-2) + 'T' + 
+	                        ('0' + today.getHours()).slice(-2) + ':' + 
+	                        ('0' + today.getMinutes()).slice(-2);
+	    dateInput.value = formattedDate;
      
     // 모든 링크 요소와 버튼을 선택하여 변수에 저장
     var links = document.querySelectorAll('a[data-toggle="modal"], button[data-toggle="modal"]');

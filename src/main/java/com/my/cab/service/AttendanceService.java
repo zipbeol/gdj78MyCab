@@ -43,12 +43,17 @@ public class AttendanceService {
 		
 		Timestamp startTime =  dto.getAtt_time();
 		Timestamp endTime =  dto.getLeave_time();
-		String sTime = setTimea(startTime);
-		String eTime = setTimea(endTime);
-		logger.info("시간변환 "+sTime);
-		logger.info("시간변환 "+eTime);
-		map.put("sTime", sTime);
-		map.put("eTime", eTime);
+		if (startTime != null) {
+	        String sTime = setTimea(startTime);
+	        map.put("sTime", sTime);
+	        logger.info("시간변환 " + sTime);
+	    }
+
+	    if (endTime != null) {
+	        String eTime = setTimea(endTime);
+	        map.put("eTime", eTime);
+	        logger.info("시간변환 " + eTime);
+	    }
 		return map;
 	}
 	
@@ -153,6 +158,40 @@ public class AttendanceService {
 		
 		return Map.of("totalPages", totalPages);
 
+	}
+
+	public boolean approvalReject(AttendanceDTO attDTO) {
+		boolean result = false;
+		
+		
+		
+		result = attDAO.approvalReject(attDTO);
+		
+		
+		
+		
+		return result;
+	}
+
+	public boolean approvalPermit(AttendanceDTO attDTO) {
+		boolean result = false;
+		
+		result = attDAO.approvalPermit(attDTO);
+		
+		
+		return result;
+	}
+
+	public void checkAtt(List<AttendanceDTO> list) {
+		for (AttendanceDTO dto : list) {
+			attDAO.checkAtt(dto);
+			
+		}
+		attDAO.insertAtt();
+	}
+
+	public List<AttendanceDTO> getEmp() {
+		return attDAO.getEmp();
 	}
 
 	

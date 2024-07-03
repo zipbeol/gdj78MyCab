@@ -1,11 +1,13 @@
 package com.my.cab.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -132,7 +134,6 @@ public Map<String, Object> getTotalPages(SearchDTO searchDTO){
 	public Map<String, Object> totalEditList(SearchDTO searchDTO){
 		 logger.info("\nsearchDTO SearchText:" + searchDTO.getSearchText()
         + "\nsearchDTO filterAttResult:" + searchDTO.getFilterAttResult()
-       + "\nsearchDTO filterForSearch:" + searchDTO.getFilterForSearch()
         + "\nsearchDTO page:" + searchDTO.getPage()+ "\nsearchDTO date:" + searchDTO.getFilterAttDate());
 		
 		return attService.totalEditList(searchDTO);
@@ -147,7 +148,36 @@ public Map<String, Object> getEditTotalPages(SearchDTO searchDTO){
 		return attService.getEditTotalPages(searchDTO);
 	} 
 	
+	@GetMapping(value="approvalReject.ajax")
+	@ResponseBody
+	public Map<String, Object> approvalReject(AttendanceDTO attDTO){
+		
+		boolean isSuccess =  attService.approvalReject(attDTO);
+		
+		return Map.of("isSuccess", isSuccess);
+	}
 	
+	@GetMapping(value="approvalPermit.ajax")
+	@ResponseBody
+	public Map<String, Object> approvalPermit(AttendanceDTO attDTO){
+		
+		boolean isSuccess =  attService.approvalPermit(attDTO);
+		
+		return Map.of("isSuccess", isSuccess);
+	}
+	
+	@Scheduled(cron = "0 12 11 * * MON-FRI", zone = "Asia/Seoul")
+	public void checkAtt() {
+		logger.info("출석 체크");
+		
+		List<AttendanceDTO> list = attService.getEmp(); 
+		
+			
+			attService.checkAtt(list);
+		
+		
+		
+	}
 	
 	
 	

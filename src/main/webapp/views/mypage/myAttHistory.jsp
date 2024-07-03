@@ -546,6 +546,23 @@ document.addEventListener("DOMContentLoaded", function() {
                                             color: "#28d4c4"	
                                         };
                                 	events.push(event);
+                                	if (res.att_result != null) {
+                                		event={
+                                    			id: res.attendance_idx,
+                                                title: res.att_result,
+                                                start: res.att_time,
+                                                end: res.leave_time,
+                                                allDay: true,
+                                                color: res.att_result === '지각' ? '#ff8d22' :
+                                                		 res.att_result === '결근' ? '#fd1616' :
+                                                		res.att_result === '근무' ? '#56ca31' :
+                                                		res.att_result === '연차' ? '#ff6820' : 'gray'
+                                    	};
+                                    	events.push(event);
+									}
+                                	
+                                	
+                                }else if (res.att_result != null) {
                                 	event={
                                 			id: res.attendance_idx,
                                             title: res.att_result,
@@ -558,8 +575,8 @@ document.addEventListener("DOMContentLoaded", function() {
                                             		res.att_result === '연차' ? '#ff6820' : 'gray'
                                 	};
                                 	events.push(event);
-                                	
-                                }
+									
+								}
                         } 
                         
                     }
@@ -603,9 +620,10 @@ document.addEventListener("DOMContentLoaded", function() {
 					document.getElementById('detail-name').value = response.dto.emp_name	;
 					document.getElementById('detail-workday').value = response.dto.work_day;
 					document.getElementById('detail-result').value = response.dto.att_result;
-					document.getElementById('detail-att').value = response.sTime;
+					document.getElementById('detail-att').value = response.sTime || '정보없음';
+					console.log('null인가요..?'+response.eTime);
 					
-					document.getElementById('detail-leave').value = response.eTime;
+					document.getElementById('detail-leave').value = response.eTime || '정보없음';
 					myModal.show();
 		        },
 		        error: function(xhr, status, error) {
@@ -779,9 +797,11 @@ document.addEventListener("DOMContentLoaded", function() {
             $('#ddetail-after-att').val(data.att.att_modify_attresult);
             $('#ddetail-reason').val(data.att.att_reason);
             
-            const rejectionReason = data.att.att_modify_reject != null ? data.att.att_modify_reject : '검토 전입니다';
+            const rejectionReason = data.att.att_modify_reject != null ? data.att.att_modify_reject : '';
             const handler = data.att.att_modifier != 0 ? data.att.att_modifier : '검토 전입니다';
             const processDate = data.att.att_modify_date ? formattedDate : '검토 전입니다';
+            
+          
             
             console.log("리젝트~"+rejectionReason);
             console.log("핸들러~"+handler);

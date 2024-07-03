@@ -45,7 +45,7 @@
   	width: 755px;
   }
   .fixed-size {
-    width: 150px;
+    width: 192px;
     height: 33.8px;
     flex: 1 1 auto; /* flex 속성을 이용하여 크기를 조절 */
     margin-right: 1px;
@@ -57,7 +57,7 @@
     margin-right: 0.5px;
   }
   .fixed-size3{
-  	width: 180px;
+  	width: 210px;
   	height: 33.8px;
   }
   .fixed-size4{
@@ -83,8 +83,8 @@
   	width: 790px;
   }
   .form-size2 {
-  	left: 152px;
-  	width: 600;
+  	left: 0px;
+  	width: 755px;
   }
   .button-size{
   	left: 16px;

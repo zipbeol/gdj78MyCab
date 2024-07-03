@@ -142,6 +142,13 @@ public class EmpController {
 		
 	}
 	
+	@RequestMapping(value="emp/vac/list.go")
+	public String vacList() {
+		logger.info("연차 관리 이동");
+		
+		return "HR/vacManagement";
+	}
+	
 	
 	
 	

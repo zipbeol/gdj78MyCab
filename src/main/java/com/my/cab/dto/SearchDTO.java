@@ -28,6 +28,7 @@ public class SearchDTO {
     private String filterEditDate;
     private String filterEditResult;
     private String filterforsearchEdit;
+
     private String filterDriverName;
     private String filterStartLocation;
     private String filterEndLocation;

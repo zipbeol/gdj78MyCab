@@ -129,6 +129,9 @@
                         <a href="/" class="text-decoration-none">메인</a>
                     </li>
                     <li class="breadcrumb-item">
+                        <a href="#" class="text-decoration-none">택시 관리</a>
+                    </li>
+                    <li class="breadcrumb-item">
                         <a href="/driver/list.go" class="text-decoration-none">기사 조회</a>
                     </li>
                 </ol>

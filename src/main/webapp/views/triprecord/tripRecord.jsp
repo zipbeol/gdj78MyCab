@@ -114,7 +114,10 @@
                         <a href="/" class="text-decoration-none">메인</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="/taxi/list.go" class="text-decoration-none">택시 조회</a>
+                        <a href="#" class="text-decoration-none">택시 관리</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/taxi/list.go" class="text-decoration-none">운행기록 조회</a>
                     </li>
                 </ol>
                 <!-- Breadcrumb end -->

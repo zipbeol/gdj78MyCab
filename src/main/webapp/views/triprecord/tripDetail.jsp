@@ -80,7 +80,13 @@
                         <a href="/" class="text-decoration-none">메인</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="/taxi/list.go" class="text-decoration-none">택시 조회</a>
+                        <a href="#" class="text-decoration-none">택시 관리</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/taxi/list.go" class="text-decoration-none">운행 기록 조회</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/taxi/list.go" class="text-decoration-none">운행 기록 상세</a>
                     </li>
                 </ol>
                 <!-- Breadcrumb end -->
@@ -185,6 +191,7 @@
 
 <script>
     var tripLocationData = [];
+    var tripDistance = '${info.trip_record_distance}';
 
     <c:forEach var="location" items="${tripLocationData}">
     tripLocationData.push({
@@ -208,21 +215,102 @@
     console.log(midPoint);
 
     // 실제 경로 지도 초기화
-    var actualMapContainer = document.getElementById('actualRouteMap');
+    var actualMapContainer = $('#actualRouteMap')[0];
     var actualMapOption = {
         center: new kakao.maps.LatLng(midPoint.lat, midPoint.lng),
         level: 5
     };
     var actualMap = new kakao.maps.Map(actualMapContainer, actualMapOption);
 
+    // 실제 경로 표시
+    var actualPath = tripLocationData.map(function (location) {
+        return new kakao.maps.LatLng(location.lat, location.lng);
+    });
+    var polylineActual = new kakao.maps.Polyline({
+        path: actualPath,
+        strokeWeight: 5,
+        strokeColor: '#FF0000', // 실제 경로 색상
+        strokeOpacity: 0.7,
+        strokeStyle: 'solid'
+    });
+    polylineActual.setMap(actualMap);
+
     // 네비게이션 경로 지도 초기화
-    var naviMapContainer = document.getElementById('navigationRouteMap');
+    var naviMapContainer = $('#navigationRouteMap')[0];
     var naviMapOption = {
         center: new kakao.maps.LatLng(midPoint.lat, midPoint.lng),
         level: 5
     };
     var naviMap = new kakao.maps.Map(naviMapContainer, naviMapOption);
 
+    var naviLocationData = [];
+
+    $.ajax({
+        url: 'https://apis-navi.kakaomobility.com/v1/directions',
+        type: 'GET',
+        headers: {
+            'Authorization': 'KakaoAK 7e6d12e9c7079432daf4ef284186acb1' // 실제 API 키로 변경 필요
+        },
+        data: {
+            origin: startLocation.lng + ',' + startLocation.lat,
+            destination: endLocation.lng + ',' + endLocation.lat
+        },
+        success: function (data) {
+            console.log(data);
+            var naviDistance = data.routes[0].sections[0].distance;
+            console.log(naviDistance);
+            naviLocationData = data.routes[0].sections[0].guides.map(function (item) {
+                return {lat: item.y, lng: item.x};
+            });
+
+            var routePath = naviLocationData.map(function (location) {
+                return new kakao.maps.LatLng(location.lat, location.lng);
+            });
+            var polylineNavi = new kakao.maps.Polyline({
+                path: routePath,
+                strokeWeight: 5,
+                strokeColor: '#0000FF', // 네비게이션 경로 색상
+                strokeOpacity: 0.7,
+                strokeStyle: 'solid'
+            });
+            polylineNavi.setMap(naviMap); // 네비게이션 경로 지도에 표시
+            //
+            // // 경로 유사성 계산
+            // var frechetDistance = calculateFrechetDistance(tripLocationData, naviLocationData);
+            // $('#routeSimilarity').text(frechetDistance.toFixed(2));
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+    //
+    // function euclideanDistance(point1, point2) {
+    //     return Math.sqrt(Math.pow(point1.lat - point2.lat, 2) + Math.pow(point1.lng - point2.lng, 2));
+    // }
+    //
+    // function calculateFrechetDistance(P, Q) {
+    //     let ca = Array.from({length: P.length}, () => Array(Q.length).fill(-1));
+    //
+    //     function c(i, j) {
+    //         if (ca[i][j] > -1) {
+    //             return ca[i][j];
+    //         } else if (i === 0 && j === 0) {
+    //             ca[i][j] = euclideanDistance(P[0], Q[0]);
+    //         } else if (i > 0 && j === 0) {
+    //             ca[i][j] = Math.max(c(i - 1, 0), euclideanDistance(P[i], Q[0]));
+    //         } else if (i === 0 && j > 0) {
+    //             ca[i][j] = Math.max(c(0, j - 1), euclideanDistance(P[0], Q[j]));
+    //         } else if (i > 0 && j > 0) {
+    //             ca[i][j] = Math.max(Math.min(c(i - 1, j), c(i - 1, j - 1), c(i, j - 1)), euclideanDistance(P[i], Q[j]));
+    //         } else {
+    //             ca[i][j] = Infinity;
+    //         }
+    //         return ca[i][j];
+    //     }
+    //
+    //     return c(P.length - 1, Q.length - 1);
+    // }
 </script>
+
 
 </html>

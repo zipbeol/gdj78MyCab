@@ -236,14 +236,11 @@ th.sortable.desc::after {
 															<th class="text-center" id="th-emp-no"
 																style="width: 10%;" >사번</th>
 															<th class="text-center" id="th-emp-name"
-																style="width: 20%;" >이름</th>
+																style="width: 20%;" >근속년수</th>
 															<th class="text-center" id="th-title-name"
-																style="width: 20%;" >직급</th>
+																style="width: 20%;" >지급 연차</th>
 															<th class="text-center" id="th-dept-name"
-																style="width: 20%;" >부서</th>
-															<th class="text-center" id="th-employment-status"
-																style="width: 10%;" >재직
-																여부</th>
+																style="width: 20%;" >잔여 연차</th>
 														</tr>
 													</thead>
 													<tbody id="emp-list">
@@ -316,8 +313,6 @@ th.sortable.desc::after {
     var searchText = '';
     var filterforsearch = '';
     var currentPage = 1; // 현재 페이지 번호
-    var sortOrder = 'asc';
-    var sortColumn = 'default';
 
     
     
@@ -326,28 +321,6 @@ th.sortable.desc::after {
     getList();
 
    
-
-    // 테이블 헤더 클릭 이벤트 설정
-    $('th.sortable').click(function () {
-        sortColumn = $(this).data('value');
-        // 현재 정렬 상태 확인
-        if ($(this).hasClass('asc')) {
-            $(this).removeClass('asc').addClass('desc');
-            sortOrder = 'desc';
-        } else if ($(this).hasClass('desc')) {
-            $(this).removeClass('desc').addClass('asc');
-            sortOrder = 'asc';
-        } else {
-            $('th.sortable').removeClass('asc desc');
-            $(this).addClass('asc');
-            sortOrder = 'asc';
-        }
-        getList();
-    });
-    
-    
-    
-    
     $('#search-emp').on('change', function(){
     	currentPage = 1;
         getTotalPages();

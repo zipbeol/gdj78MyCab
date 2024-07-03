@@ -16,14 +16,14 @@
     <meta property="og:site_name" content="Bootstrap Gallery">
     <link rel="shortcut icon" href="/assets/images/favicon.svg">
     <!-- *************
-			************ CSS Files *************
-		************* -->
+            ************ CSS Files *************
+        ************* -->
     <link rel="stylesheet" href="/assets/fonts/bootstrap/bootstrap-icons.css">
     <link rel="stylesheet" href="/assets/css/main.min.css">
 
     <!-- *************
-			************ Vendor Css Files *************
-		************ -->
+            ************ Vendor Css Files *************
+        ************ -->
 
     <!-- Scrollbar CSS -->
     <link rel="stylesheet" href="/assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
@@ -36,7 +36,21 @@
     <!-- 따로 적용한 CSS -->
     <link rel="stylesheet" href="/assets/css/default.css">
     <style>
-
+        .approval-line-table {
+            width: auto;
+            border: 1px solid #dee2e6;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .approval-line-table th, .approval-line-table td {
+            border: 1px solid #dee2e6;
+            padding: 8px;
+            text-align: center;
+        }
+        .approval-line-table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -103,53 +117,66 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="card mb-3">
-                                <div class="card-header">
-                                    <h4 class="card-title">제목제목</h4>
-                                </div>
-                                <div class="card-body">
-              <div class="app-body">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card mb-3">
-                                <div class="card-header">
+                                <div class="card-header d-flex justify-content-between align-items-center">
                                     <h4 class="card-title">결재 문서</h4>
+                                    <!-- 결재 라인 테이블 -->
+                                   <table class="approval-line-table" style="margin-left: 20px; margin-top: 20px;">
+								    <tr>
+								        <th rowspan="3">결</br>재</th>
+								        <th>&nbsp;&nbsp;기안자&nbsp;&nbsp;</th>
+								        <th>중간결재자</th>
+								        <th>최종결재자</th>
+								    </tr>
+								    <tr>
+								    	<td>&nbsp;</td>
+								        <td>&nbsp;</td>
+								        <td>&nbsp;</td>
+								       
+								    </tr>
+								    <tr>
+								        <td>&nbsp;</td>
+								        <td>&nbsp;</td>
+								        <td>&nbsp;</td>
+						
+								    </tr>
+								</table>
                                 </div>
                                 <div class="card-body">
-                                    <iframe src="${fileUrl}" width="100%" height="600px"></iframe>
+                                    <c:if test="${not empty fileContent}">
+                                        <iframe src="data:text/html;base64,${fileContent}" width="100%" height="700px"></iframe>
+                                    </c:if>
+                                    <c:if test="${not empty errorMessage}">
+                                        <p style="color: red;">${errorMessage}</p>
+                                    </c:if>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- Row end -->
             </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Row end -->
-
-
-                </div>
-                <!-- Container ends -->
-                
-            </div>
-            <!-- App body ends -->
-
-            <!-- App footer start -->
-            <div class="app-footer">
-                <span>GDJ78FINALPROJECTMYCAB</span>
-            </div>
-            <!-- App footer end -->
-
+            
+            <!-- Container ends -->
         </div>
-        <!-- App container ends -->
+        <!-- App body ends -->
+
+        <!-- App footer start -->
+        <div class="app-footer">
+            <span>GDJ78FINALPROJECTMYCAB</span>
+        </div>
+        <!-- App footer end -->
 
     </div>
-    <!-- Main container end -->
+    <!-- App container ends -->
+
+</div>
+<!-- Main container end -->
 
 </div>
 <!-- Page wrapper end -->
+
+<!-- 드롭다운 결재 및 반려 버튼 -->
 
 <!-- *************
         ************ JavaScript Files *************
@@ -166,19 +193,10 @@
 <script src="/assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
 <script src="/assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
 
-
 <!-- Custom JS files -->
 <script src="/assets/js/custom.js"></script>
 <script src="/assets/js/localStorage.js"></script>
 </body>
 <script>
-    // 스크립트
-
-    
-     var message = "${message}";
-        if (message) {
-            alert(message);
-        }
-
 </script>
 </html>

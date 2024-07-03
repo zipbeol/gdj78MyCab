@@ -152,6 +152,7 @@ td:hover {
 				<div class="app-body">
 					<!-- Container starts -->
 					<div class="container-fluid">
+					
 						<!-- Row start -->
 						<div class="row">
 							<div class="col-12">
@@ -164,16 +165,44 @@ td:hover {
 										<!-- 검색창 시작 -->
 										<div
 											class="search-filter-container border border-2 p-3 rounded mb-3">
+											<div class="row mb-3">
+				                            <div class="col-md-8 offset-md-4"></div>
+					                        </div>
+					                        
+					                        
+					                        <div class="row">
+	                        				<div class="col-2">
+	                                             <label for="filter-maintenance-reg-date"
+	                                                    class="form-label">시작 날짜
+	                                                 </label>
+	                                         </div>
+	                                         <div class="col-2">
+	                                             <label for="filter-maintenance-reg-date"
+	                                                    class="form-label">종료 날짜
+	                                              </label>
+	                                         </div>
+	                                         <div class="col-4">
+	                                         </div>
+	                                         <div class="col-2">
+	                                             <label for="search-text-maintenance"
+	                                                    class="form-label">정렬</label>
+	                                         </div>
+	                                         <div class="col-2">
+	                                             <label for="search-text-maintenance"
+	                                                    class="form-label">검색</label>
+	                                         </div>
+	                                         </div>
+					                        
+					                        
 											<!-- 날짜 필터링 입력 -->
-											<div class="mt-3">
-												<label for="startDate" class="form-label">시작
-													날짜&nbsp;</label> <input type="date" id="startDate"> <label
-													for="endDate" class="form-label">&nbsp;&nbsp;-&nbsp;&nbsp;종료
-													날짜&nbsp;</label> <input type="date" id="endDate">
+											<div class="row mb-3">
+											<div class="col-2">
+												 <input type="date" id="startDate">
 											</div>
-											<div class="row mt-2">
-												<div class="col-2">
-													<label for="filter" class="form-label">정렬</label>
+											<div class="col-2">
+											<input type="date" id="endDate">
+											</div>
+												<div class="col-2 d-flex">
 													<!-- 필터링 버튼 -->
 													<select id="filter" name="filter" class="form-select"
 														required>
@@ -183,10 +212,9 @@ td:hover {
 														<option value="lessProfit">적은 수익 순</option>
 													</select>
 												</div>
-												<div class="col-10"></div>
+												<div class="col-4"></div>
 											</div>
-											<label for="searchQuery" class="form-label mt-2">검색</label>
-											<div class="d-flex">
+											<div class="col-2">
 												<!-- 검색 입력 필드 -->
 												<input type="text" id="searchQuery"
 													placeholder="검색 내용을 입력하세요.">

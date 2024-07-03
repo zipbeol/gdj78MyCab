@@ -368,10 +368,10 @@ td:hover {
             });
         });
 
-        // 카테고리 이름을 출력하는 함수
+       /*  // 카테고리 이름을 출력하는 함수
         function categoryName(category) {
             console.log('Selected category:', category);
-        }
+        } */
  
 
         // 숫자를 세 자리마다 쉼표가 포함된 형식으로 포맷하는 함수
@@ -393,7 +393,7 @@ td:hover {
         // AJAX로 받은 거래 리스트를 테이블에 표시하는 함수
         function displayDealList(dealList) {
             var tbody = $('#dealTableBody');
-            console.log(dealList);
+           /*  console.log(dealList); */
             tbody.empty(); // 테이블 본문을 비웁니다.
             var row = '';
             for (item of dealList) {
@@ -450,8 +450,8 @@ td:hover {
                 dataType: 'json',
                 success: function(data) {
                     displayDealList(data.deal); // 갱신된 거래 리스트 표시
-                    console.log($('#searchQuery').val());
-                    console.log(categories);
+                   /*  console.log($('#searchQuery').val());
+                    console.log(categories); */
                 },
                 error: function(error) {
                     console.error("AJAX 요청 실패:", error);
@@ -486,9 +486,9 @@ td:hover {
         
      // 총 수익, 총 지출, 총 순수익 가져오기
         function fetchTotalAmounts() {
-    	 var value = $('#startDate').val();
-        	console.log(value);
-        	console.log($('#endDate').val());
+            var value = $('#startDate').val();
+           /*  console.log(value);
+            console.log($('#endDate').val()); */
             $.ajax({
                 type: 'GET',
                 url: '/finance/deal/totalAmounts.ajax',
@@ -498,12 +498,21 @@ td:hover {
                 },
                 dataType: 'json',
                 success: function(data) {
-                    // 총 수익, 총 지출, 총 순수익 업데이트
-                    $('#totalProfit').html(formatNumberWithCommas(data.dto.total_profit));
-                    $('#totalExpense').html(formatNumberWithCommas(data.dto.total_expense));
-                    $('#netProfit').html(formatNumberWithCommas(data.dto.net_profit));
-                    console.log(data.dto);
-                    
+                        console.log(data);
+                    // data가 정의되지 않거나 data.dto가 정의되지 않은 경우를 처리
+                    if (data && data.dto) {
+                        // 총 수익, 총 지출, 총 순수익 업데이트
+                        $('#totalProfit').html(formatNumberWithCommas(data.dto.total_profit));
+                        $('#totalExpense').html(formatNumberWithCommas(data.dto.total_expense));
+                        $('#netProfit').html(formatNumberWithCommas(data.dto.net_profit)); 
+                        /* console.log(data.dto); */
+                    } else {
+                       /*  console.error("Unexpected response structure:", data); */
+                        // 디버그를 위해서 undefined 상태인 필드를 초기화할 수도 있습니다.
+                        $('#totalProfit').html('0');
+                        $('#totalExpense').html('0');
+                        $('#netProfit').html('0');
+                    }
                 },
                 error: function(error) {
                     console.error("AJAX 요청 실패:", error);

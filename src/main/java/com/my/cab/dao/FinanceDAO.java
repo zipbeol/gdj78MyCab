@@ -29,5 +29,6 @@ public interface FinanceDAO {
 
 	int getDealCount(SearchDTO searchDTO);
 	
-	FinanceDTO getTotalAmounts(FinanceDTO financeDTO);
+	FinanceDTO getTotalAmounts(Map<String, Object> financeDTO);
+
 }

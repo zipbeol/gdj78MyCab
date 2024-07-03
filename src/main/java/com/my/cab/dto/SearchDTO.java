@@ -28,6 +28,10 @@ public class SearchDTO {
     private String filterEditDate;
     private String filterEditResult;
     private String filterforsearchEdit;
+    private String noticeWriter;
+    private String noticeTitle;
+    private String searchFilter;
+    private String searchQuery;
     
     public String getSearchEditText() {
 		return searchEditText;
@@ -220,5 +224,37 @@ public class SearchDTO {
     public void setDeal_filter(String deal_filter) {
         this.deal_filter = deal_filter;
     }
+
+	public String getNoticeWriter() {
+		return noticeWriter;
+	}
+
+	public void setNoticeWriter(String noticeWriter) {
+		this.noticeWriter = noticeWriter;
+	}
+
+	public String getNoticeTitle() {
+		return noticeTitle;
+	}
+
+	public void setNoticeTitle(String noticeTitle) {
+		this.noticeTitle = noticeTitle;
+	}
+
+	public String getSearchFilter() {
+		return searchFilter;
+	}
+
+	public void setSearchFilter(String searchFilter) {
+		this.searchFilter = searchFilter;
+	}
+
+	public String getSearchQuery() {
+		return searchQuery;
+	}
+
+	public void setSearchQuery(String searchQuery) {
+		this.searchQuery = searchQuery;
+	}
 
 }

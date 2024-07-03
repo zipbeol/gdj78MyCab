@@ -20,7 +20,9 @@
 <meta property="og:type" content="Website">
 <meta property="og:site_name" content="Bootstrap Gallery">
 <link rel="shortcut icon" href="/assets/images/favicon.svg">
-<script src="https://cdn.ckeditor.com/ckeditor5/34.1.0/classic/ckeditor.js"></script>
+<link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css">
+
+
 
 <!-- CSS Files -->
 <link rel="stylesheet"
@@ -233,6 +235,7 @@ td:hover {
 	<!-- Page wrapper end -->
 
 	<!-- Required jQuery first, then Bootstrap Bundle JS -->
+	<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 	<script src="/assets/js/jquery.min.js"></script>
 	<script src="/assets/js/bootstrap.bundle.min.js"></script>
 
@@ -251,41 +254,15 @@ td:hover {
     
 	var category = '';
     
-	
-    
-    // CKEditor 초기화
-
-	ClassicEditor
-        .create(document.querySelector('#noticeContent'), {
-            toolbar: [
-                'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 
-                'imageUpload' // 이미지 업로드 버튼 추가
-            ],
-            language: 'ko',
-            ckfinder: {
-                uploadUrl: '/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&responseType=json',
-            },
-            image: {
-                toolbar: [
-                    'imageTextAlternative', 'imageStyle:full', 'imageStyle:side'
-                ]
-            }
-        })
-        .then(editor => {
-            editorInstence = editor;
-            editor.ui.view.editable.element.style.height = '400px';  // 여기서 높이를 설정합니다.
-            console.log('Editor was initialized', editor);
-        })
-        .catch(error => {
-            console.error(error);
+	document.addEventListener('DOMContentLoaded', function () {
+        const editor = new toastui.Editor({
+            el: document.querySelector('#noticeContent'),
+            height: '500px',
+            initialEditType: 'markdown',
+            previewStyle: 'vertical',
+            initialEditType: 'wysiwyg' // Set initial edit type to wysiwyg for preview mode
         });
 
-
- 
-
-    $(document).ready(function() {
-    	
-        // 등록 버튼 클릭 시 등록 로직 실행
         $('#registerButton').click(function() {
             var formData = new FormData();
             formData.append('notice_title', $('#noticeTitle').val());
@@ -294,9 +271,8 @@ td:hover {
             for (var i = 0; i < files.length; i++) {
                 formData.append('fileAttachment', files[i]);
             }
-            formData.append('notice_content', editorInstence.getData());
+            formData.append('notice_content', editor.getHTML());
             formData.append('notice_imp', $('#importantCheckbox').prop('checked'));
-            
 
             $.ajax({
                 url: '/notice/register.ajax',
@@ -304,10 +280,14 @@ td:hover {
                 data: formData,
                 processData: false,
                 contentType: false,
-                dateType: 'JSON',
+                dataType: 'json',
                 success: function(response) {
-                    alert('등록이 성공적으로 완료되었습니다.');
-                    window.location.href = '/notice/list';
+                    if (response.status === 'error') {
+                        alert(response.message); // 경고 메시지 표시
+                    } else {
+                        alert(response.message); // 성공 메시지 표시
+                        window.location.href = '/notice/list';
+                    }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     alert('등록에 실패하였습니다. 다시 시도해 주세요.');

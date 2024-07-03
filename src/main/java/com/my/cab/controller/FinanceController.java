@@ -88,7 +88,7 @@ public class FinanceController {
 		// 서비스 호출하여 리스트 데이터 가져오기
 		return financeService.getExpensesList(param, searchDTO);
 	}
-	
+
 	// 지출 등록 폼
 	@PostMapping("/expenses/add.ajax")
 	@ResponseBody
@@ -96,7 +96,7 @@ public class FinanceController {
 		logger.info("exp_actual_date = " + expenses.getExp_actual_date());
 		return financeService.addExpenses(expenses);
 	}
-	
+
 	// 지출 페이징 처리
 	@GetMapping("/expenses/getTotalPages.ajax")
 	@ResponseBody
@@ -111,7 +111,7 @@ public class FinanceController {
 
 		return map;
 	}
-	
+
 	// 거래 내역
 	@RequestMapping("/deal/list.go")
 	public String financeDeal(Model model) {
@@ -131,7 +131,7 @@ public class FinanceController {
 		// 서비스 호출하여 리스트 데이터 가져오기
 		return financeService.getDealList(param, searchDTO);
 	}
-	
+
 	// 거래 페이징 처리
 	@GetMapping("/deal/getTotalPages.ajax")
 	@ResponseBody
@@ -146,14 +146,14 @@ public class FinanceController {
 
 		return map;
 	}
-	
+
 	@GetMapping("/deal/totalAmounts.ajax")
 	@ResponseBody
-	    public Map<String, Object> getTotalAmounts(@RequestParam Map<String, Object> financeDTO) {
-			Map<String, Object>map = new HashMap<String, Object>();
-			// financeService.getTotalAmounts(financeDTO);
-			logger.info("param : {}", financeDTO);
-	        return map;
-	    
+	public Map<String, Object> getTotalAmounts(@RequestParam Map<String, Object> financeDTO) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		logger.info("param : {}", financeDTO);
+		return financeService.getTotalAmounts(financeDTO);
+
 	}
 }

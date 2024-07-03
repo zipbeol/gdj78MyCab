@@ -112,12 +112,12 @@ public class FinanceService {
 		return totalPages = totalPages > 0 ? totalPages : 1;
 	}
 
-	public Map<String, Object> getTotalAmounts(FinanceDTO financeDTO) {
+	public Map<String, Object> getTotalAmounts(Map<String, Object> financeDTO) {
 		FinanceDTO dto = financeDAO.getTotalAmounts(financeDTO);
 		logger.info("********************총합계*********************");
-		logger.info("financeDTO profit {}", financeDTO.getTotal_profit());
-		logger.info("financeDTO expenses {}", financeDTO.getTotal_expense());
-		logger.info("financeDTO sum {}", financeDTO.getNet_profit());
+		logger.info("financeDTO profit {}", dto.getTotal_profit());
+		logger.info("financeDTO expenses {}", dto.getTotal_expense());
+		logger.info("financeDTO sum {}", dto.getNet_profit());
 		logger.info("********************총합계*********************");
 		Map<String , Object> map = new HashMap<String, Object>();
 		map.put("dto", dto);

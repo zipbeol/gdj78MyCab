@@ -6,17 +6,139 @@
 <mapper namespace="com.my.cab.dao.NoticeDAO">
 
 	<!-- 공지사항 등록 쿼리 -->
-    <insert id="insertNotice" parameterType="notice"
-		useGeneratedKeys="true" keyColumn="notice_idx" keyProperty="notice_idx">
-        INSERT INTO notice (notice_writer, notice_field, notice_imp, notice_stat, notice_title, notice_content)
-        VALUES (30002, #{notice_field}, #{notice_imp}, '공개', #{notice_title}, #{notice_content})
-    </insert>
+	<insert id="insertNotice" parameterType="notice"
+		useGeneratedKeys="true" keyColumn="notice_idx"
+		keyProperty="notice_idx">
+		INSERT INTO notice (notice_writer, notice_field,
+		notice_imp, notice_stat,
+		notice_title, notice_content)
+		VALUES (30002,
+		#{notice_field}, #{notice_imp}, '공개', #{notice_title},
+		#{notice_content})
+	</insert>
+	
+	<select id="countImportantNotices" resultType="int">
+		SELECT COUNT(*)
+		FROM notice
+		WHERE notice_imp = 'true'
+	</select>
+	<!-- 첨부 파일 등록 쿼리 -->
+	<insert id="insertAttachment" parameterType="notice">
+		INSERT INTO
+		notice_attach_file (notice_idx, notice_file_name,
+		notice_attach_file)
+		VALUES (#{notice_idx}, #{notice_file_name}, #{notice_attach_file})
+	</insert>
 
-    <!-- 첨부 파일 등록 쿼리 -->
-    <insert id="insertAttachment" parameterType="notice">
-        INSERT INTO notice_attach_file (notice_idx, notice_file_name, notice_attach_file)
-        VALUES (#{notice_idx}, #{notice_file_name}, #{notice_attach_file})
-    </insert>
+<select id="getNoticeList" parameterType="search" resultType="notice">
+    SELECT *
+    FROM (
+        (SELECT
+            notice_idx,
+            notice_writer,
+            notice_field,
+            notice_imp,
+            notice_stat,
+            notice_title,
+            notice_content,
+            notice_date
+        FROM
+            notice
+        WHERE
+            notice_stat != '비활성화'
+            AND notice_imp = 'true'
+<!--             AND (notice_field = 'all' OR notice_field = #{category}) -->
+            <if test="filterStartDate != null and filterStartDate != ''">
+                AND notice_date &gt;= #{filterStartDate}
+            </if>
+            <if test="filterEndDate != null and filterEndDate != ''">
+                AND notice_date &lt;= #{filterEndDate}
+            </if>
+            <if test="searchFilter != null and searchFilter == 'noticeWriter' and searchQuery != null and searchQuery != ''">
+                AND notice_writer LIKE CONCAT('%', #{searchQuery}, '%')
+            </if>
+            <if test="searchFilter != null and searchFilter == 'noticeTitle' and searchQuery != null and searchQuery != ''">
+                AND notice_title LIKE CONCAT('%', #{searchQuery}, '%')
+            </if>
+        ORDER BY
+            notice_date DESC
+        LIMIT 3)
+        UNION ALL
+        (SELECT
+            notice_idx,
+            notice_writer,
+            notice_field,
+            notice_imp,
+            notice_stat,
+            notice_title,
+            notice_content,
+            notice_date
+        FROM
+            notice
+        WHERE
+            notice_stat != '비활성화'
+            AND (notice_imp = 'false' OR notice_imp IS NULL)
+            AND (notice_field = 'all' OR notice_field = #{category})
+            <if test="filterStartDate != null and filterStartDate != ''">
+                AND notice_date &gt;= #{filterStartDate}
+            </if>
+            <if test="filterEndDate != null and filterEndDate != ''">
+                AND notice_date &lt;= #{filterEndDate}
+            </if>
+            <if test="searchFilter != null and searchFilter == 'noticeWriter' and searchQuery != null and searchQuery != ''">
+                AND notice_writer LIKE CONCAT('%', #{searchQuery}, '%')
+            </if>
+            <if test="searchFilter != null and searchFilter == 'noticeTitle' and searchQuery != null and searchQuery != ''">
+                AND notice_title LIKE CONCAT('%', #{searchQuery}, '%')
+            </if>
+        ORDER BY
+            notice_date DESC)
+    ) AS combined_notices
+    ORDER BY
+        CASE WHEN notice_imp = 'true' THEN 0 ELSE 1 END,
+        <if test="searchFilter != null and searchFilter == 'noticeWriter'">
+            notice_writer ASC,
+        </if>
+        <if test="searchFilter != null and searchFilter == 'noticeTitle'">
+            notice_title ASC,
+        </if>
+        notice_date DESC
+    LIMIT #{pageSize} OFFSET #{page}
+</select>
+
+
+
+	
+	<!-- 비활성화 -->
+	<update id="inactivateNotice" parameterType="int">
+    UPDATE notice
+    SET notice_stat = '비활성화',
+        notice_imp = 'false'
+    WHERE notice_idx = #{noticeId}
+	</update>
+
+	
+	<!-- 토탈 페이지 출력 -->
+	<select id="getNoticeCount" resultType="int" parameterType="search">
+	    SELECT COUNT(notice_idx)
+	    FROM notice
+	    <where>
+	        notice_stat != '비활성화'
+	        AND (notice_field = 'all' OR notice_field = #{category})
+	        <if test="filterStartDate != null and filterStartDate != ''">
+	            AND notice_date &gt;= #{filterStartDate}
+	        </if>
+	        <if test="filterEndDate != null and filterEndDate != ''">
+	            AND notice_date &lt;= #{filterEndDate}
+	        </if>
+	        <if test="searchFilter != null and searchFilter == 'noticeWriter' and searchQuery != null and searchQuery != ''">
+	            AND notice_writer = #{searchQuery}
+	        </if>
+	        <if test="searchFilter != null and searchFilter == 'noticeTitle' and searchQuery != null and searchQuery != ''">
+	            AND notice_title LIKE CONCAT('%', #{searchQuery}, '%')
+	        </if>
+	    </where>
+	</select>
 
 
 </mapper>

@@ -22,7 +22,7 @@
             <li class="active current-page">
             </li>
             <li id="menu-notice">
-                <a href="/notice/list.go">
+                <a href="/notice/list">
                     <i class="fs-3 bi bi-pin-angle"></i>
                     <span class="menu-text">공지사항</span>
                 </a>

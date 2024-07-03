@@ -1,11 +1,20 @@
 package com.my.cab.controller;
 
-import java.io.Console;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Base64;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,12 +23,8 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -168,8 +173,30 @@ public class ApprovalController {
     public List<ApprovalDocDTO> getApprovalData() {
         return apprservice.getApprovalData();
     }
-	
-
     
+    @GetMapping("/approval/viewFile/{encodedFilename}")
+    public String viewFile(@PathVariable String encodedFilename, Model model) {
+        try {
+            String filename = new String(Base64.getDecoder().decode(encodedFilename));
+            Path file = Paths.get("C:/upload").resolve(filename).normalize();
+            System.out.println("Serving file: " + file.toString()); // 디버깅용 출력
+
+            if (Files.exists(file) && Files.isReadable(file)) {
+                byte[] fileContent = Files.readAllBytes(file);
+                String encodedString = Base64.getEncoder().encodeToString(fileContent);
+                model.addAttribute("fileContent", encodedString);
+                return "approval/viewFile";
+            } else {
+                model.addAttribute("errorMessage", "파일을 읽을 수 없습니다.");
+                return "approval/error";
+            }
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "파일을 읽는 중 오류가 발생했습니다.");
+            return "approval/error";
+        }
+    }
+
+
 }
+    
 

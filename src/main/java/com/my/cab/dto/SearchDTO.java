@@ -33,7 +33,7 @@ public class SearchDTO {
     private String searchFilter;
     private String searchQuery;
     
-    public String getSearchEditText() {
+	public String getSearchEditText() {
 		return searchEditText;
 	}
 

@@ -195,7 +195,7 @@
 
 	function getOff(){
 	
-		location.href='login/logoutAndGetOff.do';
+		location.href='/login/logoutAndGetOff.do';
 	
 	};
 

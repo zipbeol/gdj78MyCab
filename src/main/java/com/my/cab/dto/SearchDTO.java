@@ -4,35 +4,100 @@ import org.apache.ibatis.type.Alias;
 
 @Alias("search")
 public class SearchDTO {
-    private String searchText;
-    private String filterTaxiModel;
-    private String filterIsActive;
-    private String filterStartDate;
-    private String filterEndDate;
-    private String sortOrder;
-    private String sortColumn;
-    private String pro_filter;
-    private String exp_filter;
-    private String deal_filter;
-    private String category;
-    private int page;
-    private String searchIdx;
-    private String filterIsDriverFault;
-    private String whereCalled;
-    private int pageSize;
-    private String filterIsRetired;
-    private String filterForSearch;
-    private String filterAttResult;
-    private String filterAttDate;
-    private String searchEditText;
-    private String filterEditDate;
-    private String filterEditResult;
-    private String filterforsearchEdit;
-    private String noticeWriter;
-    private String noticeTitle;
-    private String searchFilter;
-    private String searchQuery;
-    
+	private String searchText;
+	private String filterTaxiModel;
+	private String filterIsActive;
+	private String filterStartDate;
+	private String filterEndDate;
+	private String sortOrder;
+	private String sortColumn;
+	private String pro_filter;
+	private String exp_filter;
+	private String deal_filter;
+	private String category;
+	private int page;
+	private String searchIdx;
+	private String filterIsDriverFault;
+	private String whereCalled;
+	private int pageSize;
+	private String filterIsRetired;
+	private String filterForSearch;
+	private String filterAttResult;
+	private String filterAttDate;
+	private String searchEditText;
+	private String filterEditDate;
+	private String filterEditResult;
+	private String filterforsearchEdit;
+
+	private String noticeWriter;
+	private String noticeTitle;
+	private String searchFilter;
+	private String searchQuery;
+
+	private String filterDriverName;
+	private String filterStartLocation;
+	private String filterEndLocation;
+	private String filterMinDistance;
+	private String filterMaxDistance;
+	private String filterMinFare;
+	private String filterMaxFare;
+
+	public String getFilterDriverName() {
+		return filterDriverName;
+	}
+
+	public void setFilterDriverName(String filterDriverName) {
+		this.filterDriverName = filterDriverName;
+	}
+
+	public String getFilterStartLocation() {
+		return filterStartLocation;
+	}
+
+	public void setFilterStartLocation(String filterStartLocation) {
+		this.filterStartLocation = filterStartLocation;
+	}
+
+	public String getFilterEndLocation() {
+		return filterEndLocation;
+	}
+
+	public void setFilterEndLocation(String filterEndLocation) {
+		this.filterEndLocation = filterEndLocation;
+	}
+
+	public String getFilterMinDistance() {
+		return filterMinDistance;
+	}
+
+	public void setFilterMinDistance(String filterMinDistance) {
+		this.filterMinDistance = filterMinDistance;
+	}
+
+	public String getFilterMaxDistance() {
+		return filterMaxDistance;
+	}
+
+	public void setFilterMaxDistance(String filterMaxDistance) {
+		this.filterMaxDistance = filterMaxDistance;
+	}
+
+	public String getFilterMinFare() {
+		return filterMinFare;
+	}
+
+	public void setFilterMinFare(String filterMinFare) {
+		this.filterMinFare = filterMinFare;
+	}
+
+	public String getFilterMaxFare() {
+		return filterMaxFare;
+	}
+
+	public void setFilterMaxFare(String filterMaxFare) {
+		this.filterMaxFare = filterMaxFare;
+	}
+
 	public String getSearchEditText() {
 		return searchEditText;
 	}
@@ -82,148 +147,148 @@ public class SearchDTO {
 	}
 
 	public String getPro_filter() {
-        return pro_filter;
-    }
+		return pro_filter;
+	}
 
-    public void setPro_filter(String pro_filter) {
-        this.pro_filter = pro_filter;
-    }
+	public void setPro_filter(String pro_filter) {
+		this.pro_filter = pro_filter;
+	}
 
-    public String getCategory() {
-        return category;
-    }
+	public String getCategory() {
+		return category;
+	}
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
+	public void setCategory(String category) {
+		this.category = category;
+	}
 
-    public String getSearchIdx() {
-        return searchIdx;
-    }
+	public String getSearchIdx() {
+		return searchIdx;
+	}
 
-    public void setSearchIdx(String searchIdx) {
-        this.searchIdx = searchIdx;
-    }
+	public void setSearchIdx(String searchIdx) {
+		this.searchIdx = searchIdx;
+	}
 
-    public String getFilterIsDriverFault() {
-        return filterIsDriverFault;
-    }
+	public String getFilterIsDriverFault() {
+		return filterIsDriverFault;
+	}
 
-    public void setFilterIsDriverFault(String filterIsDriverFault) {
-        this.filterIsDriverFault = filterIsDriverFault;
-    }
+	public void setFilterIsDriverFault(String filterIsDriverFault) {
+		this.filterIsDriverFault = filterIsDriverFault;
+	}
 
-    public String getWhereCalled() {
-        return whereCalled;
-    }
+	public String getWhereCalled() {
+		return whereCalled;
+	}
 
-    public void setWhereCalled(String whereCalled) {
-        this.whereCalled = whereCalled;
-    }
+	public void setWhereCalled(String whereCalled) {
+		this.whereCalled = whereCalled;
+	}
 
-    public String getFilterIsRetired() {
-        return filterIsRetired;
-    }
+	public String getFilterIsRetired() {
+		return filterIsRetired;
+	}
 
-    public void setFilterIsRetired(String filterIsRetired) {
-        this.filterIsRetired = filterIsRetired;
-    }
+	public void setFilterIsRetired(String filterIsRetired) {
+		this.filterIsRetired = filterIsRetired;
+	}
 
-    public String getSortOrder() {
-        return sortOrder;
-    }
+	public String getSortOrder() {
+		return sortOrder;
+	}
 
-    public void setSortOrder(String sortOrder) {
-        this.sortOrder = sortOrder;
-    }
+	public void setSortOrder(String sortOrder) {
+		this.sortOrder = sortOrder;
+	}
 
-    public String getSortColumn() {
-        return sortColumn;
-    }
+	public String getSortColumn() {
+		return sortColumn;
+	}
 
-    public void setSortColumn(String sortColumn) {
-        this.sortColumn = sortColumn;
-    }
+	public void setSortColumn(String sortColumn) {
+		this.sortColumn = sortColumn;
+	}
 
-    public int getPageSize() {
-        return pageSize;
-    }
+	public int getPageSize() {
+		return pageSize;
+	}
 
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-    }
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
+	}
 
-    public int getPage() {
-        return page;
-    }
+	public int getPage() {
+		return page;
+	}
 
-    public void setPage(int page) {
-        this.page = page;
-    }
+	public void setPage(int page) {
+		this.page = page;
+	}
 
-    public String getFilterTaxiModel() {
-        return filterTaxiModel;
-    }
+	public String getFilterTaxiModel() {
+		return filterTaxiModel;
+	}
 
-    public void setFilterTaxiModel(String filterTaxiModel) {
-        this.filterTaxiModel = filterTaxiModel;
-    }
+	public void setFilterTaxiModel(String filterTaxiModel) {
+		this.filterTaxiModel = filterTaxiModel;
+	}
 
-    public String getFilterIsActive() {
-        return filterIsActive;
-    }
+	public String getFilterIsActive() {
+		return filterIsActive;
+	}
 
-    public void setFilterIsActive(String filterIsActive) {
-        this.filterIsActive = filterIsActive;
-    }
+	public void setFilterIsActive(String filterIsActive) {
+		this.filterIsActive = filterIsActive;
+	}
 
-    public String getFilterStartDate() {
-        return filterStartDate;
-    }
+	public String getFilterStartDate() {
+		return filterStartDate;
+	}
 
-    public void setFilterStartDate(String filterStartDate) {
-        this.filterStartDate = filterStartDate;
-    }
+	public void setFilterStartDate(String filterStartDate) {
+		this.filterStartDate = filterStartDate;
+	}
 
-    public String getFilterEndDate() {
-        return filterEndDate;
-    }
+	public String getFilterEndDate() {
+		return filterEndDate;
+	}
 
-    public void setFilterEndDate(String filterEndDate) {
-        this.filterEndDate = filterEndDate;
-    }
+	public void setFilterEndDate(String filterEndDate) {
+		this.filterEndDate = filterEndDate;
+	}
 
-    public String getSearchText() {
-        return searchText;
-    }
+	public String getSearchText() {
+		return searchText;
+	}
 
-    public void setSearchText(String searchText) {
-        this.searchText = searchText;
-    }
+	public void setSearchText(String searchText) {
+		this.searchText = searchText;
+	}
 
-    public String getExp_filter() {
-        return exp_filter;
-    }
+	public String getExp_filter() {
+		return exp_filter;
+	}
 
-    public void setExp_filter(String exp_filter) {
-        this.exp_filter = exp_filter;
-    }
+	public void setExp_filter(String exp_filter) {
+		this.exp_filter = exp_filter;
+	}
 
-    public String getFilterForSearch() {
-        return filterForSearch;
-    }
+	public String getFilterForSearch() {
+		return filterForSearch;
+	}
 
-    public void setFilterForSearch(String filterForSearch) {
-        this.filterForSearch = filterForSearch;
-    }
+	public void setFilterForSearch(String filterForSearch) {
+		this.filterForSearch = filterForSearch;
+	}
 
-    public String getDeal_filter() {
-        return deal_filter;
-    }
+	public String getDeal_filter() {
+		return deal_filter;
+	}
 
-    public void setDeal_filter(String deal_filter) {
-        this.deal_filter = deal_filter;
-    }
+	public void setDeal_filter(String deal_filter) {
+		this.deal_filter = deal_filter;
+	}
 
 	public String getNoticeWriter() {
 		return noticeWriter;

@@ -370,8 +370,7 @@
 <script src="/assets/js/showAlert.js"></script>
 
 <!-- 카카오 맵 -->
-<script type="text/javascript"
-        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6a9392fb6c3d719802f976bbff4678eb&libraries=services"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6a9392fb6c3d719802f976bbff4678eb&libraries=services"></script>
 
 <script>
     // 구디 아카데미 좌표
@@ -491,7 +490,7 @@
 
                             showDistance(content, path[path.length - 1]);
 
-                            geocoder.coord2Address(parseFloat(lat), parseFloat(lng), function (result, status) {
+                            geocoder.coord2Address(lng, lat, function (result, status) {
                                 if (status === kakao.maps.services.Status.OK) {
                                     tripEndLocation = result[0].address.address_name;
                                     processTripEnd(); // 주소 값이 설정된 후 호출
@@ -592,8 +591,9 @@
 
         // 마우스로 클릭한 위치입니다
         var clickPosition = mouseEvent.latLng;
-        lat = clickPosition.La.toFixed(4);
-        lng = clickPosition.Ma.toFixed(4);
+        console.log(clickPosition);
+        lat = clickPosition.getLat().toFixed(4);
+        lng = clickPosition.getLng().toFixed(4);
 
         tripRecord.recordLat.push(lat);
         tripRecord.recordLng.push(lng);
@@ -605,7 +605,7 @@
         if (!drawingFlag) {
             geocoder = new kakao.maps.services.Geocoder();
 
-            geocoder.coord2Address(lat, lng, function (result, status) {
+            geocoder.coord2Address(lng, lat, function (result, status) {
                 if (status === kakao.maps.services.Status.OK) {
                     tripStartLocation = result[0].address.address_name;
                     // console.log(tripStartLocation);

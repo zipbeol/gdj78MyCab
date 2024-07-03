@@ -4,8 +4,8 @@
         >
 
 <mapper namespace="com.my.cab.dao.TripRecordDAO">
-    <insert id="insertTripRecord" parameterType="tripRecord" keyProperty="trip_record_idx, trip_record_date"
-            keyColumn="trip_record_idx, trip_record_date" useGeneratedKeys="true">
+    <insert id="insertTripRecord" parameterType="tripRecord" keyProperty="trip_record_idx"
+            keyColumn="trip_record_idx" useGeneratedKeys="true">
         INSERT INTO trip_record(trip_record_taxi_idx, trip_record_driver_id, trip_record_start_location,
                                 trip_record_end_location, trip_record_distance, trip_record_fare)
         VALUES (#{trip_record_taxi_idx}, #{trip_record_driver_id}, #{trip_record_start_location},
@@ -16,4 +16,137 @@
         INSERT INTO trip_record_detail(trip_record_idx, trip_record_latitude, trip_record_longitude)
         VALUES (#{param1}, #{param2}, #{param3})
     </insert>
+
+    <select id="getFirstTripDate" resultType="String">
+        SELECT trip_record_date FROM trip_record ORDER BY trip_record_date ASC LIMIT 1
+    </select>
+
+    <select id="getTripList" resultType="tripRecord" parameterType="search">
+        SELECT tr.trip_record_idx,
+        tr.trip_record_taxi_idx,
+        d.driver_name AS trip_record_driver_name,
+        tr.trip_record_date,
+        tr.trip_record_start_location,
+        tr.trip_record_end_location,
+        tr.trip_record_distance,
+        tr.trip_record_fare
+        FROM trip_record tr
+        JOIN driver d ON tr.trip_record_driver_id = d.driver_idx
+        <where>
+            <if test="filterStartDate != null and filterStartDate != ''">
+                AND tr.trip_record_date &gt;= #{filterStartDate}
+            </if>
+            <if test="filterEndDate != null and filterEndDate != ''">
+                AND tr.trip_record_date &lt;= #{filterEndDate}
+            </if>
+            <if test="filterDriverName != null and filterDriverName != ''">
+                AND d.driver_name LIKE CONCAT('%', #{filterDriverName}, '%')
+            </if>
+            <if test="filterStartLocation != null and filterStartLocation != ''">
+                AND tr.trip_record_start_location LIKE CONCAT('%', #{filterStartLocation}, '%')
+            </if>
+            <if test="filterEndLocation != null and filterEndLocation != ''">
+                AND tr.trip_record_end_location LIKE CONCAT('%', #{filterEndLocation}, '%')
+            </if>
+            <if test="filterMinDistance != null and filterMinDistance != ''">
+                AND tr.trip_record_distance &gt;= #{filterMinDistance}
+            </if>
+            <if test="filterMaxDistance != null and filterMaxDistance != ''">
+                AND tr.trip_record_distance &lt;= #{filterMaxDistance}
+            </if>
+            <if test="filterMinFare != null and filterMinFare != ''">
+                AND tr.trip_record_fare &gt;= #{filterMinFare}
+            </if>
+            <if test="filterMaxFare != null and filterMaxFare != ''">
+                AND tr.trip_record_fare &lt;= #{filterMaxFare}
+            </if>
+        </where>
+        <choose>
+            <when test="sortColumn != null and sortColumn == 'trip-record-date'">
+                ORDER BY tr.trip_record_date ${sortOrder}
+            </when>
+            <when test="sortColumn != null and sortColumn == 'trip-record-idx'">
+                ORDER BY tr.trip_record_idx ${sortOrder}
+            </when>
+            <when test="sortColumn != null and sortColumn == 'trip-record-driver-name'">
+                ORDER BY d.driver_name ${sortOrder}
+            </when>
+            <when test="sortColumn != null and sortColumn == 'trip-record-start-location'">
+                ORDER BY tr.trip_record_start_location ${sortOrder}
+            </when>
+            <when test="sortColumn != null and sortColumn == 'trip-record-end-location'">
+                ORDER BY tr.trip_record_end_location ${sortOrder}
+            </when>
+            <when test="sortColumn != null and sortColumn == 'trip-record-distance'">
+                ORDER BY tr.trip_record_distance ${sortOrder}
+            </when>
+            <when test="sortColumn != null and sortColumn == 'trip-record-fare'">
+                ORDER BY tr.trip_record_fare ${sortOrder}
+            </when>
+            <otherwise>
+                ORDER BY tr.trip_record_date DESC
+            </otherwise>
+        </choose>
+        <if test="page != null">
+            LIMIT #{pageSize} OFFSET #{page}
+        </if>
+    </select>
+    <select id="getTripRecordCount" parameterType="search" resultType="int">
+        SELECT COUNT(tr.trip_record_idx)
+        FROM trip_record tr
+        JOIN driver d ON tr.trip_record_driver_id = d.driver_idx
+        <where>
+            <if test="filterStartDate != null and filterStartDate != ''">
+                AND tr.trip_record_date &gt;= #{filterStartDate}
+            </if>
+            <if test="filterEndDate != null and filterEndDate != ''">
+                AND tr.trip_record_date &lt;= #{filterEndDate}
+            </if>
+            <if test="filterDriverName != null and filterDriverName != ''">
+                AND d.driver_name LIKE CONCAT('%', #{filterDriverName}, '%')
+            </if>
+            <if test="filterStartLocation != null and filterStartLocation != ''">
+                AND tr.trip_record_start_location LIKE CONCAT('%', #{filterStartLocation}, '%')
+            </if>
+            <if test="filterEndLocation != null and filterEndLocation != ''">
+                AND tr.trip_record_end_location LIKE CONCAT('%', #{filterEndLocation}, '%')
+            </if>
+            <if test="filterMinDistance != null and filterMinDistance != ''">
+                AND tr.trip_record_distance &gt;= #{filterMinDistance}
+            </if>
+            <if test="filterMaxDistance != null and filterMaxDistance != ''">
+                AND tr.trip_record_distance &lt;= #{filterMaxDistance}
+            </if>
+            <if test="filterMinFare != null and filterMinFare != ''">
+                AND tr.trip_record_fare &gt;= #{filterMinFare}
+            </if>
+            <if test="filterMaxFare != null and filterMaxFare != ''">
+                AND tr.trip_record_fare &lt;= #{filterMaxFare}
+            </if>
+        </where>
+    </select>
+
+    <select id="getTripInfo" resultType="tripRecord">
+        select trip_record_idx,
+               (SELECT t.taxi_license_plate
+                FROM taxi t
+                WHERE t.taxi_idx = tr.trip_record_taxi_idx)    AS trip_license_plate,
+               (SELECT driver_name
+                FROM driver d
+                WHERE d.driver_idx = tr.trip_record_driver_id) AS trip_record_driver_name,
+               trip_record_date,
+               trip_record_start_location,
+               trip_record_end_location,
+               trip_record_distance,
+               trip_record_fare
+        FROM trip_record tr
+        WHERE trip_record_idx = #{param1}
+    </select>
+
+    <select id="getTripLocationData" resultType="coordinate">
+        SELECT trip_record_latitude AS latitude, trip_record_longitude AS longitude
+        FROM trip_record_detail
+        WHERE trip_record_idx = #{param1}
+        ORDER BY trip_record_detail_idx
+    </select>
 </mapper>

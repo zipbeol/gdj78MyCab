@@ -1,0 +1,151 @@
+diff a/src/main/webapp/views/calendar/calendarList.jsp b/src/main/webapp/views/calendar/calendarList.jsp	(rejected hunks)
+@@ -149,6 +149,26 @@
+ 		.form-check-input[type=checkbox]{
+ 			float: right;
+ 		}
++		.app-body{
++			width: 1500px;
++		}
++		#detail-profile{
++			border: 1px solid black;
++			width: 100px;
++			height: 100px;
++		}
++		.form-check-input{
++		    text-align: center;
++		    margin: 0px;
++		    top: -6px;
++		    position: relative;	
++		}
++		.form-check-label{
++			text-align: center;
++		    margin: 0px;
++		    top: -9px;
++		    position: relative;	
++		}
+     </style>
+   </head>
+ 
+@@ -232,15 +252,24 @@
+                     	<div id="calendar-util-box" class = "alert alert-secondary rounded-3">
+                     		<div class="util-box-category alert alert-secondary rounded-3 util-box1" onclick="utilBoxClk(this)">
+ 		                          <label class="form-check-label" for="firstCheckbox">개인</label>
+-		                          <input class="form-check-input me-1" type="checkbox" value="" id="firstCheckbox">
++		                          <input class="form-check-input me-1" type="checkbox" value="" id="firstCheckbox" checked disabled="disabled">
+                     		</div>
+                     		<div class="util-box-category alert alert-secondary rounded-3 util-box2" onclick="utilBoxClk(this)">
+ 		                          <label class="form-check-label" for="secondCheckbox">부서</label>
+-		                          <input class="form-check-input me-1" type="checkbox" value="" id="secondCheckbox" >
++		                          <input class="form-check-input me-1" type="checkbox" value="" id="secondCheckbox" checked disabled="disabled">
+                     		</div>
+-                    		<div class="util-box-category alert alert-secondary rounded-3 util-box3" onclick="utilBoxClk(this)">
++                    		<div class="util-box-category alert alert-secondary rounded-3 util-box3" onclick="utilBoxClk(this)" >
+ 		                          <label class="form-check-label" for="thirdCheckbox">전사</label>
+-		                          <input class="form-check-input me-1" type="checkbox" value="" id="thirdCheckbox">
++		                          <input class="form-check-input me-1" type="checkbox" value="" id="thirdCheckbox" checked disabled="disabled">
++                    		</div>
++                    		<hr>
++                    		<div id="share-calendar">
++                    			<div class="util-box-category alert alert-secondary rounded-3 util-box3" onclick="utilBoxClk(this)" >
++		                          <label class="form-check-label" for="thirdCheckbox">공유 캘린더</label>
++		                          <button type="button" class="btn btn-outline-info">
++		                          	<i class="bi bi-plus-square"></i>
++		                          </button>
++                    			</div>
+                     		</div>
+                     	</div>
+                       <div id="selectableCalendar"></div>
+@@ -313,12 +342,13 @@
+                 <div class="input-group mb-3">
+                     <label class="input-group-text" for="create-category">일정 범위</label>
+                     <select class="form-select" id="create-category" onchange="changeCategoryColor(this)">
+-                        <c:if test="${sessionScope.loginId == '개인'}">
+-                            <option value="개인" style="color: #ffec63;">개인</option>
+-                        </c:if>
++                        <option value="개인" style="color: #ffec63;">개인</option>
+                         <option value="부서" style="color: #28b9ff;">부서</option>
+                         <option value="전사" style="color: #71f371;">전사</option>
+                     </select>
++                    <label class="input-group-text" for="create-share">공유 상대선택</label>
++                    <input type="text" id="create-share" onclick="shareModalOpen()">
++                    
+                 </div>
+                 <div class="input-group mb-3">
+                     <label class="input-group-text" for="create-content">내용</label>
+@@ -752,17 +789,17 @@
+ 				data:{
+ 					'schedule_idx': detailIdx,
+ 					'schedule_name': document.getElementById('detail-title').value,
+-					'schedule_content': document.getElementById('detail-content'),
++					'schedule_content': document.getElementById('detail-content').value,
+ 					'schedule_start_date': startDateTime,
+ 					'schedule_end_date': endDateTime,
+ 					'schedule_edit_date' : curTime,
+-					'schedule_editor' : '30001', // 세션으로 가져오기
++					'schedule_editor' : "${sessionScope.loginId}", // 세션으로 가져오기
+ 					'schedule_category': document.getElementById('detail-category').value,
+ 					'schedule_color' : color
+ 				},
+ 				dataType :"json",
+ 				suceess: function(response){
+-					if (reponse.suceess) {
++					if (response.success) {
+ 						alert("수정에 성공 했습니다")
+ 						calendar.refetchEvents();
+ 					}
+@@ -803,29 +840,51 @@
+ 	function utilBoxClk(t){
+ 		var chkBox = t.querySelector('input[type="checkbox"]').checked;
+ 		var chkBoxVal = t.querySelector('label').innerText;
+-		console.log(chkBoxVal);
+-		console.log(chkBox);
++		
+ 		if(chkBox){
++			t.querySelector('input[type="checkbox"]').checked = false;
+ 			var events = calendar.getEvents();
+ 			for (let e of events) {
+ 				if(e.extendedProps.category == chkBoxVal){
+ 					console.log("ㅋㅋㅋ",e);
+-		            e.setProp('display', '');
++		            e.setProp('display', 'none');
+ 				}
+ 			}
+ 			
+ 		}else{
++			t.querySelector('input[type="checkbox"]').checked =true;
+ 			var events = calendar.getEvents();
+ 			for (let e of events) {
+ 				if(e.extendedProps.category == chkBoxVal){
+ 					console.log("ㅋㅋㅋ",e);
+-		            e.setProp('display', 'none');
++		            e.setProp('display', '');
+ 				}
+ 			}
+ 		}
+ 
+ 	};
+ 	
++	// 수정버튼 버튼변경 (readOnly해제)
++	function editButton(){
++		var editBtn =  document.getElementById("editButton");
++		editBtn.innerHTML = '수정완료';
++		editBtn.setAttribute("click",editSchedule());
++		document.getElementById("detail-category").disabled = false;
++		document.getElementById("detail-end-min").disabled = false;
++		document.getElementById("detail-end-hour").disabled = false;
++		document.getElementById("detail-start-min").disabled= false;
++		document.getElementById("detail-start-hour").disabled =false;
++		document.getElementById("detail-title").disabled = false;
++		document.getElementById("detail-start-date").disabled = false;
++		document.getElementById("detail-end-date").disabled = false;
++		document.getElementById("detail-content").disabled = false;
++		document.getElementById("editButton").setAttribute('data-bs-dismiss',"modal");
++		
++	}
++	
++	function shareModalOpen(){
++		
++	}
+   	
+ </script>
+ 

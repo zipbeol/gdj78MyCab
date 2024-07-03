@@ -177,6 +177,13 @@
         .slide-toggle.show {
             max-height: 1000px; /* Adjust based on content height */
         }
+        .shareCalBox{
+        	    overflow: scroll;
+			    /* overflow-x: hidden; */
+			    height: 237px;
+			    width: 192px;
+			    position: relative;
+        }
     </style>
   </head>
 
@@ -270,20 +277,20 @@
 		                          <label class="form-check-label" for="thirdCheckbox">전사</label>
 		                          <input class="form-check-input me-1" type="checkbox" value="" id="thirdCheckbox" checked disabled="disabled">
                     		</div>
-                    		<hr>
-                    		<div id="share-calendar">
-                    			<div class="util-box-category alert alert-secondary rounded-3 util-box3">
-		                          <label class="form-check-label" for="thirdCheckbox">공유 캘린더</label>
-		                          <button type="button" class="btn btn-outline-info" onclick="createShareModalOpen()">
-		                          	<i class="bi bi-plus-square"></i>
-		                          </button>
-		                          <c:forEach items="${shareCalList}" varStatus="status" var="item">
-		                          	<div class="util-box-category alert alert-secondary rounded-3 util-box${status.index+4}" onclick="utilBoxClk(this)" >
-				                          <label class="form-check-label" for="thirdCheckbox">${item.calendar_name}</label>
-				                          <input class="form-check-input me-1" type="checkbox" value="" id="thirdCheckbox" checked disabled="disabled">
-		                    		</div>
-		                          </c:forEach>
+		                          <hr>
+                    		<div id="share-calendar" >
+                    			<div class="util-box-category alert alert-secondary rounded-3 util-box3" id="thirdCheckbox"  onclick="createShareModalOpen()" style="background-color: #3659cd">
+		                        <label class="form-check-label" for="thirdCheckbox">공유 캘린더 추가</label>
                     			</div>
+		                          <div class="shareCalBox">
+			                          <c:forEach items="${shareCalList}" varStatus="status" var="item">
+			                          	<div class="util-box-category alert alert-secondary rounded-3 util-box${status.index+4}" onclick="shareUtilBoxClk(this)" 
+			                          		 style="background-color: ${item.calendar_color}" data-share-idx = "${item.calendar_idx}">
+					                          <label class="form-check-label" for="thirdCheckbox">${item.calendar_name}</label>
+					                          <input class="form-check-input me-1" type="checkbox" value="" id="thirdCheckbox" checked disabled="disabled">
+			                    		</div>
+			                          </c:forEach>
+		                          </div>
                     		</div>
                     	</div>
                       <div id="selectableCalendar"></div>
@@ -661,7 +668,7 @@
 						            content: res.schedule_content,
 						            start: res.schedule_start_date,
 						            end: res.schedule_end_date,
-						            color: res.schedule_color,
+						            color: res.calendar_color,
 						            category: res.schedule_category,
 						            shareIdx: res.calendar_idx,
 						            calName: res.calendar_name
@@ -987,6 +994,35 @@
 			var events = calendar.getEvents();
 			for (let e of events) {
 				if(e.extendedProps.category == chkBoxVal){
+					console.log("ㅋㅋㅋ",e);
+		            e.setProp('display', '');
+				}
+			}
+		}
+
+	};
+	
+	function shareUtilBoxClk(t){
+		var chkBox = t.querySelector('input[type="checkbox"]').checked;
+		var chkBoxVal = t.querySelector('label').innerText;
+		var idx = t.dataset.shareIdx;
+		console.log(idx);
+		
+		if(chkBox){
+			t.querySelector('input[type="checkbox"]').checked = false;
+			var events = calendar.getEvents();
+			for (let e of events) {
+				if(e.extendedProps.shareIdx == idx){
+					console.log("ㅋㅋㅋ",e);
+		            e.setProp('display', 'none');
+				}
+			}
+			
+		}else{
+			t.querySelector('input[type="checkbox"]').checked =true;
+			var events = calendar.getEvents();
+			for (let e of events) {
+				if(e.extendedProps.shareIdx == idx){
 					console.log("ㅋㅋㅋ",e);
 		            e.setProp('display', '');
 				}

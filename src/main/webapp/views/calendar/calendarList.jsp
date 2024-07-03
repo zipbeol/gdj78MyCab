@@ -279,7 +279,7 @@
                     		</div>
 		                          <hr>
                     		<div id="share-calendar" >
-                    			<div class="util-box-category alert alert-secondary rounded-3 util-box3" id="thirdCheckbox"  onclick="createShareModalOpen()" style="background-color: #3659cd">
+                    			<div class="util-box-category alert alert-secondary rounded-3 util-box3" id="thirdCheckbox"  onclick="createShareModalOpen()" style="background-color: white">
 		                        <label class="form-check-label" for="thirdCheckbox">공유 캘린더 추가</label>
                     			</div>
 		                          <div class="shareCalBox">

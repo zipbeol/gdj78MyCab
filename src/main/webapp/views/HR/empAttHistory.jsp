@@ -373,21 +373,37 @@ document.addEventListener("DOMContentLoaded", function() {
                                             color: "#28d4c4"	
                                         };
                                 	events.push(event);
-                                	event={
-                                			id: res.attendance_idx,
-                                            title: res.att_result,
-                                            start: res.att_time,
-                                            end: res.leave_time,
-                                            allDay: true,
-                                            color: res.att_result === '지각' ? '#ff8d22' :
-                                            		 res.att_result === '결근' ? '#fd1616' :
-                                            		res.att_result === '근무' ? '#56ca31' :
-                                            		res.att_result === '연차' ? '#ff6820' : 'gray'
-                                	};
-                                	events.push(event);
-                                	
-                                }
-                        } 
+                                	if (res.att_result != null) {
+                                		event={
+                                    			id: res.attendance_idx,
+                                                title: res.att_result,
+                                                start: res.att_time,
+                                                end: res.leave_time,
+                                                allDay: true,
+                                                color: res.att_result === '지각' ? '#ff8d22' :
+                                                		 res.att_result === '결근' ? '#fd1616' :
+                                                		res.att_result === '근무' ? '#56ca31' :
+                                                		res.att_result === '연차' ? '#ff6820' : 'gray'
+                                    	};
+                                    	events.push(event);
+									}
+                        }else if (res.att_result != null) {
+                        	event={
+                        			id: res.attendance_idx,
+                                    title: res.att_result,
+                                    start: res.att_time,
+                                    end: res.leave_time,
+                                    allDay: true,
+                                    color: res.att_result === '지각' ? '#ff8d22' :
+                                    		 res.att_result === '결근' ? '#fd1616' :
+                                    		res.att_result === '근무' ? '#56ca31' :
+                                    		res.att_result === '연차' ? '#ff6820' : 'gray'
+                        	};
+                        	events.push(event);
+							
+                        }
+							
+						} 
                         
                     }
                     console.log('Events:', events);

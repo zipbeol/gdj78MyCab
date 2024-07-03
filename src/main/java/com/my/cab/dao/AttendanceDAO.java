@@ -34,4 +34,14 @@ public interface AttendanceDAO {
 
 	int getEditTotalPages(SearchDTO searchDTO);
 
+	boolean approvalReject(AttendanceDTO attDTO);
+
+	boolean approvalPermit(AttendanceDTO attDTO);
+
+	void checkAtt(AttendanceDTO dto);
+
+	void insertAtt();
+
+	List<AttendanceDTO> getEmp();
+
 }

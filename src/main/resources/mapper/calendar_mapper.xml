@@ -113,7 +113,7 @@
 		    e.emp_no = #{schedule_emp_no}
 	</insert>
 	
-	<select id="shareCalListCall" resultType="calendarDTO">
+	<select id="shareCalListCall" resultType="map">
 		SELECT * FROM schedule s 
 		INNER JOIN share_calendar sc  ON sc.share_cal_idx = s.schedule_cal_idx
 		INNER JOIN calendar cal ON cal.calendar_idx = s.schedule_cal_idx 

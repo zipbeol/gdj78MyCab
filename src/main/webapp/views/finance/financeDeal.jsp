@@ -162,53 +162,53 @@ td:hover {
 									<div class="card-body">
 
 										<!-- 검색창 시작 -->
-										<div
-											class="search-filter-container border border-2 p-3 rounded mb-3">
-											<!-- 날짜 필터링 입력 -->
-											<div class="mt-3">
-											    <label for="startDate" class="form-label">시작 날짜&nbsp;</label>
-											    <input type="date" id="startDate" />
-											    <label for="endDate" class="form-label">&nbsp;&nbsp;-&nbsp;&nbsp;종료 날짜&nbsp;</label>
-											    <input type="date" id="endDate" />
-											</div>
-											<div class="row mt-2">
-												<!-- 수익 지출 체크박스 -->
-												<div class="col-10"></div>
-												<label for="searchQuery" class="form-label mt-2">거래 종류</label>
-												<div class="col-2">
-													<!-- 수익 체크박스 -->
-													<input class="form-check-input" type="checkbox"value="profit" id="flexCheckProfit" />
-													<label class="form-check-label" for="flexCheckProfit">수익</label>
-													&nbsp;&nbsp;&nbsp;
-													<!-- 지출 체크박스 -->
-													<input class="form-check-input" type="checkbox" value="expense" id="flexCheckExpense" />
-													<label class="form-check-label" for="flexCheckExpense">지출</label>
-												</div>
-												<div class="row mt-2">
-													<div class="col-2">
-														<label for="filter" class="form-label">정렬</label>
-														<!-- 필터링 버튼 -->
-														<select id="filter" name="filter" class="form-select"
-															required>
-															<option value="" selected disabled>필터 선택</option>
-															<option value="byDealWho">거래 이름 순</option>
-															<option value="manyDeal">많은 거래금 순</option>
-															<option value="lessDeal">적은 거래금 순</option>
-														</select>
-													</div>
-													<div class="col-10"></div>
-													<label for="searchQuery" class="form-label mt-2">검색</label>
-													<div class="d-flex">
-														<!-- 검색 입력 필드 -->
-														<input type="text" id="searchQuery"
-															placeholder="검색 내용을 입력하세요."/>
-														<!-- 검색 버튼 -->
-														<button id="go" class="btn btn-outline-info">찾기</button>
-													</div>
-												</div>
-											</div>
-											<button class="btn btn-secondary" onclick="resetFilters()">초기화</button>
+										<div class="border border-2 p-3 rounded mb-3">
+										    <div class="row mb-3">
+										        <div class="col-md-8 offset-md-4"></div>
+										    </div>
+										
+										    <div class="row mb-3">
+										        <div class="col-2">
+										            <label for="startDate" class="form-label">시작 날짜</label>
+										            <input type="date" id="startDate" class="form-control">
+										        </div>
+										        <div class="col-2">
+										            <label for="endDate" class="form-label">종료 날짜</label>
+										            <input type="date" id="endDate" class="form-control">
+										        </div>
+										        <div class="col-2">
+										            <label for="searchQuery" class="form-label mt-2">거래 종류</label>
+										            <div class="d-flex align-items-center">
+									                <div class="form-check form-check-inline">
+									                    <input class="form-check-input" type="checkbox" value="profit" id="flexCheckProfit">
+									                    <label class="form-check-label" for="flexCheckProfit">수익</label>
+									                </div>
+									                <div class="form-check form-check-inline">
+									                    <input class="form-check-input" type="checkbox" value="expense" id="flexCheckExpense">
+									                    <label class="form-check-label" for="flexCheckExpense">지출</label>
+									                </div>
+									            </div>
+										        </div>
+										        <div class="col-2">
+										            <label for="filter" class="form-label">정렬</label>
+										            <select id="filter" name="filter" class="form-select">
+										                <option value="" selected disabled>필터 선택</option>
+										                <option value="byDealWho">거래 이름 순</option>
+										                <option value="manyDeal">많은 거래금 순</option>
+										                <option value="lessDeal">적은 거래금 순</option>
+										            </select>
+										        </div>
+										        <div class="col-4">
+										            <label for="searchQuery" class="form-label">검색</label>
+										            <div class="input-group">
+										                <input type="text" id="searchQuery" class="form-control" placeholder="검색 내용을 입력하세요.">
+										                <button id="go" class="btn btn-outline-info">찾기</button>
+										            </div>
+										        </div>
+										    </div>
 										</div>
+
+								    <button class="btn btn-secondary" onclick="resetFilters()">초기화</button>
 									<!-- 거래내역 리스트 테이블 -->
 									<div class="table-outer mt-3">
 										<table class="table table-hover align-middle custom-table m-0">
@@ -224,17 +224,18 @@ td:hover {
 												<!-- AJAX 요청으로 항목들이 여기에 추가됩니다 -->
 											</tbody>
 										</table>
-										<div>
-										    <label for="totalProfit" class="form-label mt-2">총 수익금: </label>
+										<div class="text-center fs-5 my-3">
+										    <label for="totalProfit" class="form-label">총 수익금 : </label>
 										    <span id="totalProfit"></span>
-										    <label class="form-label mt-2">원</label>
-										    <label for="totalExpense" class="form-label mt-2">총 지출금: </label>
+										    <label class="form-label">원</label>
+										    <label for="totalExpense" class="form-label ms-3">총 지출금 : </label>
 										    <span id="totalExpense"></span>
-										    <label class="form-label mt-2">원</label>
-										    <label for="netProfit" class="form-label mt-2">총 순수익: </label>
+										    <label class="form-label">원</label>
+										    <label for="netProfit" class="form-label ms-3">총 순수익 : </label>
 										    <span id="netProfit"></span>
-										    <label class="form-label mt-2">원</label>
+										    <label class="form-label">원</label>
 										</div>
+
 
 										<!-- 페이지 네이션 시작 -->
 										<nav aria-label="Page navigation example" class="mt-3">

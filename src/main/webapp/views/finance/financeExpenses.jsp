@@ -49,29 +49,7 @@
 	display: table-row;
 }
 
-.filter-btn {
-	background-color: #f8f9fa;
-	color: #6c757d;
-	border: 1px solid #ced4da;
-	padding: 8px 16px;
-	margin-right: 10px;
-	border-radius: 5px;
-	cursor: pointer;
-	transition: background-color 0.3s ease, color 0.3s ease, border-color
-		0.3s ease;
-}
 
-/* 호버 효과 */
-.filter-btn:hover {
-	background-color: #e9ecef;
-}
-
-/* 액티브(선택된) 상태 */
-.filter-btn.active {
-	background-color: #0d6efd;
-	color: #fff;
-	border-color: #0d6efd;
-}
 /* 리셋 버튼 스타일 */
 .reset-btn {
 	background-color: #dc3545;
@@ -153,6 +131,7 @@ td:hover {
 				<div class="app-body">
 					<!-- Container starts -->
 					<div class="container-fluid">
+					
 						<!-- Row start -->
 						<div class="row">
 							<div class="col-12">
@@ -162,54 +141,54 @@ td:hover {
 									</div>
 									<div class="card-body">
 										<!-- 검색창 시작 -->
-										<div
-											class="search-filter-container border border-2 p-3 rounded mb-3">
+										<div class="border border-2 p-3 rounded mb-3">
+											<div class="row mb-3">
+                                                <div class="col-md-8 offset-md-4"></div>
+                                            </div>
 											<!-- 날짜 필터링 입력 -->
-											<div class="mt-3">
-												<label for="startDate" class="form-label">시작
-													날짜&nbsp;</label> <input type="date" id="startDate"> <label
-													for="endDate" class="form-label">&nbsp;&nbsp;-&nbsp;&nbsp;종료
-													날짜&nbsp;</label> <input type="date" id="endDate">
-											</div>
-											<div class="row mt-2">
+											<div class="row mb-3">
+												<div class="col-2">
+													<label for="startDate" class="form-label">시작 날짜</label>
+                                                    <input type="date" id="startDate" class="form-control">
+												</div>
+												<div class="col-2">
+                                                    <label for="endDate" class="form-label">종료 날짜</label>
+                                                    <input type="date" id="endDate" class="form-control">
+                                                </div>
+                                                <div class="col-4"></div>
 												<div class="col-2">
 													<label for="filter" class="form-label">정렬</label>
-													<!-- 필터링 버튼 -->
-													<select id="filter" name="filter" class="form-select"
-														required>
+													<select id="filter" name="filter" class="form-select">
 														<option value="" selected disabled>필터 선택</option>
 														<option value="orderByName">이름 순</option>
 														<option value="manyExpenses">많은 지출 순</option>
 														<option value="lessExpenses">적은 지출 순</option>
 													</select>
 												</div>
-												<div class="col-10"></div>
-											</div>
-											<label for="searchQuery" class="form-label mt-2">검색</label>
-											<div class="d-flex">
-												<!-- 검색 입력 필드 -->
-												<input type="text" id="searchQuery"
-													placeholder="검색 내용을 입력하세요.">
-												<!-- 검색 버튼 -->
-												<button id="go" class="btn btn-outline-info">찾기</button>
+												<div class="col-2">
+													<label for="searchQuery" class="form-label">검색</label>
+													<div class="input-group">
+														<input type="text" id="searchQuery"  class="form-control" placeholder="검색 내용을 입력하세요.">
+														<button id="go" class="btn btn-outline-info">찾기</button>
+													</div>
+												</div>
 											</div>
 										</div>
-										<button class="btn btn-secondary" onclick="resetFilters()">초기화</button>
-										<!-- 카테고리 필터링 버튼 -->
-										<div class="btn-group" role="group" aria-label="Basic example">
-											<button type="button" class="btn btn-primary filter-btn"
-												data-category="택시">택시 지출</button>
-											<button type="button" class="btn btn-primary filter-btn"
-												data-category="사내">사내 지출</button>
-											<button type="button" class="btn btn-primary filter-btn"
-												data-category="기타">기타 지출</button>
+										
+										<div class="d-flex align-items-center mb-2">
+										<button class="btn btn-secondary me-2" onclick="resetFilters()">초기화</button>
+											<div class="btn-group" role="group">
+												<button type="button" class="btn btn-primary filter-btn" data-category="택시">택시 지출</button>
+												<button type="button" class="btn btn-primary filter-btn" data-category="사내">사내 지출</button>
+												<button type="button" class="btn btn-primary filter-btn" data-category="기타">기타 지출</button>
+											</div>
 										</div>
+										
 										<!-- 지출 등록 버튼 -->
 										<div class="text-end mb-2">
-											<button id="myBtn" class="btn btn-primary"
-												data-bs-toggle="modal" data-bs-target="#exampleModal">지출
-												등록</button>
+											<button id="myBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">지출 등록</button>
 										</div>
+										
 										<!-- 지출 리스트 테이블 -->
 										<div class="table-outer mt-3">
 											<table class="table table-hover align-middle custom-table m-0">
@@ -348,8 +327,21 @@ td:hover {
         getTotalPages();
         refreshExpensesList();
     });
-    
+
     $('#go').on('click',function(){
+        getTotalPages();
+        refreshExpensesList();
+    });
+    
+ // 날짜 변경 이벤트 핸들러 추가
+    $('#startDate').on('change', function() {
+    	currentPage=1;
+        getTotalPages();
+        refreshExpensesList();
+    });
+
+    $('#endDate').on('change', function() {
+    	currentPage=1;
         getTotalPages();
         refreshExpensesList();
     });

@@ -182,10 +182,16 @@ public class AttendanceService {
 		return result;
 	}
 
-	public void checkAtt() {
-		
-		attDAO.checkAtt();
+	public void checkAtt(List<AttendanceDTO> list) {
+		for (AttendanceDTO dto : list) {
+			attDAO.checkAtt(dto);
+			
+		}
 		attDAO.insertAtt();
+	}
+
+	public List<AttendanceDTO> getEmp() {
+		return attDAO.getEmp();
 	}
 
 	

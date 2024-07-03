@@ -33,9 +33,27 @@ public class AttendanceDTO {
     private int lateCount;
     private int leaveCount;
     private String process_status;
+    private String  STatt_time;
+	private String STleave_time;
     
     
-    public String getProcess_status() {
+    public String getSTatt_time() {
+		return STatt_time;
+	}
+
+	public void setSTatt_time(String sTatt_time) {
+		STatt_time = sTatt_time;
+	}
+
+	public String getSTleave_time() {
+		return STleave_time;
+	}
+
+	public void setSTleave_time(String sTleave_time) {
+		STleave_time = sTleave_time;
+	}
+
+	public String getProcess_status() {
 		return process_status;
 	}
 

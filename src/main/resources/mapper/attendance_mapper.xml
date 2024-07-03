@@ -252,37 +252,42 @@
         am.att_management_idx = #{att_management_idx}
 	</update>
 	
+	<select id="getEmp" resultType="att">
+		SELECT e.emp_no, a.att_time as STatt_time, a.leave_time as STleave_time
+		FROM employee e
+		JOIN attendance a ON e.emp_no = a.emp_no
+		WHERE a.work_day = CURDATE()
+	</select>
 	
 	
-    <update id="checkAtt">
-    	UPDATE attendance 
-        SET att_result = 
+	
+     <update id="checkAtt" parameterType="att">
+         UPDATE attendance 
         <set>
-            <if test="att_time &gt;= '09:01:00'">
-                att_result = '지각',
-            </if>
-            <if test="att_time &lt; '09:01:00' and leave_time != null">
-                att_result = '근무',
-            </if>
-            <if test="att_time &lt; '09:01:00' and leave_time == null">
-                att_result = '무단 조퇴',
-            </if>
+            <choose>
+                <when test="STatt_time &gt;= '09:01:00'">
+                    att_result = '지각'
+                </when>
+                <when test="STatt_time &lt; '09:01:00' and STleave_time != null">
+                    att_result = '근무'
+                </when>
+                <when test="STatt_time &lt; '09:01:00' and STleave_time == null">
+                    att_result = '무단 조퇴'
+                </when>
+            </choose>
         </set>
-    	WHERE work_day = CURRENT_DATE
+        WHERE work_day = CURDATE()
         AND att_result IS NULL
-        AND emp_no IN (
-            SELECT emp_no 
-            FROM employee 
-            WHERE emp_employment_status = true)
+        AND emp_no = #{emp_no}
     </update>
         
     
     
     <insert id="insertAtt">
         INSERT INTO attendance (emp_no, att_time, leave_time, att_result, work_day)
-        SELECT e.emp_no, NULL, NULL, '결근', CURRENT_DATE
+        SELECT e.emp_no, NULL, NULL, '결근', CURDATE()
         FROM employee e
-        LEFT JOIN attendance a ON e.emp_no = a.emp_no AND a.work_day = CURRENT_DATE
+        LEFT JOIN attendance a ON e.emp_no = a.emp_no AND a.work_day = CURDATE()
         WHERE a.emp_no IS NULL
         AND e.emp_employment_status = true
     </insert>

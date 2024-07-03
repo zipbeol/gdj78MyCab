@@ -1,5 +1,6 @@
 package com.my.cab.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -165,9 +166,17 @@ public Map<String, Object> getEditTotalPages(SearchDTO searchDTO){
 		return Map.of("isSuccess", isSuccess);
 	}
 	
-	@Scheduled(cron = "0 5 18 * * MON-FRI", zone = "Asia/Seoul")
+	@Scheduled(cron = "0 12 11 * * MON-FRI", zone = "Asia/Seoul")
 	public void checkAtt() {
-		attService.checkAtt();
+		logger.info("출석 체크");
+		
+		List<AttendanceDTO> list = attService.getEmp(); 
+		
+			
+			attService.checkAtt(list);
+		
+		
+		
 	}
 	
 	

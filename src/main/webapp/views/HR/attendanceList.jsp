@@ -118,10 +118,10 @@
                         <a href="/" class="text-decoration-none">메인</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="#" class="text-decoration-none">마이페이지</a>
+                        <a href="#" class="text-decoration-none">인사 관리</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="/attendance/myAttendance/list.go" class="text-decoration-none">근태 관리</a>
+                        <a href="/attendance/attendance/list.go" class="text-decoration-none">근태 관리</a>
                     </li>
                 </ol>
                 <!-- Breadcrumb end -->

@@ -141,6 +141,7 @@
          FROM attendance a
          WHERE a.emp_no = e.emp_no
            AND a.work_day = #{filterAttDate}
+           AND (a.att_time IS NOT NULL OR a.att_result LIKE '%연차%' OR a.att_result LIKE '%반차%')
      )) AS absentCount,
     (SELECT COUNT(*)
      FROM attendance a

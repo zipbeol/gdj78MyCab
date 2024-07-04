@@ -32,6 +32,8 @@
 <!-- 따로 적용한 CSS -->
 <link rel="stylesheet" href="/assets/css/default.css">
 <style>
+/* ... 기존 스타일 ... */
+
 .detail-row {
     display: none;
     transition: all 0.3s ease;
@@ -85,9 +87,11 @@ td:hover {
     background-color: #f8d7da;
 }
 
+/* 테이블 전체 높이 설정 */
 .custom-table {
     width: 100%;
     table-layout: fixed; /* 테이블 너비 고정 */
+    height: 500px; /* 테이블 전체 높이 설정 */
 }
 
 .custom-table th,
@@ -109,6 +113,16 @@ td:hover {
 
 .custom-table .detail-row {
     background-color: #f1f1f1;
+}
+
+/* 중요 공지사항 스타일 */
+.important {
+    background-color: #f5f5dc; /* 베이지색 배경 */
+}
+
+.important td {
+	font-weight: bold;
+    color: red;
 }
 
 </style>
@@ -175,39 +189,39 @@ td:hover {
                                         <h4 class="card-title">공지사항</h4>
                                     </div>
                                     <div class="card-body">
-                                        <button class="btn btn-secondary" onclick="resetFilters()">초기화</button>
-                                        <!-- 검색창 시작 -->
-                                        <div class="search-filter-container border border-2 p-3 rounded mb-3">
-                                            <!-- 날짜 필터링 입력 -->
-                                            <div class="mt-3">
-                                                <label for="startDate" class="form-label">시작 날짜&nbsp;</label> 
-                                                <input type="date" id="startDate"> 
-                                                <label for="endDate" class="form-label">&nbsp;&nbsp;-&nbsp;&nbsp;종료 날짜&nbsp;</label> 
-                                                <input type="date" id="endDate">
-                                            </div>
-                                            <div class="row mt-2">
-                                                <div class="col-2">
-                                                    <!-- 필터링 버튼 -->
-                                            <label for="searchQuery" class="form-label mt-2">검색</label>
-                                                    <select id="searchFilter" name="filter" class="form-select" required>
-                                                        <option value="" selected disabled>필터 선택</option>
-                                                        <option value="noticeWriter">작성자</option>
-                                                        <option value="noticeTitle">제목</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex">
-                                                <!-- 검색 입력 필드 -->
-                                                <input type="text" id="searchQuery" placeholder="검색 내용을 입력하세요.">
-                                                <!-- 검색 버튼 -->
-                                                <button id="go" class="btn btn-outline-info">찾기</button>
-                                            </div>
-                                            <div class="row mt-3">
-                                                <div class="col-12 text-end">
-                                                    <button id="registerButton" class="btn btn-primary">등록</button>
-                                                </div>
-                                            </div>
+                                    	<div class="mb-2">
+                                        	<button class="btn btn-secondary" onclick="resetFilters()">초기화</button>
                                         </div>
+                                        
+										<!-- 검색창 시작 -->
+										<div class="search-filter-container border border-2 p-3 rounded mb-3">
+										    <div class="row g-2 align-items-center">
+										        <!-- 날짜 필터링 입력 -->
+										        <div class="col-2">
+										            <label for="startDate" class="form-label">시작 날짜</label> 
+										            <input type="date" id="startDate" class="form-control">
+										        </div>
+										        <div class="col-2">
+										            <label for="endDate" class="form-label">종료 날짜</label> 
+										            <input type="date" id="endDate" class="form-control">
+										        </div>
+										        <div class="col-4"></div> <!-- 여백을 위한 빈 col -->
+										        <div class="col-4">
+										            <label for="searchFilter" class="form-label">검색하기</label>
+										            <div class="input-group">
+										                <select id="searchFilter" name="filter" class="form-select" style="max-width: 120px;">
+										                    <option value="" selected disabled>검색 필터</option>
+										                    <option value="noticeWriter">작성자</option>
+										                    <option value="noticeTitle">제목</option>
+										                </select>
+										                <input type="text" id="searchQuery" class="form-control" placeholder="검색 내용을 입력하세요.">
+										                <button id="go" class="btn btn-outline-info">찾기</button>
+										            </div>
+										        </div>
+										    </div>
+										</div>
+										<!-- 검색창 종료 -->
+
                                         <!-- 공지사항 리스트 테이블 -->
                                         <div class="table-outer mt-3">
                                             <table class="table table-hover align-middle custom-table m-0">
@@ -232,10 +246,12 @@ td:hover {
                                             <!-- 페이지 네이션 종료 -->
                                         </div>
                                         <!-- 비활성화 버튼 추가 -->
-                                        <div class="text-end mt-3">
-                                            <button id="toggleInactiveButton" class="btn btn-warning">비활성화</button>
-                                            <button id="applyInactiveButton" class="btn btn-danger" style="display:none;">비활성화 적용</button>
-                                        </div>
+                                        <!-- 비활성화 버튼 추가 -->
+										<div class="text-end mt-3">
+										    <button id="toggleInactiveButton" class="btn btn-warning">비활성화</button>
+										    <button id="applyInactiveButton" class="btn btn-danger" style="display:none;">비활성화 적용</button>
+										    <button id="registerButton" class="btn btn-primary">글 작성</button>
+										</div>
                                     </div>
                                 </div>
                             </div>
@@ -299,7 +315,6 @@ td:hover {
     });
     
 
-    // 리셋 버튼 클릭 시 호출되는 함수
     function resetFilters() {
         // 선택된 버튼의 active 클래스 제거
         $('.filter-btn').removeClass('active');
@@ -317,15 +332,27 @@ td:hover {
         // 총 페이지
         currentPage = 1;
         getTotalPages();
-        
+
         // 공지 리스트 다시 불러오기
         refreshNoticeList();
+
+        // 비활성화 모드 상태를 초기화
+        if (isInactiveMode) {
+            isInactiveMode = false;
+            $('#toggleInactiveButton').show();
+            $('#applyInactiveButton').hide();
+            $('.inactive-column').hide();
+        }
+
+        // 체크박스 초기화
+        $('.inactive-checkbox').prop('checked', false);
 
         // 필터링 버튼 위치로 스크롤 이동 (선택하지 않은 경우)
         $('html, body').animate({
             scrollTop: $(".mt-3").offset().top
         }, 500);
     }
+
 
     $(document).ready(function() {
         // 등록 버튼 클릭 시 등록 페이지로 이동
@@ -344,9 +371,9 @@ td:hover {
 
         // 중요 공지사항과 일반 공지사항을 분리
         for (item of noticeList) {
-            var importance = item.notice_imp === 'true' ? '중요' : '일반';
+            var importance = item.notice_imp === 'true' ? '★ 중요 ★' : '일반';
             var inactiveClass = item.inactive ? ' inactive' : '';
-            var noticeRow = '<tr class="clickable-row' + (importance === '중요' && importanceCount < 3 ? ' important' : '') + inactiveClass + '">' +
+            var noticeRow = '<tr class="clickable-row' + (importance === '★ 중요 ★' && importanceCount < 3 ? ' important' : '') + inactiveClass + '" data-id="' + item.notice_idx + '">' +
                 '<td class="inactive-column" style="display:none;"><input type="checkbox" class="inactive-checkbox" data-id="' + item.notice_idx + '"></td>' +
                 '<td>' + importance + '</td>' +
                 '<td>' + item.notice_field + '</td>' +
@@ -365,8 +392,20 @@ td:hover {
         tbody.html(row);
 
         // 각 행에 클릭 이벤트 추가
-        $('.clickable-row').on('click', function () {
-            $(this).next('.detail-row').toggleClass('active');
+        $('.clickable-row').on('click', function (event) {
+            if (isInactiveMode) {
+                // 비활성화 모드일 경우 체크박스를 체크하거나 체크 해제
+                var checkbox = $(this).find('.inactive-checkbox');
+                checkbox.prop('checked', !checkbox.prop('checked'));
+                return;
+            }
+            var noticeIdx = $(this).data('id'); // data-id 속성에서 notice_idx 값을 가져옴
+            window.location.href = '/notice/detail.go?notice_idx=' + noticeIdx;
+        });
+
+        // 체크박스를 클릭해도 상세 페이지로 이동하지 않도록 이벤트 추가
+        $('.inactive-checkbox').on('click', function (event) {
+            event.stopPropagation();
         });
     }
 

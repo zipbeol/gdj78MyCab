@@ -65,26 +65,17 @@ body {
         border: none; /* 기본 테두리 제거 */
         color: white; /* 버튼 텍스트 색상 */
     }
-        .action-buttons .btn:hover {
-        background-color: #5a6268; /* 버튼 호버 색상 */
-    }
-        .action-buttons .btn-primary {
+    .action-buttons .btn-primary {
         background-color: #dc3545; /* 빨간색 */
     }
     .action-buttons .btn-primary:hover {
         background-color: #c82333; /* 빨간색 호버 */
     }
     .action-buttons .btn-secondary {
-        background-color: #d6d8db; /* 회색 파스텔 계열 */
+        background-color: #6c757d; /* 더 진한 회색 */
     }
     .action-buttons .btn-secondary:hover {
-        background-color: #c6c8ca; /* 회색 파스텔 계열 호버 */
-    }
-    .action-buttons .btn-danger {
-        background-color: #007bff; /* 기본 파란색 */
-    }
-    .action-buttons .btn-danger:hover {
-        background-color: #0056b3; /* 파란색 호버 */
+        background-color: #5a6268; /* 더 진한 회색 호버 */
     }
 </style>
 </head>
@@ -150,41 +141,39 @@ body {
                                         <h4 class="card-title">공지사항</h4>
                                     </div>
                                     <div class="card-body">
-<div class="table-responsive">
-    <table class="table table-bordered">
-        <tbody>
-            <tr>
-                <td class="detail-label">작성자</td>
-                <td class="detail-content">관리자</td>
-            </tr>
-            <tr>
-                <td class="detail-label">등록일</td>
-                <td class="detail-content">2009-10-20</td>
-            </tr>
-            <tr>
-                <td class="detail-label">제목</td>
-                <td class="detail-content">관리환경을 오픈하였습니다.</td>
-            </tr>
-            <tr>
-                <td class="detail-label">내용</td>
-                <td class="detail-content content-height">
-                    관리환경을 오픈하였습니다.
-                    관리환경은 시스템관리, 협력관리, 변경관리, SR관리, 현장지원, 문제관리로 구성되어 있습니다.
-                </td>
-            </tr>
-            <tr>
-                <td class="detail-label no-border" colspan="1"></td>
-                <td class="detail-label" style="text-align: right;">작성 일시</td>
-                <td class="detail-content" style="text-align: right;">2009-10-19</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-<div class="action-buttons mt-3">
-    <button type="button" class="btn btn-primary">수정</button>
-    <button type="button" class="btn btn-danger">삭제</button>
-    <a href="notice_list.html" class="btn btn-secondary">목록</a>
-</div>
+										<div class="table-responsive">
+										    <table class="table table-bordered">
+										        <tbody>
+										            <tr>
+										                <td class="detail-label" style="width: 15%">작성자</td>
+										                <td class="detail-content" style="width: 85%">관리자</td>
+										            </tr>
+										            <tr>
+										                <td class="detail-label">첨부 파일</td>
+										                <td class="detail-content">.jsp</td>
+										            </tr>
+										            <tr>
+										                <td class="detail-label">제목</td>
+										                <td class="detail-content">관리환경을 오픈하였습니다.</td>
+										            </tr>
+										            <tr>
+										                <td class="detail-label">내용</td>
+										                <td class="detail-content content-height">
+										                    관리환경을 오픈하였습니다.
+										                    관리환경은 시스템관리, 협력관리, 변경관리, SR관리, 현장지원, 문제관리로 구성되어 있습니다.
+										                </td>
+										            </tr>
+										            <tr>
+										                <td class="detail-label" style="text-align: right;">작성 일시</td>
+										                <td class="detail-content" style="text-align: right;">2009-10-19</td>
+										            </tr>
+										        </tbody>
+										    </table>
+										</div>
+										<div class="action-buttons mt-3">
+										    <button type="button" class="btn btn-primary">수정</button>
+										    <a href="./list" class="btn btn-secondary">목록</a>
+										</div>
                                     </div>
                                 </div>
                             </div>
@@ -227,12 +216,7 @@ body {
     <script src="/assets/js/jquery.twbsPagination.min.js"></script>
     <!-- AJAX 및 모달 스크립트 -->
     <script>
-        // Example of populating the page with data
-        document.getElementById('notice_title').innerText = "관리환경을 오픈하였습니다.";
-        document.getElementById('notice_writer').innerText = "관리자";
-        document.getElementById('notice_date').innerText = "2009-10-20";
-        document.getElementById('notice_content').innerText = "관리환경을 오픈하였습니다. 관리환경은 시스템관리, 협력관리, 변경관리, SR관리, 현장지원, 문제관리로 구성되어 있습니다.";
-        document.getElementById('notice_start_date').innerText = "2009-10-19";
+    
     </script>
 </body>
 </html>

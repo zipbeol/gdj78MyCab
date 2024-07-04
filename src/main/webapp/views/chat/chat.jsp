@@ -37,50 +37,121 @@
     <link rel="stylesheet" href="/assets/css/default.css">
     <!-- FontAwesome 추가 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- Scrollbar CSS -->
+    <link rel="stylesheet" href="/assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
 
     <style>
         .chat-container {
-            height: 60vh; /* 카드 바디 내에서 적절한 높이 설정 */
+            height: 500px; /* 적절한 높이로 설정하세요 */
             display: flex;
             flex-direction: column;
-        }
-
-        .chat-list {
-            overflow-y: auto;
-            border-right: 1px solid #dee2e6;
-        }
-
-        .chat-window {
-            flex: 1;
-            overflow-y: auto;
-            padding-bottom: 60px; /* 메시지 입력창 높이만큼 패딩 추가 */
+            border: 1px solid #dee2e6;
         }
 
         .chat-messages {
-            height: calc(60vh - 60px); /* 적절한 높이 설정 (전체 높이에서 여백과 입력창 높이를 뺀 값) */
+            flex: 1;
             overflow-y: auto;
-            padding-bottom: 10px; /* 메시지 입력창과 간격 */
+            padding: 10px;
+            background-color: #ffffff;
+            height: 400px; /* 기본 높이 */
+            max-height: 400px; /* 최대 높이 */
+        }
+
+        .message {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .message.sent {
+            justify-content: flex-end;
+            text-align: right;
+        }
+
+        .message.received {
+            justify-content: flex-start;
+            text-align: left;
+        }
+
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .message.sent .profile-pic {
+            margin-right: 0;
+            margin-left: 10px;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #f1f0f0;
+        }
+
+        .message.sent .message-content {
+            background-color: #dcf8c6;
+        }
+
+        .sender-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .timestamp {
+            font-size: 0.8em;
+            color: #999;
+            margin-left: 10px;
+        }
+
+        .message.sent .timestamp {
+            margin-left: 0;
+            margin-right: 10px;
         }
 
         .message-input {
-            position: relative; /* 'absolute'에서 'relative'로 변경 */
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 60px; /* 메시지 입력창 높이 */
+            padding: 10px;
             background-color: #f8f9fa;
-            border-top: 1px solid #dee2e6; /* 위쪽 경계선 추가 */
+            border-top: 1px solid #dee2e6;
         }
 
-        /* Custom Modal Size */
-        .modal-dialog {
-            max-width: 40vw;
-            max-height: 30vh;
+        .input-group {
+            display: flex;
         }
 
-        .modal-content {
-            height: 100%;
-            overflow: auto;
+        .input-group input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #dee2e6;
+            border-right: none;
+            border-radius: 4px 0 0 4px;
+        }
+
+        .input-group button {
+            padding: 10px;
+            border: 1px solid #dee2e6;
+            border-left: none;
+            border-radius: 0 4px 4px 0;
+            background-color: #007bff;
+            color: white;
+        }
+
+        .chat-date {
+            text-align: center;
+            font-size: 0.9em;
+            color: #999;
+            margin: 10px 0;
+        }
+
+        .chat-date.sent {
+            text-align: right;
+        }
+
+        .chat-date.received {
+            text-align: left;
         }
     </style>
 
@@ -156,23 +227,28 @@
                                     <!-- 메시지 UI 시작 -->
                                     <div class="row h-100">
                                         <div class="col-3 chat-list p-3">
-                                            <button class="btn btn-success btn-block mb-3" data-toggle="modal" data-target="#newChatModal">새로 만들기</button>
+                                            <button class="btn btn-success btn-block mb-3" data-toggle="modal"
+                                                    data-target="#newChatModal">새로 만들기
+                                            </button>
                                             <input type="text" class="form-control mb-3" placeholder="메시지방, 메시지 검색">
                                             <div class="list-group">
-                                                <a href="#" class="list-group-item list-group-item-action active">
-                                                    <div class="d-flex w-100 justify-content-between">
-                                                        <h5 class="mb-1">테스트 1</h5>
-                                                        <small>오전 12:05</small>
-                                                    </div>
-                                                    <small>...</small>
-                                                </a>
-                                                <a href="#" class="list-group-item list-group-item-action">
-                                                    <div class="d-flex w-100 justify-content-between">
-                                                        <h5 class="mb-1">박채현</h5>
-                                                        <small>오전 12:04</small>
-                                                    </div>
-                                                    <small>메시지 메시지 메시지</small>
-                                                </a>
+                                                <c:choose>
+                                                    <c:when test="${chatRoomList.size() > 0}">
+                                                        <c:forEach items="${chatRoomList}" var="room">
+                                                            <a href="#" class="list-group-item list-group-item-action"
+                                                               data-roomID="${room.chatRoomIdx}">
+                                                                <div class="d-flex w-100 justify-content-between">
+                                                                    <h5 class="mb-1">${room.chatRoomName}</h5>
+                                                                    <small>${room.chatRoomLastMessage}</small>
+                                                                </div>
+                                                                <small>${room.chatRoomLastMessage}</small>
+                                                            </a>
+                                                        </c:forEach>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        채팅방을 만들어 주세요
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </div>
                                         </div>
                                         <div class="col-9 d-flex flex-column p-0 position-relative">
@@ -183,15 +259,22 @@
                                                 </div>
                                                 <div class="chat-messages">
                                                     <div class="text-center text-muted small my-2">2024.7.1. (월)</div>
-                                                    <div class="text-center text-muted small my-2">박채현님이 그룹 메시지방에 참여합니다.</div>
+                                                    <div class="text-center text-muted small my-2">박채현님이 그룹 메시지방에
+                                                        참여합니다.
+                                                    </div>
                                                 </div>
                                                 <div class="message-input p-3">
                                                     <div class="input-group">
-                                                        <input type="text" class="form-control" id="messageInput" placeholder="메시지를 입력해주세요. (Enter: 전송)">
+                                                        <input type="text" class="form-control" id="messageInput"
+                                                               placeholder="메시지를 입력해주세요. (Enter: 전송)">
                                                         <div class="input-group-append">
-                                                            <button class="btn btn-secondary" type="button"><i class="far fa-smile"></i></button>
-                                                            <button class="btn btn-secondary" type="button"><i class="fas fa-paperclip"></i></button>
-                                                            <button class="btn btn-primary" type="button" onclick="sendMessage()">전송</button>
+                                                            <button class="btn btn-secondary" type="button"><i
+                                                                    class="far fa-smile"></i></button>
+                                                            <button class="btn btn-secondary" type="button"><i
+                                                                    class="fas fa-paperclip"></i></button>
+                                                            <button class="btn btn-primary" type="button"
+                                                                    onclick="sendMessage()">전송
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -233,7 +316,6 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="newChatModalLabel">멤버 선택</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
@@ -244,10 +326,12 @@
                 </form>
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link active" id="organization-tab" data-toggle="tab" href="#organization" role="tab" aria-controls="organization" aria-selected="true">개인</a>
+                        <a class="nav-link active" id="organization-tab" data-toggle="tab" href="#organization"
+                           role="tab" aria-controls="organization" aria-selected="true">개인</a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="group-tab" data-toggle="tab" href="#group" role="tab" aria-controls="group" aria-selected="false">그룹</a>
+                        <a class="nav-link" id="group-tab" data-toggle="tab" href="#group" role="tab"
+                           aria-controls="group" aria-selected="false">그룹</a>
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
@@ -286,68 +370,127 @@
     </div>
 </div>
 
-<!-- JavaScript Files -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+<!-- *************
+        ************ JavaScript Files *************
+    ************* -->
+<!-- Required jQuery first, then Bootstrap Bundle JS -->
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/bootstrap.bundle.min.js"></script>
+
+<!-- *************
+        ************ Vendor Js Files *************
+    ************* -->
+
 <!-- Overlay Scroll JS -->
 <script src="/assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
 <script src="/assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
-<!-- Vendor Js Files -->
-<script src="/assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
-<script src="/assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
-
+<!-- Moment JS -->
+<script src="/assets/js/moment.min.js"></script>
+<!-- Date Range JS -->
+<script src="/assets/vendor/daterange/daterange.js"></script>
+<script src="/assets/vendor/daterange/custom-daterange.js"></script>
 <!-- Custom JS files -->
 <script src="/assets/js/custom.js"></script>
 <script src="/assets/js/LocalStorage.js"></script>
-
+<script src="/assets/js/showAlert.js"></script>
+<!-- 페이지네이션 -->
+<script src="/assets/js/jquery.twbsPagination.min.js"></script>
 <script>
     var ws;
+    var sender = '${sessionScope.loginId}';
+    var roomInfo = [];
+    var selectedRoom = '';
+    <c:forEach items="${chatRoomList}" var="room">
+    var roomIdx = '${room.chatRoomIdx}';
+    var roomName = '${room.chatRoomName}';
+    var roomLastMessage = '${room.chatRoomLastMessage}';
+    roomInfo.push(
+        {
+            roomIdx: roomIdx,
+            roomName: roomName,
+            roomLastMessage: roomLastMessage
 
-    function connect() {
+        }
+    );
+    </c:forEach>
+    console.log(roomInfo);
+
+    function connect(roomIdx) {
         ws = new WebSocket("ws://" + window.location.host + "/chat/test");
 
-        ws.onopen = function() {
-            console.log("Connected to the chat server");
+        ws.onopen = function () {
+            var firstMessage = sender + ' 님이 입장하셨습니다.';
+            sendMessage('join', firstMessage, sender, roomIdx);
         };
 
-        ws.onmessage = function(event) {
-            var chatMessages = document.querySelector(".chat-messages");
-            var newMessage = document.createElement("div");
-            newMessage.textContent = event.data;
-            chatMessages.appendChild(newMessage);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+        ws.onmessage = function (event) {
+            var chatMessage = JSON.parse(event.data);
+            console.log(chatMessage);
+
+            var messageElement = $('<div>').addClass('message');
+            if (chatMessage.sender === sender) {
+                messageElement.addClass('sent');
+            } else {
+                messageElement.addClass('received');
+            }
+
+            var profilePic = $('<img>').attr('src', 'profile.png').addClass('profile-pic');
+            var messageContent = $('<div>').addClass('message-content');
+            var senderName = $('<span>').addClass('sender-name').text(chatMessage.sender);
+            var messageText = $('<div>').text(chatMessage.message);
+            var timestamp = $('<div>').addClass('timestamp').text(new Date().toLocaleTimeString());
+
+            messageContent.append(senderName);
+            messageContent.append(messageText);
+
+            if (chatMessage.sender === sender) {
+                messageElement.append(timestamp);
+                messageElement.append(messageContent);
+                messageElement.append(profilePic);
+            } else {
+                messageElement.append(profilePic);
+                messageElement.append(messageContent);
+                messageElement.append(timestamp);
+            }
+
+            var chatMessages = $('.chat-messages');
+            chatMessages.append(messageElement);
+            chatMessages.scrollTop(chatMessages[0].scrollHeight);
         };
 
-        ws.onclose = function() {
+        ws.onclose = function () {
             console.log("Disconnected from the chat server");
         };
     }
 
-    function sendMessage() {
-        var messageInput = document.getElementById("messageInput");
-        var message = messageInput.value;
-
+    function sendMessage(type, message, sender, room) {
         var chatMessage = {
-            type: "message",
-            message: message
+            type: type,
+            message: message,
+            sender: sender,
+            room: room
         };
 
         ws.send(JSON.stringify(chatMessage));
-        messageInput.value = '';
+        $('#messageInput').val('');
     }
 
-    window.onload = function() {
-        connect();
+    $('.list-group-item').on('click', function () {
+        // Remove 'active' class from all chat room items
+        $('.list-group-item').removeClass('active');
+        // Add 'active' class to the clicked chat room item
+        $(this).addClass('active');
+        selectedRoom = $(this).data("room-id");
 
-        var messageInput = document.getElementById("messageInput");
-        messageInput.addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                sendMessage();
-            }
-        });
-    };
+        connect(selectedRoom);
+    });
+
+    $('#messageInput').on("keypress", function (event) {
+        if (event.key === "Enter") {
+            var message = $(this).val();
+            sendMessage('text', message, sender, selectedRoom);
+        }
+    });
 </script>
-
-</body>
 </html>

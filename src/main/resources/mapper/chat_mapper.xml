@@ -1,9 +1,25 @@
 <!-- <?xml version="1.0" encoding="UTF-8"?> -->
-<!DOCTYPE mapper PUBLIC	"-//mybatis.org//DTD Mapper 3.0//EN"
-	"http://mybatis.org/dtd/mybatis-3-mapper.dtd"
->
+<!DOCTYPE mapper PUBLIC    "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
+        >
 
-<mapper namespace="com.my.cab.dao.">
+<mapper namespace="com.my.cab.dao.ChatDAO">
 
+    <insert id="insertChatDB" parameterType="chat">
+        INSERT INTO chat_message(chat_message_id, chat_message_emp_no, chat_message_content, chat_message_type,
+                                 chat_message_is_delete)
+        VALUES (#{room}, #{sender}, #{message}, #{type}, false)
+    </insert>
+    <update id="updateChatRoomDB" parameterType="chat">
+        UPDATE chat_room SET chat_room_last_message = #{message} WHERE chat_room_idx = #{room}
+    </update>
 
+    <select id="getChatRoomList" resultType="chat">
+        SELECT c.chat_room_idx AS chatRoomIdx,
+               c.chat_room_name AS chatRoomName,
+               c.chat_room_last_message AS chatRoomLastMessage
+        FROM chat_room c
+                 JOIN chat_room_member cm ON c.chat_room_idx = cm.chat_room_member_id
+        WHERE chat_room_member_emp_no = #{empNo}
+    </select>
 </mapper>

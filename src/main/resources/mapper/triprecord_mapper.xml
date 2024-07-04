@@ -18,7 +18,10 @@
     </insert>
 
     <select id="getFirstTripDate" resultType="String">
-        SELECT trip_record_date FROM trip_record ORDER BY trip_record_date ASC LIMIT 1
+        SELECT trip_record_date
+        FROM trip_record
+        ORDER BY trip_record_date ASC
+        LIMIT 1
     </select>
 
     <select id="getTripList" resultType="tripRecord" parameterType="search">
@@ -149,4 +152,11 @@
         WHERE trip_record_idx = #{param1}
         ORDER BY trip_record_detail_idx
     </select>
+
+    <select id="getTripRecordDate" parameterType="tripRecord">
+        SELECT trip_record_date
+        FROM trip_record
+        WHERE trip_record_idx = #{trip_record_idx}
+    </select>
+
 </mapper>

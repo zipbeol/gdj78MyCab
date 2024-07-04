@@ -274,42 +274,42 @@
                 strokeStyle: 'solid'
             });
             polylineNavi.setMap(naviMap); // 네비게이션 경로 지도에 표시
-            //
-            // // 경로 유사성 계산
-            // var frechetDistance = calculateFrechetDistance(tripLocationData, naviLocationData);
-            // $('#routeSimilarity').text(frechetDistance.toFixed(2));
+
+            // 경로 유사성 계산
+            var frechetDistance = calculateFrechetDistance(tripLocationData, naviLocationData);
+            $('#routeSimilarity').text(frechetDistance.toFixed(2));
         },
         error: function (error) {
             console.log(error);
         }
     });
-    //
-    // function euclideanDistance(point1, point2) {
-    //     return Math.sqrt(Math.pow(point1.lat - point2.lat, 2) + Math.pow(point1.lng - point2.lng, 2));
-    // }
-    //
-    // function calculateFrechetDistance(P, Q) {
-    //     let ca = Array.from({length: P.length}, () => Array(Q.length).fill(-1));
-    //
-    //     function c(i, j) {
-    //         if (ca[i][j] > -1) {
-    //             return ca[i][j];
-    //         } else if (i === 0 && j === 0) {
-    //             ca[i][j] = euclideanDistance(P[0], Q[0]);
-    //         } else if (i > 0 && j === 0) {
-    //             ca[i][j] = Math.max(c(i - 1, 0), euclideanDistance(P[i], Q[0]));
-    //         } else if (i === 0 && j > 0) {
-    //             ca[i][j] = Math.max(c(0, j - 1), euclideanDistance(P[0], Q[j]));
-    //         } else if (i > 0 && j > 0) {
-    //             ca[i][j] = Math.max(Math.min(c(i - 1, j), c(i - 1, j - 1), c(i, j - 1)), euclideanDistance(P[i], Q[j]));
-    //         } else {
-    //             ca[i][j] = Infinity;
-    //         }
-    //         return ca[i][j];
-    //     }
-    //
-    //     return c(P.length - 1, Q.length - 1);
-    // }
+
+    function euclideanDistance(point1, point2) {
+        return Math.sqrt(Math.pow(point1.lat - point2.lat, 2) + Math.pow(point1.lng - point2.lng, 2));
+    }
+
+    function calculateFrechetDistance(P, Q) {
+        let ca = Array.from({length: P.length}, () => Array(Q.length).fill(-1));
+
+        function c(i, j) {
+            if (ca[i][j] > -1) {
+                return ca[i][j];
+            } else if (i === 0 && j === 0) {
+                ca[i][j] = euclideanDistance(P[0], Q[0]);
+            } else if (i > 0 && j === 0) {
+                ca[i][j] = Math.max(c(i - 1, 0), euclideanDistance(P[i], Q[0]));
+            } else if (i === 0 && j > 0) {
+                ca[i][j] = Math.max(c(0, j - 1), euclideanDistance(P[0], Q[j]));
+            } else if (i > 0 && j > 0) {
+                ca[i][j] = Math.max(Math.min(c(i - 1, j), c(i - 1, j - 1), c(i, j - 1)), euclideanDistance(P[i], Q[j]));
+            } else {
+                ca[i][j] = Infinity;
+            }
+            return ca[i][j];
+        }
+
+        return c(P.length - 1, Q.length - 1);
+    }
 </script>
 
 

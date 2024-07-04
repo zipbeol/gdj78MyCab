@@ -39,6 +39,7 @@ public class LoginController {
 		if (row == 1) {//로그인 성공, 최초 로그인이 아닐시
 			page = "redirect:/";
 			String profile = service.getProfile(emp_no);
+			logger.info("프로필?"+profile);
 			session.setAttribute("loginId", emp_no);
 			session.setAttribute("profile", profile);
 			

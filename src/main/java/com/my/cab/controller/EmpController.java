@@ -149,6 +149,25 @@ public class EmpController {
 		return "HR/vacManagement";
 	}
 	
+	@GetMapping(value="/vacList.ajax")
+	@ResponseBody
+	public Map<String, Object> vacList(SearchDTO searchDTO){
+		 logger.info("\nsearchDTO SearchText:" + searchDTO.getSearchText()
+        + "\nsearchDTO FilterForSearch:" + searchDTO.getFilterForSearch()
+         + "\nsearchDTO page:" + searchDTO.getPage());
+		
+		return service.getVacList(searchDTO);
+		
+	}
+	
+	
+	
+	@GetMapping(value="/getVacTotalPages.ajax")
+	@ResponseBody
+	public Map<String, Object> getVacTotalPages(SearchDTO searchDTO){
+		
+		return service.getVacTotalPages(searchDTO);
+	}
 	
 	
 	

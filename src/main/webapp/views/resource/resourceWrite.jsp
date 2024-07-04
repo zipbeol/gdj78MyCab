@@ -215,7 +215,7 @@
 													<br>
 													<div class="d-flex justify-content-end mb-5">
 														<button type="button" class="btn btn-secondary mr-2">취소</button>
-														<button type="button" class="btn btn-primary" onclick="submitClk()">저장</button>
+														<button type="button" class="btn btn-primary" onclick="submitClk()" id="submitBtn">저장</button>
 													</div>
 												</form>
 											</div>
@@ -289,6 +289,8 @@
         }
     }	
 	</script>
+	 <script type="module" src="/assets/editor/ckeditorjs.js"></script>
+	<!--  
 <script type="module" >
 	import { makeEditor } from '/assets/editor/ckeditorjs.js'
 
@@ -297,13 +299,13 @@
 		});	
 
 </script>
-
+-->
     
   <script>
+
   $(document).ready(function() {
 	  
-	 
-	  
+
 	  
 	    $('#resourceType').change(function() {
 	        var type = $(this).val();
@@ -328,7 +330,7 @@
 	                   
 	                    <div class="col-md-5 form-group">
 	                        <label for="carPhoto">차량 사진</label>
-	                        <input type="file" class="form-control" id="carPhoto" name="carPhoto" multiple="multiple" required>
+	                        <input type="file" class="form-control" id="carPhoto" name="carPhoto" multiple="multiple">
               			</div>             			
 	                </div>
 
@@ -368,10 +370,11 @@
 	});
   
   function submitClk(){
-	  var editor = document.querySelector("#editor");
-	  console.log("에디터 작성된거", editor);
-	  document.getByElementById("content").value = editor.getData();
-	  document.getByElementById("resourceForm").submit;
+	  console.log("에디터 작성된거", editor.getData());
+	  var btn = document.getElementById("submitBtn")
+	  document.getElementById("content").value = editor.getData();
+	  btn.setAttribute("type","submit");
+	  btn.click;
   }
 	
   	

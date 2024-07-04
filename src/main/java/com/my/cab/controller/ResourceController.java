@@ -37,13 +37,16 @@ public class ResourceController {
 	}
 	
 	@RequestMapping(value = "resource/resourceWrite.do")
-	public String resourceWrite(@RequestParam("carPhoto")MultipartFile file , @RequestParam Map<String,Object> param, HttpSession session) {
+	public String resourceWrite(@RequestParam(name = "carPhoto", required = false)MultipartFile file , @RequestParam Map<String,Object> param, HttpSession session) {
 		logger.info("사진 받아온거 : " +file);
 		param.put("id", session.getAttribute("loginId"));
 		logger.info("리소스 등록 : "+param.get("resourceName"));
 		logger.info("리소스 등록 : "+param.get("carLicencePlate"));
 		
+
+		
 		resourceService.resourceWrite(param,file);
+		
 		
 		return "resource/resourceList";
 	}

@@ -15,4 +15,6 @@ public interface ResourceDAO {
 
 	int resourceWriteEquip(Map<String, Object> param);
 
+	int saveResPhoto(int resource_idx, String originalFileName, String fileName);
+
 }

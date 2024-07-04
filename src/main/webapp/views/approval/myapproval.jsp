@@ -36,99 +36,67 @@
     <!-- 따로 적용한 CSS -->
     <link rel="stylesheet" href="/assets/css/default.css">
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
-        }
-        .container {
-            padding: 20px;
-        }
-        .card {
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .card-header {
-            background-color: #ffffff;
-            color: #343a40;
-            padding: 15px;
-            border-bottom: 1px solid #343a40;
-        }
-        .card-title {
-            margin: 0;
-        }
-        .btn-group .btn {
-            margin-right: 5px;
-        }
-        .btn-outline-all {
-            color: #6c757d;
-            border-color: #6c757d;
-        }
-        .btn-outline-all:hover {
-            background-color: #6c757d;
-            color: #fff;
-        }
-        .btn-outline-temporary {
-            color: #ffc107;
-            border-color: #ffc107;
-        }
-        .btn-outline-temporary:hover {
-            background-color: #ffc107;
-            color: #fff;
-        }
-        .search-form input {
-            margin-right: 5px;
-        }
-        .table thead th {
-            background-color: #ffffff;
-            color: #343a40;
-        }
-        .table-bordered th, .table-bordered td {
-            border: 1px solid #dee2e6 !important;
-        }
-        .table tbody tr {
-            transition: background-color 0.2s;
-        }
-        .table tbody tr:hover {
-            background-color: #f1f1f1;
-        }
-        .date-range {
-            text-align: right;
-            margin-bottom: 10px;
-        }
-        .btn-container {
-            display: flex;
-            justify-content: flex-start;
-            margin-top: 10px;
-        }
-        .pagination {
-            justify-content: center;
-        }
-        .pagination .page-link {
-            color: #343a40;
-        }
-        .pagination .page-item.active .page-link {
-            background-color: #343a40;
-            border-color: #343a40;
-        }
-        .form-inline label {
-            margin-right: 10px;
-        }
-        .status-btn {
-            margin-right: 10px;
-        }
-        .top-buttons {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .top-buttons .search-form {
-            display: flex;
-            align-items: center;
-        }
-        .card-body {
-            overflow-x: auto;
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; }
+        .container { padding: 20px; }
+        .card { background-color: #ffffff; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        .card-header { background-color: #ffffff; color: #343a40; padding: 15px; border-bottom: 1px solid #343a40; }
+        .card-title { margin: 0; }
+        .btn-group .btn { margin-right: 5px; }
+        .btn-outline-all { color: #6c757d; border-color: #6c757d; }
+        .btn-outline-all:hover { background-color: #6c757d; color: #fff; }
+        .btn-outline-temporary { color: #ffc107; border-color: #ffc107; }
+        .btn-outline-temporary:hover { background-color: #ffc107; color: #fff; }
+        .search-form input { margin-right: 5px; }
+        .table thead th { background-color: #ffffff; color: #343a40; }
+        .table-bordered th, .table-bordered td { border: 1px solid #dee2e6 !important; }
+        .table tbody tr { transition: background-color 0.2s; }
+        .table tbody tr:hover { background-color: #f1f1f1; }
+        .date-range { text-align: right; margin-bottom: 10px; }
+        .btn-container { display: flex; justify-content: flex-start; margin-top: 10px; }
+        .pagination { justify-content: center; }
+        .pagination .page-link { color: #343a40; }
+        .pagination .page-item.active .page-link { background-color: #343a40; border-color: #343a40; }
+        .form-inline label { margin-right: 10px; }
+        .status-btn { margin-right: 10px; }
+        .top-buttons { display: flex; align-items: center; justify-content: space-between; }
+        .top-buttons .search-form { display: flex; align-items: center; }
+        .card-body { overflow-x: auto; }
+    #signatureModal .modal-dialog {
+    max-width: 1000px; /* 모달 크기 확장 */
+  }
+  .modal-body {
+    display: flex;
+    flex-direction: column;
+  }
+  .instructions {
+    margin-bottom: 15px;
+    text-align: center; /* 중앙 정렬 */
+  }
+  .image-container, .preview-container {
+    border: 1px solid #000;
+    width: 100%;
+    height: 300px; /* Before와 After의 크기를 동일하게 */
+  }
+  #signatureCanvas {
+    width: 100%;
+    height: 100%;
+  }
+  .preview-container img {
+    width: 100%;
+    height: 100%;
+  }
+  .col-6 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .modal-footer .btn {
+    margin-left: 10px;
+  }
     </style>
 </head>
 
@@ -243,8 +211,8 @@
                         </table>
                         <div class="btn-container">
                             <button class="btn btn-outline-primary">신규(F2)</button>
-                            <button class="btn btn-outline-secondary">My도장/서명</button>
-                            <button class="btn btn-outline-warning">보내기</button>
+                            <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#signatureModal">My도장/서명</button>
+                            <button class="btn btn-outline-warning" >보내기</button>
                             <button class="btn btn-outline-danger">결재</button>
                         </div>
                         <nav aria-label="Page navigation">
@@ -257,16 +225,61 @@
                             </ul>
                         </nav>
                     </div>
+                     <iframe id="form-document" style="display:none;"></iframe>
+                    
                 </div>
             </div>
         </div>
         <!-- Row end -->
+<!-- My도장/서명 모달 -->
+<div class="modal fade" id="signatureModal" tabindex="-1" aria-labelledby="signatureModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="signatureModalLabel">도장/서명 올리기</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="instructions mb-3">
+          1. 등록할 이미지를 선택한 후, 사용할 영역을 선택합니다.
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <h6>Before : 원본사진</h6>
+            <input type="file" id="imageUpload" class="form-control mb-3" accept="image/*">
+            
+            </br>
+            <div class="image-container mb-3">
+              <canvas id="signatureCanvas" width="400" height="300" style="border: 1px solid #000; width: 100%;"></canvas>
+            </div>
+            <button class="btn btn-outline-primary" id="clearCanvas">서명 지우기</button>
+          </div>
+          <div class="col-6 text-center">
+            <h6>After</h6>
+            </br>
+            </br>
+                        </br>
+            </br>
+            <div class="preview-container mb-3" style="width: 400px; height: 300px; margin: 0 auto;">
+              <img id="previewImage" src="" alt="미리보기 이미지">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="saveSignature">저장(F8)</button>
+        <button type="button" class="btn btn-danger" id="deleteSignature">삭제</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
     </div>
                 <!-- Container ends -->
                 
             </div>
             <!-- App body ends -->
-
+    
             <!-- App footer start -->
             <!-- App footer end -->
 
@@ -298,13 +311,105 @@
 <!-- Custom JS files -->
 <script src="/assets/js/custom.js"></script>
 <script src="/assets/js/LocalStorage.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 </body>
 <script>
+
+$(document).ready(function() {
+    // 캔버스 초기화
+    const canvas = document.getElementById('signatureCanvas');
+    const ctx = canvas.getContext('2d');
+    let isDrawing = false;
+
+    // 미리보기 업데이트 함수
+    function updatePreview() {
+        const dataURL = canvas.toDataURL('image/png');
+        document.getElementById('previewImage').src = dataURL;
+    }
+
+    // 마우스 이벤트
+    canvas.addEventListener('mousedown', (e) => {
+        isDrawing = true;
+        ctx.beginPath();
+        ctx.moveTo(e.offsetX, e.offsetY);
+    });
+    
+    canvas.addEventListener('mousemove', (e) => {
+        if (isDrawing) {
+            ctx.lineTo(e.offsetX, e.offsetY);
+            ctx.stroke();
+            updatePreview();
+        }
+    });
+    
+    canvas.addEventListener('mouseup', () => {
+        isDrawing = false;
+        updatePreview();
+    });
+
+    // 이미지 업로드
+    document.getElementById('imageUpload').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                updatePreview();
+            };
+            img.src = e.target.result;
+        };
+        
+        reader.readAsDataURL(file);
+    });
+
+    // 캔버스 지우기
+    document.getElementById('clearCanvas').addEventListener('click', function() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        updatePreview();
+    });
+
+    // 서명 저장
+    $('#saveSignature').click(function() {
+        const dataURL = canvas.toDataURL('image/png');
+        const empId = '<%= session.getAttribute("empId") %>'; // 세션에서 사번 가져오기
+
+        $.ajax({
+            url: '/uploadSignature',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                image: dataURL,
+                empId: empId
+            }),
+            success: function(response) {
+                alert('서명이 저장되었습니다.');
+            },
+            error: function(xhr, status, error) {
+                console.error('서명 저장 중 오류 발생:', error);
+            }
+        });
+    });
+
+    // 서명 삭제
+    $('#deleteSignature').click(function() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        document.getElementById('previewImage').src = '';
+    });
+
+    $('#downloadPdf').click(function() {
+        downloadPDF();
+    });
+});
+  
 $(document).ready(function() {
     // 전체 선택 기능
     $('#checkAll').on('change', function() {
         const isChecked = $(this).is(':checked');
-        $('#approvalDataBody input[type="checkbox"]').prop('checked', isChecked);
+        $('.approval-checkbox').prop('checked', isChecked);
     });
 
     // 데이터 가져오기 함수
@@ -323,7 +428,8 @@ $(document).ready(function() {
                     // 각 데이터 셀 생성
                     const checkboxCell = $('<td></td>').append($('<input>', {
                         type: 'checkbox',
-                        value: item.approval_doc_idx
+                        class: 'approval-checkbox',
+                        value: item.approval_doc_path
                     }));
 
                     const writeDateCell = $('<td></td>').text(item.approval_doc_write_date);
@@ -360,6 +466,7 @@ $(document).ready(function() {
     // 페이지 로드 시 데이터 가져오기
     loadApprovalData();
 });
+
 
 </script>
 </html>

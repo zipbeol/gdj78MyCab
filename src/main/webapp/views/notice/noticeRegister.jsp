@@ -6,7 +6,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>My Cab - Finance</title>
+<title>My Cab - Notice</title>
 <!-- Meta -->
 <meta name="description"
 	content="Marketplace for Bootstrap Admin Dashboards">
@@ -138,8 +138,10 @@ td:hover {
 						<li class="breadcrumb-item"><a href="/"><i
 								class="bi bi-house lh-1"></i></a> <a href="/"
 							class="text-decoration-none">메인</a></li>
-						<li class="breadcrumb-item"><a href="notice/list.go"
+						<li class="breadcrumb-item"><a href="/notice/list.go"
 							class="text-decoration-none">공지사항</a></li>
+						<li class="breadcrumb-item"><a href="#!"
+							class="text-decoration-none">새 공지사항 작성</a></li>
 					</ol>
 					<!-- Breadcrumb end -->
 

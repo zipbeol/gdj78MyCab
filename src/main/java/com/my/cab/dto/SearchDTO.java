@@ -42,6 +42,8 @@ public class SearchDTO {
 	private String filterMinFare;
 	private String filterMaxFare;
 
+	private String dealCheckBox;
+
 	public String getFilterDriverName() {
 		return filterDriverName;
 	}
@@ -320,6 +322,14 @@ public class SearchDTO {
 
 	public void setSearchQuery(String searchQuery) {
 		this.searchQuery = searchQuery;
+	}
+
+	public String getDealCheckBox() {
+		return dealCheckBox;
+	}
+
+	public void setDealCheckBox(String dealCheckBox) {
+		this.dealCheckBox = dealCheckBox;
 	}
 
 }

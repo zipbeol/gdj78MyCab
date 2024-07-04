@@ -269,7 +269,7 @@
 		JOIN deal_history dh ON dh.deal_pro_idx = pro.pro_idx
 		<where>
 			<if test="category != null and category != ''">
-				AND pro.pro_category IN
+				AND '수익' IN
 				<foreach item="cat" collection="category.split(',')"
 					open="(" separator="," close=")">
 					#{cat}
@@ -291,7 +291,7 @@
 		dh ON dh.deal_exp_idx = exp.exp_idx
 		<where>
 			<if test="category != null and category != ''">
-				AND exp.exp_category IN
+				AND '지출' IN
 				<foreach item="cat" collection="category.split(',')"
 					open="(" separator="," close=")">
 					#{cat}
@@ -325,6 +325,13 @@
 	            <if test="filterStartDate != null and filterEndDate != null and filterEndDate != '' and filterStartDate != ''">
 	                AND pro.pro_actual_date BETWEEN #{filterStartDate} AND #{filterEndDate}
 	            </if>
+	            <if test="category != null and category != ''">
+				AND '수익' IN
+				<foreach item="cat" collection="category.split(',')"
+					open="(" separator="," close=")">
+					#{cat}
+				</foreach>
+			</if>
 	        </where>
 	        UNION ALL
 	        SELECT 
@@ -336,6 +343,13 @@
 	            <if test="filterStartDate != null and filterEndDate != null and filterEndDate != '' and filterStartDate != ''">
 	                AND exp.exp_actual_date BETWEEN #{filterStartDate} AND #{filterEndDate}
 	            </if>
+	            <if test="category != null and category != ''">
+				AND '지출' IN
+				<foreach item="cat" collection="category.split(',')"
+					open="(" separator="," close=")">
+					#{cat}
+				</foreach>
+			</if>
 	        </where>
 	    ) AS deal_amounts
 	</select>

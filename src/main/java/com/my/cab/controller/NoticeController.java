@@ -125,4 +125,11 @@ public class NoticeController {
 		return map;
 	}
 
+	@RequestMapping("/detail.go")
+	public String noticeDetail(Model model) {
+		logger.info("공지사항 작성");
+
+		return "notice/noticeDetail";
+	}
+
 }

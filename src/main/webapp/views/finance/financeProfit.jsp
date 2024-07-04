@@ -52,6 +52,32 @@
 td:hover {
     cursor: pointer;
 }
+
+.custom-table {
+    width: 100%;
+    table-layout: fixed; /* 테이블 너비 고정 */
+}
+
+.custom-table th,
+.custom-table td {
+    text-align: center; /* 텍스트 가운데 정렬 */
+    vertical-align: middle; /* 수직 가운데 정렬 */
+    word-wrap: break-word; /* 텍스트 줄바꿈 */
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+}
+
+.custom-table thead th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+
+.custom-table tbody tr:hover {
+    background-color: #e9ecef;
+}
+
+.custom-table .detail-row {
+    background-color: #f1f1f1;
+}
 </style>
 </head>
 
@@ -141,7 +167,6 @@ td:hover {
                                                     <label for="endDate" class="form-label">종료 날짜</label>
                                                     <input type="date" id="endDate" class="form-control">
                                                 </div>
-                                                <div class="col-4"></div>
                                                 <div class="col-2">
                                                     <label for="filter" class="form-label">정렬</label>
                                                     <select id="filter" name="filter" class="form-select">
@@ -151,7 +176,8 @@ td:hover {
                                                         <option value="lessProfit">적은 수익 순</option>
                                                     </select>
                                                 </div>
-                                                <div class="col-2">
+                                                <div class="col-3"></div>
+                                                <div class="col-3">
                                                     <label for="searchQuery" class="form-label">검색</label>
                                                     <div class="input-group">
                                                         <input type="text" id="searchQuery" class="form-control" placeholder="검색 내용을 입력하세요.">
@@ -177,25 +203,25 @@ td:hover {
                                         </div>
 
                                         <!-- 수익 리스트 테이블 -->
-                                        <div class="table-outer mt-3">
-                                            <table class="table table-hover align-middle custom-table m-0">
-                                                <thead>
-                                                    <tr>
-                                                        <th>수익 발생일</th>
-                                                        <th>수익자</th>
-                                                        <th>수익 금액</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="profitTableBody">
-                                                    <!-- AJAX 요청으로 항목들이 여기에 추가됩니다 -->
-                                                </tbody>
-                                            </table>
-                                            <!-- 페이지 네이션 시작 -->
-                                            <nav aria-label="Page navigation example" class="mt-3">
-                                                <ul class="pagination justify-content-center" id="pagination"></ul>
-                                            </nav>
-                                            <!-- 페이지 네이션 종료 -->
-                                        </div>
+										<div class="table-outer mt-3">
+										    <table class="table table-hover align-middle custom-table m-0">
+										        <thead>
+										            <tr>
+										                <th>수익 발생일</th>
+										                <th>수익자</th>
+										                <th>수익 금액</th>
+										            </tr>
+										        </thead>
+										        <tbody id="profitTableBody">
+										            <!-- AJAX 요청으로 항목들이 여기에 추가됩니다 -->
+										        </tbody>
+										    </table>
+										    <!-- 페이지 네이션 시작 -->
+										    <nav aria-label="Page navigation example" class="mt-3">
+										        <ul class="pagination justify-content-center" id="pagination"></ul>
+										    </nav>
+										    <!-- 페이지 네이션 종료 -->
+										</div>
 
                                         <!-- 모달 창 -->
                                         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -234,7 +260,7 @@ td:hover {
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="pro_content" class="form-label">수익 내용:</label>
-                                                                <textarea id="pro_content" name="pro_content" class="form-control" rows="3" maxlength="500" required></textarea>
+                                                                <textarea id="pro_content" name="pro_content" class="form-control" rows="3" maxlength="500" style="height: 300px" required></textarea>
                                                                 <div class="invalid-feedback">수익 내용을 입력해주세요</div>
                                                             </div>
                                                             <div class="modal-footer">
@@ -298,13 +324,28 @@ td:hover {
     refreshProfitList();
     
     $('#filter').on('change',function(){
+        currentPage = 1;
         getTotalPages();
         refreshProfitList();
     });
     
     $('#go').on('click',function(){
+        currentPage = 1;
         getTotalPages();
         refreshProfitList();
+    });
+    
+    // 날짜 변경 이벤트 핸들러 추가
+    $('#startDate').on('change', function() {
+    	currentPage=1;
+        getTotalPages();
+        refreshExpensesList();
+    });
+
+    $('#endDate').on('change', function() {
+    	currentPage=1;
+        getTotalPages();
+        refreshExpensesList();
     });
     
     // 리셋 버튼 클릭 시 호출되는 함수
@@ -337,6 +378,12 @@ td:hover {
             scrollTop: $(".mt-3").offset().top
         }, 500);
     }
+    
+    document.getElementById('startDate').addEventListener('change', function() {
+        var startDate = this.value;
+        var endDateInput = document.getElementById('endDate');
+        endDateInput.min = startDate;
+    });
 
     // 모든 버튼 요소를 선택합니다.
     const buttons = document.querySelectorAll('.filter-btn');
@@ -410,34 +457,34 @@ td:hover {
     });
 
     // AJAX로 받은 수익 리스트를 테이블에 표시하는 함수
-    function displayProfitList(profitList) {
-        var tbody = $('#profitTableBody');
-        console.log(profitList);
-        tbody.empty(); // 테이블 본문을 비웁니다.
-        var row = '';
-        for (item of profitList) {
-            row += '<tr class="clickable-row">' +
-                '<td>' + item.pro_actual_date + '</td>' +
-                '<td>' + item.pro_who + '</td>' +
-                '<td>' + formatNumberWithCommas(item.pro_cash) + '&nbsp;<strong>원</strong></td>' +
-                '</tr>'+
-                '<tr class="detail-row">'+
-                '<td colspan="3" class="detail-content gap-2">'+
-                '<div class="mb-2 mt-2"><strong>수익 발생일:</strong> ' + item.pro_actual_date + '</div>' +
-                '<div class="mb-2 mt-2"><strong>수익 등록일:</strong> ' + item.pro_date + '</div>' +
-                '<div class="mb-2 mt-2"><strong>수익 종류:</strong> ' + item.pro_category + '</div>' +
-                '<div class="mb-2 mt-2"><strong>수익 내용:</strong> ' + item.pro_content + '</div>' +
-                '<div class="mb-2 mt-2"><strong>수익 금액:</strong> ' + formatNumberWithCommas(item.pro_cash) +
-                '<strong>원</strong></div>' +
-                '</td>'+
-                '</tr>';
-        }
-        tbody.html(row);
-        // 각 행에 클릭 이벤트 추가
-        $('.clickable-row').on('click', function() {
-            $(this).next('.detail-row').toggleClass('active');
-        });
-    }
+	function displayProfitList(profitList) {
+	    var tbody = $('#profitTableBody');
+	    console.log(profitList);
+	    tbody.empty(); // 테이블 본문을 비웁니다.
+	    var row = '';
+	    for (item of profitList) {
+	        row += '<tr class="clickable-row">' +
+	            '<td>' + item.pro_actual_date + '</td>' +
+	            '<td>' + item.pro_who + '</td>' +
+	            '<td>' + formatNumberWithCommas(item.pro_cash) + '&nbsp;<strong>원</strong></td>' +
+	            '</tr>'+
+	            '<tr class="detail-row">'+
+	            '<td colspan="3" class="detail-content gap-2">'+
+	            '<div class="mb-2 mt-2"><strong>수익 발생일:</strong> ' + item.pro_actual_date + '</div>' +
+	            '<div class="mb-2 mt-2"><strong>수익 등록일:</strong> ' + item.pro_date + '</div>' +
+	            '<div class="mb-2 mt-2"><strong>수익 종류:</strong> ' + item.pro_category + '</div>' +
+	            '<div class="mb-2 mt-2"><strong>수익 내용:</strong> ' + item.pro_content + '</div>' +
+	            '<div class="mb-2 mt-2"><strong>수익 금액:</strong> ' + formatNumberWithCommas(item.pro_cash) +
+	            '<strong>원</strong></div>' +
+	            '</td>'+
+	            '</tr>';
+	    }
+	    tbody.html(row);
+	    // 각 행에 클릭 이벤트 추가
+	    $('.clickable-row').on('click', function() {
+	        $(this).next('.detail-row').toggleClass('active');
+	    });
+	}
 
     // 수익 리스트 갱신 함수
     function refreshProfitList() {

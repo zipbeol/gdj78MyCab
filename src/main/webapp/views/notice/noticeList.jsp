@@ -5,7 +5,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>My Cab - Finance</title>
+<title>My Cab - Notice</title>
 <!-- Meta -->
 <meta name="description" content="Marketplace for Bootstrap Admin Dashboards">
 <meta name="author" content="Bootstrap Gallery">
@@ -84,6 +84,33 @@ td:hover {
 .inactive {
     background-color: #f8d7da;
 }
+
+.custom-table {
+    width: 100%;
+    table-layout: fixed; /* 테이블 너비 고정 */
+}
+
+.custom-table th,
+.custom-table td {
+    text-align: center; /* 텍스트 가운데 정렬 */
+    vertical-align: middle; /* 수직 가운데 정렬 */
+    word-wrap: break-word; /* 텍스트 줄바꿈 */
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+}
+
+.custom-table thead th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+
+.custom-table tbody tr:hover {
+    background-color: #e9ecef;
+}
+
+.custom-table .detail-row {
+    background-color: #f1f1f1;
+}
+
 </style>
 </head>
 
@@ -260,11 +287,13 @@ td:hover {
     refreshNoticeList();
     
     $('#searchFilter').on('change',function(){
+    	currentPage = 1
         getTotalPages();
         refreshNoticeList();
     });
     
     $('#go').on('click',function(){
+    	currentPage = 1
         getTotalPages();
         refreshNoticeList();
     });
@@ -312,36 +341,35 @@ td:hover {
         tbody.empty(); // 테이블 본문을 비웁니다.
         var row = '';
         var importanceCount = 0;
+
+        // 중요 공지사항과 일반 공지사항을 분리
         for (item of noticeList) {
             var importance = item.notice_imp === 'true' ? '중요' : '일반';
             var inactiveClass = item.inactive ? ' inactive' : '';
+            var noticeRow = '<tr class="clickable-row' + (importance === '중요' && importanceCount < 3 ? ' important' : '') + inactiveClass + '">' +
+                '<td class="inactive-column" style="display:none;"><input type="checkbox" class="inactive-checkbox" data-id="' + item.notice_idx + '"></td>' +
+                '<td>' + importance + '</td>' +
+                '<td>' + item.notice_field + '</td>' +
+                '<td>' + item.notice_title + '</td>' +
+                '<td>' + item.notice_writer + '</td>' +
+                '<td>' + item.notice_date + '</td>' +
+                '</tr>';
             if (importance === '중요' && importanceCount < 3) {
-                row += '<tr class="clickable-row important' + inactiveClass + '">' +
-                    '<td class="inactive-column" style="display:none;"><input type="checkbox" class="inactive-checkbox" data-id="' + item.notice_idx + '"></td>' +
-                    '<td>' + importance + '</td>' +
-                    '<td>' + item.notice_field + '</td>' +
-                    '<td>' + item.notice_title + '</td>' +
-                    '<td>' + item.notice_writer + '</td>' +
-                    '<td>' + item.notice_date + '</td>' +
-                    '</tr>';
+                row = noticeRow + row; // 중요 공지사항은 상단에 추가
                 importanceCount++;
             } else {
-                row += '<tr class="clickable-row' + inactiveClass + '">' +
-                    '<td class="inactive-column" style="display:none;"><input type="checkbox" class="inactive-checkbox" data-id="' + item.notice_idx + '"></td>' +
-                    '<td>' + importance + '</td>' +
-                    '<td>' + item.notice_field + '</td>' +
-                    '<td>' + item.notice_title + '</td>' +
-                    '<td>' + item.notice_writer + '</td>' +
-                    '<td>' + item.notice_date + '</td>' +
-                    '</tr>';
+                row += noticeRow; // 일반 공지사항은 하단에 추가
             }
         }
+
         tbody.html(row);
+
         // 각 행에 클릭 이벤트 추가
         $('.clickable-row').on('click', function () {
             $(this).next('.detail-row').toggleClass('active');
         });
     }
+
 
     $('#toggleInactiveButton').click(function () {
         isInactiveMode = !isInactiveMode;
@@ -383,7 +411,7 @@ td:hover {
         refreshNoticeList();
     });
 
-    // 공지사항 리스트 갱신 함수
+ // 공지사항 리스트 갱신 함수
     function refreshNoticeList() {
         $.ajax({
             type: 'POST',
@@ -398,7 +426,6 @@ td:hover {
             dataType: 'json',
             success: function(data) {
                 displayNoticeList(data.notice); // 공지사항 리스트 표시 함수 호출
-                console.log($('#searchQuery').val());
             },
             error: function(error) {
                 console.error("AJAX 요청 실패:", error);
@@ -408,21 +435,20 @@ td:hover {
 
 
 	
+ // 총 페이지 수 갱신 함수
     function getTotalPages() {
         $.ajax({
             url: './getTotalPages.ajax',
             type: 'GET',
             data: {
                 'searchFilter': $('#searchFilter').val(),
-                'searchQuery':$('#searchQuery').val(),
+                'searchQuery': $('#searchQuery').val(),
                 'filterStartDate': $('#startDate').val(),
                 'filterEndDate': $('#endDate').val(),
-                'searchFlag':searchFlag,
                 'page': currentPage
             },
             dataType: 'json',
             success: function (data) {
-                console.log(data);
                 $('#pagination').twbsPagination('destroy');
                 $('#pagination').twbsPagination({
                     totalPages: data.totalPages, // 서버에서 받은 총 페이지 수
@@ -440,6 +466,11 @@ td:hover {
             }
         });
     }
+ 
+    $(document).ready(function() {
+        getTotalPages();
+        refreshNoticeList();
+    });
 
 </script>
 </body>

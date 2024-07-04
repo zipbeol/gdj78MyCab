@@ -66,6 +66,32 @@
 td:hover {
 	cursor: pointer;
 }
+
+.custom-table {
+    width: 100%;
+    table-layout: fixed; /* 테이블 너비 고정 */
+}
+
+.custom-table th,
+.custom-table td {
+    text-align: center; /* 텍스트 가운데 정렬 */
+    vertical-align: middle; /* 수직 가운데 정렬 */
+    word-wrap: break-word; /* 텍스트 줄바꿈 */
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+}
+
+.custom-table thead th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+
+.custom-table tbody tr:hover {
+    background-color: #e9ecef;
+}
+
+.custom-table .detail-row {
+    background-color: #f1f1f1;
+}
 </style>
 </head>
 
@@ -155,7 +181,6 @@ td:hover {
                                                     <label for="endDate" class="form-label">종료 날짜</label>
                                                     <input type="date" id="endDate" class="form-control">
                                                 </div>
-                                                <div class="col-4"></div>
 												<div class="col-2">
 													<label for="filter" class="form-label">정렬</label>
 													<select id="filter" name="filter" class="form-select">
@@ -165,6 +190,7 @@ td:hover {
 														<option value="lessExpenses">적은 지출 순</option>
 													</select>
 												</div>
+												<div class="col-4"></div>
 												<div class="col-2">
 													<label for="searchQuery" class="form-label">검색</label>
 													<div class="input-group">
@@ -324,11 +350,13 @@ td:hover {
     refreshExpensesList();
     
     $('#filter').on('change',function(){
+    	currentPage = 1;
         getTotalPages();
         refreshExpensesList();
     });
 
     $('#go').on('click',function(){
+    	currentPage = 1;
         getTotalPages();
         refreshExpensesList();
     });
@@ -345,6 +373,7 @@ td:hover {
         getTotalPages();
         refreshExpensesList();
     });
+    
  // 리셋 버튼 클릭 시 호출되는 함수
     function resetFilters() {
         // 선택된 버튼의 active 클래스 제거
@@ -376,7 +405,11 @@ td:hover {
         }, 500);
     }
 
-    
+    document.getElementById('startDate').addEventListener('change', function() {
+        var startDate = this.value;
+        var endDateInput = document.getElementById('endDate');
+        endDateInput.min = startDate;
+    });
 
         // 모든 버튼 요소를 선택합니다.
         const buttons = document.querySelectorAll('.filter-btn');
@@ -451,34 +484,34 @@ td:hover {
         });
 
         // AJAX로 받은 지출 리스트를 테이블에 표시하는 함수
-        function displayExpensesList(expensesList) {
-            var tbody = $('#expensesTableBody');
-            console.log(expensesList);
-            tbody.empty(); // 테이블 본문을 비웁니다.
-            var row = '';
-            for (item of expensesList) {
-                row += '<tr class="clickable-row">' +
-                    '<td>' + item.exp_actual_date + '</td>' +
-                    '<td>' + item.exp_who + '</td>' +
-                    '<td>' + formatNumberWithCommas(item.exp_cash) + '&nbsp;<strong>원</strong></td>' +
-                    '</tr>'+
-                    '<tr class="detail-row">'+
-                    '<td colspan="3" class="detail-content gap-2">'+
-                    '<div class="mb-2 mt-2"><strong>지출 발생일:</strong> ' + item.exp_actual_date + '</div>'+
-                    '<div class="mb-2"><strong>지출 등록일:</strong> ' + item.exp_date + '</div>'+
-                    '<div class="mb-2"><strong>지출 종류:</strong> ' + item.exp_category + '</div>'+
-                    '<div class="mb-2"><strong>지출 내용:</strong> ' + item.exp_content + '</div>'+
-                    '<div class="mb-2"><strong>지출 금액:</strong> ' + formatNumberWithCommas(item.exp_cash) +
-                    '<strong>원</strong></div> ' +
-                    '</td>'+
-                    '</tr>';
-            }
-            tbody.html(row);
-            // 각 행에 클릭 이벤트 추가
-            $('.clickable-row').on('click', function() {
-                $(this).next('.detail-row').toggleClass('active');
-            });
-        }
+		function displayExpensesList(expensesList) {
+		    var tbody = $('#expensesTableBody');
+		    console.log(expensesList);
+		    tbody.empty(); // 테이블 본문을 비웁니다.
+		    var row = '';
+		    for (item of expensesList) {
+		        row += '<tr class="clickable-row">' +
+		            '<td>' + item.exp_actual_date + '</td>' +
+		            '<td>' + item.exp_who + '</td>' +
+		            '<td>' + formatNumberWithCommas(item.exp_cash) + '&nbsp;<strong>원</strong></td>' +
+		            '</tr>'+
+		            '<tr class="detail-row">'+
+		            '<td colspan="3" class="detail-content gap-2">'+
+		            '<div class="mb-2 mt-2"><strong>지출 발생일:</strong> ' + item.exp_actual_date + '</div>'+
+		            '<div class="mb-2"><strong>지출 등록일:</strong> ' + item.exp_date + '</div>'+
+		            '<div class="mb-2"><strong>지출 종류:</strong> ' + item.exp_category + '</div>'+
+		            '<div class="mb-2"><strong>지출 내용:</strong> ' + item.exp_content + '</div>'+
+		            '<div class="mb-2"><strong>지출 금액:</strong> ' + formatNumberWithCommas(item.exp_cash) +
+		            '<strong>원</strong></div> ' +
+		            '</td>'+
+		            '</tr>';
+		    }
+		    tbody.html(row);
+		    // 각 행에 클릭 이벤트 추가
+		    $('.clickable-row').on('click', function() {
+		        $(this).next('.detail-row').toggleClass('active');
+		    });
+		}
 
         
         

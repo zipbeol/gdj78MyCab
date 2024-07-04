@@ -28,4 +28,8 @@ public interface EmpDAO {
 
 	EmpDTO getEmpDetail(String emp_no);
 
+	List<EmpDTO> getVacList(SearchDTO searchDTO);
+
+	int getVacTotal(SearchDTO searchDTO);
+
 }

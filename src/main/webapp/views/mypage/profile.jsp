@@ -55,11 +55,12 @@
             font-size: 16px;
         }
         .info-section input{
-            font-size: 16px;
+           font-size: 25px;
         }
         .info-section dt, .info-section dd {
             margin: 0;
             padding: 5px;
+            font-size: 22px;
             
         }
         .profile-section {
@@ -75,7 +76,7 @@
         .profile-pic {
             
             margin-top:30px;
-            border-radius: 10%;
+            border-radius: 100%;
             width: 400px;
             height: 350px;
             /* margin: 0 auto; */

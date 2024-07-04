@@ -199,6 +199,7 @@
 																		<div id="editor"></div>
 																	</div>
 																</div>
+																<input type="hidden" name="content" id="content">
 															</div>
 														</div>
 													</div>
@@ -214,7 +215,7 @@
 													<br>
 													<div class="d-flex justify-content-end mb-5">
 														<button type="button" class="btn btn-secondary mr-2">취소</button>
-														<button type="submit" class="btn btn-primary">저장</button>
+														<button type="button" class="btn btn-primary" onclick="submitClk()">저장</button>
 													</div>
 												</form>
 											</div>
@@ -279,7 +280,8 @@
     
     <!-- Custom JS files -->
     <script src="/assets/js/custom.js"></script>
-    <script type="importmap">
+
+ <script type="importmap">
     {
         "imports": {
             "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/42.0.0/ckeditor5.js",
@@ -287,14 +289,22 @@
         }
     }	
 	</script>
-	<script type="module" src="/assets/editor/ckeditorjs.js"></script>
-	<script src="/assets/editor/imageEditor.js" type="module"></script>
+<script type="module" >
+	import { makeEditor } from '/assets/editor/ckeditorjs.js'
 
+	 makeEditor('#editor').catch(error => {
+		    console.error('There was a problem initializing the editor:', error);
+		});	
+
+</script>
 
     
   <script>
-  
   $(document).ready(function() {
+	  
+	 
+	  
+	  
 	    $('#resourceType').change(function() {
 	        var type = $(this).val();
 	        var dynamicFields = $('#dynamic-fields');
@@ -357,8 +367,16 @@
 	    });
 	});
   
+  function submitClk(){
+	  var editor = document.querySelector("#editor");
+	  console.log("에디터 작성된거", editor);
+	  document.getByElementById("content").value = editor.getData();
+	  document.getByElementById("resourceForm").submit;
+  }
 	
   	
 </script>
+
+
 
 </html>

@@ -15,13 +15,19 @@ public class ApprovalDTO {
     private String appr_decsion; // 전결
     private String appr_midapprover; // 중간결재자
     private String appr_finalapprover; // 최종결재자
-    
+    private int emp_no; // fk 사원 아이디
     private int approval_doc_idx; // 결재 번호
     
     
     
     
     
+	public int getEmp_no() {
+		return emp_no;
+	}
+	public void setEmp_no(int emp_no) {
+		this.emp_no = emp_no;
+	}
 	public int getApproval_doc_idx() {
 		return approval_doc_idx;
 	}
@@ -81,8 +87,8 @@ public class ApprovalDTO {
 		return "ApprovalDTO [approval_doc_line_idx=" + approval_doc_line_idx + ", appr_line_bkmk_idx="
 				+ appr_line_bkmk_idx + ", appr_imgname=" + appr_imgname + ", appr_comment=" + appr_comment
 				+ ", appr_mngr_updt=" + appr_mngr_updt + ", appr_decsion=" + appr_decsion + ", appr_midapprover="
-				+ appr_midapprover + ", appr_finalapprover=" + appr_finalapprover + ", approval_doc_idx="
-				+ approval_doc_idx + "]";
+				+ appr_midapprover + ", appr_finalapprover=" + appr_finalapprover + ", emp_no=" + emp_no
+				+ ", approval_doc_idx=" + approval_doc_idx + "]";
 	}
 
     

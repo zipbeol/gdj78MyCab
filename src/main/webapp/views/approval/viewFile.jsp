@@ -143,12 +143,14 @@
                                 </div>
                                 <div class="card-body">
                                     <c:if test="${not empty fileContent}">
-                                        <iframe src="data:text/html;base64,${fileContent}" width="100%" height="700px"></iframe>
+                                        <iframe id="iframe-document" src="data:text/html;base64,${fileContent}" width="100%" height="700px"></iframe>
                                     </c:if>
                                     <c:if test="${not empty errorMessage}">
                                         <p style="color: red;">${errorMessage}</p>
                                     </c:if>
                                 </div>
+                       
+
                             </div>
                         </div>
                     </div>
@@ -185,6 +187,8 @@
 <script src="/assets/js/jquery.min.js"></script>
 <script src="/assets/js/bootstrap.bundle.min.js"></script>
 
+
+
 <!-- *************
         ************ Vendor Js Files *************
     ************* -->
@@ -197,6 +201,7 @@
 <script src="/assets/js/custom.js"></script>
 <script src="/assets/js/localStorage.js"></script>
 </body>
+
 <script>
 </script>
 </html>

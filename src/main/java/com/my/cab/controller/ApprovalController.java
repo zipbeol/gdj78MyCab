@@ -1,8 +1,12 @@
 package com.my.cab.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -10,7 +14,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.sql.Date;
@@ -22,12 +25,8 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.web.bind.annotation.PostMapping;
 
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.my.cab.dto.ApprovalDTO;
@@ -174,6 +173,7 @@ public class ApprovalController {
         return apprservice.getApprovalData();
     }
     
+    // 기안서 결재 페이지 불러오기
     @GetMapping("/approval/viewFile/{encodedFilename}")
     public String viewFile(@PathVariable String encodedFilename, Model model) {
         try {
@@ -195,8 +195,7 @@ public class ApprovalController {
             return "approval/error";
         }
     }
-
-
+    
 }
     
 

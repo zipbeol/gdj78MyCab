@@ -5,7 +5,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>My Cab - Finance</title>
+<title>My Cab - Notice</title>
 <!-- Meta -->
 <meta name="description" content="Marketplace for Bootstrap Admin Dashboards">
 <meta name="author" content="Bootstrap Gallery">
@@ -146,26 +146,32 @@ body {
 										        <tbody>
 										            <tr>
 										                <td class="detail-label" style="width: 15%">작성자</td>
-										                <td class="detail-content" style="width: 85%">관리자</td>
+										                <td class="detail-content" style="width: 85%">${noticeDetail.notice_writer}</td>
 										            </tr>
 										            <tr>
-										                <td class="detail-label">첨부 파일</td>
-										                <td class="detail-content">.jsp</td>
-										            </tr>
+													    <td class="detail-label">첨부 파일</td>
+													    <td class="detail-content">
+														    <c:if test="${not empty fileList}">
+														        <c:forEach items="${fileList}" var="file">
+														            <a href="download/${file.notice_attach_file}">${file.notice_file_name}</a>
+														            <hr/>
+														        </c:forEach>
+														    </c:if>
+														</td>
+													</tr>
 										            <tr>
 										                <td class="detail-label">제목</td>
-										                <td class="detail-content">관리환경을 오픈하였습니다.</td>
+										                <td class="detail-content">${noticeDetail.notice_title}</td>
 										            </tr>
 										            <tr>
 										                <td class="detail-label">내용</td>
 										                <td class="detail-content content-height">
-										                    관리환경을 오픈하였습니다.
-										                    관리환경은 시스템관리, 협력관리, 변경관리, SR관리, 현장지원, 문제관리로 구성되어 있습니다.
+										                ${noticeDetail.notice_content}
 										                </td>
 										            </tr>
 										            <tr>
 										                <td class="detail-label" style="text-align: right;">작성 일시</td>
-										                <td class="detail-content" style="text-align: right;">2009-10-19</td>
+										                <td class="detail-content" style="text-align: right;">${noticeDetail.notice_date}</td>
 										            </tr>
 										        </tbody>
 										    </table>

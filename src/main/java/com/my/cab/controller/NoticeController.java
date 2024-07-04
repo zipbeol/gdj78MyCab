@@ -8,9 +8,12 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +41,7 @@ public class NoticeController {
 		return "notice/noticeList";
 	}
 
+	// 공지사항 리스트
 	@PostMapping("/list.ajax")
 	@ResponseBody
 	public Map<String, Object> getNoticeList(@RequestParam Map<String, Object> param) {
@@ -59,6 +63,7 @@ public class NoticeController {
 		return "notice/noticeRegister";
 	}
 
+	// 공지사항 등록
 	@PostMapping("/register.ajax")
 	@ResponseBody
 	public Map<String, Object> registerNotice(NoticeDTO noticeDTO,
@@ -95,6 +100,7 @@ public class NoticeController {
 		return response;
 	}
 
+	// 비활성화
 	@PostMapping("/inactivate.ajax")
 	@ResponseBody
 	public Map<String, Object> inactivateNotices(@RequestBody List<Integer> noticeIds) {
@@ -126,10 +132,24 @@ public class NoticeController {
 	}
 
 	@RequestMapping("/detail.go")
-	public String noticeDetail(Model model) {
-		logger.info("공지사항 작성");
-
+	public String noticeDetail(Model model, String notice_idx, NoticeDTO noticeDTO) {
+		logger.info("notice_idx : {}", notice_idx);
+		List<String> noticeAttach = noticeService.fileList();
+		noticeService.noticeDetail(notice_idx, model);
+		model.addAttribute("noticeAttach", noticeAttach);
 		return "notice/noticeDetail";
+	}
+	
+	@RequestMapping(value="/photo/{fileName}")
+	public ResponseEntity<Resource> imgView(@PathVariable String fileName) {
+	    logger.info("fileName : " + fileName);
+	    return noticeService.imgView(fileName);
+	}
+
+	@RequestMapping(value="/download/{fileName}")
+	public ResponseEntity<Resource> download(@PathVariable String fileName) {
+	    logger.info("download fileName : " + fileName);
+	    return noticeService.download(fileName);
 	}
 
 }

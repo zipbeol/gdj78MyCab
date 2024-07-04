@@ -22,4 +22,6 @@ public interface NoticeDAO {
 
 	int getNoticeCount(SearchDTO searchDTO);
 
+	NoticeDTO noticeDetail(String notice_idx);
+
 }

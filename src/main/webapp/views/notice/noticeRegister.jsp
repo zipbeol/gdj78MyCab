@@ -257,47 +257,69 @@ td:hover {
 	var category = '';
     
 	document.addEventListener('DOMContentLoaded', function () {
-        const editor = new toastui.Editor({
-            el: document.querySelector('#noticeContent'),
-            height: '500px',
-            initialEditType: 'markdown',
-            previewStyle: 'vertical',
-            initialEditType: 'wysiwyg' // Set initial edit type to wysiwyg for preview mode
-        });
+	    const editor = new toastui.Editor({
+	        el: document.querySelector('#noticeContent'),
+	        height: '500px',
+	        initialEditType: 'markdown',
+	        previewStyle: 'vertical',
+	        initialEditType: 'wysiwyg' // Set initial edit type to wysiwyg for preview mode
+	    });
+	    
+	    $('#registerButton').click(function() {
+	        // 제목과 내용이 비어 있는지 확인
+	        var noticeTitle = $('#noticeTitle').val();
+	        var noticeContent = editor.getHTML().trim();
 
-        $('#registerButton').click(function() {
-            var formData = new FormData();
-            formData.append('notice_title', $('#noticeTitle').val());
-            formData.append('notice_field', $('#noticeTarget').val());
-            var files = $('#fileAttachment')[0].files;
-            for (var i = 0; i < files.length; i++) {
-                formData.append('fileAttachment', files[i]);
-            }
-            formData.append('notice_content', editor.getHTML());
-            formData.append('notice_imp', $('#importantCheckbox').prop('checked'));
+	        if (!noticeTitle) {
+	            alert('공지 제목을 작성해주세요.');
+	            return;
+	        }
 
-            $.ajax({
-                url: '/notice/register.ajax',
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                dataType: 'json',
-                success: function(response) {
-                    if (response.status === 'error') {
-                        alert(response.message); // 경고 메시지 표시
-                    } else {
-                        alert(response.message); // 성공 메시지 표시
-                        window.location.href = '/notice/list';
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    alert('등록에 실패하였습니다. 다시 시도해 주세요.');
-                    console.error('Error:', textStatus, errorThrown);
-                }
-            });
-        });
-    });
+	        // 빈 태그만 있는지 확인
+	        var tempElement = document.createElement('div');
+	        tempElement.innerHTML = noticeContent;
+	        if (!tempElement.textContent.trim()) {
+	            alert('공지 내용을 작성해 주세요.');
+	            return;
+	        }
+
+	        // 확인창 띄우기
+	        if (!confirm('공지를 등록하시겠습니까?')) {
+	            return;
+	        }
+
+	        var formData = new FormData();
+	        formData.append('notice_title', noticeTitle);
+	        formData.append('notice_field', $('#noticeTarget').val());
+	        var files = $('#fileAttachment')[0].files;
+	        for (var i = 0; i < files.length; i++) {
+	            formData.append('fileAttachment', files[i]);
+	        }
+	        formData.append('notice_content', noticeContent);
+	        formData.append('notice_imp', $('#importantCheckbox').prop('checked'));
+
+	        $.ajax({
+	            url: '/notice/register.ajax',
+	            type: 'POST',
+	            data: formData,
+	            processData: false,
+	            contentType: false,
+	            dataType: 'json',
+	            success: function(response) {
+	                if (response.status === 'error') {
+	                    alert(response.message); // 경고 메시지 표시
+	                } else {
+	                    alert(response.message); // 성공 메시지 표시
+	                    window.location.href = '/notice/list';
+	                }
+	            },
+	            error: function(jqXHR, textStatus, errorThrown) {
+	                alert('등록에 실패하였습니다. 다시 시도해 주세요.');
+	                console.error('Error:', textStatus, errorThrown);
+	            }
+	        });
+	    });
+	});
 
 
         // 카테고리 이름을 출력하는 함수

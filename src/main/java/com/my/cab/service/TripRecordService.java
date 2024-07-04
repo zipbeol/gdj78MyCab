@@ -1,7 +1,9 @@
 package com.my.cab.service;
 
+import com.my.cab.dao.FinanceDAO;
 import com.my.cab.dao.TripRecordDAO;
 import com.my.cab.dto.*;
+import com.my.cab.util.DateFormatter;
 import com.my.cab.util.PageCalc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +24,9 @@ public class TripRecordService {
 
     @Autowired
     TripRecordDAO tripRecordDAO;
+
+    @Autowired
+    FinanceDAO financeDAO;
 
     private static final int PAGE_SIZE = 10;
 
@@ -43,10 +48,21 @@ public class TripRecordService {
         for (int i = 0; i < recordLats.length; i++) {
             result = tripRecordDAO.insertTripRecordDetail(tripRecordDTO.getTrip_record_idx(), recordLats[i], recordLngs[i]);
         }
-
-
+        FinanceDTO financeDTO = new FinanceDTO();
+        financeDTO.setPro_category("택시");
+        financeDTO.setPro_actual_date(tripRecordDAO.getTripRecordDate(tripRecordDTO));
+        financeDTO.setPro_content("택시 운행");
+        financeDTO.setPro_who(tripRecordDTO.getTrip_record_driver_name());
+        financeDTO.setPro_cash(Integer.parseInt(tripRecordDTO.getTrip_record_fare()));
+        financeDTO.setPro_trip_id(Integer.parseInt(tripRecordDTO.getTrip_record_idx()));
+        financeDTO.setDeal_pro_idx(financeDTO.getPro_idx());
+        financeDTO.setDeal_category("수익");
+        financeDTO.setProfit(true);
+        financeDAO.addProfit(financeDTO);
+        financeDAO.addDeal(financeDTO);
         return result;
     }
+
 
     public String getFirstTripDate() {
         return tripRecordDAO.getFirstTripDate();

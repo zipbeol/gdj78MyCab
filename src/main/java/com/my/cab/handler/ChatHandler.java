@@ -2,8 +2,10 @@ package com.my.cab.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.my.cab.dto.ChatDTO;
+import com.my.cab.service.ChatService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -26,28 +28,39 @@ public class ChatHandler extends TextWebSocketHandler {
 
     private final ObjectMapper mapper = new ObjectMapper();
 
+    @Autowired
+    ChatService chatService;
+
     // 처음 접속시
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         logger.info("{} 연결", session.getId());
         sessions.add(session);
-        joinRoom(session, "test");
     }
 
     // 메세지 관련
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String msg = message.getPayload();
-        logger.info("받은 메세지: {}", msg);
-
         ChatDTO chatDTO = mapper.readValue(msg, ChatDTO.class);
-        logger.info("session: {}", chatDTO.getMessage());
+        logger.info("message: {}", chatDTO.getMessage());
+        logger.info("type: {}", chatDTO.getType());
+        logger.info("sender: {}", chatDTO.getSender());
+        logger.info("room: {}", chatDTO.getRoom());
 
-
-        if ("message".equals(chatDTO.getType())) {
-            sendMessageToRoom("test", chatDTO.getMessage());
+        switch (chatDTO.getType()) {
+            case "message":
+                boolean result = chatService.insertChatDB(chatDTO);
+                logger.info("insertDB result: {}", result);
+                sendMessageToRoom(chatDTO);
+                break;
+            case "text":
+                sendMessageToRoom(chatDTO);
+                break;
+            case "join":
+                joinRoom(session, chatDTO.getRoom());
+                break;
         }
-
     }
 
     // 연결 종료
@@ -60,6 +73,7 @@ public class ChatHandler extends TextWebSocketHandler {
 
     /**
      * 세션 종료시 방 나가기
+     *
      * @param session
      */
     private void leaveRoom(WebSocketSession session) {
@@ -84,11 +98,12 @@ public class ChatHandler extends TextWebSocketHandler {
         logger.info("{} 채팅방 {}에 참여", session.getId(), room);
     }
 
-    private void sendMessageToRoom(String room, String message) throws Exception {
-        Set<WebSocketSession> roomSessions = chatRooms.get(room);
+    private void sendMessageToRoom(ChatDTO chatDTO) throws Exception {
+        Set<WebSocketSession> roomSessions = chatRooms.get(chatDTO.getRoom());
+        String messageJson = mapper.writeValueAsString(chatDTO);
         if (roomSessions != null) {
             for (WebSocketSession s : roomSessions) {
-                s.sendMessage(new TextMessage(message));
+                s.sendMessage(new TextMessage(messageJson));
             }
         }
     }

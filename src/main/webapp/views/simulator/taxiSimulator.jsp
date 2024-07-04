@@ -370,7 +370,8 @@
 <script src="/assets/js/showAlert.js"></script>
 
 <!-- 카카오 맵 -->
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6a9392fb6c3d719802f976bbff4678eb&libraries=services"></script>
+<script type="text/javascript"
+        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6a9392fb6c3d719802f976bbff4678eb&libraries=services"></script>
 
 <script>
     // 구디 아카데미 좌표
@@ -506,7 +507,8 @@
                                             'trip_record_distance': distance,
                                             'trip_record_fare': money,
                                             'recordLats': tripRecord.recordLat,
-                                            'recordLngs': tripRecord.recordLng
+                                            'recordLngs': tripRecord.recordLng,
+                                            'trip_record_driver_name': selectedDriverName
                                         }),
                                         dataType: 'JSON',
                                         success: function (data) {

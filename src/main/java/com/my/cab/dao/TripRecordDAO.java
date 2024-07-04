@@ -5,6 +5,7 @@ import com.my.cab.dto.SearchDTO;
 import com.my.cab.dto.TripRecordDTO;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.sql.Date;
 import java.util.List;
 
 @Mapper
@@ -23,4 +24,6 @@ public interface TripRecordDAO {
     TripRecordDTO getTripInfo(String tripRecordIdx);
 
     List<CoordinateDTO> getTripLocationData(String tripRecordIdx);
+
+    Date getTripRecordDate(TripRecordDTO tripRecordDTO);
 }

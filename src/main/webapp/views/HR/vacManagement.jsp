@@ -207,8 +207,6 @@ th.sortable.desc::after {
 														class="form-select emp-search-filter">
 														<option value="emp_no">사번</option>
 														<option value="emp_name">이름</option>
-														<option value="title_name">직급</option>
-														<option value="dept_name">부서</option>
 													</select>
 												</div>
 												<div class="col-3 text-end">
@@ -232,18 +230,20 @@ th.sortable.desc::after {
 													<thead>
 														<tr>
 														<th class="text-center" id="th-emp-no"
-																style="width: 10%;" ><input class="form-check-input chk" type="checkbox" value="" id=""></th>
+																style="width: 10%;" ><input class="form-check-input chk" type="checkbox"  id="allCheck"></th>
 															<th class="text-center" id="th-emp-no"
 																style="width: 10%;" >사번</th>
+																<th class="text-center" id="th-emp-no"
+																style="width: 10%;" >이름</th>
 															<th class="text-center" id="th-emp-name"
-																style="width: 20%;" >근속년수</th>
+																style="width: 10%;" >근속년수</th>
 															<th class="text-center" id="th-title-name"
 																style="width: 20%;" >지급 연차</th>
 															<th class="text-center" id="th-dept-name"
 																style="width: 20%;" >잔여 연차</th>
 														</tr>
 													</thead>
-													<tbody id="emp-list">
+													<tbody id="vac-list">
 													</tbody>
 												</table>
 											</div>
@@ -317,31 +317,30 @@ th.sortable.desc::after {
     
     
 
-    getTotalPages();
+    getVacTotalPages();
     getList();
 
    
     $('#search-emp').on('change', function(){
     	currentPage = 1;
-        getTotalPages();
+    	getVacTotalPages();
         getList();
     });
 
    
     $('.emp-search-filter').on('input', function () {
         currentPage = 1;
-        getTotalPages();
+        getVacTotalPages();
         getList();
     });
 
 
     // 필터 값 리셋
     function filterReset() {
-        $('#filter-emp-is-retired').val('');
         $('#search-emp').val('');
         $('#filterforsearch').val('');
         currentPage = 1; // 페이지 번호 초기화
-        getTotalPages();
+        getVacTotalPages();
         getList(); // 목록 새로고침
     }
 
@@ -367,10 +366,10 @@ th.sortable.desc::after {
     }
 
     // 토탈 페이지 호출
-    function getTotalPages() {
+    function getVacTotalPages() {
         getSearchValue();
         $.ajax({
-            url: './getTotalPages.ajax',
+            url: '/getVacTotalPages.ajax',
             type: 'GET',
             data: {
                 'searchText': searchText,
@@ -405,33 +404,42 @@ th.sortable.desc::after {
         var content = '';
         if (list.length > 0) {
             for (item of list) {
-            	console.log(item.emp_employment_status);
-                var emp_employment_status = item.emp_employment_status === true ? '재직중' : '퇴사';
-                
+            	
+                console.log('근속년수?'+item.work_yaer);
                 content += '<tr class="emp-list-tbody-tr" id="' + item.emp_no + '">'
+               		+ '<td class="text-center">' + '<input class="form-check-input chk" type="checkbox"  id="check">' + '</td>'
                 	+ '<td class="text-center">' + item.emp_no + '</td>'
-                    + '<td class="text-center">' + item.emp_name + '</td>'
-                    + '<td class="text-center">' + item.title_name + '</td>'
-                    + '<td class="text-center">' + item.dept_name + '</td>'
-                    + '<td class="text-center">' + emp_employment_status + '</td>'
+                	+ '<td class="text-center">' + item.emp_name + '</td>'
+                    + '<td class="text-center">' + item.work_year + '</td>'
+                    + '<td class="text-center">' + item.vac_add + '</td>'
+                    + '<td class="text-center">' + item.vac_left + '</td>'
                     + '</tr>';
             }
         } else {
             content = '<tr><td colspan="7" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
         }
-        $('#emp-list').html(content);
+        $('#vac-list').html(content);
     }
     
     $(document).on('click', '.emp-list-tbody-tr', function () {
-        location.href = './empDetail.go?emp_no=' + $(this).attr('id');
+        
     });
     
-    
+    $('#allCheck').on('click', function(){
+    	
+    	if ($('#allCheck').prop("checked")) {
+			$('.chk').prop("checked", true);
+		}else{
+			$('.chk').prop("checked", false);
+		}
+    	
+    	
+    });
     
 
     // 검색 값들 변수에 저장
     function getSearchValue() {
-        filterIsRetired = $('#filter-emp-is-retired').val();
+       
 		filterForSearch = $('#filterforsearch').val();
         searchText = $('#search-emp').val();
     }

@@ -168,9 +168,12 @@
           <c:when test="${not empty sessionScope.profile}">
           	<img src="/photo/${sessionScope.profile}" class="rounded-2 img-3x" alt="user">
           </c:when>
-          <c:otherwise>
-            <img src="/assets/user.png" class="rounded-2 img-3x" alt="user">
-          </c:otherwise>
+          <c:when test="${empty sessionScope.profile}">
+          	<img src="/assets/user.png" class="rounded-2 img-3x" alt="user">
+          </c:when>
+          <c:when test="${empty sessionScope.loginId}">
+          <img src="/assets/user.png" class="rounded-2 img-3x" alt="user">
+          </c:when>
           </c:choose>
         </a>
         <div class="dropdown-menu dropdown-menu-end shadow-sm">

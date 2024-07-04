@@ -118,7 +118,6 @@
 		INNER JOIN share_calendar sc  ON sc.share_cal_idx = s.schedule_cal_idx
 		INNER JOIN calendar cal ON cal.calendar_idx = s.schedule_cal_idx 
 		WHERE sc.shared_emp_no = #{param1}
-		GROUP BY shared_emp_no 
 	</select>
 
 </mapper>

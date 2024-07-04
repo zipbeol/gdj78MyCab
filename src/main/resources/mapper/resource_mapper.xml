@@ -3,7 +3,35 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd"
 >
 
-<mapper namespace="com.my.cab.dao.">
-
+<mapper namespace="com.my.cab.dao.ResourceDAO">
+	<insert id="resourceWrite"
+		useGeneratedKeys="true"
+		keyColumn="resource_idx"
+		keyProperty="resource_idx"
+	>
+		INSERT INTO resource_management (resource_name,resource_category,resource_management_emp_no,resource_state,resource_content)
+		VALUES (#{resourceName},#{resourceType},#{id},#{status},'테스트')
+	</insert>
+	
+	<insert id="resourceWriteMeetRomm" parameterType="map">
+		INSERT INTO resource_meeting_room (meeting_room_location,meeting_room_resource_idx,meeting_room_capacity)
+		VALUES (#{resourceLocation},#{idx},#{meetRoomCapacity})
+	</insert>
+	
+	<insert id="resourceWriteCar" parameterType="map">
+		INSERT INTO resource_company_car (
+			company_car_resource_idx,
+			company_car_category,
+			company_car_license_plate,
+			company_car_location,
+			company_car_capacity
+			)
+		VALUES (#{idx},#{carType},#{carLicencePlate},#{resourceLocation},#{seatCount})
+	</insert>
+	
+	<insert id="resourceWriteEquip" parameterType="map">
+		INSERT INTO equipment (resource_equipment_idx,resource_equipment_category,resource_equipment_location)
+		VALUES (#{idx},#{equipmentCategory},#{resourceLocation})
+	</insert>
 
 </mapper>

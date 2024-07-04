@@ -31,11 +31,8 @@
     <link rel="stylesheet" href="/assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
 
     <!-- EDITOR -->
-    <link rel="stylesheet" href="/assets/editor/res/style.css" />
-    <link rel="stylesheet" href="/assets/editor/richtexteditor/rte_theme_default.css" />
-	<script type="text/javascript" src="/assets/editor/richtexteditor/rte.js"></script>
-	<script type="text/javascript" src='/assets/editor/richtexteditor/plugins/all_plugins.js'></script>
-    
+    <link rel="stylesheet" href="/assets/editor/ckeditorstyle.css" />
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.0/ckeditor5.css" />
     <!-- 폰트 -->
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -50,6 +47,7 @@
     <link rel="stylesheet" href="/assets/vendor/daterange/daterange.css">
     
     <style >
+
     	
     </style>
    
@@ -137,77 +135,83 @@
 										<div class="card mb-4">
 											<div class="card-header">기본 정보</div>
 											<div class="card-body">
-												<form id="resourceForm">
+												<form id="resourceForm" action="/resource/resourceWrite.do" method="post" enctype="multipart/form-data">
 													<div class="row">
-														<div class="col-md-6 form-group">
-															<label for="resourceName">자원명</label> 
-															<input type="text"
-																class="form-control" id="resourceName"
-																name="resourceName" required>										
-																<!-- 추가 옵션들 -->
-															</select>
-														</div>
-														<div class="col-md-6 form-group">
-															<label for="location">위치</label> <input type="text"
-																class="form-control" id="resourceName"
-																name="resourceName" required>
-														</div>
-													</div>
-													<div class="row">
-														<div class="col-md-6 form-group">
-															<label for="type">타입</label> <select class="form-control"
-																id="type" name="type" required>
-																<option value="">선택</option>
-																<option value="vehicle">차량</option>
-																<option value="meeting_room">회의실</option>
-																<option value="equipment">비품</option>
-															</select>
-														</div>
 														<div class="col-md-6 form-group">
 															<label for="resourceName">자원명</label> <input type="text"
 																class="form-control" id="resourceName"
 																name="resourceName" required>
+															<!-- 추가 옵션들 -->
+															</select>
+														</div>
+														<div class="col-md-6 form-group">
+															<label for="location">위치</label> <input type="text"
+																class="form-control" id="resourceLocation"
+																name="resourceLocation" required>
 														</div>
 													</div>
 													<div class="row">
 														<div class="col-md-6 form-group">
-															<label for="resourceDetail">자원 세부사항</label> <input
-																type="text" class="form-control" id="resourceDetail"
-																name="resourceDetail">
+															<label for="resourceType">타입</label> <select
+																class="form-control" id="resourceType"
+																name="resourceType" required>
+																<option value="">선택</option>
+																<option value="차량">차량</option>
+																<option value="회의실">회의실</option>
+																<option value="비품">비품</option>
+															</select>
 														</div>
 														<div class="col-md-6 form-group">
-															<label for="order">우선 순위</label> <input type="number"
-																class="form-control" id="order" name="order" min="0">
-														</div>
-													</div>
-													<div class="row">
-														<div class="col-md-6 form-group">
-															<label for="status">사용 상태</label>
+															<label for="status">사용 가능 여부</label>
 															<div>
 																<div class="form-check form-check-inline">
 																	<input class="form-check-input" type="radio"
 																		name="status" id="statusUse" value="use" checked>
-																	<label class="form-check-label" for="statusUse">사용</label>
+																	<label class="form-check-label" for="statusUse">사용가능</label>
 																</div>
 																<div class="form-check form-check-inline">
 																	<input class="form-check-input" type="radio"
 																		name="status" id="statusNotUse" value="not_use">
-																	<label class="form-check-label" for="statusNotUse">미사용</label>
+																	<label class="form-check-label" for="statusNotUse">사용불가</label>
 																</div>
 															</div>
 
 														</div>
+													</div>
+
+													<div class="row">
+														<div class="form-group col-md-6">
+															<div id="dynamic-fields"></div>
+														</div>
 
 
 													</div>
-													<div class="form-group">
-														<div id="dynamic-fields"></div>
+													<div class="row">
+
+														<div class="form-group">
+															<label for="detail">세부사항</label>
+															<div
+																class="main-container ckeditor-div main-container-custom">
+																<div
+																	class="editor-container editor-container_classic-editor editor-container_include-style"
+																	id="editor-container">
+																	<div class="editor-container__editor">
+																		<div id="editor"></div>
+																	</div>
+																</div>
+															</div>
+														</div>
 													</div>
-													<div class="form-group">
-														<label for="detail">세부사항</label>
-														<textarea class="form-control" id="detail" name="detail"></textarea>
-													</div>
-													<br><br><br><br><br><br><br><br><br><br>
+													<br>
+													<br>
+													<br>
+													<br>
+													<br>
+													<br>
+													<br>
+													<br>
+													<br>
+													<br>
 													<div class="d-flex justify-content-end mb-5">
 														<button type="button" class="btn btn-secondary mr-2">취소</button>
 														<button type="submit" class="btn btn-primary">저장</button>
@@ -275,56 +279,73 @@
     
     <!-- Custom JS files -->
     <script src="/assets/js/custom.js"></script>
+    <script type="importmap">
+    {
+        "imports": {
+            "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/42.0.0/ckeditor5.js",
+            "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/42.0.0/"
+        }
+    }	
+	</script>
+	<script type="module" src="/assets/editor/ckeditorjs.js"></script>
+	<script src="/assets/editor/imageEditor.js" type="module"></script>
+
+
     
-  <script >
+  <script>
   
   $(document).ready(function() {
-	    $('#type').change(function() {
+	    $('#resourceType').change(function() {
 	        var type = $(this).val();
 	        var dynamicFields = $('#dynamic-fields');
 	        dynamicFields.empty();
 
-	        if (type === 'vehicle') {
+	        if (type === '차량') {
 	            dynamicFields.append(`
 	                <div class="row">
-	                    <div class="col-md-3 form-group">
-	                        <label for="vehicleNumber">차량 번호</label>
-	                        <input type="text" class="form-control" id="vehicleNumber" name="vehicleNumber" required>
+	                    <div class="col-md-2 form-group">
+	                        <label for="carLicencePlate">차량 번호</label>
+	                        <input type="text" class="form-control" id="carLicencePlate" name="carLicencePlate" required>
 	                    </div>
-	                    <div class="col-md-3 form-group">
-	                        <label for="driverName">운전사 이름</label>
-	                        <input type="text" class="form-control" id="driverName" name="driverName" required>
+	                    <div class="col-md-2 form-group">
+	                        <label for="CarType">차종</label>
+	                        <input type="text" class="form-control" id="carType" name="carType" required>
 	                    </div>
-	                    <div class="col-md-3 form-group">
+	                    <div class="col-md-2 form-group">
 	                        <label for="seatCount">좌석 수</label>
 	                        <input type="number" class="form-control" id="seatCount" name="seatCount" required>
 	                    </div>
+	                   
+	                    <div class="col-md-5 form-group">
+	                        <label for="carPhoto">차량 사진</label>
+	                        <input type="file" class="form-control" id="carPhoto" name="carPhoto" multiple="multiple" required>
+              			</div>             			
 	                </div>
 
 	            `);
-	        } else if (type === 'meeting_room') {
+	        } else if (type === '회의실') {
 	            dynamicFields.append(`
 	                <div class="row">
 	                    <div class="col-md-3 form-group">
-	                        <label for="roomNumber">회의실 번호</label>
-	                        <input type="text" class="form-control" id="roomNumber" name="roomNumber" required>
+	                        <label for="roomNumber">회의실 이름</label>
+	                        <input type="text" class="form-control" id="meetRoomName" name="meetRoomName" required>
 	                    </div>
 	                    <div class="col-md-3 form-group">
 	                        <label for="floor">층</label>
-	                        <input type="number" class="form-control" id="floor" name="floor" required>
+	                        <input type="number" class="form-control" id="meetRoomLocation" name="meetRoomLocation" required>
 	                    </div>
 	                    <div class="col-md-3 form-group">
 	                        <label for="capacity">수용 인원</label>
-	                        <input type="number" class="form-control" id="capacity" name="capacity" required>
+	                        <input type="number" class="form-control" id="meetRoomCapacity" name="meetRoomCapacity" required>
 	                    </div>
 	                </div>	                
 	            `);
-	        } else if (type === 'equipment') {
+	        } else if (type === '비품') {
 	            dynamicFields.append(`
 	                <div class="row">
 	                    <div class="col-md-3 form-group">
 	                        <label for="equipmentType">비품 종류</label>
-	                        <input type="text" class="form-control" id="equipmentType" name="equipmentType" required>
+	                        <input type="text" class="form-control" id="equipmentCategory" name="equipmentCategory" required>
 	                    </div>
 	                    <div class="col-md-3 form-group">
 	                        <label for="quantity">수량</label>
@@ -335,6 +356,7 @@
 	        }
 	    });
 	});
+  
 	
   	
 </script>

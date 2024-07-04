@@ -279,8 +279,8 @@
                     		</div>
 		                          <hr>
                     		<div id="share-calendar" >
-                    			<div class="util-box-category alert alert-secondary rounded-3 util-box3" id="thirdCheckbox"  onclick="createShareModalOpen()" style="background-color: #3659cd">
-		                        <label class="form-check-label" for="thirdCheckbox">공유 캘린더 추가</label>
+                    			<div class="util-box-category alert alert-secondary rounded-3 util-box3" id="thirdCheckbox"  onclick="createShareModalOpen()" style="background-color: white">
+		                        	<label class="form-check-label" for="thirdCheckbox">공유 캘린더 추가</label>
                     			</div>
 		                          <div class="shareCalBox">
 			                          <c:forEach items="${shareCalList}" varStatus="status" var="item">
@@ -336,7 +336,7 @@
                 </div>
                 <div class="input-group mb-3">
                     <label class="input-group-text" for="create-start-date">시작 일정</label>
-                    <input type="text" class="createDatepicker form-control" id="create-start-date" name="create-start-date">
+                    <input type="text" class="createDatepickerStart form-control" id="create-start-date" name="create-start-date">
                     <select id="create-start-hour" name="create-start-hour">
                         <c:forEach var="a" begin="0" end="23" varStatus="i">
                             <option value="${a}">${a}시</option>
@@ -348,7 +348,7 @@
                         </c:forEach>
                     </select>
                     <span class="input-group-text">~</span>
-                    <input type="text" class="createDatepicker form-control" id="create-end-date" name="create-end-date">
+                    <input type="text" class="createDatepickerEnd form-control" id="create-end-date" name="create-end-date">
                     <select id="create-end-hour" name="create-end-hour">
                         <c:forEach var="a" begin="0" end="23" varStatus="i">
                             <option value="${a}">${a}시</option>
@@ -411,7 +411,7 @@
 		                    </div>                                    
 		                    <div class="input-group mb-3">
 		                        <label class="input-group-text" for="detail-start-date">일정</label>
-		                        <input type="text" class="form-control detailDatepicker" id="detail-start-date" name="detail-start-date" disabled="disabled">
+		                        <input type="text" class="form-control detailDatepickerStart" id="detail-start-date" name="detail-start-date" disabled="disabled">
 		                        <select id="detail-start-hour" name="detail-start-hour" disabled="disabled">
 		                        	    <c:forEach var="a" begin="0" end="23" varStatus="i">
 		                        	    	<option value="${a}">${a}시</option>
@@ -423,7 +423,7 @@
 		                        	    </c:forEach>                    	
 		                        </select>
 		                        <span class="input-group-text">~</span>
-		                        <input type="text" class="form-control detailDatepicker" id="detail-end-date" name="detail-end-date" disabled="disabled">
+		                        <input type="text" class="form-control detailDatepickerEnd" id="detail-end-date" name="detail-end-date" disabled="disabled">
 		                        <select id="detail-end-hour" name="detail-end-hour" disabled="disabled">
 		                        	    <c:forEach var="a" begin="0" end="23" varStatus="i">
 		                        	    	<option value="${a}">${a}시</option>
@@ -566,8 +566,8 @@
     
     <!-- 데이터 피커 -->
    <script src="/assets/vendor/daterange/daterange.js"></script>
-   <script src="/assets/vendor/daterange/custom-daterange-mycab.js"></script>
-    
+   <!--  <script src="/assets/vendor/daterange/custom-daterange-mycab.js"></script>
+    -->
     <!-- Custom JS files -->
     <script src="/assets/js/custom.js"></script>
     
@@ -1137,7 +1137,127 @@
 	        addSharedCalendarModal.hide();
 	    }
 	
-  	
+	    
+	    // 데
+  		// Date Range
+		$(".createDatepickerStart").daterangepicker({
+			singleDatePicker: true,
+			showOtherMonths: true,
+			startDate: moment().startOf("hour"),
+			endDate: moment().startOf("hour").add(32, "hour"),
+			select: function(){
+				console.log("드디어 돼싸 ㄷㅋㅋㅋ")	
+			},
+			locale: {
+				format: "YYYY-MM-DD",
+				daysOfWeek: ['일', '월', '화', '수', '목', '금', '토'],
+		        monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']
+			},
+			
+		});
+		
+		var createPikEnd = $(".createDatepickerEnd").daterangepicker({
+			singleDatePicker: true,
+			showOtherMonths: true,
+			startDate: moment().startOf("hour"),
+			endDate: moment().startOf("hour").add(32, "hour"),
+			locale: {
+				format: "YYYY-MM-DD",
+				daysOfWeek: ['일', '월', '화', '수', '목', '금', '토'],
+		        monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']
+			},
+			
+		});
+		
+		
+		$(".detailDatepickerStart").daterangepicker({
+			singleDatePicker: true,
+			showOtherMonths: true,
+			startDate: moment().startOf("hour"),
+			endDate: moment().startOf("hour").add(32, "hour"),
+			locale: {
+				format: "YYYY-MM-DD",
+				daysOfWeek: ['일', '월', '화', '수', '목', '금', '토'],
+		        monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']
+			},
+			
+		});
+		
+		$(".detailDatepickerEnd").daterangepicker({
+			singleDatePicker: true,
+			showOtherMonths: true,
+			startDate: moment().startOf("hour"),
+			endDate: moment().startOf("hour").add(32, "hour"),
+			locale: {
+				format: "YYYY-MM-DD",
+				daysOfWeek: ['일', '월', '화', '수', '목', '금', '토'],
+		        monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']
+			},
+			
+		});
+		
+		
+		$(".createDatepickerStart").on('apply.daterangepicker', function(ev, picker) {
+		    // apply 버튼을 눌렀을 때 실행할 코드
+		    var chkStartDateVal = document.getElementById("create-start-date").value;
+			var chkEndDateVal = document.getElementById("create-end-date").value;
+			console.log(chkStartDateVal);
+			console.log(chkEndDateVal);
+			console.log("DatePicker : " , ev);
+			console.log("DatePicker : " , picker);
+			console.log("DatePicker : " , picker.startDate.toDate());
+			console.log(createPikEnd);
+			createPikEnd.setStartDate =createPikEnd;
+			
+			  $(".createDatepickerEnd").datepicker("setStartDate", picker.startDate.toDate());
+			if(chkStartDateVal>chkEndDateVal){
+				alert("시작날짜보다 종료날짜가 더 빠릅니다.");
+				document.getElementById("create-end-date").value = document.getElementById("create-start-date").value;
+			};
+		});
+		
+		$(".createDatepickerEnd").on('apply.daterangepicker', function(ev, picker) {
+		    // apply 버튼을 눌렀을 때 실행할 코드
+		    var chkStartDateVal = document.getElementById("create-start-date").value;
+			var chkEndDateVal = document.getElementById("create-end-date").value;
+			console.log(chkStartDateVal);
+			console.log(chkEndDateVal);
+			console.log("DatePicker : " , ev);
+			console.log("DatePicker : " , picker);
+			if(chkStartDateVal>chkEndDateVal){
+				alert("시작날짜보다 종료날짜가 더 빠릅니다.");
+				document.getElementById("create-end-date").value = document.getElementById("create-start-date").value;
+			};
+		});
+		
+		
+		$(".detailDatepickerStart").on('apply.daterangepicker', function(ev, picker) {
+		    // apply 버튼을 눌렀을 때 실행할 코드
+		    var chkStartDateVal = document.getElementById("detail-start-date").value;
+			var chkEndDateVal = document.getElementById("detail-end-date").value;
+			console.log(chkStartDateVal);
+			console.log(chkEndDateVal);
+			console.log("DatePicker : " , ev);
+			console.log("DatePicker : " , picker);
+			if(chkStartDateVal>chkEndDateVal){
+				alert("시작날짜보다 종료날짜가 더 빠릅니다.");
+				document.getElementById("detail-end-date").value = document.getElementById("detail-start-date").value;
+			};
+		});
+		
+		$(".detailDatepickerEnd").on('apply.daterangepicker', function(ev, picker) {
+		    // apply 버튼을 눌렀을 때 실행할 코드
+		    var chkStartDateVal = document.getElementById("detail-start-date").value;
+			var chkEndDateVal = document.getElementById("detail-end-date").value;
+			console.log(chkStartDateVal);
+			console.log(chkEndDateVal);
+			console.log("DatePicker : " , ev);
+			console.log("DatePicker : " , picker);
+			if(chkStartDateVal>chkEndDateVal){
+				alert("시작날짜보다 종료날짜가 더 빠릅니다.");
+				document.getElementById("detail-end-date").value = document.getElementById("detail-start-date").value;
+			};
+		});
 </script>
 
 </html>

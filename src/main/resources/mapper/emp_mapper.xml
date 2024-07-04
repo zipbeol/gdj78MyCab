@@ -188,7 +188,49 @@
 	WHERE emp_no = #{emp_no};
     </update>
     
+    <select id="getVacList" resultType="emp" parameterType="search">
+    SELECT e.emp_no, 
+    e.emp_name, 
+    TRUNCATE((DATEDIFF(CURDATE(), e.emp_hired_date) + 1) / 365, 0) AS work_year,  
+    v.vac_left, 
+    v.vac_add
+	FROM employee e 
+	JOIN vacation v ON v.emp_no = e.emp_no 
+    <where>
+     	e.emp_employment_status = true
+    		<if test="filterForSearch != null and filterForSearch != ''">
+                <choose>
+                	<when test="filterForSearch == 'emp_no'">
+                		AND e.emp_no LIKE CONCAT('%', #{searchText}, '%')
+                	</when>
+                	<when test="filterForSearch == 'emp_name'">
+                		AND e.emp_name LIKE CONCAT('%', #{searchText}, '%')
+                	</when>
+                </choose>
+            </if>
+        </where>
+        ORDER BY e.emp_no
+        LIMIT #{pageSize} OFFSET #{page}
+    </select>
     
+    
+    <select id="getVacTotal" resultType="int" parameterType="search">
+    SELECT COUNT(e.emp_no)
+	FROM employee e
+    <where>
+    e.emp_employment_status = true
+    		<if test="filterForSearch != null and filterForSearch != ''">
+                <choose>
+                	<when test="filterForSearch == 'emp_no'">
+                		AND e.emp_no LIKE CONCAT('%', #{searchText}, '%')
+                	</when>
+                	<when test="filterForSearch == 'emp_name'">
+                		AND e.emp_name LIKE CONCAT('%', #{searchText}, '%')
+                	</when>
+                </choose>
+            </if>
+        </where>
+    </select>
     
 
 

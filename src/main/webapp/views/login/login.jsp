@@ -51,23 +51,17 @@
       z-index: 1;
     }
     .login-form {
-      background: linear-gradient(124.47deg, 
-              rgba(255, 255, 255, 0.0), 
-              rgba(255, 255, 255, 0.0), 
-              rgba(255, 255, 255, 0.0)); /* 배경색이 투명하게 보이게 한다 */
+      background: white;
   	border-radius: 16px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(0px);
+  backdrop-filter: blur(30px);
   padding: 30px;
     }
     .login-form:hover {
-  background: linear-gradient(124.47deg, 
-            rgba(255, 255, 255, 0.2), 
-            rgba(255, 255, 255, 0.0), 
-            rgba(255, 255, 255, 0.2));
+  background: white;
   border-radius: 16px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(30px);
   padding: 30px;
 }
 .incss {

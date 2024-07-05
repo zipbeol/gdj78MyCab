@@ -18,25 +18,25 @@ import com.my.cab.dto.SearchDTO;
 
 @Service
 public class EmpService {
-	
+
 	private String password = "";
-	
+
 	@Value("${spring.servlet.multipart.location}")
     private String uploadDir;
-	
+
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired EmpDAO dao;
 	@Autowired PasswordEncoder encoder;
-	
+
 	private static final int PAGE_SIZE = 10;
-	
+
 
 	public int empRegistration(Map<String, Object> param) {
-		
-	
+
+
 		String emp_bday = String.valueOf(param.get("emp_bday")).replace("-", "");
 		logger.info("생일 : "+emp_bday);
-		
+
 		int emp_no =Integer.parseInt(String.valueOf(param.get("emp_no"))) ;
 		password =  encoder.encode(emp_bday);
 		String emp_name = (String) param.get("emp_name");
@@ -45,20 +45,20 @@ public class EmpService {
 		String acc_no = (String) param.get("acc_no");
 		int title_no = Integer.parseInt(String.valueOf(param.get("title_no"))) ;
 		String bank_name = (String) param.get("bank_name");
-		
+
 		String emp_email = param.get("email_id") + "@" + param.get("domain");
 		logger.info(emp_email);
-		
-		
+
+
 		String emp_add = param.get("emp_roadAdd") +" "+  param.get("emp_addDetail");
-		
-		
+
+
 		String emp_extension_number = (String) param.get("emp_extension_number");
 		int emp_level = Integer.parseInt(String.valueOf(param.get("emp_level"))) ;;
-		
-		
+
+
 		EmpDTO dto = new EmpDTO();
-		
+
 		dto.setEmp_no(emp_no);
 		dto.setEmp_password(password);
 		dto.setEmp_name(emp_name);
@@ -73,27 +73,27 @@ public class EmpService {
 		dto.setEmp_level(emp_level);
 		dto.setEmp_bday(emp_bday);
 		dto.setEmp_employment_status(true);
-		
+
 		int row1 = dao.empJoin(dto);
 		int row2 = dao.accJoin(dto);
-		
+
 		int totalRow = row1 + row2;
-		
-		
+
+
 		return totalRow;
 	}
 
 
 	public int overlay(String email) {
-		
+
 		return dao.overlay(email);
 	}
 
 
 	public int getNextEmpNo(int deptNo) {
-		
+
 		int lastEmpNo = dao.getLastEmpNo(deptNo);
-		
+
 		return (deptNo * 10000) + lastEmpNo + 1;
 	}
 
@@ -108,8 +108,8 @@ public class EmpService {
 		List<EmpDTO> empList = dao.getEmpList(searchDTO);
 		logger.info("empList {}", empList);
 		result.put("empList", empList);
-		
-		
+
+
 		return result;
 	}
 
@@ -118,7 +118,7 @@ public class EmpService {
 		int empTotal = dao.getEmpTotal(searchDTO);
 		int totalPages = (int) Math.ceil((double)empTotal/PAGE_SIZE);
 		totalPages = totalPages > 0? totalPages : 1;
-		
+
 		return Map.of("totalPages", totalPages);
 	}
 
@@ -127,31 +127,31 @@ public class EmpService {
 
 	public boolean updateEmp(EmpDTO empDTO) {
 		boolean result = false;
-		
-		
+
+
 		boolean isRetired = empDTO.isEmp_employment_status();
-		
+
 		if (isRetired) {
-			
+
 			result = dao.updateEmp(empDTO);
-			
+
 		}else {
 			result = dao.updateEmpRetried(empDTO);
 		}
-		
-		
+
+
 		return result;
 	}
 
 
 	public EmpDTO getEmpDetail(String emp_no) {
-	
+
 		return dao.getEmpDetail(emp_no);
 	}
 
 
 	public Map<String, Object> getVacList(SearchDTO searchDTO) {
-		
+
 		Map<String, Object> result = new HashMap<String, Object>();
 		int page = (searchDTO.getPage() - 1)*PAGE_SIZE;
 		searchDTO.setPage(page);
@@ -161,12 +161,12 @@ public class EmpService {
 		List<EmpDTO> empList = dao.getVacList(searchDTO);
 		logger.info("empList {}", empList);
 		result.put("empList", empList);
-		
-		
+
+
 		return result;
-		
-		
-	
+
+
+
 	}
 
 
@@ -174,8 +174,16 @@ public class EmpService {
 		int empTotal = dao.getVacTotal(searchDTO);
 		int totalPages = (int) Math.ceil((double)empTotal/PAGE_SIZE);
 		totalPages = totalPages > 0? totalPages : 1;
-		
+
 		return Map.of("totalPages", totalPages);
 	}
 
+    /**
+     * 검색조건으로 오프셋 없는 emp 리스트 호출
+     * @param searchDTO
+     * @return
+     */
+	public List<EmpDTO> getNoOffsetEmpList(SearchDTO searchDTO) {
+		return dao.getNoOffsetEmpList(searchDTO);
+	}
 }

@@ -232,7 +232,12 @@
         </where>
     </select>
     
-
+    <select id="getNoOffsetEmpList" resultType="emp" parameterType="search">
+        SELECT e.emp_no, e.emp_name, d.dept_name, d.dept_no
+        FROM employee e
+                 JOIN department d ON d.dept_no = e.dept_no
+        WHERE e.emp_employment_status = 1 AND e.dept_no = #{dept_no}
+    </select>
 
 
 </mapper>

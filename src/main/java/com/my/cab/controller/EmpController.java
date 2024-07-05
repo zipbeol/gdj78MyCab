@@ -26,13 +26,18 @@ public class EmpController {
 	public EmpController(EmpService service) {
 		this.service = service;
 	}
-	
-	
-	
-	@RequestMapping(value="emp/emp/create.go")
+
+	@GetMapping("/emp/emp/noOffsetEmpList.ajax")
+	@ResponseBody
+	public Map<String, Object> noOffsetEmpList(SearchDTO searchDTO) {
+		return Map.of("EmpList", service.getNoOffsetEmpList(searchDTO));
+	}
+
+	@RequestMapping(value = "emp/emp/create.go")
 	public String Registration() {
+
 		logger.info("사원 등록 페이지로 이동");
-	
+
 		return "HR/empRegistration";
 	}
 	

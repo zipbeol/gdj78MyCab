@@ -32,4 +32,5 @@ public interface EmpDAO {
 
 	int getVacTotal(SearchDTO searchDTO);
 
+    List<EmpDTO> getNoOffsetEmpList(SearchDTO searchDTO);
 }

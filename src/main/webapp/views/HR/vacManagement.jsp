@@ -215,10 +215,10 @@ th.sortable.desc::after {
 														placeholder="검색어를 입력해주세요.">
 												</div>
 												<div class="col-2">
-													<input type="button" class="btn btn-primary resetPosition"
-														onclick="" value="연차 지급">
+													<input type="button" class="btn btn-primary resetPosition"  id="add"
+														 value="연차 지급">
 														<input type="button" class="btn btn-secondary resetPosition"
-														onclick="" value="연차 수정"> 
+														id="edit" value="연차 수정"> 
 												</div>
 											</div>
 										</div>
@@ -280,6 +280,48 @@ th.sortable.desc::after {
 		<!-- Main container end -->
 
 	</div>
+	
+	
+	
+	
+	<!-- 연차 수정 모달 시작 -->
+	<div class="modal fade" id="vacEditModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title h4" id="exampleModalLgLabel">연차 수정</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <div class="input-group">
+                            <label class="input-group-text" for="detail-no">사번</label>
+                            <input type="text" class="form-control" id="empNo" value="" readonly>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="input-group">
+                            <label class="input-group-text" for="detail-name">이름</label>
+                            <input type="text" class="form-control" id="empName" value="" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <label class="input-group-text" for="detail-reason">연차 수정</label>
+                    <input type="text" class="form-control" id="vacLeft" value="" readonly>
+                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="edit-att-btn" onclick="vacEdit()">수정</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 연차 수정 모달 끝 -->
+	
+	
+	
+	
 
 </body>
 <!-- *************
@@ -405,15 +447,16 @@ th.sortable.desc::after {
         if (list.length > 0) {
             for (item of list) {
             	
-                console.log('근속년수?'+item.work_yaer);
                 content += '<tr class="emp-list-tbody-tr" id="' + item.emp_no + '">'
-               		+ '<td class="text-center">' + '<input class="form-check-input chk" type="checkbox"  id="check">' + '</td>'
-                	+ '<td class="text-center">' + item.emp_no + '</td>'
-                	+ '<td class="text-center">' + item.emp_name + '</td>'
-                    + '<td class="text-center">' + item.work_year + '</td>'
+               		+ '<td class="text-center">' + '<input class="form-check-input chk"  id="chk" type="checkbox" value="' + item.emp_no + '" >' + '</td>'
+                	+ '<td class="text-center" id="emp_no">' + item.emp_no + '</td>'
+                	+ '<td class="text-center" id="emp_name">' + item.emp_name + '</td>'
+                    + '<td class="text-center" id="year">' + item.work_year + '</td>'
                     + '<td class="text-center">' + item.vac_add + '</td>'
-                    + '<td class="text-center">' + item.vac_left + '</td>'
+                    + '<td class="text-center" id="left">' + item.vac_left + '</td>'
                     + '</tr>';
+                    
+                console.log(item.work_year);
             }
         } else {
             content = '<tr><td colspan="7" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
@@ -425,6 +468,8 @@ th.sortable.desc::after {
         
     });
     
+    
+    
     $('#allCheck').on('click', function(){
     	
     	if ($('#allCheck').prop("checked")) {
@@ -433,8 +478,99 @@ th.sortable.desc::after {
 			$('.chk').prop("checked", false);
 		}
     	
-    	
     });
+    
+    $('#add').on('click', function(){
+    	
+    	 if ($('#allCheck').prop("checked")) {
+    	        $('input[type=checkbox]:checked').each(function() {
+    	             if ($(this).attr('id') !== 'allCheck') {
+    	            	 console.log('여기1');
+    	        	console.log($(this).val());
+    	        	var emp_no = $(this).val();
+    	        	var work_year = $(this).parent().parent().find('#year').text();
+    	            console.log('근속년수? ' + work_year);
+    	            console.log('어딘데??1 ');
+    	            addVac(emp_no, work_year);
+    	        	
+           			 }
+    	        });
+    	 }else{
+    	     $('input[type=checkbox]:checked').each(function() {
+	        	console.log($(this).val());
+	        	var emp_no = $(this).val();
+	        	var work_year = $(this).parent().parent().find('#year').text();
+	        	console.log('근속년수? ' + work_year);
+	            console.log('어딘데??2 ');
+	            addVac(emp_no, work_year);
+	        });
+    		 
+    		 
+    	 }
+    	    
+    	    
+    	    
+    });
+    
+    
+    function addVac(emp_no, work_year) {
+	       
+        $.ajax({
+            url: '/addVac.ajax',
+            type: 'GET',
+            data: {
+                'emp_no' : emp_no,
+                'work_year': work_year
+            },
+            dataType: 'JSON',
+            success: function (data) {
+            	if (data.isSuccess) {
+                    showAlert('success', '연차 지급이 완료되었습니다.');
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1200);
+                } else {
+                    showAlert('danger', '연차 지급에 실패했습니다.');
+                }  
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    
+    
+    
+    $('#edit').on('click', function(){
+       
+        
+        if ($('#allCheck').prop("checked")) {
+            showAlert('danger','연차 수정은 1명씩만 가능합니다.');
+                }else {
+            $('input[type=checkbox]:checked').each(function() {
+                console.log($(this).val());
+                var emp_no = $(this).val();
+                var left = $(this).parent().parent().find('#left').text();
+                var emp_no = $(this).parent().parent().find('#emp_no').text();
+                var emp_name = $(this).parent().parent().find('#emp_name').text();
+                
+                console.log('잔여연차? ' + left);
+                console.log('어딘데??2 ');
+                
+                $('#vacEditModal').modal('show');
+                $('#vacLeft').val(left);
+                $('#empNo').val(emp_no);
+                $('#empName').val(emp_name);
+                
+                
+                
+            });
+        }
+    });
+   
+    
+   
     
 
     // 검색 값들 변수에 저장

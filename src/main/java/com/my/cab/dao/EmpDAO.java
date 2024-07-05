@@ -32,4 +32,8 @@ public interface EmpDAO {
 
 	int getVacTotal(SearchDTO searchDTO);
 
+	boolean addVac(EmpDTO empDTO);
+
+	void vacJoin(EmpDTO dto);
+
 }

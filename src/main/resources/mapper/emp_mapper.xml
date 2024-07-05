@@ -1,75 +1,79 @@
 <!-- <?xml version="1.0" encoding="UTF-8"?> -->
-<!DOCTYPE mapper PUBLIC	"-//mybatis.org//DTD Mapper 3.0//EN"
-	"http://mybatis.org/dtd/mybatis-3-mapper.dtd"
->
+<!DOCTYPE mapper PUBLIC    "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
+        >
 
 
 <!-- @Alias(value="emp") -->
 <mapper namespace="com.my.cab.dao.EmpDAO">
 
-	<insert id="empJoin" parameterType="emp">
-		INSERT INTO employee (
-        emp_no,
-        dept_no,
-        title_no,
-        emp_password,
-        emp_name,
-        emp_email,
-        emp_employment_status,
-        emp_add,
-        emp_extension_number,
-        emp_bday,
-        emp_level
-    ) VALUES (
-        #{emp_no},
-        #{dept_no},
-        #{title_no},
-        #{emp_password},
-        #{emp_name},
-        #{emp_email},
-        #{emp_employment_status},
-        #{emp_add},
-        #{emp_extension_number},
-        #{emp_bday},
-        #{emp_level}
-    )
-	</insert>
-	
-	<insert id="accJoin" parameterType="emp">
-		INSERT INTO account(acc_no,emp_no,bank_name,acc_name) 
-		VALUES (#{acc_no},#{emp_no},#{bank_name},#{acc_name})
-	</insert>
-	
-	<select id="overlay" resultType="int">
-		select count(emp_email) from employee where emp_email = #{param1}
-   </select>
-   
+    <insert id="empJoin" parameterType="emp">
+        INSERT INTO employee (emp_no,
+                              dept_no,
+                              title_no,
+                              emp_password,
+                              emp_name,
+                              emp_email,
+                              emp_employment_status,
+                              emp_add,
+                              emp_extension_number,
+                              emp_bday,
+                              emp_level)
+        VALUES (#{emp_no},
+                #{dept_no},
+                #{title_no},
+                #{emp_password},
+                #{emp_name},
+                #{emp_email},
+                #{emp_employment_status},
+                #{emp_add},
+                #{emp_extension_number},
+                #{emp_bday},
+                #{emp_level})
+    </insert>
+
+    <insert id="accJoin" parameterType="emp">
+        INSERT INTO account(acc_no, emp_no, bank_name, acc_name)
+        VALUES (#{acc_no}, #{emp_no}, #{bank_name}, #{acc_name})
+    </insert>
+
+    <insert id="vacJojn" parameterType="emp">
+        INSERT INTO vacation(emp_no, vac_left, vac_add)
+        VALUES (#{emp_no}, 0, 0)
+    </insert>
+
+    <select id="overlay" resultType="int">
+        select count(emp_email)
+        from employee
+        where emp_email = #{param1}
+    </select>
+
     <select id="getLastEmpNo" resultType="int" parameterType="int">
         SELECT COALESCE(MAX(SUBSTRING(emp_no, 2)), 0) AS latestEmpNo
         FROM employee
         WHERE SUBSTRING(emp_no, 1, 1) = #{deptNo}
     </select>
-    
+
     <select id="getEmpList" resultType="emp" parameterType="search">
-    SELECT e.emp_no, e.emp_name, t.title_name, d.dept_name, e.emp_employment_status
-	FROM employee e 
-	JOIN department d ON e.dept_no = d.dept_no 
-	JOIN title t ON e.title_no = t.title_no
-    <where>
-    		<if test="filterForSearch != null and filterForSearch != ''">
+        SELECT e.emp_no, e.emp_name, t.title_name, d.dept_name, e.emp_employment_status
+        FROM employee e
+        JOIN department d ON e.dept_no = d.dept_no
+        JOIN title t ON e.title_no = t.title_no
+        <where>
+            <if test="filterForSearch != null and filterForSearch != ''">
                 <choose>
-                	<when test="filterForSearch == 'emp_no'">
-                		e.emp_no LIKE CONCAT('%', #{searchText}, '%')
-                	</when>
-                	<when test="filterForSearch == 'emp_name'">
-                		e.emp_name LIKE CONCAT('%', #{searchText}, '%')
-                	</when>
-                	<when test="filterForSearch == 'title_name'">
-                		t.title_name LIKE CONCAT('%', #{searchText}, '%')
-                	</when>
-                	<when test="filterForSearch == 'dept_name'">
-                		d.dept_name LIKE CONCAT('%', #{searchText}, '%')
-                	</when>
+                    <when test="filterForSearch == 'emp_no'">
+                        e.emp_no LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterForSearch == 'emp_name'">
+                        e.emp_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterForSearch == 'title_name'">
+                        t.title_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterForSearch == 'dept_name'">
+                        d.dept_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
                 </choose>
             </if>
             <if test="filterIsRetired != null and filterIsRetired !=  ''">
@@ -106,27 +110,27 @@
         </choose>
         LIMIT #{pageSize} OFFSET #{page}
     </select>
-    
-     <select id="getEmpTotal" resultType="int" parameterType="search">
-    SELECT COUNT(e.emp_no)
-	FROM employee e 
-	JOIN department d ON e.dept_no = d.dept_no 
-	JOIN title t ON e.title_no = t.title_no
-    <where>
-    		<if test="filterForSearch != null and filterForSearch != ''">
+
+    <select id="getEmpTotal" resultType="int" parameterType="search">
+        SELECT COUNT(e.emp_no)
+        FROM employee e
+        JOIN department d ON e.dept_no = d.dept_no
+        JOIN title t ON e.title_no = t.title_no
+        <where>
+            <if test="filterForSearch != null and filterForSearch != ''">
                 <choose>
-                	<when test="filterForSearch == 'emp_no'">
-                		e.emp_no LIKE CONCAT('%', #{searchText}, '%')
-                	</when>
-                	<when test="filterForSearch == 'emp_name'">
-                		e.emp_name LIKE CONCAT('%', #{searchText}, '%')
-                	</when>
-                	<when test="filterForSearch == 'title_name'">
-                		t.title_name LIKE CONCAT('%', #{searchText}, '%')
-                	</when>
-                	<when test="filterForSearch == 'dept_name'">
-                		d.dept_name LIKE CONCAT('%', #{searchText}, '%')
-                	</when>
+                    <when test="filterForSearch == 'emp_no'">
+                        e.emp_no LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterForSearch == 'emp_name'">
+                        e.emp_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterForSearch == 'title_name'">
+                        t.title_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterForSearch == 'dept_name'">
+                        d.dept_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
                 </choose>
             </if>
             <if test="filterIsRetired != null and filterIsRetired !=  ''">
@@ -134,110 +138,111 @@
             </if>
         </where>
     </select>
-    
+
     <select id="getEmpDetail" resultType="emp">
-	SELECT
-	e.emp_no,
-	e.emp_name,
-	e.dept_no,
-	e.title_no,
-	e.emp_email,
-	e.emp_hired_date,
-	e.emp_retired_date,
-	e.emp_add,
-	e.emp_extension_number,
-	e.emp_level,
-	e.emp_employment_status,
-	t.title_name,
-	d.dept_name,
-	v.vac_left,
-	pp.profile_new
-	FROM
-	employee e
-	JOIN
-	department d ON e.dept_no = d.dept_no
-	JOIN
-	title t ON e.title_no = t.title_no
-	JOIN
-	vacation v ON e.emp_no = v.emp_no
-	LEFT JOIN
-	profile_photo pp ON e.emp_no = pp.emp_no
-	WHERE
-	e.emp_no = #{param1}
+        SELECT e.emp_no,
+               e.emp_name,
+               e.dept_no,
+               e.title_no,
+               e.emp_email,
+               e.emp_hired_date,
+               e.emp_retired_date,
+               e.emp_add,
+               e.emp_extension_number,
+               e.emp_level,
+               e.emp_employment_status,
+               t.title_name,
+               d.dept_name,
+               v.vac_left,
+               pp.profile_new
+        FROM employee e
+                 JOIN
+             department d ON e.dept_no = d.dept_no
+                 JOIN
+             title t ON e.title_no = t.title_no
+                 JOIN
+             vacation v ON e.emp_no = v.emp_no
+                 LEFT JOIN
+             profile_photo pp ON e.emp_no = pp.emp_no
+        WHERE e.emp_no = #{param1}
     </select>
-    
+
     <update id="updateEmp" parameterType="emp">
-    UPDATE employee
-	SET
-    dept_no = #{dept_no},
-    title_no = #{title_no},
-    emp_level = #{emp_level}
-	WHERE emp_no = #{emp_no};
+        UPDATE employee
+        SET dept_no   = #{dept_no},
+            title_no  = #{title_no},
+            emp_level = #{emp_level}
+        WHERE emp_no = #{emp_no};
     </update>
-    
-    
-    
+
+
     <update id="updateEmpRetried" parameterType="emp">
-    UPDATE employee
-	SET
-    dept_no = #{dept_no},
-    title_no = #{title_no},
-    emp_level = #{emp_level},
-    emp_employment_status = 0,
-    emp_retired_date = CURDATE()
-	WHERE emp_no = #{emp_no};
+        UPDATE employee
+        SET dept_no               = #{dept_no},
+            title_no              = #{title_no},
+            emp_level             = #{emp_level},
+            emp_employment_status = 0,
+            emp_retired_date      = CURDATE()
+        WHERE emp_no = #{emp_no};
     </update>
-    
+
     <select id="getVacList" resultType="emp" parameterType="search">
-    SELECT e.emp_no, 
-    e.emp_name, 
-    TRUNCATE((DATEDIFF(CURDATE(), e.emp_hired_date) + 1) / 365, 0) AS work_year,  
-    v.vac_left, 
-    v.vac_add
-	FROM employee e 
-	JOIN vacation v ON v.emp_no = e.emp_no 
-    <where>
-     	e.emp_employment_status = true
-    		<if test="filterForSearch != null and filterForSearch != ''">
+        SELECT e.emp_no,
+        e.emp_name,
+        TRUNCATE((DATEDIFF(CURDATE(), e.emp_hired_date) + 1) / 365, 0) AS work_year,
+        v.vac_left,
+        v.vac_add
+        FROM employee e
+        JOIN vacation v ON v.emp_no = e.emp_no
+        <where>
+            e.emp_employment_status = true
+            <if test="filterForSearch != null and filterForSearch != ''">
                 <choose>
-                	<when test="filterForSearch == 'emp_no'">
-                		AND e.emp_no LIKE CONCAT('%', #{searchText}, '%')
-                	</when>
-                	<when test="filterForSearch == 'emp_name'">
-                		AND e.emp_name LIKE CONCAT('%', #{searchText}, '%')
-                	</when>
+                    <when test="filterForSearch == 'emp_no'">
+                        AND e.emp_no LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterForSearch == 'emp_name'">
+                        AND e.emp_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
                 </choose>
             </if>
         </where>
         ORDER BY e.emp_no
         LIMIT #{pageSize} OFFSET #{page}
     </select>
-    
-    
+
+
     <select id="getVacTotal" resultType="int" parameterType="search">
-    SELECT COUNT(e.emp_no)
-	FROM employee e
-    <where>
-    e.emp_employment_status = true
-    		<if test="filterForSearch != null and filterForSearch != ''">
+        SELECT COUNT(e.emp_no)
+        FROM employee e
+        <where>
+            e.emp_employment_status = true
+            <if test="filterForSearch != null and filterForSearch != ''">
                 <choose>
-                	<when test="filterForSearch == 'emp_no'">
-                		AND e.emp_no LIKE CONCAT('%', #{searchText}, '%')
-                	</when>
-                	<when test="filterForSearch == 'emp_name'">
-                		AND e.emp_name LIKE CONCAT('%', #{searchText}, '%')
-                	</when>
+                    <when test="filterForSearch == 'emp_no'">
+                        AND e.emp_no LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterForSearch == 'emp_name'">
+                        AND e.emp_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
                 </choose>
             </if>
         </where>
     </select>
-    
+
     <select id="getNoOffsetEmpList" resultType="emp" parameterType="search">
         SELECT e.emp_no, e.emp_name, d.dept_name, d.dept_no
         FROM employee e
                  JOIN department d ON d.dept_no = e.dept_no
-        WHERE e.emp_employment_status = 1 AND e.dept_no = #{dept_no}
+        WHERE e.emp_employment_status = 1
+          AND e.dept_no = #{dept_no}
     </select>
+    <update id="addVac" parameterType="emp">
+        UPDATE vacation
+        SET vac_left = #{work_year} + 15,
+            vac_add  = #{work_year} + 15
+        WHERE emp_no = #{emp_no};
+    </update>
 
 
 </mapper>

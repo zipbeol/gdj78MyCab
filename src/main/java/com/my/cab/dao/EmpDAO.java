@@ -10,27 +10,32 @@ import com.my.cab.dto.SearchDTO;
 @Mapper
 public interface EmpDAO {
 
-	int empJoin(EmpDTO dto);
+    int empJoin(EmpDTO dto);
 
-	int accJoin(EmpDTO dto);
+    int accJoin(EmpDTO dto);
 
-	int overlay(String email);
+    int overlay(String email);
 
-	int getLastEmpNo(int deptNo);
+    int getLastEmpNo(int deptNo);
 
-	List<EmpDTO> getEmpList(SearchDTO searchDTO);
+    List<EmpDTO> getEmpList(SearchDTO searchDTO);
 
-	int getEmpTotal(SearchDTO searchDTO);
+    int getEmpTotal(SearchDTO searchDTO);
 
-	boolean updateEmp(EmpDTO empDTO);
+    boolean updateEmp(EmpDTO empDTO);
 
-	boolean updateEmpRetried(EmpDTO empDTO);
+    boolean updateEmpRetried(EmpDTO empDTO);
 
-	EmpDTO getEmpDetail(String emp_no);
+    EmpDTO getEmpDetail(String emp_no);
 
-	List<EmpDTO> getVacList(SearchDTO searchDTO);
+    List<EmpDTO> getVacList(SearchDTO searchDTO);
 
-	int getVacTotal(SearchDTO searchDTO);
+    int getVacTotal(SearchDTO searchDTO);
 
     List<EmpDTO> getNoOffsetEmpList(SearchDTO searchDTO);
+
+    boolean addVac(EmpDTO empDTO);
+
+    void vacJoin(EmpDTO dto);
+
 }

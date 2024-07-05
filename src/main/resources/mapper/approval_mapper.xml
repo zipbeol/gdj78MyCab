@@ -60,6 +60,7 @@
 	    WHERE appr_line_bkmk_idx = #{lineId}
 	</select>
 	
+	<!-- 결재자들 데이터 불러오기 -->
 	    <select id="getApprovalData" resultType="com.my.cab.dto.ApprovalDocDTO">
         SELECT 
             d.approval_doc_idx,
@@ -75,6 +76,54 @@
             tb_approval a
         JOIN 
             tb_approval_doc d ON a.approval_doc_idx = d.approval_doc_idx;
+    </select>
+    
+    <!-- 서명 이미지 경로 저장 -->
+    <insert id="saveSignature" parameterType="com.my.cab.dto.DocumentDTO">
+        INSERT INTO tb_doc_item_file (appr_file_name, appr_file_path, appr_file_type)
+        VALUES (#{appr_file_name}, #{appr_file_path}, #{appr_file_type})
+    </insert>
+
+    <!-- 서명 이미지 경로 업데이트 -->
+    <update id="updateSignature" parameterType="com.my.cab.dto.DocumentDTO">
+        UPDATE tb_doc_item_file 
+        SET appr_file_path = #{appr_file_path}, appr_file_dt = CURRENT_TIMESTAMP 
+        WHERE appr_file_name = #{appr_file_name}
+    </update>
+    
+    <!-- 서명 이미지 존재 여부 확인 -->
+    <select id="isSignatureExist" parameterType="string" resultType="int">
+        SELECT COUNT(*) 
+        FROM tb_doc_item_file 
+        WHERE appr_file_name = #{fileName}
+    </select>
+    
+    <!-- 서명 이미지 경로 조회 -->
+    <select id="getSignaturePath" parameterType="string" resultType="string">
+        SELECT appr_file_path 
+        FROM tb_doc_item_file 
+        WHERE appr_file_name = #{fileName}
+    </select>
+    <!-- 결재 리스트 필터링 값 불러오기( 나랑 연관된 문서들만 ) -->
+    <select id="getFilteredApprovalData" parameterType="string" resultType="com.my.cab.dto.ApprovalDocDTO">
+        SELECT ad.*, 
+               a.appr_midapprover,
+               a.appr_finalapprover
+        FROM tb_approval_doc ad
+        JOIN tb_approval a ON ad.approval_doc_idx = a.approval_doc_idx
+        WHERE ad.approval_doc_id = #{loginId} 
+        OR a.appr_midapprover = (
+            SELECT CONCAT(e.emp_name, ' ', t.title_name)
+            FROM employee e
+            JOIN title t ON e.title_no = t.title_no
+            WHERE e.emp_no = #{loginId}
+        ) 
+        OR a.appr_finalapprover = (
+            SELECT CONCAT(e.emp_name, ' ', t.title_name)
+            FROM employee e
+            JOIN title t ON e.title_no = t.title_no
+            WHERE e.emp_no = #{loginId}
+        )
     </select>
 
 </mapper>

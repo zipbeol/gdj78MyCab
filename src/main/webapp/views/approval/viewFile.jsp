@@ -51,6 +51,39 @@
             background-color: #f8f9fa;
             font-weight: bold;
         }
+        .button-container {
+            display: flex;
+            justify-content: flex-end;
+            padding: 10px;
+            border-top: 1px solid #dee2e6;
+            background-color: #f8f9fa;
+            margin-top: 20px;
+        }
+        .button-container .btn {
+            margin-left: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+        .button-container .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: white;
+        }
+        .button-container .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+        .button-container .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            color: white;
+        }
+        .button-container .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #4e555b;
+        }
     </style>
 </head>
 
@@ -149,6 +182,10 @@
                                         <p style="color: red;">${errorMessage}</p>
                                     </c:if>
                                 </div>
+                    <div class="card-footer d-flex justify-content-end">
+                        <button class="btn btn-primary me-2" id="approve-button">결재</button>
+                        <button class="btn btn-secondary" id="close-button">닫기</button>
+                    </div>
                        
 
                             </div>
@@ -203,5 +240,38 @@
 </body>
 
 <script>
+$(document).ready(function() {
+    $('#approve-button').on('click', function() {
+        // 서버에서 서명 이미지를 불러와 결재라인에 표시
+        $.ajax({
+            url: '/getSignature',
+            type: 'GET',
+            success: function(response) {
+                if (response) {
+                    // 서명 이미지를 표시할 <img> 태그를 생성하고 결재라인에 추가
+                    const signatureImage = $('<img>', {
+                        src: 'data:image/png;base64,' + response,
+                        alt: 'Signature',
+                        style: 'width: 100px; height: auto;'
+                    });
+
+                    // 결재라인 테이블에 서명 이미지 추가
+                    $('.approval-line-table tr:nth-child(2) td:nth-child(2)').html(signatureImage);
+                    alert('결재가 완료되었습니다.');
+                } else {
+                    alert('서명 이미지를 불러오는 중 오류가 발생했습니다.');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('서명 이미지를 불러오는 중 오류 발생:', error);
+                alert('서명 이미지를 불러오는 중 오류가 발생했습니다.');
+            }
+        });
+    });
+
+    $('#close-button').on('click', function() {
+        window.close(); // 창 닫기
+    });
+});
 </script>
 </html>

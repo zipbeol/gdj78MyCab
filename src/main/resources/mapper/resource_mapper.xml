@@ -10,12 +10,12 @@
 		keyProperty="resource_idx"
 	>
 		INSERT INTO resource_management (resource_name,resource_category,resource_management_emp_no,resource_state,resource_content,resource_Location)
-		VALUES (#{resourceName},#{resourceType},#{id},#{status},#{content},#{resourceLocation})
+		VALUES (#{resource_name},#{resource_category},#{id},#{resource_state},#{resource_content},#{resource_location})
 	</insert>
 	
 	<insert id="resourceWriteMeetRomm" parameterType="map">
 		INSERT INTO resource_meeting_room (meeting_room_resource_idx,meeting_room_capacity)
-		VALUES (#{idx},#{meetRoomCapacity})
+		VALUES (#{idx},#{meeting_room_capacity})
 	</insert>
 	
 	<insert id="resourceWriteCar" parameterType="map">
@@ -25,12 +25,12 @@
 			company_car_license_plate,
 			company_car_capacity
 			)
-		VALUES (#{idx},#{carType},#{carLicencePlate},#{seatCount})
+		VALUES (#{idx},#{company_car_category},#{company_car_license_plate},#{company_car_capacity})
 	</insert>
 	
 	<insert id="resourceWriteEquip" parameterType="map">
 		INSERT INTO equipment (resource_equipment_idx,resource_equipment_category)
-		VALUES (#{idx},#{equipmentCategory})
+		VALUES (#{idx},#{company_car_capacity})
 	</insert>
 	
 	<insert id="saveResPhoto">

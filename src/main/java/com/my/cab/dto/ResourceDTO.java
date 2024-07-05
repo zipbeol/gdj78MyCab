@@ -50,6 +50,8 @@ public class ResourceDTO {
 	private int resource_reserve_editor;	
 	private boolean resource_reserve_del;
 	
+	private int id ;
+	
 	
 	public int getResource_idx() {
 		return resource_idx;
@@ -254,6 +256,12 @@ public class ResourceDTO {
 	}
 	public void setResource_reserve_del(boolean resource_reserve_del) {
 		this.resource_reserve_del = resource_reserve_del;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 

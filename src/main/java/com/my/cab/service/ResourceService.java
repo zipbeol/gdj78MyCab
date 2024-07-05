@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,6 +21,7 @@ import com.my.cab.dto.ResourceDTO;
 public class ResourceService {
 	
 	private final ResourceDAO resourceDao;
+	@Value("${spring.servlet.multipart.location}")
     private String upload;
 	
 	public ResourceService (ResourceDAO resourceDao) {
@@ -28,33 +30,38 @@ public class ResourceService {
 	
 	Logger logger = LoggerFactory.getLogger(getClass());
 
-	public int resourceWrite(Map<String, Object> param , MultipartFile file) {
+	public int resourceWrite(Map<String, Object> param , MultipartFile file, ResourceDTO dto) {
 		int row = 0;
-		if(param.get("resourceType").equals("차량")) {
-			resourceDao.resourceWrite(param);
-			int idx = new ResourceDTO().getResource_idx();
+		int idx = 0;
+		if(param.get("resource_category").equals("차량")) {			
+			 idx = resourceDao.resourceWrite(dto);
+			 logger.info("pp : " + idx);
+			 
+			 logger.info("dto idx get : "+ dto.getResource_idx());
 			logger.info("idx 가져온 값:: "+idx);
 			if(idx >0) {
 				param.put("idx", idx);
 				row = resourceDao.resourceWriteCar(param);
 				logger.info("자동차 작성 :"+row);
+				 logger.info("dto idx get : "+ dto.getResource_idx());
 			}
-		}else if(param.get("resourceType").equals("회의실")){
-			resourceDao.resourceWrite(param);
-			int idx = new ResourceDTO().getResource_idx();
+		}else if(param.get("resource_category").equals("회의실")){
+			 idx = resourceDao.resourceWrite(dto);
+
 			if(idx >0) {
 				param.put("idx", idx);
 				row = resourceDao.resourceWriteMeetRomm(param);		
 				logger.info("회의실 작성 :"+row);
+				 logger.info("dto idx get : "+ dto.getResource_idx());
 			}
 			
-		}else if(param.get("resourceType").equals("비품")){
-			resourceDao.resourceWrite(param);
-			int idx = new ResourceDTO().getResource_idx();
+		}else if(param.get("resource_category").equals("비품")){
+			 idx = resourceDao.resourceWrite(dto);
 			if(idx >0) {
 				param.put("idx", idx);
 				row = resourceDao.resourceWriteEquip(param);	
 				logger.info("비품 작성 :"+row);
+				 logger.info("dto idx get : "+ dto.getResource_idx());
 			}			
 		}else {
 			logger.info("자원 등록 이상함");

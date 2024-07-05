@@ -170,8 +170,15 @@ public class EmpController {
 	}
 	
 	
-	
-	
-	
+	@GetMapping("/addVac.ajax")
+	@ResponseBody
+	public Map<String, Object> addVac(EmpDTO empDTO){
+		logger.info("사원 연차 지급");
+		logger.info("연차 지급할 사번 : "+empDTO.getEmp_no());
+		
+		boolean isSuccess = service.addVac(empDTO);
+		
+		return Map.of("isSuccess", isSuccess);
+	}
 
 }

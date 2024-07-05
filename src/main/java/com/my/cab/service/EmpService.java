@@ -76,6 +76,7 @@ public class EmpService {
 		
 		int row1 = dao.empJoin(dto);
 		int row2 = dao.accJoin(dto);
+		dao.vacJoin(dto);
 		
 		int totalRow = row1 + row2;
 		
@@ -176,6 +177,21 @@ public class EmpService {
 		totalPages = totalPages > 0? totalPages : 1;
 		
 		return Map.of("totalPages", totalPages);
+	}
+
+
+	public boolean addVac(EmpDTO empDTO) {
+		
+		boolean result = false;
+		
+		
+		
+		result = dao.addVac(empDTO);
+			
+		
+		
+		
+		return result;
 	}
 
 }

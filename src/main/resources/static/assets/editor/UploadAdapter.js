@@ -13,7 +13,7 @@ export default class UploadAdapter {
 
     _initRequest() {
         const xhr = this.xhr = new XMLHttpRequest();
-        xhr.open('POST', 'http://localhost:8000/api/image/upload', true);
+        xhr.open('POST', '/resource/resourcePhoto', true);
         xhr.responseType = 'json';
     }
 

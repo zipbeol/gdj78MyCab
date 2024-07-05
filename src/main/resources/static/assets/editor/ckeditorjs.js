@@ -1,19 +1,14 @@
 import {
 	ClassicEditor,
 	AccessibilityHelp,
-	Alignment,
 	Autoformat,
 	AutoImage,
-	AutoLink,
 	Autosave,
-	BlockQuote,
+	Base64UploadAdapter,
 	Bold,
-	CodeBlock,
 	Essentials,
 	FindAndReplace,
 	GeneralHtmlSupport,
-	Heading,
-	HorizontalLine,
 	ImageBlock,
 	ImageCaption,
 	ImageInline,
@@ -24,17 +19,17 @@ import {
 	ImageTextAlternative,
 	ImageToolbar,
 	ImageUpload,
-	Indent,
-	IndentBlock,
 	Italic,
 	Link,
 	LinkImage,
 	List,
-	Mention,
+	ListProperties,
+	Markdown,
+	MediaEmbed,
 	Paragraph,
+	PasteFromMarkdownExperimental,
+	PasteFromOffice,
 	SelectAll,
-	SimpleUploadAdapter,
-	Style,
 	Table,
 	TableCaption,
 	TableCellProperties,
@@ -42,6 +37,7 @@ import {
 	TableProperties,
 	TableToolbar,
 	TextTransformation,
+	TodoList,
 	Undo
 } from 'ckeditor5';
 
@@ -56,25 +52,17 @@ const editorConfig = {
 			'findAndReplace',
 			'selectAll',
 			'|',
-			'heading',
-			'style',
-			'|',
 			'bold',
 			'italic',
 			'|',
-			'horizontalLine',
 			'link',
 			'insertImage',
+			'mediaEmbed',
 			'insertTable',
-			'blockQuote',
-			'codeBlock',
-			'|',
-			'alignment',
 			'|',
 			'bulletedList',
 			'numberedList',
-			'indent',
-			'outdent',
+			'todoList',
 			'|',
 			'accessibilityHelp'
 		],
@@ -82,19 +70,14 @@ const editorConfig = {
 	},
 	plugins: [
 		AccessibilityHelp,
-		Alignment,
 		Autoformat,
 		AutoImage,
-		AutoLink,
 		Autosave,
-		BlockQuote,
+		Base64UploadAdapter,
 		Bold,
-		CodeBlock,
 		Essentials,
 		FindAndReplace,
 		GeneralHtmlSupport,
-		Heading,
-		HorizontalLine,
 		ImageBlock,
 		ImageCaption,
 		ImageInline,
@@ -105,17 +88,17 @@ const editorConfig = {
 		ImageTextAlternative,
 		ImageToolbar,
 		ImageUpload,
-		Indent,
-		IndentBlock,
 		Italic,
 		Link,
 		LinkImage,
 		List,
-		Mention,
+		ListProperties,
+		Markdown,
+		MediaEmbed,
 		Paragraph,
+		PasteFromMarkdownExperimental,
+		PasteFromOffice,
 		SelectAll,
-		SimpleUploadAdapter,
-		Style,
 		Table,
 		TableCaption,
 		TableCellProperties,
@@ -123,53 +106,9 @@ const editorConfig = {
 		TableProperties,
 		TableToolbar,
 		TextTransformation,
+		TodoList,
 		Undo
 	],
-	heading: {
-		options: [
-			{
-				model: 'paragraph',
-				title: 'Paragraph',
-				class: 'ck-heading_paragraph'
-			},
-			{
-				model: 'heading1',
-				view: 'h1',
-				title: 'Heading 1',
-				class: 'ck-heading_heading1'
-			},
-			{
-				model: 'heading2',
-				view: 'h2',
-				title: 'Heading 2',
-				class: 'ck-heading_heading2'
-			},
-			{
-				model: 'heading3',
-				view: 'h3',
-				title: 'Heading 3',
-				class: 'ck-heading_heading3'
-			},
-			{
-				model: 'heading4',
-				view: 'h4',
-				title: 'Heading 4',
-				class: 'ck-heading_heading4'
-			},
-			{
-				model: 'heading5',
-				view: 'h5',
-				title: 'Heading 5',
-				class: 'ck-heading_heading5'
-			},
-			{
-				model: 'heading6',
-				view: 'h6',
-				title: 'Heading 6',
-				class: 'ck-heading_heading6'
-			}
-		]
-	},
 	htmlSupport: {
 		allow: [
 			{
@@ -208,120 +147,27 @@ const editorConfig = {
 			}
 		}
 	},
-	mention: {
-		feeds: [
-			{
-				marker: '@',
-				feed: [
-					/* See: https://ckeditor.com/docs/ckeditor5/latest/features/mentions.html */
-				]
-			}
-		]
+	list: {
+		properties: {
+			styles: true,
+			startIndex: true,
+			reversed: true
+		}
 	},
 	placeholder: 'Type or paste your content here!',
-	style: {
-		definitions: [
-			{
-				name: 'Article category',
-				element: 'h3',
-				classes: ['category']
-			},
-			{
-				name: 'Title',
-				element: 'h2',
-				classes: ['document-title']
-			},
-			{
-				name: 'Subtitle',
-				element: 'h3',
-				classes: ['document-subtitle']
-			},
-			{
-				name: 'Info box',
-				element: 'p',
-				classes: ['info-box']
-			},
-			{
-				name: 'Side quote',
-				element: 'blockquote',
-				classes: ['side-quote']
-			},
-			{
-				name: 'Marker',
-				element: 'span',
-				classes: ['marker']
-			},
-			{
-				name: 'Spoiler',
-				element: 'span',
-				classes: ['spoiler']
-			},
-			{
-				name: 'Code (dark)',
-				element: 'pre',
-				classes: ['fancy-code', 'fancy-code-dark']
-			},
-			{
-				name: 'Code (bright)',
-				element: 'pre',
-				classes: ['fancy-code', 'fancy-code-bright']
-			}
-		]
-	},
 	table: {
 		contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties']
 	},
-	ckfinder : {
-		uploadUrl : "/photo/upload"
-	},
 	translations: [translations]
-	
 };
 
-export default class UploadAdapter {
-    constructor(loader) {
-        this.loader = loader;
-    }
 
-    upload() {
-        return this.loader.file.then( file => new Promise(((resolve, reject) => {
-            this._initRequest();
-            this._initListeners( resolve, reject, file );
-            this._sendRequest( file );
-        })))
-    }
-
-    _initRequest() {
-        const xhr = this.xhr = new XMLHttpRequest();
-        xhr.open('POST', 'http://localhost:8000/api/image/upload', true);
-        xhr.responseType = 'json';
-    }
-
-    _initListeners(resolve, reject, file) {
-        const xhr = this.xhr;
-        const loader = this.loader;
-        const genericErrorText = '파일을 업로드 할 수 없습니다.'
-
-        xhr.addEventListener('error', () => {reject(genericErrorText)})
-        xhr.addEventListener('abort', () => reject())
-        xhr.addEventListener('load', () => {
-            const response = xhr.response
-            if(!response || response.error) {
-                return reject( response && response.error ? response.error.message : genericErrorText );
-            }
-
-            resolve({
-                default: response.url //업로드된 파일 주소
-            })
-        })
-    }
-
-    _sendRequest(file) {
-        const data = new FormData()
-        data.append('upload',file)
-        this.xhr.send(data)
-    }
-}
-
-ClassicEditor.create(document.querySelector('#editor'), editorConfig);
-
+ClassicEditor
+    .create(document.querySelector('#editor'), editorConfig)
+    .then(createdEditor => {
+        console.log('에디터가 성공적으로 생성되었습니다:', createdEditor);
+        window.editor = createdEditor; // 전역 변수에 에디터 객체 할당
+    })
+    .catch(error => {
+        console.error('에디터를 생성하는 중 오류가 발생했습니다:', error);
+    });

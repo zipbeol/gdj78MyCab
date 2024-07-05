@@ -140,21 +140,21 @@
 														<div class="col-md-6 form-group">
 															<label for="resourceName">자원명</label> <input type="text"
 																class="form-control" id="resourceName"
-																name="resourceName" required>
+																name="resource_name" required>
 															<!-- 추가 옵션들 -->
 															</select>
 														</div>
 														<div class="col-md-6 form-group">
 															<label for="location">위치</label> <input type="text"
 																class="form-control" id="resourceLocation"
-																name="resourceLocation" required>
+																name="resource_location" required>
 														</div>
 													</div>
 													<div class="row">
 														<div class="col-md-6 form-group">
 															<label for="resourceType">타입</label> <select
 																class="form-control" id="resourceType"
-																name="resourceType" required>
+																name="resource_category" required>
 																<option value="">선택</option>
 																<option value="차량">차량</option>
 																<option value="회의실">회의실</option>
@@ -166,12 +166,12 @@
 															<div>
 																<div class="form-check form-check-inline">
 																	<input class="form-check-input" type="radio"
-																		name="status" id="statusUse" value="use" checked>
+																		name="resource_state" id="statusUse" value="use" checked>
 																	<label class="form-check-label" for="statusUse">사용가능</label>
 																</div>
 																<div class="form-check form-check-inline">
 																	<input class="form-check-input" type="radio"
-																		name="status" id="statusNotUse" value="not_use">
+																		name="resource_state" id="statusNotUse" value="not_use">
 																	<label class="form-check-label" for="statusNotUse">사용불가</label>
 																</div>
 															</div>
@@ -199,6 +199,7 @@
 																		<div id="editor"></div>
 																	</div>
 																</div>
+																<input type="hidden" name="resource_content" id="content">
 															</div>
 														</div>
 													</div>
@@ -214,7 +215,7 @@
 													<br>
 													<div class="d-flex justify-content-end mb-5">
 														<button type="button" class="btn btn-secondary mr-2">취소</button>
-														<button type="submit" class="btn btn-primary">저장</button>
+														<button type="button" class="btn btn-primary" onclick="submitClk()" id="submitBtn">저장</button>
 													</div>
 												</form>
 											</div>
@@ -279,7 +280,8 @@
     
     <!-- Custom JS files -->
     <script src="/assets/js/custom.js"></script>
-    <script type="importmap">
+
+ <script type="importmap">
     {
         "imports": {
             "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/42.0.0/ckeditor5.js",
@@ -287,14 +289,24 @@
         }
     }	
 	</script>
-	<script type="module" src="/assets/editor/ckeditorjs.js"></script>
-	<script src="/assets/editor/imageEditor.js" type="module"></script>
+	 <script type="module" src="/assets/editor/ckeditorjs.js"></script>
+	<!--  
+<script type="module" >
+	import { makeEditor } from '/assets/editor/ckeditorjs.js'
 
+	 makeEditor('#editor').catch(error => {
+		    console.error('There was a problem initializing the editor:', error);
+		});	
 
+</script>
+-->
     
   <script>
-  
+
   $(document).ready(function() {
+	  
+
+	  
 	    $('#resourceType').change(function() {
 	        var type = $(this).val();
 	        var dynamicFields = $('#dynamic-fields');
@@ -305,20 +317,20 @@
 	                <div class="row">
 	                    <div class="col-md-2 form-group">
 	                        <label for="carLicencePlate">차량 번호</label>
-	                        <input type="text" class="form-control" id="carLicencePlate" name="carLicencePlate" required>
+	                        <input type="text" class="form-control" id="carLicencePlate" name="company_car_license_plate" required>
 	                    </div>
 	                    <div class="col-md-2 form-group">
 	                        <label for="CarType">차종</label>
-	                        <input type="text" class="form-control" id="carType" name="carType" required>
+	                        <input type="text" class="form-control" id="carType" name="company_car_category" required>
 	                    </div>
 	                    <div class="col-md-2 form-group">
 	                        <label for="seatCount">좌석 수</label>
-	                        <input type="number" class="form-control" id="seatCount" name="seatCount" required>
+	                        <input type="number" class="form-control" id="seatCount" name="company_car_capacity" required>
 	                    </div>
 	                   
 	                    <div class="col-md-5 form-group">
 	                        <label for="carPhoto">차량 사진</label>
-	                        <input type="file" class="form-control" id="carPhoto" name="carPhoto" multiple="multiple" required>
+	                        <input type="file" class="form-control" id="carPhoto" name="carPhoto" multiple="multiple">
               			</div>             			
 	                </div>
 
@@ -336,7 +348,7 @@
 	                    </div>
 	                    <div class="col-md-3 form-group">
 	                        <label for="capacity">수용 인원</label>
-	                        <input type="number" class="form-control" id="meetRoomCapacity" name="meetRoomCapacity" required>
+	                        <input type="number" class="form-control" id="meetRoomCapacity" name="meeting_room_capacity" required>
 	                    </div>
 	                </div>	                
 	            `);
@@ -345,7 +357,7 @@
 	                <div class="row">
 	                    <div class="col-md-3 form-group">
 	                        <label for="equipmentType">비품 종류</label>
-	                        <input type="text" class="form-control" id="equipmentCategory" name="equipmentCategory" required>
+	                        <input type="text" class="form-control" id="equipmentCategory" name="resource_equipment_category" required>
 	                    </div>
 	                    <div class="col-md-3 form-group">
 	                        <label for="quantity">수량</label>
@@ -357,8 +369,17 @@
 	    });
 	});
   
+  function submitClk(){
+	  console.log("에디터 작성된거", editor.getData());
+	  var btn = document.getElementById("submitBtn")
+	  document.getElementById("content").value = editor.getData();
+	  btn.setAttribute("type","submit");
+	  btn.click;
+  }
 	
   	
 </script>
+
+
 
 </html>

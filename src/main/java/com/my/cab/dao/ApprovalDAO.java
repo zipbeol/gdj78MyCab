@@ -36,5 +36,15 @@ public interface ApprovalDAO {
 
 	List<ApprovalDocDTO> getApprovalData();
 
+	void saveSignature(DocumentDTO document);
+
+	void updateSignature(DocumentDTO document);
+
+	int isSignatureExist(String fileName);
+
+	String getSignaturePath(String fileName);
+
+	List<ApprovalDocDTO> getFilteredApprovalData(String loginId);
+
 
 }

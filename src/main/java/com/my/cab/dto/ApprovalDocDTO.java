@@ -22,11 +22,47 @@ public class ApprovalDocDTO {
     private String appr_finalapprover; // 최종결재자
     private Date appr_mngr_updt;
     
-    
+	private int dept_no; // 부서 넘버
+	private int title_no; // 직책 넘버
+	private String emp_name; // 사원 이름
+
+	
+	private String dept_name; // 부서 이름
+	private String title_name; // 직책 이름
     
     
 	
-    public Date getAppr_mngr_updt() {
+    public int getDept_no() {
+		return dept_no;
+	}
+	public void setDept_no(int dept_no) {
+		this.dept_no = dept_no;
+	}
+	public int getTitle_no() {
+		return title_no;
+	}
+	public void setTitle_no(int title_no) {
+		this.title_no = title_no;
+	}
+	public String getEmp_name() {
+		return emp_name;
+	}
+	public void setEmp_name(String emp_name) {
+		this.emp_name = emp_name;
+	}
+	public String getDept_name() {
+		return dept_name;
+	}
+	public void setDept_name(String dept_name) {
+		this.dept_name = dept_name;
+	}
+	public String getTitle_name() {
+		return title_name;
+	}
+	public void setTitle_name(String title_name) {
+		this.title_name = title_name;
+	}
+	public Date getAppr_mngr_updt() {
 		return appr_mngr_updt;
 	}
 	public void setAppr_mngr_updt(Date appr_mngr_updt) {
@@ -113,7 +149,8 @@ public class ApprovalDocDTO {
 				+ approval_doc_udt_id + ", approval_doc_udt_dt=" + approval_doc_udt_dt + ", approval_doc_path="
 				+ approval_doc_path + ", approval_doc__state=" + approval_doc__state + ", approval_doc_isFinal="
 				+ approval_doc_isFinal + ", appr_midapprover=" + appr_midapprover + ", appr_finalapprover="
-				+ appr_finalapprover + ", appr_mngr_updt=" + appr_mngr_updt + "]";
+				+ appr_finalapprover + ", appr_mngr_updt=" + appr_mngr_updt + ", dept_no=" + dept_no + ", title_no="
+				+ title_no + ", emp_name=" + emp_name + ", dept_name=" + dept_name + ", title_name=" + title_name + "]";
 	}
 
 

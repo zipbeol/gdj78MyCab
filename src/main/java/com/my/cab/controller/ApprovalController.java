@@ -26,7 +26,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
-
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.my.cab.dto.ApprovalDTO;
@@ -44,14 +44,26 @@ public class ApprovalController {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired ApprovalService apprservice;
 	
-	// 저장 디렉토리
-    private static final String UPLOAD_DIR = "C:/upload"; 
+	// 결재문서 저장 디렉토리
+    private static final String APPROVAL_UPLOAD_DIR = "C:/upload/startApprover";
+    // 서명 이미지 저장 디렉토리
+    private static final String SIGNATURE_UPLOAD_DIR = "C:/upload/signatures";
+    // 첨부파일 저장 디렉토리
+    private static final String DOC_FILE_UPLOAD_DIR = "C:/upload/doc_file";
 
-    // 애플리케이션 시작 시 저장 디렉토리 생성
+    // 애플리케이션 시작 시 디렉토리 생성
     static {
-        File uploadDir = new File(UPLOAD_DIR);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdirs();
+        File approvalDir = new File(APPROVAL_UPLOAD_DIR);
+        if (!approvalDir.exists()) {
+            approvalDir.mkdirs();
+        }
+        File signatureDir = new File(SIGNATURE_UPLOAD_DIR);
+        if (!signatureDir.exists()) {
+            signatureDir.mkdirs();
+        }
+        File docFileDir = new File(DOC_FILE_UPLOAD_DIR);
+        if (!docFileDir.exists()) {
+            docFileDir.mkdirs();
         }
     }
 	
@@ -62,80 +74,75 @@ public class ApprovalController {
 		return "approval/approvalWriteForm";
 	}
 	
-	// 기안서 데이터 db 저장
-	@PostMapping("approval/save-html.fetch")
-	public String saveHtmlFile(
-	        @RequestParam("htmlContent") String htmlContent,
-	        @RequestParam("date") String date,
-	        @RequestParam("title") String title,
-	        @RequestParam("approverline") String approverLine,
-	        @RequestParam("midApprover") String midApprover,
-	        @RequestParam("finalApprover") String finalApprover,
-	        @RequestParam("participator") String participator,
-	        @RequestParam(value = "file", required = false) MultipartFile file,
-	        @RequestParam("isFinal") boolean isFinal,
-	        HttpSession session,
-	        Model model) {
-	    try {
-	        System.out.println("Received HTML content: " + htmlContent);
+	  // 기안서 데이터 DB 저장
+    @PostMapping("approval/save-html.fetch")
+    public String saveHtmlFile(
+            @RequestParam("htmlContent") String htmlContent,
+            @RequestParam("date") String date,
+            @RequestParam("title") String title,
+            @RequestParam("approverline") String approverLine,
+            @RequestParam("midApprover") String midApprover,
+            @RequestParam("finalApprover") String finalApprover,
+            @RequestParam("participator") String participator,
+            @RequestParam(value = "file", required = false) MultipartFile file,
+            @RequestParam("isFinal") boolean isFinal,
+            HttpSession session,
+            Model model) {
+        try {
+            // HTML 내용 저장
+            String timeStamp = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date(System.currentTimeMillis()));
+            String fileName = "approval_file_" + timeStamp + ".html";
+            String filePath = APPROVAL_UPLOAD_DIR + File.separator + fileName;
 
-	        // 현재 시간을 밀리초 단위로 가져옴
-	        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date(System.currentTimeMillis()));
-	        String fileName = "approval_file_" + timeStamp + ".html"; // session 에 저장 되는 loginId 이용하여 변경
-	        String filePath = UPLOAD_DIR + File.separator + fileName; // 저장 경로 수정
-	        
-	        String drafterId = (String)session.getAttribute("loginId");
-	        logger.info("아이디 추가 확인 : "+drafterId);
-	        
-	        
-	        // HTML 파일 저장
-	        File htmlFile = new File(filePath);
-	        FileOutputStream fos = new FileOutputStream(htmlFile);
-	        fos.write(htmlContent.getBytes());
-	        fos.close();
+            String drafterId = (String) session.getAttribute("loginId");
+            logger.info("아이디 추가 확인 : " + drafterId);
 
-	        // 수정한 html의 파일 경로를 데이터베이스에 저장
-	        ApprovalDocDTO approvalDoc = new ApprovalDocDTO();
-	        approvalDoc.setApproval_doc_path(filePath); 
-	        approvalDoc.setApproval_doc_write_date(date); // 기안서 작성일
-	        approvalDoc.setApproval_doc_title(title); // 기안서 제목
-	        approvalDoc.setApproval_doc_assist_user(participator); // 참조자
-	        approvalDoc.setApproval_doc_isFinal(isFinal); // 최종결재 여부
-	        approvalDoc.setApproval_doc_id(drafterId); // 기안자 ID
-	        apprservice.saveApprovalDoc(approvalDoc); // 14번 문서 등록 성공
+            // HTML 파일 생성 및 저장
+            File htmlFile = new File(filePath);
+            try (FileOutputStream fos = new FileOutputStream(htmlFile)) {
+                fos.write(htmlContent.getBytes());
+            }
 
-	        // 첨부 파일 저장
-	        String uploadFilePath = null;
-	        if (file != null && !file.isEmpty()) {
-	            String originalFilename = file.getOriginalFilename();
-	            uploadFilePath = UPLOAD_DIR + File.separator + originalFilename;
-	            File uploadedFile = new File(uploadFilePath);
-	            file.transferTo(uploadedFile);
-	            System.out.println("Uploaded file saved at: " + uploadFilePath);
-	            // 필요한 경우 첨부 파일 경로를 데이터베이스에 저장
-	            DocumentDTO docItemFileDTO = new DocumentDTO();
-	            docItemFileDTO.setAppr_file_path(uploadFilePath);
-	            apprservice.saveAttachedFilePath(uploadFilePath);
-	        }
+            // 수정한 HTML의 파일 경로를 데이터베이스에 저장
+            ApprovalDocDTO approvalDoc = new ApprovalDocDTO();
+            approvalDoc.setApproval_doc_path(filePath);
+            approvalDoc.setApproval_doc_write_date(date);
+            approvalDoc.setApproval_doc_title(title);
+            approvalDoc.setApproval_doc_assist_user(participator);
+            approvalDoc.setApproval_doc_isFinal(isFinal);
+            approvalDoc.setApproval_doc_id(drafterId);
+            apprservice.saveApprovalDoc(approvalDoc);
 
-	        // 결재라인 등 데이터베이스에 저장 approvalDTO 테이블
-	        ApprovalDTO approval = new ApprovalDTO();
-	        approval.setApproval_doc_idx(approvalDoc.getApproval_doc_idx());
-	        approval.setAppr_line_bkmk_idx(approverLine); // 결재라인
-	        approval.setAppr_midapprover(midApprover); // 중간결재자
-	        approval.setAppr_finalapprover(finalApprover); // 최종결재자
-	        apprservice.saveApproval(approval);
+            // 첨부 파일 저장
+            if (file != null && !file.isEmpty()) {
+                String originalFilename = file.getOriginalFilename();
+                String uploadFilePath = DOC_FILE_UPLOAD_DIR + File.separator + originalFilename;
+                File uploadedFile = new File(uploadFilePath);
+                file.transferTo(uploadedFile);
+                logger.info("Uploaded file saved at: " + uploadFilePath);
 
-	        System.out.println("File saved at: " + filePath);
+                // 첨부 파일 경로를 데이터베이스에 저장
+                DocumentDTO docItemFileDTO = new DocumentDTO();
+                docItemFileDTO.setAppr_file_path(uploadFilePath);
+                apprservice.saveAttachedFilePath(uploadFilePath);
+            }
 
-	        model.addAttribute("message", "File saved successfully: " + fileName);
-	        return "success";
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        model.addAttribute("message", "Error saving file");
-	        return "error";
-	    }
-	}
+            // 결재라인 등 데이터베이스에 저장
+            ApprovalDTO approval = new ApprovalDTO();
+            approval.setApproval_doc_idx(approvalDoc.getApproval_doc_idx());
+            approval.setAppr_line_bkmk_idx(approverLine);
+            approval.setAppr_midapprover(midApprover);
+            approval.setAppr_finalapprover(finalApprover);
+            apprservice.saveApproval(approval);
+
+            model.addAttribute("message", "File saved successfully: " + fileName);
+            return "success";
+        } catch (Exception e) {
+            logger.error("Error saving file", e);
+            model.addAttribute("message", "Error saving file");
+            return "error";
+        }
+    }
 
     
 	// 중간.최종 결재자 선택 시 사원 리스트 조회/검색
@@ -167,11 +174,12 @@ public class ApprovalController {
 	}
 	
 	// 내 결재 관리 결재문서 리스트 조회
-    @PostMapping("/getApprovalData.ajax")
-    @ResponseBody
-    public List<ApprovalDocDTO> getApprovalData() {
-        return apprservice.getApprovalData();
-    }
+	@PostMapping("/getApprovalData.ajax")
+	@ResponseBody
+	public List<ApprovalDocDTO> getApprovalData(HttpSession session) {
+	    String loginId = (String) session.getAttribute("loginId");
+	    return apprservice.getFilteredApprovalData(loginId);
+	}
     
     // 기안서 결재 페이지 불러오기
     @GetMapping("/approval/viewFile/{encodedFilename}")
@@ -196,6 +204,67 @@ public class ApprovalController {
         }
     }
     
+ // 서명 이미지 업로드 처리
+    @PostMapping("/uploadSignature")
+    @ResponseBody
+    public String uploadSignature(@RequestBody Map<String, String> requestBody, HttpSession session) {
+        try {
+            // 이미지 데이터와 로그인 ID를 받아옴
+            String imageData = requestBody.get("image");
+            String loginId = requestBody.get("loginId");
+            byte[] imageBytes = Base64.getDecoder().decode(imageData.split(",")[1]);
+            String fileName = "signature_" + loginId + ".png";
+            String filePath = SIGNATURE_UPLOAD_DIR + File.separator + fileName;
+
+            // 이미지 파일 생성 및 저장
+            try (FileOutputStream fos = new FileOutputStream(filePath)) {
+                fos.write(imageBytes);
+            }
+
+            // DB에 이미지 경로 저장
+            DocumentDTO document = new DocumentDTO();
+            document.setAppr_file_name(fileName);
+            document.setAppr_file_path(filePath);
+            document.setAppr_file_type(2); // 파일 유형 2로 설정
+
+            // 기존 서명 이미지가 있는지 확인 후 업데이트 또는 저장
+            if (apprservice.isSignatureExist(fileName)) {
+                apprservice.updateSignature(document);
+            } else {
+                apprservice.saveSignature(document);
+            }
+
+            return "서명이 저장되었습니다.";
+        } catch (Exception e) {
+            logger.error("서명 저장 중 오류 발생", e);
+            return "서명 저장 중 오류 발생: " + e.getMessage();
+        }
+    }
+
+    // 서명 이미지 조회 처리
+    @GetMapping("/getSignature")
+    @ResponseBody
+    public String getSignature(HttpSession session) {
+        String loginId = (String) session.getAttribute("loginId");
+        String fileName = "signature_" + loginId + ".png";
+        String filePath = apprservice.getSignaturePath(fileName);
+
+        if (filePath != null) {
+            File file = new File(filePath);
+            if (file.exists()) {
+                try {
+                    // 파일을 읽어 Base64로 인코딩하여 반환
+                    byte[] imageBytes = Files.readAllBytes(file.toPath());
+                    return Base64.getEncoder().encodeToString(imageBytes);
+                } catch (Exception e) {
+                    logger.error("서명 이미지 로드 중 오류 발생", e);
+                }
+            }
+        }
+        return null;
+    }
+    
+
 }
     
 

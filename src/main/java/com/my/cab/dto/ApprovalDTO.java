@@ -9,7 +9,7 @@ public class ApprovalDTO {
 	
     private int approval_doc_line_idx; // 결재라인번호
     private String appr_line_bkmk_idx; // 결재라인즐겨찾기번호
-    private String appr_imgname; // 결재자 서명
+    private String appr_imgname; // 결재자 서명 경로
     private String appr_comment; // 결재의견
     private Date appr_mngr_updt; // 결재일
     private String appr_decsion; // 전결
@@ -17,8 +17,6 @@ public class ApprovalDTO {
     private String appr_finalapprover; // 최종결재자
     private int emp_no; // fk 사원 아이디
     private int approval_doc_idx; // 결재 번호
-    
-    
     
     
     
@@ -61,8 +59,8 @@ public class ApprovalDTO {
 	public Date getAppr_mngr_updt() {
 		return appr_mngr_updt;
 	}
-	public void setAppr_mngr_updt(Date appr_mngr_updt) {
-		this.appr_mngr_updt = appr_mngr_updt;
+	public void setAppr_mngr_updt(java.util.Date date) {
+		this.appr_mngr_updt = (Date) date;
 	}
 	public String getAppr_decsion() {
 		return appr_decsion;

@@ -97,6 +97,30 @@ public class ApprovalService {
 		  return apprDAO.getApprovalData();
 	}
 
+    // 서명 이미지 저장
+    public void saveSignature(DocumentDTO document) {
+    	apprDAO.saveSignature(document);
+    }
+
+    // 서명 이미지 업데이트
+    public void updateSignature(DocumentDTO document) {
+    	apprDAO.updateSignature(document);
+    }
+
+    // 서명 이미지 존재 여부 확인
+    public boolean isSignatureExist(String fileName) {
+        return apprDAO.isSignatureExist(fileName) > 0;
+    }
+
+    // 서명 이미지 경로 조회
+    public String getSignaturePath(String fileName) {
+        return apprDAO.getSignaturePath(fileName);
+    }
+
+	public List<ApprovalDocDTO> getFilteredApprovalData(String loginId) {
+		return apprDAO.getFilteredApprovalData(loginId);
+	}
+
 
 
 }

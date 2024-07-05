@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="utf-8">
@@ -19,27 +20,18 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/assets/fonts/bootstrap/bootstrap-icons.css">
     <link rel="stylesheet" href="/assets/css/main.min.css">
-
     <!-- Vendor Css Files -->
     <link rel="stylesheet" href="/assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
-
-    <!-- Scrollbar CSS -->
-    <link rel="stylesheet" href="/assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
-
     <!-- 폰트 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
-
     <!-- Date Range CSS -->
     <link rel="stylesheet" href="/assets/vendor/daterange/daterange.css">
     <!-- 따로 적용한 CSS -->
     <link rel="stylesheet" href="/assets/css/default.css">
     <!-- FontAwesome 추가 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <!-- Scrollbar CSS -->
-    <link rel="stylesheet" href="/assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
-
     <style>
         .chat-container {
             height: 500px; /* 적절한 높이로 설정하세요 */
@@ -154,23 +146,19 @@
             text-align: left;
         }
     </style>
-
 </head>
 
 <body>
 <!-- Page wrapper start -->
 <div class="page-wrapper">
-
     <!-- Main container start -->
     <div class="main-container">
-
         <!-- Sidebar wrapper start -->
         <jsp:include page="../sidebar.jsp"/>
         <!-- Sidebar wrapper end -->
 
         <!-- App container starts -->
         <div class="app-container">
-
             <!-- App header starts -->
             <div class="app-header d-flex align-items-center">
                 <!-- Toggle buttons start -->
@@ -207,13 +195,11 @@
                 <!-- App header actions start -->
                 <jsp:include page="../appHeader.jsp"/>
                 <!-- App header actions end -->
-
             </div>
             <!-- App header ends -->
 
             <!-- App body starts -->
             <div class="app-body">
-
                 <!-- Container starts -->
                 <div class="container-fluid">
                     <!-- Row start -->
@@ -278,13 +264,11 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>
                                     <!-- 메시지 UI 끝 -->
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -299,90 +283,70 @@
                 <span>GDJ78FINALPROJECTMYCAB</span>
             </div>
             <!-- App footer end -->
-
         </div>
         <!-- App container ends -->
-
     </div>
     <!-- Main container end -->
-
 </div>
 <!-- Page wrapper end -->
 
 <!-- New Chat Modal -->
-<div class="modal fade" id="newChatModal" tabindex="-1" aria-labelledby="newChatModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+<div class="modal fade" id="newChatModal" tabindex="-1" role="dialog" aria-labelledby="newChatModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="newChatModalLabel">멤버 선택</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="searchMember" placeholder="이름 검색">
-                    </div>
-                </form>
+                <input type="text" class="form-control mb-3" placeholder="이름, 부서 검색" id="memberSearch">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
-                    <li class="nav-item" role="presentation">
+                    <li class="nav-item">
                         <a class="nav-link active" id="organization-tab" data-toggle="tab" href="#organization"
-                           role="tab" aria-controls="organization" aria-selected="true">개인</a>
+                           role="tab"
+                           aria-controls="organization" aria-selected="true">조직도</a>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="group-tab" data-toggle="tab" href="#group" role="tab"
-                           aria-controls="group" aria-selected="false">그룹</a>
+                    <li class="nav-item">
+                        <a class="nav-link" id="groups-tab" data-toggle="tab" href="#groups" role="tab"
+                           aria-controls="groups" aria-selected="false">그룹</a>
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade" id="organization" role="tabpanel" aria-labelledby="organization-tab">
-                        <div class="row">
-                            <div class="col-4">
-                                <ul class="list-group">
-                                    <li class="list-group-item">My Cab</li>
-                                </ul>
-                            </div>
-                            <div class="col-8">
-                                <ul class="list-group">
-                                    <li class="list-group-item">
-                                        <div class="d-flex align-items-center">
-                                            <img src="profile.png" alt="Profile" class="rounded-circle mr-2" width="30">
-                                            <div>
-                                                <div>박채현</div>
-                                                <div class="text-muted small">관리직 내회사</div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
+                    <div class="tab-pane fade show active" id="organization" role="tabpanel"
+                         aria-labelledby="organization-tab">
+                        <div class="list-group mt-3">
+                            <a href="#"
+                               class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <span>박채현</span>
+                                <span class="badge badge-primary badge-pill">관리직</span>
+                            </a>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="group" role="tabpanel" aria-labelledby="group-tab">
-                        <!-- 그룹 내용 -->
+                    <div class="tab-pane fade" id="groups" role="tabpanel" aria-labelledby="groups-tab">
+                        <div class="list-group mt-3">
+                            <span class="list-group-item">그룹에 추가된 멤버가 없습니다.</span>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-                <button type="button" class="btn btn-primary">선택</button>
+                <button type="button" class="btn btn-primary">확인</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
             </div>
         </div>
     </div>
 </div>
 
 </body>
-<!-- *************
-        ************ JavaScript Files *************
-    ************* -->
 <!-- Required jQuery first, then Bootstrap Bundle JS -->
-<script src="/assets/js/jquery.min.js"></script>
-<script src="/assets/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-<!-- *************
-        ************ Vendor Js Files *************
-    ************* -->
-
-<!-- Overlay Scroll JS -->
+<!-- Vendor JS Files -->
 <script src="/assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
 <script src="/assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
 <!-- Moment JS -->
@@ -401,19 +365,21 @@
     var sender = '${sessionScope.loginId}';
     var roomInfo = [];
     var selectedRoom = '';
-    <c:forEach items="${chatRoomList}" var="room">
-    var roomIdx = '${room.chatRoomIdx}';
-    var roomName = '${room.chatRoomName}';
-    var roomLastMessage = '${room.chatRoomLastMessage}';
-    roomInfo.push(
-        {
-            roomIdx: roomIdx,
-            roomName: roomName,
-            roomLastMessage: roomLastMessage
+    function chatRoomList() {
+        <c:forEach items="${chatRoomList}" var="room">
+        var roomIdx = '${room.chatRoomIdx}';
+        var roomName = '${room.chatRoomName}';
+        var roomLastMessage = '${room.chatRoomLastMessage}';
+        roomInfo.push(
+            {
+                roomIdx: roomIdx,
+                roomName: roomName,
+                roomLastMessage: roomLastMessage
+            }
+        );
+        </c:forEach>
+    }
 
-        }
-    );
-    </c:forEach>
     console.log(roomInfo);
 
     function connect(roomIdx) {
@@ -464,27 +430,16 @@
         };
     }
 
-    function sendMessage(type, message, sender, room) {
-        var chatMessage = {
-            type: type,
-            message: message,
-            sender: sender,
-            room: room
-        };
 
-        ws.send(JSON.stringify(chatMessage));
-        $('#messageInput').val('');
-    }
 
     $('.list-group-item').on('click', function () {
-        // Remove 'active' class from all chat room items
         $('.list-group-item').removeClass('active');
-        // Add 'active' class to the clicked chat room item
         $(this).addClass('active');
         selectedRoom = $(this).data("room-id");
 
         connect(selectedRoom);
     });
+
 
     $('#messageInput').on("keypress", function (event) {
         if (event.key === "Enter") {

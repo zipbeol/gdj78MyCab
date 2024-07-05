@@ -173,7 +173,10 @@
                                                         <tr>
                                                             <td class="detail-label" style="text-align: right;">비활성화</td>
                                                             <td class="detail-content" style="text-align: right;">
-                                                                <input type="checkbox" name="disabled" ${noticeAttach.disabled ? 'checked' : ''} />
+                                                                <div class="form-check form-switch">
+                                                                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" name="disabled" ${noticeAttach.disabled ? 'checked' : ''}>
+                                                                    <label class="form-check-label" for="flexSwitchCheckDefault"></label>
+                                                                </div>
                                                             </td>
                                                         </tr>
                                                     </tbody>

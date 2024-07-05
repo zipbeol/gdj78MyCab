@@ -164,7 +164,7 @@
                                             </table>
                                         </div>
                                         <div class="action-buttons mt-3">
-                                            <button type="button" id="noticeModify" class="btn btn-primary">수정</button>
+                                            <button type="button" id="noticeModify" class="btn btn-primary" data-notice_idx="${noticeAttach.notice_idx}">수정</button>
                                             <a href="./list" class="btn btn-secondary">목록</a>
                                         </div>
                                     </div>
@@ -189,10 +189,9 @@
     <script src="/assets/js/jquery.twbsPagination.min.js"></script>
     <script>
     $(document).ready(function() {
-        // 등록 버튼 클릭 시 등록 페이지로 이동
+        // 수정 버튼 클릭 시 등록 페이지로 이동
         $('#noticeModify').click(function() {
-        	var noticeIdx = $('#noticeModify').data('id');
-        	window.location.href = '/notice/modify.go?notice_idx=' + noticeIdx;
+            window.location.href = '/notice/modify.go?notice_idx=' + ${noticeAttach.notice_idx};
         });
     });
     </script>

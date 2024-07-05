@@ -78,7 +78,7 @@ public class NoticeService {
 		// 첨부 파일 업로드
 		if (!file.isEmpty()) {
 			byte[] bytes = file.getBytes();
-			Path filePath = Paths.get(uploadDir + "/" + uploadFileName);
+			Path filePath = Paths.get(uploadFileName);
 			Files.write(filePath, bytes);
 			noticeDTO.setNotice_file_name(file.getOriginalFilename());
 			noticeDTO.setNotice_attach_file(filePath.toString());
@@ -90,25 +90,24 @@ public class NoticeService {
 		int totalPages = (int) Math.ceil((double) profitTotal / PAGE_SIZE);
 		return totalPages = totalPages > 0 ? totalPages : 1;
 	}
-	public void noticeDetail(String notice_idx, Model model) {
-		logger.info("공지 상세 서비스 들어옴");
-		NoticeDTO noticeDTO = noticeDAO.noticeDetail(notice_idx);
-		model.addAttribute("noticeDetail", noticeDTO);
+
+	public NoticeDTO fileList(String notice_idx) {
+		NoticeDTO filename = noticeDAO.getDetail(notice_idx);
+		return filename;
 	}
-	public List<String> fileList() {
-		String[] list = new File(uploadDir).list();		
-		return Arrays.asList(list);
-	}
+	
 	public ResponseEntity<Resource> imgView(String fileName) {
 		// 특정 경로에서 파일을 읽어와 Resource 로 만든다.
-		Resource resource = new FileSystemResource(uploadDir+"/"+fileName);
+		logger.info("15616516165 "+fileName);
+		Resource resource = new FileSystemResource(fileName);
 		HttpHeaders header = new HttpHeaders();
 		
 		// 보내질 파일의 형태를 지정해 준다.(헤더에)
 		// 예: image/gif, image/png, image/jpg, image/jpeg
 		try {
-			String type = Files.probeContentType(Paths.get(uploadDir+"/"+fileName));// 경로를 주면 해당 파일의 mime-type 을 알아낸다.
+			String type = Files.probeContentType(Paths.get(fileName));// 경로를 주면 해당 파일의 mime-type 을 알아낸다.
 			logger.info("mime-type : "+type);
+			logger.info(fileName);
 			header.add("content-type", type);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -118,9 +117,13 @@ public class NoticeService {
 	}
 	
 	public ResponseEntity<Resource> download(String fileName) {
-
+		String[] names = fileName.split("\"");
+		String name = names[names.length-1];
+		logger.info(name);
 		// 특정 경로에서 파일을 읽어와 Resource 로 만든다.
-		Resource resource = new FileSystemResource(uploadDir+"/"+fileName);
+		Resource resource = new FileSystemResource(fileName);
+		
+		logger.info(fileName);
 		HttpHeaders header = new HttpHeaders();
 		
 
@@ -131,13 +134,17 @@ public class NoticeService {
 			// content-Disposition 는 내다 보내려는 컨텐트의 형태를 의미 한다. inline 이면 문자열, attachment 는 다운로드 파일을 의미
 			// attachment;filename="fileName.jpg"
 			// 이때 파일명이 한글일 경우 깨져서 다운로드 된다. 그래서 안전하게 인코딩 해 준다.
-			String oriFile = URLEncoder.encode("이미지_"+fileName, "UTF-8");
+			String oriFile = URLEncoder.encode(fileName, "UTF-8");
 			header.add("content-Disposition", "attachment;filename=\""+oriFile+"\"");
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
 		//보낼 내용, 헤더, 상태(200 또는 HttpStatus.OK 는 정상이라는 뜻)		
 		return new ResponseEntity<Resource>(resource,header,HttpStatus.OK);
+	}
+	
+	public List<NoticeDTO> getDetail(String notice_idx) {
+		return noticeDAO.getList(notice_idx);
 	}
 
 }

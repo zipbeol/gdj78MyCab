@@ -91,7 +91,6 @@ td:hover {
 .custom-table {
     width: 100%;
     table-layout: fixed; /* 테이블 너비 고정 */
-    height: 500px; /* 테이블 전체 높이 설정 */
 }
 
 .custom-table th,
@@ -115,12 +114,9 @@ td:hover {
     background-color: #f1f1f1;
 }
 
-/* 중요 공지사항 스타일 */
-.important {
-    background-color: #f5f5dc; /* 베이지색 배경 */
-}
 
 .important td {
+	background-color: #FCFAEF;
 	font-weight: bold;
     color: red;
 }
@@ -314,10 +310,20 @@ td:hover {
         refreshNoticeList();
     });
     
+    // 날짜 변경 이벤트 핸들러 추가
+    $('#startDate').on('change', function() {
+    	currentPage=1;
+        getTotalPages();
+        refreshExpensesList();
+    });
+
+    $('#endDate').on('change', function() {
+    	currentPage=1;
+        getTotalPages();
+        refreshExpensesList();
+    });
 
     function resetFilters() {
-        // 선택된 버튼의 active 클래스 제거
-        $('.filter-btn').removeClass('active');
 
         // 날짜 입력 필드 초기화
         $('#startDate').val('');
@@ -353,6 +359,11 @@ td:hover {
         }, 500);
     }
 
+    document.getElementById('startDate').addEventListener('change', function() {
+        var startDate = this.value;
+        var endDateInput = document.getElementById('endDate');
+        endDateInput.min = startDate;
+    });
 
     $(document).ready(function() {
         // 등록 버튼 클릭 시 등록 페이지로 이동

@@ -134,22 +134,30 @@ public class NoticeController {
 	@RequestMapping("/detail.go")
 	public String noticeDetail(Model model, String notice_idx, NoticeDTO noticeDTO) {
 		logger.info("notice_idx : {}", notice_idx);
-		List<String> noticeAttach = noticeService.fileList();
-		noticeService.noticeDetail(notice_idx, model);
-		model.addAttribute("noticeAttach", noticeAttach);
+		List<NoticeDTO> list = noticeService.getDetail(notice_idx);
+		NoticeDTO dto = noticeService.fileList(notice_idx);
+		model.addAttribute("noticeAttach", dto);
+		model.addAttribute("list",list);
 		return "notice/noticeDetail";
 	}
-	
-	@RequestMapping(value="/photo/{fileName}")
+
+	@RequestMapping(value = "/photo/{fileName}")
 	public ResponseEntity<Resource> imgView(@PathVariable String fileName) {
-	    logger.info("fileName : " + fileName);
-	    return noticeService.imgView(fileName);
+		logger.info("fileName : " + fileName);
+		return noticeService.imgView(fileName);
 	}
 
-	@RequestMapping(value="/download/{fileName}")
+	@RequestMapping(value = "/download/{fileName}")
 	public ResponseEntity<Resource> download(@PathVariable String fileName) {
-	    logger.info("download fileName : " + fileName);
-	    return noticeService.download(fileName);
+		logger.info("download fileName : " + fileName);
+		return noticeService.download(fileName);
 	}
 
+	@RequestMapping("/modify.go")
+	public String noticeModify(Model model, String notice_idx, NoticeDTO noticeDTO) {
+		logger.info("공지사항 작성");
+
+		return "notice/noticeModify";
+	}
+	
 }

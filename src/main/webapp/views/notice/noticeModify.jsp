@@ -5,7 +5,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>My Cab - Notice</title>
+<title>My Cab - Notice Edit</title>
 <!-- Meta -->
 <meta name="description" content="Marketplace for Bootstrap Admin Dashboards">
 <meta name="author" content="Bootstrap Gallery">
@@ -126,47 +126,64 @@
                             <div class="col-12">
                                 <div class="card mb-3">
                                     <div class="card-header">
-                                        <h4 class="card-title">공지사항</h4>
+                                        <h4 class="card-title">공지사항 수정</h4>
                                     </div>
                                     <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered">
-                                                <tbody>
-                                                    <tr>
-                                                        <td class="detail-label" style="width: 15%">작성자</td>
-                                                        <td class="detail-content" style="width: 85%">${noticeAttach.notice_writer}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="detail-label">첨부 파일</td>
-                                                        <td class="detail-content">
-                                                            <c:if test="${list.size()>0 }">
-                                                                <c:forEach items="${list}" var="path">
-                                                                    <a href="download/${path.notice_attach_file}">${path.notice_attach_file} 다운로드</a>
-                                                                </c:forEach>
-                                                            </c:if>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="detail-label">제목</td>
-                                                        <td class="detail-content">${noticeAttach.notice_title}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="detail-label">내용</td>
-                                                        <td class="detail-content content-height">
-                                                            ${noticeAttach.notice_content}
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="detail-label" style="text-align: right;">작성 일시</td>
-                                                        <td class="detail-content" style="text-align: right;">${noticeAttach.notice_date}</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div class="action-buttons mt-3">
-                                            <button type="button" id="noticeModify" class="btn btn-primary">수정</button>
-                                            <a href="./list" class="btn btn-secondary">목록</a>
-                                        </div>
+                                        <form action="updateNotice" method="post">
+                                            <input type="hidden" name="notice_id" value="${noticeAttach.notice_id}" />
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="detail-label" style="width: 15%">작성자</td>
+                                                            <td class="detail-content" style="width: 85%">
+                                                                <input type="text" name="notice_writer" value="${noticeAttach.notice_writer}" class="form-control" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="detail-label">첨부 파일</td>
+                                                            <td class="detail-content">
+                                                                <c:if test="${list.size()>0 }">
+                                                                    <c:forEach items="${list}" var="path">
+                                                                        <div class="d-flex align-items-center">
+                                                                            <a href="download/${path.notice_attach_file}" class="me-2">${path.notice_attach_file} 다운로드</a>
+                                                                            <button type="button" class="btn btn-danger btn-sm">삭제</button>
+                                                                        </div>
+                                                                    </c:forEach>
+                                                                </c:if>
+                                                                <input type="file" name="uploadFile" class="form-control mt-2" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="detail-label">제목</td>
+                                                            <td class="detail-content">
+                                                                <input type="text" name="notice_title" value="${noticeAttach.notice_title}" class="form-control" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="detail-label">내용</td>
+                                                            <td class="detail-content content-height">
+                                                                <textarea name="notice_content" class="form-control" rows="15">${noticeAttach.notice_content}</textarea>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="detail-label" style="text-align: right;">작성 일시</td>
+                                                            <td class="detail-content" style="text-align: right;">${noticeAttach.notice_date}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="detail-label" style="text-align: right;">비활성화</td>
+                                                            <td class="detail-content" style="text-align: right;">
+                                                                <input type="checkbox" name="disabled" ${noticeAttach.disabled ? 'checked' : ''} />
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="action-buttons mt-3">
+                                                <button type="submit" class="btn btn-primary">등록</button>
+                                                <a href="./list" class="btn btn-secondary">취소</a>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -188,13 +205,6 @@
     <script src="/assets/js/LocalStorage.js"></script>
     <script src="/assets/js/jquery.twbsPagination.min.js"></script>
     <script>
-    $(document).ready(function() {
-        // 등록 버튼 클릭 시 등록 페이지로 이동
-        $('#noticeModify').click(function() {
-        	var noticeIdx = $('#noticeModify').data('id');
-        	window.location.href = '/notice/modify.go?notice_idx=' + noticeIdx;
-        });
-    });
     </script>
 </body>
 </html>

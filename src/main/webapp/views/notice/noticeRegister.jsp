@@ -22,8 +22,6 @@
 <link rel="shortcut icon" href="/assets/images/favicon.svg">
 <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css">
 
-
-
 <!-- CSS Files -->
 <link rel="stylesheet"
 	href="/assets/fonts/bootstrap/bootstrap-icons.css">
@@ -253,20 +251,21 @@ td:hover {
 	<script src="/assets/js/jquery.twbsPagination.min.js"></script>
 	<!-- AJAX 및 모달 스크립트 -->
 	<script>
-    
-	var category = '';
-    
+	const MAX_CONTENT_SIZE = 5 * 1024 * 1024; // 5MB를 바이트로 변환
+
 	document.addEventListener('DOMContentLoaded', function () {
 	    const editor = new toastui.Editor({
 	        el: document.querySelector('#noticeContent'),
 	        height: '500px',
-	        initialEditType: 'markdown',
-	        previewStyle: 'vertical',
-	        initialEditType: 'wysiwyg' // Set initial edit type to wysiwyg for preview mode
+	        initialEditType: 'wysiwyg',
+	        previewStyle: 'vertical'
 	    });
+
+	    // 툴바에서 코드와 코드 블록 제거
+	    editor.removeToolbarItem('code');
+	    editor.removeToolbarItem('codeblock');
 	    
 	    $('#registerButton').click(function() {
-	        // 제목과 내용이 비어 있는지 확인
 	        var noticeTitle = $('#noticeTitle').val();
 	        var noticeContent = editor.getHTML().trim();
 
@@ -275,11 +274,16 @@ td:hover {
 	            return;
 	        }
 
-	        // 빈 태그만 있는지 확인
 	        var tempElement = document.createElement('div');
 	        tempElement.innerHTML = noticeContent;
 	        if (!tempElement.textContent.trim()) {
 	            alert('공지 내용을 작성해 주세요.');
+	            return;
+	        }
+
+	        // 내용 용량 확인
+	        if (new Blob([noticeContent]).size > MAX_CONTENT_SIZE) {
+	            alert('내용의 용량이 초과되었습니다. 이미지의 크기나 갯수를 줄여 주세요.');
 	            return;
 	        }
 
@@ -320,14 +324,6 @@ td:hover {
 	        });
 	    });
 	});
-
-
-        // 카테고리 이름을 출력하는 함수
-        function categoryName(category) {
-            console.log('Selected category:', category);
-            // refreshNoticeList();
-        }
-
     </script>
 </body>
 </html>

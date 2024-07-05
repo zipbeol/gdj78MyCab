@@ -22,6 +22,8 @@ public interface NoticeDAO {
 
 	int getNoticeCount(SearchDTO searchDTO);
 
-	NoticeDTO noticeDetail(String notice_idx);
+	NoticeDTO getDetail(String notice_idx);
+
+	List<NoticeDTO> getList(String notice_idx);
 
 }

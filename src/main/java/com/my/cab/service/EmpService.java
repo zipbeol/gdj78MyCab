@@ -201,4 +201,15 @@ public class EmpService {
         return result;
     }
 
+
+	public boolean vacEditValue(EmpDTO empDTO) {
+		boolean result = false;
+
+
+        result = dao.vacEditValue(empDTO);
+
+
+        return result;
+	}
+
 }

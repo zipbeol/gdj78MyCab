@@ -185,5 +185,24 @@ public class EmpController {
 		
 		return Map.of("isSuccess", isSuccess);
 	}
+	
+	
+	@GetMapping("/vacEditValue.ajax")
+	@ResponseBody
+	public Map<String, Object> vacEditValue(EmpDTO empDTO){
+		logger.info("사원 연차 지급");
+		logger.info("연차 지급할 사번 : "+empDTO.getEmp_no());
+		
+		boolean isSuccess = service.vacEditValue(empDTO);
+		
+		return Map.of("isSuccess", isSuccess);
+	}
+	
+	
+	
+	
+	
+	
+	
 
 }

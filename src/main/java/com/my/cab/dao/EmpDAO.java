@@ -38,4 +38,6 @@ public interface EmpDAO {
 
     void vacJoin(EmpDTO dto);
 
+	boolean vacEditValue(EmpDTO empDTO);
+
 }

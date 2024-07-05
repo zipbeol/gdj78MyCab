@@ -309,10 +309,16 @@ th.sortable.desc::after {
                 </div>
                 <div class="input-group mb-3">
                     <label class="input-group-text" for="detail-reason">연차 수정</label>
-                    <input type="text" class="form-control" id="vacLeft" value="" readonly>
+                    <div class="input-group-prepend">
+                		<button class="btn btn-outline-secondary" type="button" id="minus">-</button>
+            		</div>
+                    	<input type="text" class="form-control  text-center" id="vacLeft" value="" readonly>
+                     <div class="input-group-append">
+               			 <button class="btn btn-outline-secondary" type="button" id="plus">+</button>
+            		</div>
                 </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="edit-att-btn" onclick="vacEdit()">수정</button>
+                <button type="button" class="btn btn-primary" id="vacEdit" >수정</button>
             </div>
         </div>
     </div>
@@ -539,36 +545,97 @@ th.sortable.desc::after {
         });
     }
 
-    
-    
-    
-    $('#edit').on('click', function(){
-       
-        
-        if ($('#allCheck').prop("checked")) {
-            showAlert('danger','연차 수정은 1명씩만 가능합니다.');
-                }else {
-            $('input[type=checkbox]:checked').each(function() {
-                console.log($(this).val());
-                var emp_no = $(this).val();
-                var left = $(this).parent().parent().find('#left').text();
-                var emp_no = $(this).parent().parent().find('#emp_no').text();
-                var emp_name = $(this).parent().parent().find('#emp_name').text();
+    $(document).ready(function() {
+        var count = 0;
+
+        // 체크박스 상태 변경 시 count 값 업데이트 (이벤트 위임 사용)
+        $(document).on('change', 'input[type=checkbox]', function() {
+            count = $('input[type=checkbox]:checked').length;  // 체크된 체크박스의 개수를 재계산
+            console.log(count);
+        });
+
+        // 'edit' 버튼 클릭 시
+        $('#edit').on('click', function(){
+            if ($('#allCheck').prop("checked")) {
+                showAlert('danger', '연차 수정은 1명씩만 가능합니다.');
+            } else if (count > 1) {
+                showAlert('danger', '연차 수정은 1명씩만 가능합니다.');
+            } else if(count == 1) {
+                var checkedBox = $('input[type=checkbox]:checked').closest('tr');
+                var left = checkedBox.find('#left').text();
+                var emp_no = checkedBox.find('#emp_no').text();
+                var emp_name = checkedBox.find('#emp_name').text();
+                
+                var oriValue =  parseInt(left);
                 
                 console.log('잔여연차? ' + left);
+                console.log('저장됐나요?'+ oriValue);
                 console.log('어딘데??2 ');
                 
-                $('#vacEditModal').modal('show');
                 $('#vacLeft').val(left);
                 $('#empNo').val(emp_no);
                 $('#empName').val(emp_name);
                 
+                $('#vacEditModal').off('click', '#plus').on('click', '#plus', function(){
+                    var vac = parseInt($('#vacLeft').val());
+                    $('#vacLeft').val(vac + 1);
+                });
+                
+                $('#vacEditModal').off('click', '#minus').on('click', '#minus', function(){
+                    var vac = parseInt($('#vacLeft').val());
+                    if (vac > 0) { // 연차가 0 이하로 내려가지 않도록 제한
+                        $('#vacLeft').val(vac - 1);
+                    }
+                });
                 
                 
-            });
-        }
-    });
-   
+                $('#vacEditModal').off('click', '#vacEdit').on('click', '#vacEdit', function(){
+                    var valueEdit = parseInt($('#vacLeft').val());
+                    var difference = valueEdit - oriValue;
+                    
+                    console.log('수정된 값: ' + valueEdit);
+                    console.log('변경된 차이: ' + difference);
+                    
+                    vacEditValue(valueEdit, difference, emp_no);
+                    $('#vacEditModal').modal('hide');
+                });
+                
+                $('#vacEditModal').modal('show');
+                
+            } else {
+                showAlert('danger', '연차 수정을 위해 체크박스를 선택해 주세요.');
+            }
+        });
+    }); 
+    
+    
+    
+    function vacEditValue(valueEdit, difference, emp_no) {
+	       
+        $.ajax({
+            url: '/vacEditValue.ajax',
+            type: 'GET',
+            data: {
+                'vac_left' : valueEdit,
+                'difference' : difference,
+                'emp_no' : emp_no
+            },
+            dataType: 'JSON',
+            success: function (data) {
+            	if (data.isSuccess) {
+                    showAlert('success', '연차 수정이 완료되었습니다.');
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1200);
+                } else {
+                    showAlert('danger', '연차 수정에 실패했습니다.');
+                }  
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
     
    
     

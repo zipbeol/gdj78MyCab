@@ -33,6 +33,15 @@ public class EmpDTO {
 	private int work_year;
 	private double vac_add;
 	private double vac_idx;
+	private int difference;
+	
+	
+	public int getDifference() {
+		return difference;
+	}
+	public void setDifference(int difference) {
+		this.difference = difference;
+	}
 	public int getEmp_no() {
 		return emp_no;
 	}

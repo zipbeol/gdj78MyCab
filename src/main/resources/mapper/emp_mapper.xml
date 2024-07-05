@@ -243,6 +243,13 @@
             vac_add  = #{work_year} + 15
         WHERE emp_no = #{emp_no};
     </update>
+    
+    <update id="vacEditValue" parameterType="emp">
+        UPDATE vacation
+        SET vac_left = #{vac_left},
+            vac_add  = vac_add +#{difference}
+        WHERE emp_no = #{emp_no};
+    </update>
 
 
 </mapper>

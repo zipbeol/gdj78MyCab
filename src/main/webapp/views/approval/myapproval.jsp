@@ -315,26 +315,25 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 </body>
 <script>
-
 $(document).ready(function() {
-    // 캔버스 초기화
     const canvas = document.getElementById('signatureCanvas');
     const ctx = canvas.getContext('2d');
     let isDrawing = false;
 
-    // 미리보기 업데이트 함수
+    // 캔버스 미리보기 업데이트
     function updatePreview() {
         const dataURL = canvas.toDataURL('image/png');
         document.getElementById('previewImage').src = dataURL;
     }
 
-    // 마우스 이벤트
+    // 마우스 다운 이벤트 핸들러
     canvas.addEventListener('mousedown', (e) => {
         isDrawing = true;
         ctx.beginPath();
         ctx.moveTo(e.offsetX, e.offsetY);
     });
-    
+
+    // 마우스 무브 이벤트 핸들러
     canvas.addEventListener('mousemove', (e) => {
         if (isDrawing) {
             ctx.lineTo(e.offsetX, e.offsetY);
@@ -342,17 +341,24 @@ $(document).ready(function() {
             updatePreview();
         }
     });
-    
+
+    // 마우스 업 이벤트 핸들러
     canvas.addEventListener('mouseup', () => {
         isDrawing = false;
         updatePreview();
     });
 
-    // 이미지 업로드
+    // 캔버스 지우기 버튼 이벤트 핸들러
+    document.getElementById('clearCanvas').addEventListener('click', function() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        updatePreview();
+    });
+
+    // 이미지 업로드 이벤트 핸들러
     document.getElementById('imageUpload').addEventListener('change', function(event) {
         const file = event.target.files[0];
         const reader = new FileReader();
-        
+
         reader.onload = function(e) {
             const img = new Image();
             img.onload = function() {
@@ -362,20 +368,14 @@ $(document).ready(function() {
             };
             img.src = e.target.result;
         };
-        
+
         reader.readAsDataURL(file);
     });
 
-    // 캔버스 지우기
-    document.getElementById('clearCanvas').addEventListener('click', function() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        updatePreview();
-    });
-
-    // 서명 저장
+    // 서명 저장 버튼 클릭 이벤트 핸들러
     $('#saveSignature').click(function() {
         const dataURL = canvas.toDataURL('image/png');
-        const empId = '<%= session.getAttribute("empId") %>'; // 세션에서 사번 가져오기
+        const loginId = '<%= session.getAttribute("loginId") %>';
 
         $.ajax({
             url: '/uploadSignature',
@@ -383,10 +383,10 @@ $(document).ready(function() {
             contentType: 'application/json',
             data: JSON.stringify({
                 image: dataURL,
-                empId: empId
+                loginId: loginId
             }),
             success: function(response) {
-                alert('서명이 저장되었습니다.');
+                alert(response);
             },
             error: function(xhr, status, error) {
                 console.error('서명 저장 중 오류 발생:', error);
@@ -394,14 +394,23 @@ $(document).ready(function() {
         });
     });
 
-    // 서명 삭제
-    $('#deleteSignature').click(function() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        document.getElementById('previewImage').src = '';
-    });
-
-    $('#downloadPdf').click(function() {
-        downloadPDF();
+    // 기존 서명 이미지 로드
+    $.ajax({
+        url: '/getSignature',
+        type: 'GET',
+        success: function(response) {
+            if (response) {
+                const img = new Image();
+                img.onload = function() {
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    updatePreview();
+                };
+                img.src = 'data:image/png;base64,' + response;
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('서명 이미지 로드 중 오류 발생:', error);
+        }
     });
 });
   
@@ -444,8 +453,22 @@ $(document).ready(function() {
                         class: 'btn btn-primary',
                         text: '결재',
                         click: function() {
+                            // 파일 경로 처리
+                            let filePath = item.approval_doc_path;
+
+                            // 각 디렉토리별로 파일 이름 추출
+                            if (filePath.includes('/startApprover/')) {
+                                filePath = filePath.split('/startApprover/')[1];
+                            } else if (filePath.includes('/signatures/')) {
+                                filePath = filePath.split('/signatures/')[1];
+                            } else if (filePath.includes('/doc_file/')) {
+                                filePath = filePath.split('/doc_file/')[1];
+                            } else {
+                                filePath = filePath.split('C:/upload/')[1];
+                            }
+
                             // 파일 이름을 Base64로 인코딩
-                            const encodedFilename = btoa(item.approval_doc_path.split('\\').pop());
+                            const encodedFilename = btoa(filePath);
                             window.location.href = '/approval/viewFile/' + encodedFilename;
                         }
                     }));

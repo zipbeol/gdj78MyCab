@@ -119,6 +119,29 @@ public class MyPageController {
 		return "redirect:/mypage/profile.go";
 	}
 	
+	@RequestMapping(value="mypage/vac/list.go")
+	public String myVacList(Model model, HttpSession session) {
+		logger.info("마이페이지 연차관리 이동");
+		String emp_no = (String) session.getAttribute("loginId");
+		
+		MyPageDTO mypageDTO = myPageService.myVacList(emp_no);
+		model.addAttribute("vacList",mypageDTO);
+		
+		return "mypage/myVacManagement";
+	}
+	
+	@GetMapping(value="vacApply.ajax")
+	@ResponseBody
+	public Map<String, Object> vacApply(MyPageDTO myPageDTO){
+		logger.info("사원 연차 신청");
+		logger.info("연차 신청한 사원 번호 : "+myPageDTO.getEmp_no());
+		
+		
+		boolean isSuccess = myPageService.vacApply(myPageDTO);
+		
+		return Map.of("isSuccess", isSuccess);
+		
+	}
 	
 	
 

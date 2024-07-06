@@ -237,6 +237,8 @@
         WHERE e.emp_employment_status = 1
           AND e.dept_no = #{dept_no}
     </select>
+    
+    
     <update id="addVac" parameterType="emp">
         UPDATE vacation
         SET vac_left = #{work_year} + 15,

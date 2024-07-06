@@ -85,6 +85,38 @@
         </set>
         WHERE emp_no = #{emp_no}
     </update>
+    
+    <select id="myVacList" resultType="myPage">
+    SELECT e.emp_name, d.dept_name, t.title_name, v.vac_left
+	FROM employee e
+	JOIN department d ON e.dept_no = d.dept_no
+	JOIN title t ON e.title_no = t.title_no 
+	JOIN vacation v ON e.emp_no = v.emp_no 
+	WHERE e.emp_no = #{emp_no}
+    </select>
+    
+    
+    <insert id="vacApply" parameterType="myPage">
+        INSERT INTO vacation_apply (
+        emp_no,
+        vac_use,
+        vac_type,
+        vac_reason,
+        vac_use_date
+        <if test="vac_use_end_date != null and vac_use_end_date != ''">
+            , vac_use_end_date
+        </if>
+    	) VALUES (
+        #{emp_no},
+        #{vac_use},
+        #{vac_type},
+        #{vac_reason},
+        #{vac_use_date}
+        <if test="vac_use_end_date != null and vac_use_end_date != ''">
+            , #{vac_use_end_date}
+        </if>
+    )
+    </insert>
 
 
 </mapper>

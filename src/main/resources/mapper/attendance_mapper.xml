@@ -26,7 +26,7 @@
 	</insert>
 	
 	<select id="attEditList" resultType="att">
-	SELECT att_management_idx, att_applicant_date, att_apply_status
+	SELECT att_management_idx, att_applicant_date, att_apply_status, att_modifier
 	FROM attendance_management
 	WHERE att_applicant = #{param3}
 	ORDER BY att_management_idx DESC

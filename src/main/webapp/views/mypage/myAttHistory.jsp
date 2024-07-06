@@ -248,6 +248,8 @@
 																style="width: 20%;" data-value="emp-name">신청일</th>
 															<th class="text-center" id="th-dept-name"
 																style="width: 20%;" data-value="dept-name">승인 여부</th>
+																<th class="text-center" id="th-dept-name"
+																style="width: 20%;" data-value="dept-name">처리 여부</th>
 														</tr>
 													</thead>
 													<tbody id="att-Edit-list">
@@ -733,7 +735,7 @@ document.addEventListener("DOMContentLoaded", function() {
             for (item of list) {
             	console.log(item.att_apply_status);
                 var att_apply_status = item.att_apply_status === true ? 'Y' : 'N';
-                
+                var att_modifier = item.att_modifier != 0 ? '처리 완료' : '처리중';
                 
              // ISO 8601 날짜 문자열을 Date 객체로 변환
                 var date = new Date(item.att_applicant_date);
@@ -741,11 +743,14 @@ document.addEventListener("DOMContentLoaded", function() {
                 var kstDate = new Date(date.getTime() + (9 * 60 * 60 * 1000));
                 // 날짜만 추출 (yyyy-mm-dd 형식)
                 var formattedDate = kstDate.toISOString().split('T')[0];
+                
+                
               
                 content += '<tr class="att-Edit-list-tbody-tr" id="' + item.att_management_idx + '">'
                 	+ '<td class="text-center">' + item.att_management_idx+ '</td>'
                     + '<td class="text-center">' + formattedDate  + '</td>'
                     + '<td class="text-center">' + att_apply_status + '</td>'
+                    + '<td class="text-center">' + att_modifier + '</td>'
                     + '</tr>';
             }
         } else {

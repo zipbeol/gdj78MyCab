@@ -116,6 +116,23 @@ public class MypageService {
 		
 		return row;
 	}
+
+	public MyPageDTO myVacList(String emp_no) {
+		
+		return myPageDAO.myVacList(emp_no);
+	}
+
+	public boolean vacApply(MyPageDTO myPageDTO) {
+		
+		
+		boolean result = false;
+
+
+        result = myPageDAO.vacApply(myPageDTO);
+
+
+        return result;
+	}
 		
 
 }

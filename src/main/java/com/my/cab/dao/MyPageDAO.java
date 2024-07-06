@@ -22,6 +22,10 @@ public interface MyPageDAO {
 
 	void deleteProfile(String emp_no);
 
+	MyPageDTO myVacList(String emp_no);
+
+	boolean vacApply(MyPageDTO myPageDTO);
+
 	
 
 }

@@ -240,5 +240,21 @@ public class EmpController {
 		return Map.of("isSuccess", isSuccess);
 
 	}
+	
+	@RequestMapping(value="emp/orgchart/list.go")
+	public String orgChart() {
+		logger.info("조직도 이동");
+		
+		return "HR/orgChart";
+		
+	}
+	
+	@RequestMapping(value="emp/emp/list.go")
+	public String empList() {
+		logger.info("사원 조회로 이동");
+		
+		return "HR/empList";
+	}
+	
 
 }

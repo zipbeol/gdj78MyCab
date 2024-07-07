@@ -164,6 +164,15 @@ public class MyPageController {
 		return myPageService.getVacApplyTotalPages(searchDTO);
 	}
 	
+	@RequestMapping(value="/vacApplyDetail.go")
+	public String vacApplyDetail(String vac_no, Model model) {
+		logger.info("연차 신청 상세페이지 이동");
+		MyPageDTO mypageDTO = myPageService.vacApplyDetail(vac_no);
+		model.addAttribute("vacList",mypageDTO);
+		
+		
+		return "mypage/vacApplyDetail";
+	}
 	
 	
 	

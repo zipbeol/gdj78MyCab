@@ -33,6 +33,8 @@ public interface MyPageDAO {
 
 	List<MyPageDTO> myVacApplyList(SearchDTO searchDTO);
 
+	MyPageDTO vacApplyDetail(String vac_no);
+
 	
 
 }

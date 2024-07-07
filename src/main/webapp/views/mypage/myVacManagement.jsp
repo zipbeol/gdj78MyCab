@@ -615,7 +615,7 @@ $(document).ready(function(){
                 item.vac_apply_status && !item.vac_apply_status_final ? '결재(1/2)' : '결재(0/2)';
 				let finalStatus = approvalStatus === '결재(2/2)' ? (item.vac_apply_status_final ? '승인' : '반려') : '검토중';
               
-                content += '<tr class="total-att-list-tbody-tr" id="' + item.vac_no + '">'
+                content += '<tr class="total-vac-list-tbody-tr" id="' + item.vac_no + '">'
                 	+ '<td class="text-center">' + item.vac_no + '</td>'
                 	+ '<td class="text-center">' + item.vac_apply_date + '</td>'
                 	+ '<td class="text-center">' + item.vac_type + '</td>'
@@ -629,8 +629,8 @@ $(document).ready(function(){
         $('#vac-apply-list').html(content);
         
         
-        $(document).on('click', '.total-att-list-tbody-tr', function () {
-            
+        $(document).on('click', '.total-vac-list-tbody-tr', function () {
+        	location.href = '/vacApplyDetail.go?vac_no=' + $(this).attr('id');
         });
     }
  

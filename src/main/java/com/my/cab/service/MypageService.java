@@ -161,6 +161,11 @@ public class MypageService {
 
 	        return Map.of("totalPages", totalPages);
 	}
+
+	public MyPageDTO vacApplyDetail(String vac_no) {
+		
+		return myPageDAO.vacApplyDetail(vac_no);
+	}
 		
 
 }

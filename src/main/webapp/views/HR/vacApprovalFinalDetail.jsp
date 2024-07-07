@@ -128,7 +128,7 @@
             padding: 10px;
             text-align: center;
         }
-        #total_days, #total_days2 {
+        #total_days1, #total_days2 {
             width: 5% !important;
             display: inline-block;
             size: 1;
@@ -141,8 +141,7 @@
         	width: 100%;
         }
         .btn1{
-        margin-left: 1235px;
-        display: none;
+        margin-left: 706px;
         }
         #todayDate{
         	text-align: center;
@@ -201,10 +200,10 @@
                         <a href="/" class="text-decoration-none">메인</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="/mypage/vac/list.go" class="text-decoration-none">마이페이지</a>
+                        <a href="#" class="text-decoration-none">인사관리</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="#" class="text-decoration-none">연차 관리</a>
+                        <a href="/mypage/vacApply/list.go" class="text-decoration-none">연차 승인 및 반려</a>
                     </li>
                     <li class="breadcrumb-item">
                         <a href="#" class="text-decoration-none">연차 신청 상세보기</a>
@@ -325,12 +324,12 @@
                                 <td id="vac1">
 									<c:if test="${empty vacList.vac_use_end_date}">
                                     <input type="text" id="start_date" value="${vacList.vac_use_date}" readonly>
-    								(총 <input type="text" id="total_days" value="0.5" readonly> 일)
+    								(총 <input type="text" id="total_days2" value="0.5" readonly> 일)
 									</c:if>
 									<c:if test="${not empty vacList.vac_use_end_date}">
 									<input type="text" id="start_date" value="${vacList.vac_use_date}" readonly> 부터
     								<input type="text" id="end_date" value="${vacList.vac_use_end_date}" readonly> 까지
-    								(총 <input type="text" id="total_days" readonly> 일)
+    								(총 <input type="text" id="total_days1" readonly> 일)
 								</c:if>
                                 </td>
                             </tr>
@@ -347,7 +346,18 @@
                         <p id="todayDate">${vacList.vac_apply_date}</p>
                     </div>
                     <div class="mt-3 btn1">
-                        <input type="button" class="btn btn-primary" id="vacSubmit" value="제출">
+                    	<c:if test="${vacList.vac_apply_status_final}">
+                						<span>이미 승인된 신청서입니다.</span>
+            						</c:if>
+            						<c:if test="${!vacList.vac_apply_status_final}">
+                						<c:if test="${empty vacList.vac_reject_reason_final}">
+                    						<input type="button" class="btn btn-primary" id="vacApproval" value="승인">
+                         					<input type="button" class="btn btn-secondary" id="vacReject" value="반려">
+                						</c:if>
+                						<c:if test="${not empty vacList.vac_reject_reason_final}">
+                   					 		<span>이미 반려된 신청서입니다.</span>
+                						</c:if>
+            						</c:if>
                     </div>
                 </div>
                 <!-- 연차 신청 끝 -->
@@ -377,6 +387,37 @@
 
 </div>
 <!-- Page wrapper end -->
+
+
+<!-- 캘린더 상세보기 모달  -->
+<div class="modal fade" id="vacRejectModal" tabindex="-1" aria-labelledby="exampleModalLgLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title h4" id="exampleModalLgLabel">연차 반려 사유</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body"> 
+                    <div class="input-group mb-3">
+                        <textarea class="form-control" id="reject-reason" rows="3" style="height: 245px; resize:none;" placeholder="연차 반려 사유를 작성해주세요." ></textarea>
+                    </div> 
+                    <h4>🚨연차 반려 사유를 반드시 입력해주세요.</h4> 
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary btn-lg"  id="rejectButton">작성</button>
+                    <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal">닫기</button>
+                          
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- 캘린더 상세보기 모달 끝-->
+
+
+
+
+
+
 
 </body>
 <!-- *************
@@ -410,7 +451,11 @@
 <script src="/assets/vendor/calendar/js/main.min.js"></script>
 <script src="/assets/vendor/calendar/custom/mycab-cal.js"></script>
 <script>
+var vac_no = '${vacList.vac_no}';
+var start_date = '${vacList.vac_use_date}';
 
+var emp_no = '${vacList.emp_no}';
+var type= '${vacList.vac_type}';
 
 
 
@@ -421,7 +466,7 @@
  document.addEventListener('DOMContentLoaded', function() {
      var startDateInput = document.getElementById('start_date');
      var endDateInput = document.getElementById('end_date');
-     var totalDaysInput = document.getElementById('total_days');
+     var totalDaysInput = document.getElementById('total_days1');
 
      var startDate = new Date(startDateInput.value);
      
@@ -432,6 +477,114 @@
          totalDaysInput.value = diffDays;
      </c:if>
  });
+ 
+ 
+ 
+ 
+ $('#vacApproval').on('click', function(){
+	
+	 var use = 0;
+	 var vacType = "${vacList.vac_type}";
+	 
+	 if (vacType === "연차") {
+	        use = $('#total_days1').val();
+	    } else if (vacType === "오전반차" || vacType === "오후반차") {
+	        use = 0.5;
+	    }
+	 
+	 console.log('잘 나오나요?'+use);
+	    
+	 if (confirm('승인하시겠습니까?')) {
+		 
+		 $.ajax({
+             url: '/vacFinalApproval.ajax',
+             type: 'GET',
+             data: {
+            	 'emp_no': emp_no,
+            	 'vac_no': vac_no,
+            	 'vac_use_date': start_date,
+            	 'vac_type': type,
+            	 'vac_use' : use
+            	 
+             },
+             dataType: 'JSON',
+             success: function (data) {
+             	if (data.isSuccess) {
+                     showAlert('success', '연차 승인이 완료되었습니다.');
+                     setTimeout(function() {
+                    	 location.href='/emp/vac/finalList.go';
+                     }, 1200);
+                 } else {
+                     showAlert('danger', '연차 승인에 실패했습니다.');
+                 }  
+             },
+             error: function (error) {
+                 console.log(error);
+             }
+         });
+		
+	}
+	 
+ });
+ 
+ $('#vacReject').on('click', function(){
+	 
+	 $('#vacRejectModal').modal('show');
+	 
+ });
+ 
+ $('#rejectButton').on('click', function(){
+	 
+	 var  rejectReason = $('#reject-reason').val();
+	 
+	 if (rejectReason === '' || rejectReason.trim() === '') {
+ 		
+		 alert('반려 사유를 입력해주세요!');
+			
+	 }else{
+		 $('#vacRejectModal').modal('hide');
+		 
+		 $.ajax({
+             url: '/vacFinalReject.ajax',
+             type: 'GET',
+             data: 
+             {
+            	 'vac_no': vac_no,
+            	'vac_reject_reason': rejectReason		
+             },
+             dataType: 'JSON',
+             success: function (data) {
+             	if (data.isSuccess) {
+                     showAlert('success', '연차 반려가 완료되었습니다.');
+                     setTimeout(function() {
+                         location.href='/emp/vac/finalList.go';
+                     }, 1200);
+                 } else {
+                     showAlert('danger', '연차 반려에 실패했습니다.');
+                 }  
+             },
+             error: function (error) {
+                 console.log(error);
+             }
+         });
+		 
+		 
+	 }
+	 
+	 
+	 
+ });
+	 
+	 
+		 
+		
+		
+	
+	 
+ 
+ 
+ 
+ 
     
 </script>
 

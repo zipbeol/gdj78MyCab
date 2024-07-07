@@ -191,6 +191,28 @@ public class MypageService {
 
 	        return Map.of("totalPages", totalPages);
 	}
+
+	public boolean vacApproval(MyPageDTO myPageDTO) {
+		
+		boolean result = false;
+
+
+        result = myPageDAO.vacApproval(myPageDTO);
+
+
+        return result;
+	}
+
+	public boolean vacReject(MyPageDTO myPageDTO) {
+		
+		boolean result = false;
+
+
+        result = myPageDAO.vacReject(myPageDTO);
+
+
+        return result;
+	}
 	
 
 }

@@ -219,6 +219,7 @@
             </choose>
         </if>
         </where>
+        ORDER BY va.vac_no DESC
         LIMIT #{pageSize} OFFSET #{page}
     </select>
     
@@ -249,6 +250,18 @@
         </where>
     </select>
     
+    
+    <update id="vacApproval" parameterType="myPage">
+   	 	UPDATE vacation_apply SET 
+   	 	vac_apply_status = true
+   	 	WHERE vac_no = #{vac_no}
+    </update>
+    
+     <update id="vacReject" parameterType="myPage">
+     	UPDATE vacation_apply SET 
+   	 	vac_reject_reason = #{vac_reject_reason}
+   	 	WHERE vac_no = #{vac_no}
+    </update>
 
 
 </mapper>

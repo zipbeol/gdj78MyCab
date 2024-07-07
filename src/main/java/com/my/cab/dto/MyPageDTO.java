@@ -24,8 +24,8 @@ public class MyPageDTO {
 	private String title_name;
 	private String vac_left; //잔여 연차
 	private String profile_new; // 프로필 사진
-	private double vac_use;
 	private double vac_add;
+	private double vac_use;
 	private String vac_type;
 	private String vac_apply_date;
 	private boolean vac_apply_status;

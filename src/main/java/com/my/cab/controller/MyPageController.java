@@ -214,5 +214,35 @@ public class MyPageController {
 		return "mypage/vacApprovalDetail";
 	}
 	
+	@GetMapping(value="vacApproval.ajax")
+	@ResponseBody
+	public Map<String, Object> vacApproval(MyPageDTO myPageDTO){
+		logger.info("연차 승인");
+		logger.info("연차 승인한 vac_no : "+myPageDTO.getVac_no());
+		
+		
+		boolean isSuccess = myPageService.vacApproval(myPageDTO);
+		
+		return Map.of("isSuccess", isSuccess);
+		
+	}
+	
+	@GetMapping(value="vacReject.ajax")
+	@ResponseBody
+	public Map<String, Object> vacReject(MyPageDTO myPageDTO){
+		logger.info("연차 반려");
+		logger.info("연차 반려한 vac_no : "+myPageDTO.getVac_no());
+		
+		
+		boolean isSuccess = myPageService.vacReject(myPageDTO);
+		
+		return Map.of("isSuccess", isSuccess);
+		
+	}
+	
+	
+	
+	
+	
 
 }

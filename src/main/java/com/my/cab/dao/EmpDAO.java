@@ -40,4 +40,20 @@ public interface EmpDAO {
 
 	boolean vacEditValue(EmpDTO empDTO);
 
+	List<EmpDTO> vacFinalList(SearchDTO searchDTO);
+
+	int getVacFinalTotalPages(SearchDTO searchDTO);
+
+	EmpDTO vacApplyDetailFinal(String vac_no);
+
+	boolean vacFinalApproval(EmpDTO empDTO);
+
+	boolean vacFinalReject(EmpDTO empDTO);
+
+	void insertVacAtt(EmpDTO empDTO);
+
+	void insertVacAttFull(int emp_no, String vac_type, String new_work_day);
+
+	void updateVac(int emp_no, double use);
+
 }

@@ -141,7 +141,7 @@
         	width: 100%;
         }
         .btn1{
-        margin-left: 1073px;
+        margin-left: 706px;
         }
         #todayDate{
         	text-align: center;
@@ -343,8 +343,18 @@
                         <p id="todayDate">${vacList.vac_apply_date}</p>
                     </div>
                     <div class="mt-3 btn1">
-                        <input type="button" class="btn btn-primary" id="vacApproval" value="승인">
-                         <input type="button" class="btn btn-secondary" id="vacReject" value="반려">
+                    	<c:if test="${vacList.vac_apply_status}">
+                						<span>이미 승인된 신청서입니다.</span>
+            						</c:if>
+            						<c:if test="${!vacList.vac_apply_status}">
+                						<c:if test="${empty vacList.vac_reject_reason}">
+                    						<input type="button" class="btn btn-primary" id="vacApproval" value="승인">
+                         					<input type="button" class="btn btn-secondary" id="vacReject" value="반려">
+                						</c:if>
+                						<c:if test="${not empty vacList.vac_reject_reason}">
+                   					 		<span>이미 반려된 신청서입니다.</span>
+                						</c:if>
+            						</c:if>
                     </div>
                 </div>
                 <!-- 연차 신청 끝 -->
@@ -374,6 +384,37 @@
 
 </div>
 <!-- Page wrapper end -->
+
+
+<!-- 캘린더 상세보기 모달  -->
+<div class="modal fade" id="vacRejectModal" tabindex="-1" aria-labelledby="exampleModalLgLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title h4" id="exampleModalLgLabel">연차 반려 사유</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body"> 
+                    <div class="input-group mb-3">
+                        <textarea class="form-control" id="reject-reason" rows="3" style="height: 245px; resize:none;" placeholder="연차 반려 사유를 작성해주세요." ></textarea>
+                    </div> 
+                    <h4>🚨연차 반려 사유를 반드시 입력해주세요.</h4> 
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary btn-lg"  id="rejectButton">작성</button>
+                    <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal">닫기</button>
+                          
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- 캘린더 상세보기 모달 끝-->
+
+
+
+
+
+
 
 </body>
 <!-- *************
@@ -429,6 +470,91 @@ var vac_no = '${vacList.vac_no}';
          totalDaysInput.value = diffDays;
      </c:if>
  });
+ 
+ 
+ $('#vacApproval').on('click', function(){
+	 
+	 if (confirm('승인하시겠습니까?')) {
+		 
+		 $.ajax({
+             url: '/vacApproval.ajax',
+             type: 'GET',
+             data: {'vac_no': vac_no},
+             dataType: 'JSON',
+             success: function (data) {
+             	if (data.isSuccess) {
+                     showAlert('success', '연차 승인이 완료되었습니다.');
+                     setTimeout(function() {
+                    	 location.href='/mypage/vacApply/list.go';
+                     }, 1200);
+                 } else {
+                     showAlert('danger', '연차 승인에 실패했습니다.');
+                 }  
+             },
+             error: function (error) {
+                 console.log(error);
+             }
+         });
+		
+	}
+	 
+ });
+ 
+ $('#vacReject').on('click', function(){
+	 
+	 $('#vacRejectModal').modal('show');
+	 
+ });
+ 
+ $('#rejectButton').on('click', function(){
+	 
+	 var  rejectReason = $('#reject-reason').val();
+	 
+	 if (rejectReason === '' || rejectReason.trim() === '') {
+ 		
+		 alert('반려 사유를 입력해주세요!');
+			
+	 }else{
+		 $('#vacRejectModal').modal('hide');
+		 
+		 $.ajax({
+             url: '/vacReject.ajax',
+             type: 'GET',
+             data: 
+             {
+            	 'vac_no': vac_no,
+            	'vac_reject_reason': rejectReason		
+             },
+             dataType: 'JSON',
+             success: function (data) {
+             	if (data.isSuccess) {
+                     showAlert('success', '연차 반려가 완료되었습니다.');
+                     setTimeout(function() {
+                         location.href='/mypage/vacApply/list.go';
+                     }, 1200);
+                 } else {
+                     showAlert('danger', '연차 반려에 실패했습니다.');
+                 }  
+             },
+             error: function (error) {
+                 console.log(error);
+             }
+         });
+		 
+		 
+	 }
+	 
+	 
+	 
+ });
+	 
+	 
+		 
+		
+		
+	
+	 
+ 
  
  
  

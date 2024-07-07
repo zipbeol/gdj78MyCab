@@ -39,6 +39,10 @@ public interface MyPageDAO {
 
 	int getVacApprovalTotalPages(SearchDTO searchDTO);
 
+	boolean vacApproval(MyPageDTO myPageDTO);
+
+	boolean vacReject(MyPageDTO myPageDTO);
+
 	
 
 }

@@ -1,6 +1,8 @@
 package com.my.cab.service;
 
+import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.my.cab.dao.EmpDAO;
 import com.my.cab.dto.EmpDTO;
+import com.my.cab.dto.MyPageDTO;
 import com.my.cab.dto.SearchDTO;
 
 
@@ -207,6 +210,86 @@ public class EmpService {
 
 
         result = dao.vacEditValue(empDTO);
+
+
+        return result;
+	}
+
+
+	public Map<String, Object> vacFinalList(SearchDTO searchDTO) {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+        int page = (searchDTO.getPage() - 1) * PAGE_SIZE;
+        searchDTO.setPage(page);
+        searchDTO.setPageSize(PAGE_SIZE);
+        logger.info("page {}", page);
+        logger.info("searchDTO page {}", searchDTO.getPage());
+        List<EmpDTO> empList = dao.vacFinalList(searchDTO);
+        logger.info("empList {}", empList);
+        result.put("empList", empList);
+
+
+        return result;
+	}
+
+
+	public Map<String, Object> getVacFinalTotalPages(SearchDTO searchDTO) {
+		 int empTotal = dao.getVacFinalTotalPages(searchDTO);
+	     int totalPages = (int) Math.ceil((double) empTotal / PAGE_SIZE);
+	     totalPages = totalPages > 0 ? totalPages : 1;
+
+	        return Map.of("totalPages", totalPages);
+	}
+
+
+	public EmpDTO vacApplyDetailFinal(String vac_no) {
+		
+		
+		
+		return dao.vacApplyDetailFinal(vac_no);
+	}
+
+
+	public boolean vacFinalApproval(EmpDTO empDTO) {
+		
+		boolean result = false;
+		
+		
+		 String start_date = empDTO.getVac_use_date();
+	     double use = empDTO.getVac_use();
+	     int emp_no = empDTO.getEmp_no();
+	     String vac_type = empDTO.getVac_type();
+	     
+	     LocalDate startDate = LocalDate.parse(start_date);
+	     
+	        
+	        //반차
+	        if (use == 0.5) {
+				dao.insertVacAtt(empDTO);
+			}else {//연차
+				for (int i = 0; i < use; i++) {
+					LocalDate workDate = startDate.plusDays(i);
+					dao.insertVacAttFull(emp_no, vac_type, workDate.toString());
+				}
+			}
+	     //연차 차감
+	        dao.updateVac(emp_no, use);
+		
+
+        result = dao.vacFinalApproval(empDTO);
+        
+
+
+        return result;
+	}
+
+
+	public boolean vacFinalReject(EmpDTO empDTO) {
+		
+		boolean result = false;
+
+
+        result = dao.vacFinalReject(empDTO);
 
 
         return result;

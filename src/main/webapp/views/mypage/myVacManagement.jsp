@@ -117,6 +117,17 @@
     		width: 680px;
     		resize:none;
         }
+        .approvalTable1{
+        border-collapse: collapse;
+        width: 160px;
+        text-align: center;
+        margin-left: 1611px;
+        }
+        .approvalTable1 td{
+            border: 1px solid #000;
+            padding: 5px;
+            text-align: center;
+        }
         .approvalTable{
         border-collapse: collapse;
         width: 209px;
@@ -125,7 +136,7 @@
         }
          .approvalTable td{
             border: 1px solid #000;
-            padding: 10px;
+            padding: 5px;
             text-align: center;
         }
         #total_days, #total_days2 {
@@ -246,6 +257,18 @@
                 <div class="tab-pane fade show active" id="taxi-schedule" role="tabpanel"
                      aria-labelledby="taxi-schedule-tab">
                     <h2>연차 내역</h2>
+                     <div class="mt-3">
+                      <table class="approvalTable1" >
+                            <tr>
+                                <td>잔여 연차</td>
+                                <td>사용 연차</td>
+                            </tr>
+                            <tr>
+                                <td style="height: 50px;">${vacList.vac_left}</td>
+                                <td style="height: 50px;" id="vacCal"></td>
+                            </tr>
+                        </table>
+                     </div>
                      <div class="mt-3"></div>
                     <div class="search-filter-container border border-2 p-3 rounded mb-3">
                         <div class="row mb-3">
@@ -485,11 +508,15 @@ var filterVacResult = '';
 var currentPage = 1; // 현재 페이지 번호
 var today = moment().format('YYYY/MM/DD');
 var emp_no = '${sessionScope.loginId}';
+var vacLeft = ${vacList.vac_left}; 
+var vacAdd = ${vacList.vac_add};
+var difference = vacLeft - vacAdd;
 
 $(document).ready(function(){
 	currentPage = 1;
 	getTotalPages();
 	 getList();
+	 document.getElementById('vacCal').innerHTML = difference;
 	
 });
  

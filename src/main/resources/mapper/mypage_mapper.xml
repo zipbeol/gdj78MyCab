@@ -87,7 +87,7 @@
     </update>
     
     <select id="myVacList" resultType="myPage">
-    SELECT e.emp_name, d.dept_name, t.title_name, v.vac_left
+    SELECT e.emp_name, d.dept_name, t.title_name, v.vac_left, v.vac_add
 	FROM employee e
 	JOIN department d ON e.dept_no = d.dept_no
 	JOIN title t ON e.title_no = t.title_no 

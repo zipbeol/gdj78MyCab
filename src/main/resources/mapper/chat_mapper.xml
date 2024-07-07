@@ -5,21 +5,90 @@
 
 <mapper namespace="com.my.cab.dao.ChatDAO">
 
-    <insert id="insertChatDB" parameterType="chat">
+    <insert id="insertChatDB" parameterType="chat" useGeneratedKeys="true" keyColumn="chat_message_idx"
+            keyProperty="chatId">
         INSERT INTO chat_message(chat_message_id, chat_message_emp_no, chat_message_content, chat_message_type,
                                  chat_message_is_delete)
         VALUES (#{room}, #{sender}, #{message}, #{type}, false)
     </insert>
+
     <update id="updateChatRoomDB" parameterType="chat">
-        UPDATE chat_room SET chat_room_last_message = #{message} WHERE chat_room_idx = #{room}
+        UPDATE chat_room
+        SET chat_room_last_message           = #{message},
+            chat_room_last_message_send_date = #{date}
+        WHERE chat_room_idx = #{room}
+    </update>
+    <select id="getSendDate" resultType="String" parameterType="chat">
+        SELECT chat_message_send_date
+        FROM chat_message
+        WHERE chat_message_idx = #{chatId}
+    </select>
+
+    <insert id="insertChatAttachment" parameterType="attachment">
+        INSERT INTO chat_attachment(chat_attachment_message_id, chat_attachment_type,
+                                    chat_attachment_name,chat_attachment_ori_name)
+        VALUES (#{chatIdx}, #{fileType}, #{fileName},#{oriFileName})
+    </insert>
+
+    <select id="getChatRoomList" resultType="chatRoom">
+        SELECT cr.chat_room_idx                         AS roomIdx,
+               cr.chat_room_name                        AS roomName,
+               cr.chat_room_last_message                AS roomLastMessage,
+               cr.chat_room_last_message_send_date      AS roomLastMessageDate,
+               (SELECT COUNT(*)
+                FROM chat_room_member crm
+                WHERE crm.chat_room_member_id = cr.chat_room_idx
+                  AND crm.chat_room_member_is_join = 1) AS roomMemberCount
+        FROM chat_room cr
+                 INNER JOIN chat_room_member crm ON cr.chat_room_idx = crm.chat_room_member_id
+        WHERE crm.chat_room_member_emp_no = #{param1}
+          AND crm.chat_room_member_is_join = 1
+          AND cr.chat_room_is_active = true
+        ORDER BY cr.chat_room_last_message_send_date DESC
+    </select>
+
+    <select id="getChatRoomMembers" parameterType="chatRoom" resultType="emp">
+        SELECT e.emp_no      AS emp_no,
+               e.emp_name    AS emp_name,
+               p.profile_new AS profile_new
+        FROM employee e
+                 INNER JOIN chat_room_member crm ON e.emp_no = crm.chat_room_member_emp_no
+                 LEFT JOIN profile_photo p ON p.emp_no = e.emp_no
+        WHERE crm.chat_room_member_id = #{roomIdx}
+          AND crm.chat_room_member_is_join = 1
+    </select>
+
+
+    <select id="getMessages" parameterType="String" resultType="chat">
+        SELECT chat_message_idx       AS chatId,
+               chat_message_emp_no    AS sender,
+               chat_message_content   AS message,
+               chat_message_send_date AS date,
+               chat_message_type      AS type,
+               chat_message_is_delete AS messageIsDelete
+        FROM chat_message cm
+        WHERE chat_message_id = #{param1}
+    </select>
+
+    <select id="getChatAttachment" parameterType="chat" resultType="attachment">
+        SELECT chat_attachment_type     AS type,
+               chat_attachment_name     AS fileName,
+               chat_attachment_ori_name AS oriFileName
+        from chat_attachment ca
+                 INNER JOIN chat_message cm ON cm.chat_message_idx = ca.chat_attachment_message_id
+        WHERE chat_message_idx = #{chatId}
+    </select>
+
+    <update id="exitChatRoom" parameterType="chatRoom">
+        UPDATE chat_room_member
+        SET chat_room_member_is_join = false
+        WHERE chat_room_member_emp_no = #{roomEmpIdx}
+          AND chat_room_member_id = #{roomIdx}
     </update>
 
-    <select id="getChatRoomList" resultType="chat">
-        SELECT c.chat_room_idx AS chatRoomIdx,
-               c.chat_room_name AS chatRoomName,
-               c.chat_room_last_message AS chatRoomLastMessage
-        FROM chat_room c
-                 JOIN chat_room_member cm ON c.chat_room_idx = cm.chat_room_member_id
-        WHERE chat_room_member_emp_no = #{empNo}
-    </select>
+    <update id="deleteMessage" parameterType="chat">
+        UPDATE chat_message
+        SET chat_message_is_delete = true
+        WHERE chat_message_idx = #{chatId}
+    </update>
 </mapper>

@@ -22,19 +22,19 @@
     <link rel="stylesheet" href="/assets/css/main.min.css">
     <!-- Vendor Css Files -->
     <link rel="stylesheet" href="/assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
-    <!-- 폰트 -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
     <!-- Date Range CSS -->
     <link rel="stylesheet" href="/assets/vendor/daterange/daterange.css">
-    <!-- 따로 적용한 CSS -->
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="/assets/css/default.css">
-    <!-- FontAwesome 추가 -->
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         .chat-container {
-            height: 500px; /* 적절한 높이로 설정하세요 */
+            height: 500px;
             display: flex;
             flex-direction: column;
             border: 1px solid #dee2e6;
@@ -45,8 +45,8 @@
             overflow-y: auto;
             padding: 10px;
             background-color: #ffffff;
-            height: 400px; /* 기본 높이 */
-            max-height: 400px; /* 최대 높이 */
+            height: 400px;
+            max-height: 400px;
         }
 
         .message {
@@ -82,6 +82,7 @@
             padding: 10px;
             border-radius: 10px;
             background-color: #f1f0f0;
+            position: relative;
         }
 
         .message.sent .message-content {
@@ -145,23 +146,95 @@
         .chat-date.received {
             text-align: left;
         }
+
+        /* Initially hide chat window */
+        .chat-window {
+            display: none;
+        }
+
+        /* Show chat window when a chat room is selected */
+        .chat-window.active {
+            display: block;
+        }
+
+        .search-result, .selected-employees {
+            margin-top: 15px;
+        }
+
+        .employee-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .employee-item {
+            cursor: pointer;
+        }
+
+        .employee-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .selected-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-name {
+            font-size: 0.8em;
+            color: #999;
+            margin-left: 10px;
+            align-self: center;
+        }
+
+        .delete-button {
+            background: none;
+            border: none;
+            color: red;
+            cursor: pointer;
+            font-size: 0.8em;
+            margin-left: 5px;
+            display: none;
+        }
+
+        .message-content:hover .delete-button {
+            display: block;
+        }
+
+        .deleted-message .delete-button {
+            display: none;
+        }
+
+
+        .deleted-message {
+            color: #999;
+            font-style: italic;
+        }
+
     </style>
 </head>
-
 <body>
-<!-- Page wrapper start -->
 <div class="page-wrapper">
-    <!-- Main container start -->
     <div class="main-container">
-        <!-- Sidebar wrapper start -->
         <jsp:include page="../sidebar.jsp"/>
-        <!-- Sidebar wrapper end -->
-
-        <!-- App container starts -->
         <div class="app-container">
-            <!-- App header starts -->
             <div class="app-header d-flex align-items-center">
-                <!-- Toggle buttons start -->
                 <div class="d-flex">
                     <button class="btn btn-outline-primary me-2 toggle-sidebar" id="toggle-sidebar">
                         <i class="bi bi-list fs-5"></i>
@@ -170,17 +243,11 @@
                         <i class="bi bi-list fs-5"></i>
                     </button>
                 </div>
-                <!-- Toggle buttons end -->
-
-                <!-- App brand sm start -->
                 <div class="app-brand-sm d-lg-none d-sm-block">
                     <a href="/">
                         <img src="/assets/images/logo-sm.svg" class="logo" alt="Bootstrap Gallery">
                     </a>
                 </div>
-                <!-- App brand sm end -->
-
-                <!-- Breadcrumb start -->
                 <ol class="breadcrumb d-none d-lg-flex ms-3">
                     <li class="breadcrumb-item">
                         <a href="/"><i class="bi bi-house lh-1"></i></a>
@@ -190,19 +257,10 @@
                         <a href="/chat/chat.go" class="text-decoration-none">채팅</a>
                     </li>
                 </ol>
-                <!-- Breadcrumb end -->
-
-                <!-- App header actions start -->
                 <jsp:include page="../appHeader.jsp"/>
-                <!-- App header actions end -->
             </div>
-            <!-- App header ends -->
-
-            <!-- App body starts -->
             <div class="app-body">
-                <!-- Container starts -->
                 <div class="container-fluid">
-                    <!-- Row start -->
                     <div class="row">
                         <div class="col-12">
                             <div class="card mb-3">
@@ -210,7 +268,6 @@
                                     <h4 class="card-title">메신저</h4>
                                 </div>
                                 <div class="card-body chat-container">
-                                    <!-- 메시지 UI 시작 -->
                                     <div class="row h-100">
                                         <div class="col-3 chat-list p-3">
                                             <button class="btn btn-success btn-block mb-3" data-toggle="modal"
@@ -221,13 +278,32 @@
                                                 <c:choose>
                                                     <c:when test="${chatRoomList.size() > 0}">
                                                         <c:forEach items="${chatRoomList}" var="room">
-                                                            <a href="#" class="list-group-item list-group-item-action"
-                                                               data-roomID="${room.chatRoomIdx}">
+                                                            <a href="#"
+                                                               class="list-group-item chat-room-list list-group-item-action"
+                                                               data-room-idx="${room.roomIdx}"
+                                                               data-room-name="${room.roomName}"
+                                                               data-room-user-count="${room.roomMemberCount}"
+                                                               data-room-last-message="${room.roomLastMessage}">
                                                                 <div class="d-flex w-100 justify-content-between">
-                                                                    <h5 class="mb-1">${room.chatRoomName}</h5>
-                                                                    <small>${room.chatRoomLastMessage}</small>
+                                                                    <h5 class="mb-1">${room.roomName}</h5>
                                                                 </div>
-                                                                <small>${room.chatRoomLastMessage}</small>
+                                                                <small>
+                                                                    <c:choose>
+                                                                        <c:when test="${room.roomLastMessage == ''}">
+                                                                            메세지가 없습니다.
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            <c:choose>
+                                                                                <c:when test="${room.roomLastMessage.length() > 7}">
+                                                                                    ${room.roomLastMessage.substring(0, 7)}...
+                                                                                </c:when>
+                                                                                <c:otherwise>
+                                                                                    ${room.roomLastMessage}
+                                                                                </c:otherwise>
+                                                                            </c:choose>
+                                                                        </c:otherwise>
+                                                                    </c:choose>
+                                                                </small>
                                                             </a>
                                                         </c:forEach>
                                                     </c:when>
@@ -238,12 +314,14 @@
                                             </div>
                                         </div>
                                         <div class="col-9 d-flex flex-column p-0 position-relative">
-                                            <div class="chat-window p-3">
+                                            <div class="chat-window p-3" id="chatWindow">
                                                 <div class="d-flex w-100 justify-content-between border-bottom pb-2 mb-3">
-                                                    <h5 class="mb-1">테스트</h5>
-                                                    <small>멤버 1</small>
+                                                    <small>멤버 <span id="roomUserCount"></span></small>
+                                                    <h5 class="mb-1" id="roomName">테스트</h5>
+                                                    <button class="btn btn-danger btn-sm" id="leaveRoomButton">방 나가기
+                                                    </button>
                                                 </div>
-                                                <div class="chat-messages">
+                                                <div class="chat-messages" id="message-container">
                                                     <div class="text-center text-muted small my-2">2024.7.1. (월)</div>
                                                     <div class="text-center text-muted small my-2">박채현님이 그룹 메시지방에
                                                         참여합니다.
@@ -254,43 +332,35 @@
                                                         <input type="text" class="form-control" id="messageInput"
                                                                placeholder="메시지를 입력해주세요. (Enter: 전송)">
                                                         <div class="input-group-append">
-                                                            <button class="btn btn-secondary" type="button"><i
-                                                                    class="far fa-smile"></i></button>
-                                                            <button class="btn btn-secondary" type="button"><i
-                                                                    class="fas fa-paperclip"></i></button>
+                                                            <div class="file-input-wrapper btn btn-secondary">
+                                                                파일 선택
+                                                                <input type="file" id="fileInput" class="file-input">
+                                                            </div>
                                                             <button class="btn btn-primary" type="button"
                                                                     onclick="sendMessage()">전송
                                                             </button>
                                                         </div>
+                                                        <div id="fileName" class="file-name"></div>
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="text-center p-5" id="selectChatRoomMessage">
+                                                <h5>채팅방을 선택해 주세요</h5>
+                                            </div>
                                         </div>
                                     </div>
-                                    <!-- 메시지 UI 끝 -->
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- Row end -->
                 </div>
-                <!-- Container ends -->
             </div>
-            <!-- App body ends -->
-
-            <!-- App footer start -->
             <div class="app-footer">
                 <span>GDJ78FINALPROJECTMYCAB</span>
             </div>
-            <!-- App footer end -->
         </div>
-        <!-- App container ends -->
     </div>
-    <!-- Main container end -->
 </div>
-<!-- Page wrapper end -->
-
-<!-- New Chat Modal -->
 <div class="modal fade" id="newChatModal" tabindex="-1" role="dialog" aria-labelledby="newChatModalLabel"
      aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -302,32 +372,21 @@
                 </button>
             </div>
             <div class="modal-body">
-                <input type="text" class="form-control mb-3" placeholder="이름, 부서 검색" id="memberSearch">
-                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="organization-tab" data-toggle="tab" href="#organization"
-                           role="tab"
-                           aria-controls="organization" aria-selected="true">조직도</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="groups-tab" data-toggle="tab" href="#groups" role="tab"
-                           aria-controls="groups" aria-selected="false">그룹</a>
-                    </li>
-                </ul>
-                <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="organization" role="tabpanel"
-                         aria-labelledby="organization-tab">
-                        <div class="list-group mt-3">
-                            <a href="#"
-                               class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                                <span>박채현</span>
-                                <span class="badge badge-primary badge-pill">관리직</span>
-                            </a>
+                <div class="row">
+                    <div class="col-md-12">
+                        <input type="text" class="form-control" id="searchInput" placeholder="Search for employees...">
+                    </div>
+                </div>
+                <div class="row search-result">
+                    <div class="col-md-12">
+                        <div class="employee-list" id="employeeList">
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="groups" role="tabpanel" aria-labelledby="groups-tab">
-                        <div class="list-group mt-3">
-                            <span class="list-group-item">그룹에 추가된 멤버가 없습니다.</span>
+                </div>
+                <div class="row selected-employees">
+                    <div class="col-md-12">
+                        <h6>Selected Employees:</h6>
+                        <div id="selectedEmployees">
                         </div>
                     </div>
                 </div>
@@ -339,112 +398,277 @@
         </div>
     </div>
 </div>
-
 </body>
-<!-- Required jQuery first, then Bootstrap Bundle JS -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-<!-- Vendor JS Files -->
 <script src="/assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
 <script src="/assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
-<!-- Moment JS -->
 <script src="/assets/js/moment.min.js"></script>
-<!-- Date Range JS -->
 <script src="/assets/vendor/daterange/daterange.js"></script>
 <script src="/assets/vendor/daterange/custom-daterange.js"></script>
-<!-- Custom JS files -->
 <script src="/assets/js/custom.js"></script>
 <script src="/assets/js/LocalStorage.js"></script>
 <script src="/assets/js/showAlert.js"></script>
-<!-- 페이지네이션 -->
-<script src="/assets/js/jquery.twbsPagination.min.js"></script>
+
 <script>
-    var ws;
-    var sender = '${sessionScope.loginId}';
-    var roomInfo = [];
-    var selectedRoom = '';
+    var wsChat = null;
+    var selectedRoomId = null;
+
+    chatRoomWebSocketConnect();
+
     function chatRoomList() {
-        <c:forEach items="${chatRoomList}" var="room">
-        var roomIdx = '${room.chatRoomIdx}';
-        var roomName = '${room.chatRoomName}';
-        var roomLastMessage = '${room.chatRoomLastMessage}';
-        roomInfo.push(
-            {
-                roomIdx: roomIdx,
-                roomName: roomName,
-                roomLastMessage: roomLastMessage
-            }
-        );
+        let roomInfo = [];
+        <c:forEach items="${chatRoomList}" var="roomInfo">
+        roomInfo.push({
+            'roomIdx': '${roomInfo.roomIdx}',
+            'roomName': '${roomInfo.roomName}',
+            'roomLastMessage': '${roomInfo.roomLastMessage}',
+            'roomLastMessageDate': '${roomInfo.roomLastMessageDate}',
+            'roomUserCount': '${roomInfo.roomMemberCount}'
+        });
         </c:forEach>
+        return roomInfo;
     }
 
-    console.log(roomInfo);
-
-    function connect(roomIdx) {
-        ws = new WebSocket("ws://" + window.location.host + "/chat/test");
-
-        ws.onopen = function () {
-            var firstMessage = sender + ' 님이 입장하셨습니다.';
-            sendMessage('join', firstMessage, sender, roomIdx);
+    function chatRoomWebSocketConnect() {
+        let wsChatRoom = new WebSocket("ws://" + window.location.host + "/chatRoom");
+        wsChatRoom.onopen = function () {
+            console.log('채팅방 감시 연결');
         };
+        wsChatRoom.onmessage = function (event) {
+            alert('new chatRoom' + event);
+        };
+    }
 
+    function chatWebSocketConnect(ws) {
+        if (ws) {
+            ws.close();
+        }
+        let myId = '${sessionScope.loginId}';
+        ws = new WebSocket("ws://" + window.location.host + "/chat/" + selectedRoomId);
         ws.onmessage = function (event) {
-            var chatMessage = JSON.parse(event.data);
-            console.log(chatMessage);
-
-            var messageElement = $('<div>').addClass('message');
-            if (chatMessage.sender === sender) {
-                messageElement.addClass('sent');
-            } else {
-                messageElement.addClass('received');
-            }
-
-            var profilePic = $('<img>').attr('src', 'profile.png').addClass('profile-pic');
-            var messageContent = $('<div>').addClass('message-content');
-            var senderName = $('<span>').addClass('sender-name').text(chatMessage.sender);
-            var messageText = $('<div>').text(chatMessage.message);
-            var timestamp = $('<div>').addClass('timestamp').text(new Date().toLocaleTimeString());
-
-            messageContent.append(senderName);
-            messageContent.append(messageText);
-
-            if (chatMessage.sender === sender) {
-                messageElement.append(timestamp);
-                messageElement.append(messageContent);
-                messageElement.append(profilePic);
-            } else {
-                messageElement.append(profilePic);
-                messageElement.append(messageContent);
-                messageElement.append(timestamp);
-            }
-
-            var chatMessages = $('.chat-messages');
-            chatMessages.append(messageElement);
-            chatMessages.scrollTop(chatMessages[0].scrollHeight);
+            let chatMessage = JSON.parse(event.data);
+            handleIncomingMessage(chatMessage, myId);
         };
-
-        ws.onclose = function () {
-            console.log("Disconnected from the chat server");
-        };
+        return ws;
     }
 
+    function handleIncomingMessage(chatMessage, myId) {
+        let messageElement = $('<div>').addClass('message').attr('data-chat-idx', chatMessage.chatIdx);
+        if (chatMessage.sender === myId) {
+            messageElement.addClass('sent');
+        } else {
+            messageElement.addClass('received');
+        }
 
+        let profilePic = $('<img>').attr('src', 'profile.png').addClass('profile-pic');
+        let messageContent = $('<div>').addClass('message-content');
+        let senderName = $('<span>').addClass('sender-name').text(chatMessage.sender);
+        let timestamp = $('<div>').addClass('timestamp').text(new Date().toLocaleTimeString());
 
-    $('.list-group-item').on('click', function () {
+        messageContent.append(senderName);
+        if (chatMessage.messageIsDelete) {
+            let deletedText = $('<div>').addClass('deleted-message').text('Message deleted');
+            messageContent.append(deletedText);
+        } else {
+            if (chatMessage.type === 'file' && chatMessage.attachments && chatMessage.attachments.length > 0) {
+                let file = chatMessage.attachments[0];
+                if (file.fileType != null && file.fileType.startsWith('image/')) {
+                    let imagePreview = $('<img>').attr('src', '/api/download/' + file.fileName + '/' + file.oriFileName).css('max-width', '100%');
+                    messageContent.append(imagePreview);
+                }
+                let fileLink = $('<a>')
+                    .attr('href', '/api/download/' + file.fileName + '/' + file.oriFileName)
+                    .attr('download', file.oriFileName)
+                    .text('Download ' + file.oriFileName);
+                messageContent.append(fileLink);
+            } else {
+                let messageText = $('<div>').text(chatMessage.message);
+                messageContent.append(messageText);
+            }
+
+            if (chatMessage.sender === myId) {
+                let deleteButton = $('<button>').addClass('delete-button').data("chatId", chatMessage.chatId).text('삭제').click(function () {
+                    deleteMessage(chatMessage.chatIdx, chatMessage.type, chatMessage.chatId);
+                });
+                messageContent.append(deleteButton);
+            }
+        }
+
+        if (chatMessage.sender === myId) {
+            messageElement.append(timestamp);
+            messageElement.append(messageContent);
+            messageElement.append(profilePic);
+        } else {
+            messageElement.append(profilePic);
+            messageElement.append(messageContent);
+            messageElement.append(timestamp);
+        }
+
+        let chatMessages = $('.chat-messages');
+        chatMessages.append(messageElement);
+        chatMessages.scrollTop(chatMessages[0].scrollHeight);
+    }
+
+    function sendMessage() {
+        let message = $('#messageInput').val();
+        sendMessageToServer(wsChat, 'text', message, '${sessionScope.loginId}', selectedRoomId, null);
+        $('#messageInput').val('');
+    }
+
+    function sendMessageToServer(ws, type, message, sender, room, attachment) {
+        let chatMessage = {
+            type: type,
+            message: message,
+            sender: sender,
+            room: room,
+            attachments: attachment
+        };
+        ws.send(JSON.stringify(chatMessage));
+    }
+
+    function deleteMessage(chatIdx, type, chatId) {
+        $.ajax({
+            url: '/chat/deleteMessage.ajax',
+            type: 'GET',
+            data: {
+                chatId: chatId,
+                type: type
+            },
+            success: function (data) {
+                if (data.result) {
+                    alert('메시지가 삭제되었습니다.');
+                    let messageElement = $('.message[data-chat-idx="' + chatIdx + '"]');
+                    messageElement.find('.message-content').empty().append('<div class="deleted-message">Message deleted</div>');
+                } else {
+                    alert('메시지 삭제에 실패했습니다.');
+                }
+            },
+            error: function (error) {
+                console.error('Error deleting message:', error);
+                alert('메시지 삭제에 실패했습니다.');
+            }
+        });
+    }
+
+    $(document).on('click', '.chat-room-list', function () {
+        let myId = '${sessionScope.loginId}';
         $('.list-group-item').removeClass('active');
         $(this).addClass('active');
-        selectedRoom = $(this).data("room-id");
 
-        connect(selectedRoom);
+        selectedRoomId = $(this).data("room-idx");
+        let selectedRoomName = $(this).data("room-name");
+        let selectedRoomUserCount = $(this).data("room-user-count");
+
+        $('#roomName').text(selectedRoomName);
+        $('#roomUserCount').text(selectedRoomUserCount);
+
+        $('#selectChatRoomMessage').hide();
+        $('#chatWindow').addClass('active');
+
+        $.ajax({
+            url: '/chat/messages.ajax',
+            method: 'GET',
+            data: {roomId: selectedRoomId},
+            success: function (data) {
+                console.log(data);
+                let chatMessages = $('#message-container');
+                chatMessages.empty();
+
+                if (data && data.messages && Array.isArray(data.messages)) {
+                    for (let chatMessage of data.messages) {
+                        handleIncomingMessage(chatMessage, myId);
+                    }
+
+                    chatMessages.scrollTop(chatMessages[0].scrollHeight);
+                    wsChat = chatWebSocketConnect(wsChat);
+                } else {
+                    console.error('Invalid messages data:', data);
+                }
+            },
+            error: function (error) {
+                console.log('Error fetching chat messages:', error);
+            }
+        });
     });
-
 
     $('#messageInput').on("keypress", function (event) {
         if (event.key === "Enter") {
-            var message = $(this).val();
-            sendMessage('text', message, sender, selectedRoom);
+            sendMessage();
+        }
+    });
+
+    $('#fileInput').on('change', function (event) {
+        var file = event.target.files[0];
+        fileUpload(file);
+    });
+
+    function fileUpload(file) {
+        let uploadFileName = '';
+        let formData = new FormData();
+        formData.append('file', file);
+        $.ajax({
+            url: '/chat/uploadAttachment.ajax',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                uploadFileName = data.fileName;
+                console.log(uploadFileName);
+                fileSend(uploadFileName, file.type, file.name);
+            },
+            error: function (error) {
+                console.error('File upload failed:', error);
+            }
+        });
+    }
+
+    function fileSend(fileName, fileType, oriFileName) {
+        let chatMessage = {
+            type: 'file',
+            message: '',
+            sender: '${sessionScope.loginId}',
+            room: selectedRoomId,
+            attachments: [
+                {
+                    fileName: fileName,
+                    fileType: fileType,
+                    oriFileName: oriFileName
+                }
+            ]
+        };
+        wsChat.send(JSON.stringify(chatMessage));
+    }
+
+    $(document).on('click', '#leaveRoomButton', function () {
+        if (selectedRoomId !== null) {
+            $.ajax({
+                url: '/chat/exitChatRoom.ajax',
+                method: 'POST',
+                data: {
+                    roomIdx: selectedRoomId,
+                    roomEmpIdx: ${sessionScope.loginId}
+                },
+                success: function (data) {
+                    if (data.result) {
+                        alert('방에서 나갔습니다.');
+                        $('#chatWindow').removeClass('active');
+                        $('#selectChatRoomMessage').show();
+                        selectedRoomId = null;
+                        $('#message-container').empty();
+                        wsChat.close();
+                        location.reload();
+                    } else {
+                        alert('방 나가기에 실패했습니다. 다시 시도해주세요.');
+                    }
+                },
+                error: function (error) {
+                    console.log('Error leaving room:', error);
+                    alert('방 나가기에 실패했습니다. 다시 시도해주세요.');
+                }
+            });
         }
     });
 </script>

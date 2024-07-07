@@ -1,9 +1,12 @@
 package com.my.cab.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.my.cab.dto.EmpDTO;
 import com.my.cab.dto.MyPageDTO;
+import com.my.cab.dto.SearchDTO;
 
 @Mapper
 public interface MyPageDAO {
@@ -25,6 +28,10 @@ public interface MyPageDAO {
 	MyPageDTO myVacList(String emp_no);
 
 	boolean vacApply(MyPageDTO myPageDTO);
+
+	int getVacApplyTotal(SearchDTO searchDTO);
+
+	List<MyPageDTO> myVacApplyList(SearchDTO searchDTO);
 
 	
 

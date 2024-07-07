@@ -33,8 +33,21 @@ public class MyPageDTO {
 	private String vac_reject_reason;
 	private String vac_use_date;
 	private String vac_use_end_date;
+	private int vac_no;
+	private boolean vac_apply_status_final;
 	
-	
+	public boolean isVac_apply_status_final() {
+		return vac_apply_status_final;
+	}
+	public void setVac_apply_status_final(boolean vac_apply_status_final) {
+		this.vac_apply_status_final = vac_apply_status_final;
+	}
+	public int getVac_no() {
+		return vac_no;
+	}
+	public void setVac_no(int vac_no) {
+		this.vac_no = vac_no;
+	}
 	public String getVac_use_date() {
 		return vac_use_date;
 	}

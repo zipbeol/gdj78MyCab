@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -16,7 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.my.cab.dao.MyPageDAO;
+import com.my.cab.dto.EmpDTO;
 import com.my.cab.dto.MyPageDTO;
+import com.my.cab.dto.SearchDTO;
 
 
 @Service
@@ -29,6 +32,7 @@ public class MypageService {
 	@Autowired PasswordEncoder encoder;
 	@Value("${spring.servlet.multipart.location}")
     private String upload;
+	private static final int PAGE_SIZE = 10;
 
 	public MyPageDTO getEmpDetail(String emp_no) {
 		
@@ -132,6 +136,30 @@ public class MypageService {
 
 
         return result;
+	}
+
+	public Map<String, Object> myVacApplyList(SearchDTO searchDTO) {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+        int page = (searchDTO.getPage() - 1) * PAGE_SIZE;
+        searchDTO.setPage(page);
+        searchDTO.setPageSize(PAGE_SIZE);
+        logger.info("page {}", page);
+        logger.info("searchDTO page {}", searchDTO.getPage());
+        List<MyPageDTO> empList = myPageDAO.myVacApplyList(searchDTO);
+        logger.info("empList {}", empList);
+        result.put("empList", empList);
+
+
+        return result;
+	}
+
+	public Map<String, Object> getVacApplyTotalPages(SearchDTO searchDTO) {
+		 int empTotal = myPageDAO.getVacApplyTotal(searchDTO);
+	     int totalPages = (int) Math.ceil((double) empTotal / PAGE_SIZE);
+	     totalPages = totalPages > 0 ? totalPages : 1;
+
+	        return Map.of("totalPages", totalPages);
 	}
 		
 

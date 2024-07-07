@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.my.cab.dto.EmpDTO;
 import com.my.cab.dto.MyPageDTO;
+import com.my.cab.dto.SearchDTO;
 import com.my.cab.service.MypageService;
 
 
@@ -142,6 +143,29 @@ public class MyPageController {
 		return Map.of("isSuccess", isSuccess);
 		
 	}
+	
+	
+	@GetMapping(value="/myVacApplyList.ajax")
+	@ResponseBody
+	public Map<String, Object> myVacApplyList(SearchDTO searchDTO){
+		 logger.info("\nsearchDTO filterVacDate:" + searchDTO.getFilterVacDate()
+        + "\nsearchDTO filterVacResult:" + searchDTO.getFilterVacResult());
+		
+		return myPageService.myVacApplyList(searchDTO);
+		
+	}
+	
+	
+	
+	@GetMapping(value="/getVacApplyTotalPages.ajax")
+	@ResponseBody
+	public Map<String, Object> getVacApplyTotalPages(SearchDTO searchDTO){
+		
+		return myPageService.getVacApplyTotalPages(searchDTO);
+	}
+	
+	
+	
 	
 	
 

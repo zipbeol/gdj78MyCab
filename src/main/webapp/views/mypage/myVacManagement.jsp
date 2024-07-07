@@ -246,7 +246,66 @@
                 <div class="tab-pane fade show active" id="taxi-schedule" role="tabpanel"
                      aria-labelledby="taxi-schedule-tab">
                     <h2>연차 내역</h2>
-                    <div class="mt-3"></div>
+                     <div class="mt-3"></div>
+                    <div class="search-filter-container border border-2 p-3 rounded mb-3">
+                        <div class="row mb-3">
+                            <div class="col-md-8 offset-md-4">
+                            </div>
+                        	</div>
+                        		<div class="row">
+                       			 <div class="col-12 text-end d-md-flex justify-content-md-end gap-2">
+                        		<input type="button" class="btn btn-secondary" onclick="EditfilterReset()"
+                                       value="초기화">
+                                      				 </div></div>
+                        								<div class="row">
+                        									<div class="col-2">
+                                                                <label for="filter-maintenance-reg-date"
+                                                                       class="form-label">신청일
+                                                                    </label>
+                                                            </div>
+                                                            <div class="col-2">
+                                                            </div>
+                                                            <div class="col-2">
+                                                                
+                                                            </div>
+                                                            <div class="col-4">
+                                                                
+                                                            </div>
+                                                            <div class="col-2">
+                                                                <label for="search-text-maintenance"
+                                                                       class="form-label">처리 필터</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mb-3">
+                                                            <div class="col-2">
+                                                                <div class="input-group"
+                                                                     id="filter-maintenance-reg-date-div">
+                                                                    <input type="text"
+                                                                           class="form-control datepicker maintenance-search-filter"
+                                                                           id="filter-apply-date">
+                                                                    <span class="input-group-text"><i
+                                                                            class="bi bi-calendar2-range"></i></span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-2">
+                                                            </div>
+                                                            <div class="col-2 d-flex">
+                                                                
+                                                            </div>
+                                                            <div class="col-4">
+                                                                
+                                                            </div>
+                                                            <div class="col-2 d-flex">
+                                                                <select class="form-select maintenance-search-filter"
+                                                                        id="filter-apply-result">
+                                                                   <option value="">필터</option>
+    																<option value="true">연차 승인</option>
+   																	<option value="false">연차 반려</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- 검색창 종료 -->
                     <!-- 연차 내역 -->
                     <div class="table-outer">
                         <div class="table-responsive">
@@ -258,16 +317,14 @@
                                         <th class="text-center" id="th-emp-name"
                                             style="width: 20%;" data-value="emp-name">신청일</th>
                                         <th class="text-center" id="th-emp-name"
-                                            style="width: 20%;" data-value="emp-name">연차 신청일</th>
-                                        <th class="text-center" id="th-emp-name"
                                             style="width: 20%;" data-value="emp-name">연차 구분</th>
                                         <th class="text-center" id="th-dept-name"
-                                            style="width: 20%;" data-value="dept-name">승인 여부</th>
+                                            style="width: 20%;" data-value="dept-name">결재 상태</th>
                                         <th class="text-center" id="th-dept-name"
-                                            style="width: 20%;" data-value="dept-name">처리 여부</th>
+                                            style="width: 20%;" data-value="dept-name">승인 여부</th>
                                     </tr>
                                 </thead>
-                                <tbody id="att-Edit-list">
+                                <tbody id="vac-apply-list">
                                 </tbody>
                             </table>
                         </div>
@@ -423,12 +480,160 @@
 <script src="/assets/vendor/calendar/custom/mycab-cal.js"></script>
 <script>
 
+var filterVacDate = '';
+var filterVacResult = '';
+var currentPage = 1; // 현재 페이지 번호
+var today = moment().format('YYYY/MM/DD');
+var emp_no = '${sessionScope.loginId}';
+
+$(document).ready(function(){
+	currentPage = 1;
+	getTotalPages();
+	 getList();
+	
+});
+ 
+ 
+ $('#taxi-detail-tab').on('click', function(e) {
+	 currentPage = 1;
+	 getTotalPages();
+	 getList();
+	 
+});
 
 
 
+ 
+ 
+ // 검색 값들 변수에 저장
+ function getSearchValue() {
+ 	filterVacResult = $('#filter-apply-result').val();
+    filterVacDate = $('#filter-apply-date').val();
+ }
+ 
+ // 필터 값 리셋
+ function filterReset() {
+     $('#filter-apply-result').val('');
+     $('#filter-apply-date').val(today);
+     currentPage = 1; // 페이지 번호 초기화
+     getTotalPages();
+     getList(); // 목록 새로고침
+ }
 
+ 
+ $('#filter-apply-date').on('change', function(){
+ 	currentPage = 1;
+     getTotalPages();
+     getList();
+ });
+ 
+ $('#filter-apply-result').on('change', function(){
+ 	currentPage = 1;
+     getTotalPages();
+     getList();
+ });
+ 
+ 
+ 
+ // 근태리스트 호출
+    function getList() {
+        getSearchValue();
+        $.ajax({
+            url: '/myVacApplyList.ajax',
+            type: 'GET',
+            data: {
+            	'emp_no' : emp_no,
+                'filterVacResult': filterVacResult,
+                'filterVacDate':filterVacDate,
+                'page': currentPage
+            },
+            dataType: 'JSON',
+            success: function (data) {
+                drawList(data.empList);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
 
+    // 토탈 페이지 호출
+    function getTotalPages() {
+        getSearchValue();
+        $.ajax({
+            url: '/getVacApplyTotalPages.ajax',
+            type: 'GET',
+            data: {
+            	'emp_no' : emp_no,
+            	 'filterVacResult': filterVacResult,
+                 'filterVacDate':filterVacDate
+            },
+            dataType: 'JSON',
+            success: function (data) {
+                console.log(data);
+                $('#pagination').twbsPagination('destroy');
+                $('#pagination').twbsPagination({
+                    totalPages: data.totalPages, // 서버에서 받은 총 페이지 수
+                    visiblePages: 5,
+                    startPage: currentPage,
+                    paginationClass: 'pagination align-items-center',
+                    onPageClick: function (event, page) {
+                        currentPage = page;
+                        getList();
+                    }
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+    
+    
+    function toKoreanTime(dateString) {
+    	if (!dateString) return '';
+        
+        // 입력된 문자열을 UTC 시간으로 변환
+        const date = new Date(dateString);
 
+        // toLocaleTimeString을 사용하여 한국 시간대로 포맷
+        const options = { timeZone: 'Asia/Seoul', hour: '2-digit', minute: '2-digit', hour12: false };
+        const koreanTime = date.toLocaleTimeString('ko-KR', options);
+        
+        return koreanTime;
+    	}
+    
+    
+    
+ 
+    // 리스트 보여주기
+    function drawList(list) {
+        var content = '';
+        if (list.length > 0) {
+            for (item of list) {
+            	let approvalStatus = item.vac_apply_status && item.vac_apply_status_final ? '결재(2/2)' : 
+                item.vac_apply_status && !item.vac_apply_status_final ? '결재(1/2)' : '결재(0/2)';
+				let finalStatus = approvalStatus === '결재(2/2)' ? (item.vac_apply_status_final ? '승인' : '반려') : '검토중';
+              
+                content += '<tr class="total-att-list-tbody-tr" id="' + item.vac_no + '">'
+                	+ '<td class="text-center">' + item.vac_no + '</td>'
+                	+ '<td class="text-center">' + item.vac_apply_date + '</td>'
+                	+ '<td class="text-center">' + item.vac_type + '</td>'
+                    + '<td class="text-center">' + approvalStatus   + '</td>'
+                    + '<td class="text-center">' + finalStatus  + '</td>'
+                    + '</tr>';
+            }
+        } else {
+            content = '<tr><td colspan="7" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
+        }
+        $('#vac-apply-list').html(content);
+        
+        
+        $(document).on('click', '.total-att-list-tbody-tr', function () {
+            
+        });
+    }
+ 
 
 
 

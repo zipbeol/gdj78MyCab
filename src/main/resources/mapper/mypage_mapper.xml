@@ -117,6 +117,51 @@
         </if>
     )
     </insert>
+    
+    <select id="myVacApplyList" resultType="myPage" parameterType="search">
+        SELECT va.vac_no, va.vac_apply_date, va.vac_type, va.vac_apply_status, va.vac_apply_status_final
+        FROM vacation_apply va
+        <where>
+        	va.emp_no = #{emp_no}
+            <if test="filterVacDate != null and filterVacDate != ''">
+            AND va.vac_apply_date = #{filterVacDate}
+        </if>
+        <if test="filterVacResult != null and filterVacResult != ''">
+            <choose>
+                <when test="filterVacResult == 'true'">
+                    AND va.vac_apply_status_final = true
+                </when>
+                <when test="filterVacResult == 'false'">
+                    AND va.vac_apply_status_final = false
+                </when>
+            </choose>
+        </if>
+        </where>
+        LIMIT #{pageSize} OFFSET #{page}
+    </select>
+    
+    <select id="getVacApplyTotal" resultType="int" parameterType="search">
+        SELECT COUNT(va.vac_no)
+        FROM vacation_apply va
+         <where>
+        	va.emp_no = #{emp_no}
+            <if test="filterVacDate != null and filterVacDate != ''">
+            AND va.vac_apply_date = #{filterVacDate}
+        </if>
+        <if test="filterVacResult != null and filterVacResult != ''">
+            <choose>
+                <when test="filterVacResult == 'true'">
+                    AND va.vac_apply_status_final = true
+                </when>
+                <when test="filterVacResult == 'false'">
+                    AND va.vac_apply_status_final = false
+                </when>
+            </choose>
+        </if>
+        </where>
+    </select>
+    
+    
 
 
 </mapper>

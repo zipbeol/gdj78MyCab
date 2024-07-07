@@ -474,12 +474,13 @@
         } else {
             if (chatMessage.type === 'file' && chatMessage.attachments && chatMessage.attachments.length > 0) {
                 let file = chatMessage.attachments[0];
-                if (file.fileType != null && file.fileType.startsWith('image/')) {
-                    let imagePreview = $('<img>').attr('src', '/api/download/' + file.fileName + '/' + file.oriFileName).css('max-width', '100%');
+
+                if (file.fileType.startsWith('image/')) {
+                    let imagePreview = $('<img>').attr('src', '/src/main/resources/static/upload/' + file.fileName).css('max-width', '100%');
                     messageContent.append(imagePreview);
                 }
                 let fileLink = $('<a>')
-                    .attr('href', '/api/download/' + file.fileName + '/' + file.oriFileName)
+                    .attr('href', '/src/main/resources/static/upload/' + file.fileName)
                     .attr('download', file.oriFileName)
                     .text('Download ' + file.oriFileName);
                 messageContent.append(fileLink);

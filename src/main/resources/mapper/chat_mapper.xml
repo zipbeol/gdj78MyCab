@@ -71,7 +71,7 @@
     </select>
 
     <select id="getChatAttachment" parameterType="chat" resultType="attachment">
-        SELECT chat_attachment_type     AS type,
+        SELECT chat_attachment_type     AS fileType,
                chat_attachment_name     AS fileName,
                chat_attachment_ori_name AS oriFileName
         from chat_attachment ca

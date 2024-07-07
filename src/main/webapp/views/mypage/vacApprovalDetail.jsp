@@ -141,8 +141,7 @@
         	width: 100%;
         }
         .btn1{
-        margin-left: 1235px;
-        display: none;
+        margin-left: 1073px;
         }
         #todayDate{
         	text-align: center;
@@ -201,7 +200,7 @@
                         <a href="/" class="text-decoration-none">메인</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="/mypage/vac/list.go" class="text-decoration-none">연차 관리</a>
+                        <a href="/mypage/vacApply/list.go" class="text-decoration-none">연차 승인 및 반려</a>
                     </li>
                     <li class="breadcrumb-item">
                         <a href="#" class="text-decoration-none">연차 신청 상세보기</a>
@@ -344,7 +343,8 @@
                         <p id="todayDate">${vacList.vac_apply_date}</p>
                     </div>
                     <div class="mt-3 btn1">
-                        <input type="button" class="btn btn-primary" id="vacSubmit" value="제출">
+                        <input type="button" class="btn btn-primary" id="vacApproval" value="승인">
+                         <input type="button" class="btn btn-secondary" id="vacReject" value="반려">
                     </div>
                 </div>
                 <!-- 연차 신청 끝 -->
@@ -407,7 +407,7 @@
 <script src="/assets/vendor/calendar/js/main.min.js"></script>
 <script src="/assets/vendor/calendar/custom/mycab-cal.js"></script>
 <script>
-
+var vac_no = '${vacList.vac_no}';
 
 
 
@@ -429,6 +429,9 @@
          totalDaysInput.value = diffDays;
      </c:if>
  });
+ 
+ 
+ 
     
 </script>
 

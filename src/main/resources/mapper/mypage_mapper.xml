@@ -189,6 +189,66 @@
     va.vac_no = #{vac_no}
     </select>
     
+    <select id="vacApprovalList" resultType="myPage" parameterType="search">
+        SELECT 
+   		va.vac_no, 
+    	va.vac_apply_date, 
+    	va.vac_type, 
+    	va.vac_apply_status, 
+    	va.vac_apply_status_final,
+    	e.emp_name
+		FROM 
+    	vacation_apply va
+		JOIN 
+    	employee e ON va.emp_no = e.emp_no
+		JOIN 
+    	department d ON e.dept_no = d.dept_no
+        <where>
+    	e.dept_no = (SELECT dept_no FROM employee WHERE emp_no = #{emp_no})
+            <if test="filterVacDate != null and filterVacDate != ''">
+            AND va.vac_apply_date = #{filterVacDate}
+      	  	</if>
+        	<if test="filterVacResult != null and filterVacResult != ''">
+            <choose>
+                <when test="filterVacResult == 'true'">
+                    AND va.vac_apply_status_final = true
+                </when>
+                <when test="filterVacResult == 'false'">
+                    AND va.vac_apply_status_final = false
+                </when>
+            </choose>
+        </if>
+        </where>
+        LIMIT #{pageSize} OFFSET #{page}
+    </select>
+    
+    <select id="getVacApprovalTotalPages" resultType="int" parameterType="search">
+        SELECT 
+   		COUNT(va.vac_no)
+		FROM 
+    	vacation_apply va
+		JOIN 
+    	employee e ON va.emp_no = e.emp_no
+		JOIN 
+    	department d ON e.dept_no = d.dept_no
+         <where>
+        	e.dept_no = (SELECT dept_no FROM employee WHERE emp_no = #{emp_no})
+           <if test="filterVacDate != null and filterVacDate != ''">
+            AND va.vac_apply_date = #{filterVacDate}
+        	</if>
+        	<if test="filterVacResult != null and filterVacResult != ''">
+            <choose>
+                <when test="filterVacResult == 'true'">
+                    AND va.vac_apply_status_final = true
+                </when>
+                <when test="filterVacResult == 'false'">
+                    AND va.vac_apply_status_final = false
+                </when>
+            </choose>
+        </if>
+        </where>
+    </select>
+    
 
 
 </mapper>

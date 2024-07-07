@@ -174,8 +174,45 @@ public class MyPageController {
 		return "mypage/vacApplyDetail";
 	}
 	
+	@RequestMapping(value="mypage/vacApply/list.go")
+	public String vacApplyManagement() {
+		logger.info("연차 승인 관리로 이동");
+		
+		
+		return "mypage/vacApproval";
+	}
 	
 	
+	
+	@GetMapping(value="/vacApprovalList.ajax")
+	@ResponseBody
+	public Map<String, Object> vacApprovalList(SearchDTO searchDTO){
+		 logger.info("\nsearchDTO filterVacDate:" + searchDTO.getFilterVacDate()
+        + "\nsearchDTO filterVacResult:" + searchDTO.getFilterVacResult());
+		
+		return myPageService.vacApprovalList(searchDTO);
+		
+	}
+	
+	
+	
+	@GetMapping(value="/getVacApprovalTotalPages.ajax")
+	@ResponseBody
+	public Map<String, Object> getVacApprovalTotalPages(SearchDTO searchDTO){
+		
+		return myPageService.getVacApprovalTotalPages(searchDTO);
+	}
+	
+	
+	@RequestMapping(value="/vacApprovalDetail.go")
+	public String vacApprovalDetail(String vac_no, Model model) {
+		logger.info("연차 신청 승인 상세페이지 이동");
+		MyPageDTO mypageDTO = myPageService.vacApplyDetail(vac_no);
+		model.addAttribute("vacList",mypageDTO);
+		
+		
+		return "mypage/vacApprovalDetail";
+	}
 	
 
 }

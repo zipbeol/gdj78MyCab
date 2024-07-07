@@ -35,6 +35,10 @@ public interface MyPageDAO {
 
 	MyPageDTO vacApplyDetail(String vac_no);
 
+	List<MyPageDTO> vacApprovalList(SearchDTO searchDTO);
+
+	int getVacApprovalTotalPages(SearchDTO searchDTO);
+
 	
 
 }

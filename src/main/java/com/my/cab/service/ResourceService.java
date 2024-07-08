@@ -5,12 +5,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.my.cab.dao.ResourceDAO;
@@ -34,10 +36,10 @@ public class ResourceService {
 		int row = 0;
 		int idx = 0;
 		if(param.get("resource_category").equals("차량")) {			
-			 idx = resourceDao.resourceWrite(dto);
+			 resourceDao.resourceWrite(dto);
+			 idx = dto.getResource_idx();
 			 logger.info("pp : " + idx);
-			 
-			 logger.info("dto idx get : "+ dto.getResource_idx());
+			
 			logger.info("idx 가져온 값:: "+idx);
 			if(idx >0) {
 				param.put("idx", idx);
@@ -46,7 +48,8 @@ public class ResourceService {
 				 logger.info("dto idx get : "+ dto.getResource_idx());
 			}
 		}else if(param.get("resource_category").equals("회의실")){
-			 idx = resourceDao.resourceWrite(dto);
+			resourceDao.resourceWrite(dto);
+			idx = dto.getResource_idx();
 
 			if(idx >0) {
 				param.put("idx", idx);
@@ -56,7 +59,8 @@ public class ResourceService {
 			}
 			
 		}else if(param.get("resource_category").equals("비품")){
-			 idx = resourceDao.resourceWrite(dto);
+			resourceDao.resourceWrite(dto);
+			idx = dto.getResource_idx();
 			if(idx >0) {
 				param.put("idx", idx);
 				row = resourceDao.resourceWriteEquip(param);	
@@ -115,5 +119,75 @@ public class ResourceService {
 	        logger.info(result);
 	        return result;
 	    }
+
+	public Map<String, Object> resourceListCall(Map<String, Object> param) {
+		Map<String, Object>map = new HashMap<String, Object>();
+		if (param.get("resSerachCategory").equals("회의실")) {
+			List<ResourceDTO> list = resourceDao.getResMrList(param);
+			map.put("list", list);
+		}else if(param.get("resSerachCategory").equals("차량")) {
+			List<ResourceDTO> list = resourceDao.getResCarList(param);
+			map.put("list", list);
+		}else if(param.get("resSerachCategory").equals("비품")) {
+			List<ResourceDTO> list = resourceDao.getResEqList(param);
+			map.put("list", list);
+		}
+		return map;
+	}
+
+	public void getReservationInfo(int resource_idx, Model model) {
+		String category = resourceDao.getReservationCategory(resource_idx);
+		logger.info(category);
+		List<ResourceDTO> rsvTime =resourceDao.getReservationDate(resource_idx);
+		if(category.equals("회의실")) {
+			ResourceDTO dto = resourceDao.getReservationMrInfo(resource_idx);
+			model.addAttribute("dto",dto);
+			model.addAttribute("rsvTime",rsvTime);
+		} 
+			  else if(category.equals("차량")){ 
+//				  ResourceDTO dto =
+//			  resourceDao.getReservationCarInfo(resource_idx); 
+			  }else if(category.equals("비품")){ 
+//				  ResourceDTO dto =
+//			  resourceDao.getReservationEqInfo(resource_idx);
+			  }else {
+			logger.info("카테고리 불러오기 실패 ");
+		}
+		
+	}
+
+	public Map<String, Object> createReservation(Map<String, Object> param) {
+		int empId = (int) param.get("resEmpId");
+		logger.info("아이디"+empId);
+		String deptName = resourceDao.getDeptName(empId);
+		logger.info(deptName);
+		param.put("deptCategory", deptName);
+		int row = resourceDao.createReservation(param);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		if(row >0) {
+			map.put("success", true);
+		}else {
+			map.put("success", false);
+		}
+		return map;
+	}
+
+	public Map<String, Object> rsvList(int resource_idx) {
+			Map<String, Object> map = new HashMap<String, Object>();
+			List<ResourceDTO> dto = resourceDao.rsvList(resource_idx);
+			map.put("revList", dto);
+		return map;
+	}
+
+	public Map<String, Object> getSelectRsvDate(String resource_idx, String resource_reserve_start_date) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<ResourceDTO> dto = resourceDao.getSelectRsvDate(resource_idx,resource_reserve_start_date);
+		map.put("dto", dto);
+		for (ResourceDTO resourceDTO : dto) {
+			logger.info("선택된 일정 가져온다 :" + resourceDTO.getResource_reserve_start_date());
+		}
+		return map;
+	}
 
 }

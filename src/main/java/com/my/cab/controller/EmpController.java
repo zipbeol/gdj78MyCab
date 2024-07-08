@@ -284,5 +284,14 @@ public class EmpController {
 		return service.getEmpTotalPagesForEmp(searchDTO);
 	}
 	
+	
+	@RequestMapping(value="/emp/sal/list.go")
+	public String empSalList() {
+	
+		return "HR/empSalaryList";
+	}
+	
+	
+	
 
 }

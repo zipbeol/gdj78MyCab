@@ -119,7 +119,14 @@
     </insert>
     
     <select id="myVacApplyList" resultType="myPage" parameterType="search">
-        SELECT va.vac_no, va.vac_apply_date, va.vac_type, va.vac_apply_status, va.vac_apply_status_final
+        SELECT 
+        va.vac_no, 
+        va.vac_apply_date, 
+        va.vac_type, 
+        va.vac_apply_status, 
+        va.vac_apply_status_final,
+        va.vac_reject_reason,
+   		va.vac_reject_reason_final
         FROM vacation_apply va
         <where>
         	va.emp_no = #{emp_no}
@@ -196,7 +203,9 @@
     	va.vac_type, 
     	va.vac_apply_status, 
     	va.vac_apply_status_final,
-    	e.emp_name
+    	e.emp_name,
+    	va.vac_reject_reason,
+    	va.vac_reject_reason_final
 		FROM 
     	vacation_apply va
 		JOIN 

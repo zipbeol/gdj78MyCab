@@ -1,5 +1,6 @@
 package com.my.cab.dao;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +46,26 @@ public interface ApprovalDAO {
 	String getSignaturePath(String fileName);
 
 	List<ApprovalDocDTO> getFilteredApprovalData(String loginId);
+
+	ApprovalDocDTO getDocumentById(int docId);
+
+	void updateDocumentStatus(Map<String, Object> params);
+
+	int isApproverSigned(String documentId, String approverType);
+
+	// 07.08
+	
+	List<String> getUserType(Map<String, Object> params);
+
+	String getUserNameById(String loginId);
+
+	String getUserTitleById(String loginId);
+
+
+
+
+
+
 
 
 }

@@ -15,12 +15,12 @@ public class ApprovalDocDTO {
     private String approval_doc_udt_id; // 수정자
     private Date approval_doc_udt_dt; // 수정일
     private String approval_doc_path; // 문서파일경로
-    private int approval_doc__state; // 문서상태
+    private int approval_doc__state; // 결재상태
     private boolean approval_doc_isFinal; // 최종결재여부
     
     private String appr_midapprover; // 중간결재자
     private String appr_finalapprover; // 최종결재자
-    private Date appr_mngr_updt;
+    private Date appr_mngr_updt; // 결재일
     
 	private int dept_no; // 부서 넘버
 	private int title_no; // 직책 넘버

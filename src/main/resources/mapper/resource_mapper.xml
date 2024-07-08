@@ -37,5 +37,76 @@
 		INSERT INTO resource_photo (ori_file_name, new_file_name,res_management_idx)
 		VALUES (#{param2},#{param3},#{param1})
 	</insert>
-
+	
+	<select id="getResMrList" parameterType="map" resultType="resourceDTO">
+		SELECT *
+		FROM resource_management r 	
+		INNER JOIN resource_meeting_room rmr on rmr.meeting_room_resource_idx  = r.resource_idx
+		inner join resource_reservation rr ON  r.resource_idx  = rr.resource_idx 
+		WHERE r.resource_category = '회의실' and not exists 
+		<![CDATA[
+			(select 1 from resource_reservation rr2 
+			WHERE 
+			rr2.resource_reserve_start_date < #{resSearchEndTime} AND rr2.resource_reserve_end_date  > #{resSearchStartTime})
+			]]>
+		<if test='resOption != ""'>
+			<![CDATA[
+				AND rmr.meeting_room_capacity >= #{resOption}
+			]]>
+		</if>
+		group by r.resource_idx 			
+		
+	</select>
+	
+	<select id="getResCarList" parameterType="map" resultType="resourceDTO">
+		
+	</select>
+	
+	<select id="getResEqList" parameterType="map" resultType="resourceDTO">
+		
+	</select>
+	
+	<select id="getReservationCategory">
+		SELECT resource_category FROM resource_management WHERE resource_idx = #{param1}
+	</select>
+	
+	<select id="getReservationMrInfo" resultType="resourceDTO">
+		SELECT * FROM resource_management rm
+		INNER JOIN  resource_meeting_room mr on rm.resource_idx = mr.meeting_room_resource_idx 
+		WHERE resource_idx = #{param1}
+	</select>
+	
+	<select id="getReservationDate" resultType="resourceDTO">
+		SELECT * FROM resource_reservation WHERE resource_idx = #{param1}
+	</select>
+	
+	<insert id="createReservation" parameterType="map">
+				INSERT INTO resource_reservation (resource_idx,resource_reservation_emp_no,
+				resource_category,dept_category,resource_reserve_content,
+				resource_reserve_start_date,resource_reserve_end_date)
+				VALUES
+		<foreach collection="rsvStartDate" item="startDate" separator=",">
+				 (
+					#{resIdx},
+					#{resEmpId},
+					#{resCategory},
+					#{deptCategory},
+					#{rsvContent},
+					#{startDate},
+					DATE_ADD(#{startDate}, INTERVAL 59 MINUTE)
+					)
+		</foreach>
+	</insert>
+	
+	<select id="getDeptName" resultType="String">
+		select d.dept_name from department d INNER JOIN employee e ON e.dept_no =d.dept_no WHERE e.emp_no =#{param1}
+	</select>
+	
+	<select id="rsvList" resultType="resourceDTO">
+		SELECT * FROM resource_reservation WHERE resource_reserve_del = '0'
+	</select>
+	
+	<select id="getSelectRsvDate" resultType="resourceDTO">
+		SELECT * FROM resource_reservation WHERE resource_reserve_del = '0' AND resource_idx = #{param1} AND resource_reserve_start_date LIKE CONCAT('%', #{param2}, '%')
+	</select>
 </mapper>

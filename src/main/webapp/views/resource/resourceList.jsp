@@ -149,30 +149,30 @@
 					            <div class="card-header">
 					                <ul class="nav nav-tabs card-header-tabs" id="taxiTabs" role="tablist">
 					                    <li class="nav-item" role="presentation">
-					                        <button class="nav-link active" id="car-list-tab" data-bs-toggle="tab"
-					                                data-bs-target="#car-list" type="button" role="tab"
-					                                aria-controls="taxi-detail-content" aria-selected="true">회의실 예약
+					                        <button class="nav-link active" id="meetroom-list-tab" data-bs-toggle="tab"
+					                                data-bs-target="#meetroom-list-content" type="button" role="tab"
+					                                aria-controls="meetroom-list-content" aria-selected="true">회의실 예약
 					                        </button>
 					                    </li>
 					                    <li class="nav-item" role="presentation">
-					                        <button class="nav-link" id="meetroom-list-tab" data-bs-toggle="tab"
-					                                data-bs-target="#taxi-schedule-content" type="button" role="tab"
-					                                aria-controls="taxi-schedule-content" aria-selected="false">차량 예약
+					                        <button class="nav-link" id="car-list-tab" data-bs-toggle="tab"
+					                                data-bs-target="#car-list-content" type="button" role="tab"
+					                                aria-controls="car-list-content" aria-selected="false">차량 예약
 					                        </button>
 					                    </li>
 					                    <li class="nav-item" role="presentation">
 					                        <button class="nav-link" id="equipment-list-tab" data-bs-toggle="tab"
-					                                data-bs-target="#taxi-schedule-content" type="button" role="tab"
-					                                aria-controls="taxi-schedule-content" aria-selected="false">비품 예약
+					                                data-bs-target="#equipment-list-content" type="button" role="tab"
+					                                aria-controls="equipment-list-content" aria-selected="false">비품 예약
 					                        </button>
 					                    </li>
 					                </ul>
 					            </div>
 					            <div class="card-body tab-content" id="newTabsContent">
-					                <div class="tab-pane fade show active" id="car-list-content" role="tabpanel"
-					                     aria-labelledby="car-list-tab">
+					                <div class="tab-pane show active" id="meetroom-list-content" role="tabpanel"
+					                     aria-labelledby="meetroom-list-tab">
 					                    <!-- 전체 근태 내역 -->
-					                    <h2>전체 근태 내역</h2>
+					                    <h2>회의실</h2>
 					                    <div class="text-end mb-1">
 					                    </div>
 					                    <!-- 검색창 시작 -->
@@ -185,37 +185,153 @@
 					                        </div>
 					                        <div class="row">
 					                            <div class="col-1">
-					                                <label for="filter-maintenance-reg-date"
+					                                <label for="search-mr-capacity"
 					                                       class="form-label">인원</label>
 					                            </div>
 					                            <div class="col-2">
-					                                <label for="search-category-maintenance"
-					                                       class="form-label">시작날짜</label>
+					                                <label for="search-mr-date"
+					                                       class="form-label">예약일</label>
 					                            </div>
 					                            <div class="col-2">
-					                                <label for="search-text-maintenance"
-					                                       class="form-label">종료날짜</label>
+					                                <label for="search-mr-start-time"
+					                                       class="form-label">예약 시작시간</label>
 					                            </div>
 					                            <div class="col-2">
-					                                <label for="search-text-maintenance"
+					                                <label for="search-mr-end-time"
+					                                       class="form-label">예약 종료시간</label>
+					                            </div>
+					                            <div class="col-2">
+					                                <label for="search-mr-status"
 					                                       class="form-label">상태</label>
 					                            </div>
 					                        </div>
 					                        <div class="row mb-3">
 					                            <div class="col-1">
-					                                <div class="input-group" id="filter-maintenance-reg-date-div">
-					                                    <input type="number" class="form-control " id="" min="0"> 
+					                                <div class="input-group" >
+					                                    <input type="number" class="form-control" id="search-mr-capacity" min="0"> 
 					                                </div>
 					                            </div>
-					                            <div class="col-2 d-flex">
-					                                <input type="text" class="form-control datePicker">
+					                            <div class="col-2 d-flex" >
+					                                <input type="text" class="form-control datePicker" id = "search-mr-date">					                                
+					                            </div>
+					                            <div class="col-2 d-flex">					                               
+					                                <select id=search-mr-start-time name="search-mr-start-time">
+					                                	<option value="">날짜선택</option>
+														
+								                    </select>
 					                            </div>
 					                            <div class="col-2 d-flex">
-					                                <input type="text" class="form-control datePicker">
+					                             	<select id="search-mr-end-time" name="search-mr-end-time">
+					                             	<option value="">날짜선택</option>			
+								                    </select>
 					                            </div>
 					                            <div class="col-2 d-flex">
 					                                <select class="form-select maintenance-search-filter"
-					                                        id="filter-att-result">
+					                                        id="search-mr-status">
+					                                    <option value="전체">전체</option>
+					                                    <option value="예약가능">예약가능</option>
+					                                    <option value="예약불가">예약불가</option>
+
+					                                </select>
+					                            </div>
+					                            <div class="col-2 d-flex">
+					                                <button class="btn btn-secondary">검색</button>
+					                            </div>
+					                        </div>
+					                    </div>
+					                    <!-- 검색창 종료 -->
+					
+					                    <!-- 리스트 테이블 시작 -->
+					                    <div class="table-outer">
+					                        <div class="table-responsive">
+					                            <table class="table align-middle table-hover m-0">
+					                                <thead>
+					                                    <tr>
+					                                        <th class="text-center" id="resorce_name" style="width: 30%;">회의실</th>
+					                                        <th class="text-center sortable" id="meeting_room_capacity" style="width: 15%;">인원</th>
+					                                        <th class="text-center sortable" id="resource_location" style="width: 20%;">위치</th>
+					                                        <th class="text-center" id="resource_meeting_content" style="width: 20%;">비고</th>
+					                                        <th class="text-center sortable" id="resource_state" style="width: 20%;">가능여부</th>
+					                                    </tr>
+					                                </thead>
+					                                <tbody id="total-att-list">
+					                                    <!-- 테이블 내용 정의 -->
+					                                </tbody>
+					                            </table>
+					                        </div>
+					                    </div>
+					                    <!-- 리스트 테이블 종료 -->
+					
+					                    <!-- 페이지 네이션 시작 -->
+					                    <nav aria-label="Page navigation example" class="mt-3">
+					                        <ul class="pagination justify-content-center" id="pagination"></ul>
+					                    </nav>
+					                    <!-- 페이지 네이션 종료 -->
+					                </div>
+					                
+					                
+					                <div class="tab-pane fade active" id="car-list-content" role="tabpanel"
+					                     aria-labelledby="car-list-tab">
+					                    <!-- 전체 근태 내역 -->
+					                    <h2>차량 예약</h2>
+					                    <div class="text-end mb-1">
+					                    </div>
+					                    <!-- 검색창 시작 -->
+					                    <div class="search-filter-container border border-2 p-3 rounded mb-3">
+					                        <div class="row">
+					                            <div class="col-12 text-end d-md-flex justify-content-md-end gap-2">
+					                                <input type="button" class="btn btn-secondary" onclick="filterReset()"
+					                                       value="초기화">
+					                            </div>
+					                        </div>
+					                        <div class="row">
+					                            <div class="col-1">
+					                                <label for="search-car-category"
+					                                       class="form-label">차종</label>
+					                            </div>
+					                            <div class="col-2">
+					                                <label for="search-car-date"
+					                                       class="form-label">예약날</label>
+					                            </div>
+					                            <div class="col-2">
+					                                <label for="search-car-start-time"
+					                                       class="form-label">예약 시작시간</label>
+					                            </div>
+					                            <div class="col-2">
+					                                <label for="search-car-end-time"
+					                                       class="form-label">예약 종료시간</label>
+					                            </div>
+					                            <div class="col-2">
+					                                <label for="search-car-status"
+					                                       class="form-label">상태</label>
+					                            </div>
+					                        </div>
+					                        <div class="row mb-3">
+					                            <div class="col-1">
+					                                    <select id= "search-car-category">
+					                                    	<option value="소형">소형</option>
+					                                    	<option value="소형">중형</option>
+					                                    	<option value="소형">대형</option>
+					                                    </select> 
+					                            </div>
+					                            <div class="col-2 d-flex">
+					                                <input type="text" class="form-control datePicker" id= "search-car-date">
+					                            </div>
+					                            <div class="col-2 d-flex">
+					                                <select id="search-car-start-time" name="search-car-start-time">
+					                                	<option value="">날짜선택</option>
+
+								                    </select>
+					                            </div>
+					                            <div class="col-2 d-flex">
+					                             	<select id="search-car-end-time" name="search-car-end-time">
+					                             		<option value="">날짜선택</option>
+
+								                    </select>
+					                            </div>
+					                            <div class="col-2 d-flex">
+					                                <select class="form-select maintenance-search-filter"
+					                                        id="search-car-status">
 					                                    <option value="전체">전체</option>
 					                                    <option value="예약가능">예약가능</option>
 					                                    <option value="예약불가">예약불가</option>
@@ -235,13 +351,11 @@
 					                            <table class="table align-middle table-hover m-0">
 					                                <thead>
 					                                    <tr>
-					                                        <th class="text-center" id="resorce_idx" style="width: 20%;">자원번호</th>
-					                                        <th class="text-center sortable" id="th-emp-name" style="width: 20%;">이름</th>
-					                                        <th class="text-center sortable" id="th-title-name" style="width: 10%;">직급</th>
-					                                        <th class="text-center sortable" id="th-dept-name" style="width: 20%;">부서</th>
-					                                        <th class="text-center" id="th-att-time" style="width: 10%;">출근</th>
-					                                        <th class="text-center" id="th-leave-time" style="width: 10%;">퇴근</th>
-					                                        <th class="text-center" id="th-att-result" style="width: 10%;">근태 결과</th>
+					                                        <th class="text-center" id="resorce_idx" style="width: 40%;">차량</th>
+					                                        <th class="text-center sortable" id="th-emp-name" style="width: 20%;">차종</th>
+					                                        <th class="text-center sortable" id="th-title-name" style="width: 10%;">위치</th>
+					                                        <th class="text-center sortable" id="th-dept-name" style="width: 20%;">비고</th>
+					                                        <th class="text-center sortable" id="th-dept-name" style="width: 20%;">가능여부</th>
 					                                    </tr>
 					                                </thead>
 					                                <tbody id="total-att-list">
@@ -258,75 +372,88 @@
 					                    </nav>
 					                    <!-- 페이지 네이션 종료 -->
 					                </div>
-					                <div class="tab-pane fade" id="taxi-schedule-content" role="tabpanel"
-					                     aria-labelledby="taxi-schedule-tab">
-					                    <!-- 수정 요청 내역 -->
-					                    <h2>수정 요청 내역</h2>
-					                    <div class="mt-3"></div>
+					                
+					                <div class="tab-pane fade active" id="equipment-list-content" role="tabpanel"
+					                     aria-labelledby="equipment-list-tab">
+					                    <!-- 전체 근태 내역 -->
+					                    <h2>전체 근태 내역</h2>
+					                    <div class="text-end mb-1">
+					                    </div>
+					                    <!-- 검색창 시작 -->
 					                    <div class="search-filter-container border border-2 p-3 rounded mb-3">
-					                        <div class="row mb-3">
-					                            <div class="col-md-8 offset-md-4"></div>
-					                        </div>
 					                        <div class="row">
 					                            <div class="col-12 text-end d-md-flex justify-content-md-end gap-2">
-					                                <input type="button" class="btn btn-secondary" onclick="EditfilterReset()"
+					                                <input type="button" class="btn btn-secondary" onclick="filterReset()"
 					                                       value="초기화">
 					                            </div>
 					                        </div>
 					                        <div class="row">
-					                            <div class="col-2">
-					                                <label for="filter-maintenance-reg-date" class="form-label">신청일</label>
-					                            </div>
-					                            <div class="col-2"></div>
-					                            <div class="col-2"></div>
-					                            <div class="col-4">
-					                                <label for="search-text-maintenance" class="form-label">검색</label>
+					                            <div class="col-1">
+					                                <label for="search-eq-category"
+					                                       class="form-label">종류</label>
 					                            </div>
 					                            <div class="col-2">
-					                                <label for="search-text-maintenance" class="form-label">처리 필터</label>
+					                                <label for="search-eq-date"
+					                                       class="form-label">예약날짜</label>
+					                            </div>
+					                            <div class="col-2">
+					                                <label for="search-eq-start-time"
+					                                       class="form-label">예약 시작시간</label>
+					                            </div>
+					                            <div class="col-2">
+					                                <label for="search-eq-end-time"
+					                                       class="form-label">예약 종료시간</label>
+					                            </div>
+					                            <div class="col-2">
+					                                <label for="search-eq-status"
+					                                       class="form-label">상태</label>
 					                            </div>
 					                        </div>
 					                        <div class="row mb-3">
-					                            <div class="col-2">
-					                                <div class="input-group" id="filter-maintenance-reg-date-div">
-					                                    <input type="text" class="form-control datepicker maintenance-search-filter"
-					                                           id="filter-edit-date">
-					                                    <span class="input-group-text"><i class="bi bi-calendar2-range"></i></span>
-					                                </div>
-					                            </div>
-					                            <div class="col-2"></div>
-					                            <div class="col-2 d-flex"></div>
-					                            <div class="col-4">
-					                                <input type="text" class="form-control maintenance-search-filter" id="search-edit"
-					                                       placeholder="검색어를 입력해 주세요.">
+					                            <div class="col-1">
+					                                    <input type="number" class="form-control " id="search-eq-category" name="search-eq-category" min="0"> 
 					                            </div>
 					                            <div class="col-2 d-flex">
-					                                <select class="form-select maintenance-search-filter" id="filter-edit-result">
-					                                    <option value="">처리 필터</option>
-					                                    <option value="true">처리</option>
-					                                    <option value="false">미처리</option>
-					                                    <option value="수정 승인">수정 승인</option>
-					                                    <option value="수정 거부">수정 거부</option>
+					                                <input type="text" class="form-control datePicker" id = "search-eq-date">
+					                                <select id="search-eq-start-time" name="search-eq-start-time">
+					                                	<option value="">날짜선택</option>
+								                    </select>
+					                            </div>
+					                            <div class="col-2 d-flex">
+					                             	<select id="search-eq-end-time" name="search-eq-end-time">
+					                             		<option value="">날짜선택</option>
+								                    </select>
+					                            </div>
+					                            <div class="col-2 d-flex">
+					                                <select class="form-select maintenance-search-filter"
+					                                        id="search-eq-status">
+					                                    <option value="전체">전체</option>
+					                                    <option value="예약가능">예약가능</option>
+					                                    <option value="예약불가">예약불가</option>
+
 					                                </select>
+					                            </div>
+					                            <div class="col-2 d-flex">
+					                                <button class="btn-btn btn">검색</button>
 					                            </div>
 					                        </div>
 					                    </div>
 					                    <!-- 검색창 종료 -->
 					
-					                    <!-- 수정 요청 내용을 표시할 부분 -->
+					                    <!-- 리스트 테이블 시작 -->
 					                    <div class="table-outer">
 					                        <div class="table-responsive">
 					                            <table class="table align-middle table-hover m-0">
 					                                <thead>
 					                                    <tr>
-					                                        <th class="text-center" id="th-emp-no" style="width: 10%;" data-value="emp-no">No</th>
-					                                        <th class="text-center" id="th-emp-no" style="width: 20%;" data-value="emp-no">이름</th>
-					                                        <th class="text-center" id="th-emp-name" style="width: 20%;">신청일</th>
-					                                        <th class="text-center" id="th-dept-name" style="width: 20%;">승인 여부</th>
-					                                        <th class="text-center" id="th-dept-name" style="width: 20%;">처리 여부</th>
+					                                        <th class="text-center" id="resorce_idx" style="width: 20%;">자원명</th>
+					                                        <th class="text-center sortable" id="th-emp-name" style="width: 20%;">분류</th>
+					                                        <th class="text-center sortable" id="th-title-name" style="width: 10%;">위치</th>
+					                                        <th class="text-center sortable" id="th-dept-name" style="width: 20%;">비고</th>
+					                                        <th class="text-center sortable" id="th-dept-name" style="width: 20%;">가능여부</th>
 					                                    </tr>
 					                                </thead>
-					                                <tbody id="att-Edit-list">
+					                                <tbody id="total-att-list">
 					                                    <!-- 테이블 내용 정의 -->
 					                                </tbody>
 					                            </table>
@@ -336,7 +463,7 @@
 					
 					                    <!-- 페이지 네이션 시작 -->
 					                    <nav aria-label="Page navigation example" class="mt-3">
-					                        <ul class="pagination justify-content-center" id="pagination2"></ul>
+					                        <ul class="pagination justify-content-center" id="pagination"></ul>
 					                    </nav>
 					                    <!-- 페이지 네이션 종료 -->
 					                </div>
@@ -364,104 +491,12 @@
 
 </div>
 <!-- Page wrapper end -->
-div
+</div>
 
 
 
 
 <!-- 근태 수정 내역 모달 시작 -->
-	<div class="modal fade" id="attApplyModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title h4" id="exampleModalLgLabel">근태 수정 요청 내역</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row mb-3">
-                    <div class="col-6">
-                        <div class="input-group">
-                            <label class="input-group-text" for="detail-no">사번</label>
-                            <input type="text" class="form-control" id="ddetail-no" name="emp_no" readonly>
-                            <input type="hidden" class="form-control" id="ddetail-idx" name="emp_no" readonly>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="input-group">
-                            <label class="input-group-text" for="detail-name">이름</label>
-                            <input type="text" class="form-control" id="ddetail-name" name="emp_name" readonly>
-                        </div>
-                    </div>
-                </div>
-                <div class="input-group mb-3">
-                    <label class="input-group-text" for="detail-workday">날짜</label>
-                    <input type="text" class="form-control" id="ddetail-workday" name="work_day" readonly>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-6">
-                        <div class="input-group">
-                            <label class="input-group-text" for="detail-att-time">출근</label>
-                            <input type="text" class="form-control" id="ddetail-att-time" name="att_time" readonly>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="input-group">
-                            <label class="input-group-text" for="detail-leave-time">퇴근</label>
-                            <input type="text" class="form-control" id="ddetail-leave-time" name="leave_time" readonly>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-6">
-                        <div class="input-group">
-                            <label class="input-group-text" for="detail-before-att">수정 전 근태 결과</label>
-                            <input type="text" class="form-control" id="ddetail-before-att" name="before_att_time" readonly>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="input-group">
-                            <label class="input-group-text" for="detail-after-att">수정 요청 근태 결과</label>
-                            <input type="text" class="form-control" id="ddetail-after-att" name="after_att_time" readonly>
-                        </div>
-                    </div>
-                </div>
-                <div class="input-group mb-3">
-                    <label class="input-group-text" for="detail-reason">수정 신청 사유</label>
-                    <textarea class="form-control" id="ddetail-reason" name="att_reason" rows="3" style="height: 245px; resize: none;"readonly></textarea>
-                </div>
-                <div class="input-group mb-3" id="attApproval" style="display: none;">
-                    <label class="input-group-text" for="detail-reason">수정 승인 여부</label>
-                    <select class="form-select" id="ddetail-approval">
-		    			<option value="">승인 여부</option>
- 						<option value="true">승인</option>
-  						<option value="false">거부</option>
-                   </select>
-                </div>
-                <div class="input-group mb-3" id="ddetail-reject-reason" >
-                    <label class="input-group-text" for="detail-rejection-reason">수정 거부 사유</label>
-                    <input type="text" class="form-control" id="ddetail-rejection-reason" placeholder="수정 거부 사유를 입력해주세요." name="rejection_reason">
-                </div>
-                <div class="row mb-3">
-                    <div class="col-6">
-                        <div class="input-group">
-                            <label class="input-group-text" for="detail-handler">담당자</label>
-                            <input type="text" class="form-control" id="ddetail-handler" name="handler" value="${sessionScope.loginId}" readonly>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="input-group">
-                            <label class="input-group-text" for="detail-process-date">처리일</label>
-                            <input type="text" class="form-control" id="ddetail-process-date" name="process_date" readonly>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="edit-att-btn" onclick="attEdit()">등록</button>
-            </div>
-        </div>
-    </div>
-</div>
 <!-- 근태 수정 내역 모달 끝 -->
 
 			
@@ -499,43 +534,285 @@ div
 <script src="/assets/vendor/calendar/js/main.min.js"></script>
 <script src="/assets/vendor/calendar/custom/mycab-cal.js"></script>
 <script>
-    
-/* 전체 근태 내역 스크립트 시작  */
- 
- 
+    console.log("zzzzz");
+/* 카테고리 변수 저장 */
+	var resSerachCategory = '회의실';
+	var	resSearchDate ='';
+	var resSearchStartTime = '';
+	var resSearchEndTime= '';
+	var resStatus = '';
+	var resOption = '';
+    var currentPage = 1; // 현재 페이지 번호
+	var today = moment().format('YYYY/MM/DD');
+	var showPage =1;
+
  
 $(document).ready(function(){
 	getTotalPages();
-	 getList();
-	 updateChart(filterAttDate);
-	
+	getMrList();	
 	
 });
  
- 
- $('#taxi-detail-tab').on('click', function(e) {
-	 getTotalPages();
-	 getList();
-	 updateChart(filterAttDate);
+ // 탭 클릭 
+ // 회의실
+ $('#meetroom-list-tab').on('click', function(e) {
+	//카테고리 설정
+	resSerachCategory = "회의실"
+	filterStartDate = today
+	
+
+	 getMrList();
 });
  
-    var searchText = '';
-    var filterAttDate = '';
-    var filterAttResult = '';
-    var filterforSearch = '';
-    var currentPage = 1; // 현재 페이지 번호
-    var today = moment().format('YYYY/MM/DD');
-  
-    
-    // 검색 값들 변수에 저장
-    function getSearchValue() {
-    	filterAttResult = $('#filter-att-result').val();
-		filterforSearch = $('#filterforsearch').val();
-        searchText = $('#search-emp').val();
-        filterAttDate = $('#filter-att-date').val();
-    }
-    
-    // 필터 값 리셋
+// 차량
+ $('#car-list-tab').on('click', function(e) {
+	//카테고리 설정
+	resSerachCategory = "차량"
+	filterStartDate = today
+
+     getCarList();
+});
+
+// 비품
+ $('#equipment-list-tab').on('click', function(e) {
+	//카테고리 설정
+	resSerachCategory = "비품"
+	filterStartDate = today
+	
+	 getEqList();
+});
+
+ function getSearchValue() {
+ 	if(resSerachCategory == '회의실'){
+
+ 		resSearchDate = document.getElementById("search-mr-date").value;
+ 		var startTime = document.getElementById("search-mr-start-time").value;
+ 		var endTime= document.getElementById("search-mr-end-time").value;
+ 		resStatus = document.getElementById("search-mr-status").value;
+ 		resOption = document.getElementById("search-mr-capacity").value;
+ 		resSearchStartTime = setDateTimeFormat(resSearchDate,startTime)
+ 		resSearchEndTime = setDateTimeFormat(resSearchDate,endTime)
+ 		
+ 	}else if(resSerachCategory == '차량'){
+ 		resSearchDate = document.getElementById("search-car-date").value;
+ 		var startTime = document.getElementById("search-car-start-time").value;
+ 		var endTime= document.getElementById("search-car-end-time").value;
+ 		resStatus = document.getElementById("search-car-status").value;
+ 		resOption = document.getElementById("search-car-category").value;
+ 		resSearchStartTime = setDateTimeFormat(resSearchDate,startTime)
+ 		resSearchEndTime = setDateTimeFormat(resSearchDate,endTime)
+ 	}else if(resSerachCategory == '비품'){
+ 		resSearchDate = document.getElementById("search-mr-date").value;
+ 		var startTime = document.getElementById("ssearch-car-start-time").value;
+ 		var endTime= document.getElementById("search-car-end-time").value;
+ 		resStatus = document.getElementById("search-car-status").value;
+ 		resOption = document.getElementById("search-car-category").value;
+ 		resSearchStartTime = setDateTimeFormat(resSearchDate,startTime)
+ 		resSearchEndTime = setDateTimeFormat(resSearchDate,endTime)
+ 	}
+ 	
+ }
+ 
+ 
+ function setDateTimeFormat(date,time){
+	 console.log(date);
+	 console.log(time);
+	 var dateTime = date + " " + time;
+	 console.log(dateTime);
+	 return dateTime;
+ };
+
+ // 회의실 리스트 호출
+ function getMrList() {
+     getSearchValue();
+     $.ajax({
+         url: '/resource/resourceList.ajax',
+         type: 'GET',
+         data: {
+             'resSerachCategory': resSerachCategory,
+             'resSearchDate': resSearchDate,
+             'resSearchStartTime':resSearchStartTime,
+             'resSearchEndTime': resSearchEndTime,
+             'resStatus' : resStatus,
+             'resOption' : resOption            
+         },
+         dataType: 'JSON',
+         success: function (data) {
+             drawMrList(data.list);
+             
+             var startPage = 1;
+             
+             $('#pagination').twbsPagination({
+ 	    		startPage:data.currPage, // 시작 페이지
+ 	    		totalPages:data.totalPages, // 총 페이지 갯수
+ 	    		visiblePages:5,  // 보여줄 페이지 수[1][2][3][4][5]
+ 	    		onPageClick:function(evt,pg){ // 페이지 클릭시 실행 함수
+ 	    			console.log(evt); // 이벤트 객체
+ 	    			console.log(pg); //클릭한 페이지 번호 의미
+ 	        		showPage = pg;
+ 	        		getMrList(pg);
+ 	    			
+ 	    		}
+ 	       	});
+         },
+         error: function (error) {
+             console.log(error);
+         }
+     });
+ }
+ 
+ function getCarList() {
+     getSearchValue();
+     $.ajax({
+         url: '/resource/resourceList.ajax',
+         type: 'GET',
+         data: {
+             'resSerachCategory': resSerachCategory,
+             'resSearchDate': resSearchDate,
+             'resSearchStartTime':resSearchStartTime,
+             'resSearchEndTime': resSearchEndTime,
+             'resStatus' : resStatus,
+             'resOption' : resOption            
+         },
+         dataType: 'JSON',
+         success: function (data) {
+             draCarList(data.list);
+             
+             var startPage = 1;
+             
+             $('#pagination').twbsPagination({
+ 	    		startPage:data.currPage, // 시작 페이지
+ 	    		totalPages:data.totalPages, // 총 페이지 갯수
+ 	    		visiblePages:5,  // 보여줄 페이지 수[1][2][3][4][5]
+ 	    		onPageClick:function(evt,pg){ // 페이지 클릭시 실행 함수
+ 	    			console.log(evt); // 이벤트 객체
+ 	    			console.log(pg); //클릭한 페이지 번호 의미
+ 	        		showPage = pg;
+ 	        		getCarList(pg);
+ 	    			
+ 	    		}
+ 	       	});
+         },
+         error: function (error) {
+             console.log(error);
+         }
+     });
+ }
+ 
+ function getEqList() {
+     getSearchValue();
+     $.ajax({
+         url: '/resource/resourceList.ajax',
+         type: 'GET',
+         data: {
+             'resSerachCategory': resSerachCategory,
+             'resSearchDate': resSearchDate,
+             'resSearchStartTime':resSearchStartTime,
+             'resSearchEndTime': resSearchEndTime,
+             'resStatus' : resStatus,
+             'resOption' : resOption            
+         },
+         dataType: 'JSON',
+         success: function (data) {
+             drawEqList(data.list);
+             
+             var startPage = 1;
+             
+             $('#pagination').twbsPagination({
+ 	    		startPage:data.currPage, // 시작 페이지
+ 	    		totalPages:data.totalPages, // 총 페이지 갯수
+ 	    		visiblePages:5,  // 보여줄 페이지 수[1][2][3][4][5]
+ 	    		onPageClick:function(evt,pg){ // 페이지 클릭시 실행 함수
+ 	    			console.log(evt); // 이벤트 객체
+ 	    			console.log(pg); //클릭한 페이지 번호 의미
+ 	        		showPage = pg;
+ 	        		getEqList(pg);
+ 	    			
+ 	    		}
+ 	       	});
+         },
+         error: function (error) {
+             console.log(error);
+         }
+     });
+ }
+ 
+ function drawMrList(list) {
+     var content = '';
+     if (list.length > 0) {
+         for (item of list) {
+         	console.log(item.resource_name);
+           
+             content += '<tr class="total-att-list-tbody-tr" id="' + item.resource_idx + '">'
+             	+ '<td class="text-center">' + item.resource_name+ '</td>'
+             	+ '<td class="text-center">' + item.meeting_room_capacity+ '</td>'
+             	+ '<td class="text-center">' + item.resource_location+ '</td>'
+             	+ '<td class="text-center">' + item.resource_meeting_content+ '</td>'
+             	+ '<td class="text-center">' + item.resource_state+ '</td>'
+                + '</tr>';
+         }
+     } else {
+         content = '<tr><td colspan="7" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
+     }
+     $('#total-att-list').html(content);
+     
+     
+     $(document).on('click', '.total-att-list-tbody-tr', function () {
+         location.href = '/resource/resourceReservation.go?resource_idx=' + $(this).attr('id');
+     });
+ }
+ 
+ function drawCarList(list) {
+     var content = '';
+     if (list.length > 0) {
+         for (item of list) {
+         	console.log(item.resource_name);
+           
+             content += '<tr class="total-att-list-tbody-tr" id="' + item.resource_idx + '">'
+             	+ '<td class="text-center">' + item.resource_name+ '</td>'
+             	+ '<td class="text-center">' + item.meeting_room_capacity+ '</td>'
+             	+ '<td class="text-center">' + item.resource_location+ '</td>'
+             	+ '<td class="text-center">' + item.resource_meeting_content+ '</td>'
+             	+ '<td class="text-center">' + item.resource_state+ '</td>'
+                + '</tr>';
+         }
+     } else {
+         content = '<tr><td colspan="7" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
+     }
+     $('#total-att-list').html(content);
+     
+     
+     $(document).on('click', '.total-att-list-tbody-tr', function () {
+         location.href = '/resource/resourceReservation.go?resource_idx=' + $(this).attr('id');
+     });
+ }
+ 
+ function drawEqList(list) {
+     var content = '';
+     if (list.length > 0) {
+         for (item of list) {
+         	console.log(item.resource_name);
+           
+             content += '<tr class="total-att-list-tbody-tr" id="' + item.resource_idx + '">'
+             	+ '<td class="text-center">' + item.resource_name+ '</td>'
+             	+ '<td class="text-center">' + item.meeting_room_capacity+ '</td>'
+             	+ '<td class="text-center">' + item.resource_location+ '</td>'
+             	+ '<td class="text-center">' + item.resource_meeting_content+ '</td>'
+             	+ '<td class="text-center">' + item.resource_state+ '</td>'
+                + '</tr>';
+         }
+     } else {
+         content = '<tr><td colspan="7" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
+     }
+     $('#total-att-list').html(content);
+     
+     
+     $(document).on('click', '.total-att-list-tbody-tr', function () {
+         location.href = '/resource/resourceReservation.go?resource_idx=' + $(this).attr('id');
+     });
+ }
+ 
+/*     // 필터 값 리셋
     function filterReset() {
         $('#filter-att-result').val('');
         $('#search-emp').val('');
@@ -545,11 +822,7 @@ $(document).ready(function(){
         currentPage = 1; // 페이지 번호 초기화
         getTotalPages();
         getList(); // 목록 새로고침
-        updateChart(filterAttDate);
-    }
-    
-    
-    
+    }   
     $('#search-emp').on('keyup', function(){
     	currentPage = 1;
         getTotalPages();
@@ -561,54 +834,32 @@ $(document).ready(function(){
     	currentPage = 1;
         getTotalPages();
         getList();
-        updateChart(filterAttDate);
     });
     
     $('#filter-att-result').on('change', function(){
     	currentPage = 1;
         getTotalPages();
         getList();
-    });
+    }); */
 
   
     
     
     
- // 근태리스트 호출
-    function getList() {
-        getSearchValue();
-        $.ajax({
-            url: '/totalAttList.ajax',
-            type: 'GET',
-            data: {
-                'searchText': searchText,
-                'filterAttResult': filterAttResult,
-                'filterForSearch': filterforSearch,
-                'filterAttDate':filterAttDate,
-                'page': currentPage
-               
-            },
-            dataType: 'JSON',
-            success: function (data) {
-                drawList(data.empList);
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        });
-    }
+
 
     // 토탈 페이지 호출
     function getTotalPages() {
         getSearchValue();
         $.ajax({
-            url: '/getTotalPages.ajax',
+            url: '/resource/resGetPages.ajax',
             type: 'GET',
             data: {
-            	 'searchText': searchText,
-                 'filterAttResult': filterAttResult,
-                 'filterForSearch': filterforSearch,
-                 'filterAttDate':filterAttDate
+                'resSerachCategory': resSerachCategory,
+                'resSearchStartTime':resSearchStartTime,
+                'resSearchEndTime': resSearchEndTime,
+                'resStatus' : resStatus,
+                'resOption' : resOption   
             },
             dataType: 'JSON',
             success: function (data) {
@@ -630,435 +881,42 @@ $(document).ready(function(){
             }
         });
     }
-    
-    
-    function toKoreanTime(dateString) {
-    	if (!dateString) return '';
-        
-        // 입력된 문자열을 UTC 시간으로 변환
-        const date = new Date(dateString);
 
-        // toLocaleTimeString을 사용하여 한국 시간대로 포맷
-        const options = { timeZone: 'Asia/Seoul', hour: '2-digit', minute: '2-digit', hour12: false };
-        const koreanTime = date.toLocaleTimeString('ko-KR', options);
-        
-        return koreanTime;
-    	}
     
     
+
+
     
- 
-    // 리스트 보여주기
-    function drawList(list) {
-        var content = '';
-        if (list.length > 0) {
-            for (item of list) {
-            	console.log(item.att_time);
-            	console.log(toKoreanTime(item.att_time));
-              
-                content += '<tr class="total-att-list-tbody-tr" id="' + item.emp_no + '">'
-                	+ '<td class="text-center">' + item.emp_no+ '</td>'
-                	+ '<td class="text-center">' + item.emp_name+ '</td>'
-                	+ '<td class="text-center">' + item.title_name+ '</td>'
-                	+ '<td class="text-center">' + item.dept_name+ '</td>'
-                	+ '<td class="text-center">' + toKoreanTime(item.att_time)+ '</td>'
-                    + '<td class="text-center">' + toKoreanTime(item.leave_time)  + '</td>'
-                    + '<td class="text-center">' + item.att_result + '</td>'
-                    + '</tr>';
-            }
-        } else {
-            content = '<tr><td colspan="7" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
+
+
+        // 9:00부터 18:00까지 30분 간격으로 옵션 추가
+addOptions(9, 18, 60,document.getElementById("search-mr-start-time"));
+addOptions(9, 18, 60,document.getElementById("search-mr-end-time"));
+addOptions(9, 18, 60,document.getElementById("search-car-start-time"));
+addOptions(9, 18, 60,document.getElementById("search-car-end-time"));
+addOptions(9, 18, 60,document.getElementById("search-eq-start-time"));
+addOptions(9, 18, 60,document.getElementById("search-eq-end-time"));
+
+
+
+function addOptions(startHour, endHour, intervalMinutes, elem) {
+    for (let hour = startHour; hour <= endHour; hour++) {
+        console.log(hour);
+        for (let minutes = 0; minutes < 60; minutes += intervalMinutes) {
+            if (hour === endHour && minutes > 0 && elem === null) break;
+            const option = document.createElement("option");
+            const timeHour = String(hour).padStart(2, '0');
+            const timeMin = String(minutes).padStart(2, '0');
+            var timeString = timeHour + ":" + timeMin;
+            console.log(timeString);
+            option.value = timeString;
+            option.textContent = timeString;
+            elem.appendChild(option);
         }
-        $('#total-att-list').html(content);
-        
-        
-        $(document).on('click', '.total-att-list-tbody-tr', function () {
-            location.href = '/empAttHistory.go?emp_no=' + $(this).attr('id');
-        });
     }
-    
- // Initial data for the chart (dummy data for demonstration)
-    let initialData = {
-        labels: ['미출근', '지각', '연차/반차'],
-        datasets: [{
-            data: [0,0,0], // Replace with actual data
-            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
-        }]
-    };
-
-    // Function to update the chart based on selected date
-    function updateChart(filterAttDate) {
-        $.ajax({
-            url: '/updateChar.ajax', // Replace with your backend API endpoint
-            method: 'GET',
-            data: {
-                'filterAttDate': filterAttDate // Pass selectedDate as filterAttDate to backend
-            },
-            success: function (response) {
-                // Assuming response.chart contains the data array
-                console.log('미출근?'+response.chart.absentCount);
-                console.log(response.chart);
-                let newData = {
-                    labels: ['미출근', '지각', '연차/반차'],
-                    datasets: [{
-                        data: [response.chart[0].absentCount, response.chart[0].lateCount, response.chart[0].leaveCount], // Update with actual data received from server
-                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
-                    }]
-                };
-
-                // Update chart
-                myDonutChart.data = newData;
-                myDonutChart.update();
-            },
-            error: function (error) {
-                console.error('Error fetching data:', error);
-            }
-        });
-    }
-
-    // Get the canvas element
-    const ctx = document.getElementById('myDonutChart').getContext('2d');
-
-    // Create the initial chart
-    const myDonutChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: initialData,
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function (tooltipItem) {
-                            return tooltipItem.label + ': ' + tooltipItem.raw.toFixed(2) + '%';
-                        }
-                    }
-                }
-            }
-        }
-    });
-
-    // Event listener for datepicker change
-    $('#filter-att-date').on('change', function (e) {
-        let selectedDate = $('#filter-att-date').val();
-        updateChart(selectedDate);
-    });
-    
-   
-    
-    /* 수정 요청 내역 스크립트 시작  */
-    $('#taxi-schedule-tab').on('click', function(e) {
-    	getEditTotalPages();
-        getEditList();
-});
-    
-    
-    var searchEditText = '';
-    var filterEditDate = '';
-    var filterEditResult = '';
-   
-    
-    
-  
-    
-    // 검색 값들 변수에 저장
-    function getEditSearchValue() {
-    	filterEditResult = $('#filter-edit-result').val();
-		searchEditText = $('#search-edit').val();
-		filterEditDate = $('#filter-edit-date').val();
-    }
-    
-    // 필터 값 리셋
-    function EditfilterReset() {
-        $('#filter-edit-result').val('');
-        $('#search-edit').val('');
-        $('#filter-edit-date').val(today);
-        filterEditDate = $('#filter-edit-date').val(today);
-        currentPage = 1; // 페이지 번호 초기화
-        getEditTotalPages();
-        getEditList();
-    }
-    
-    
-    $('#search-edit').on('keyup', function(){
-    	currentPage = 1;
-    	 getEditTotalPages();
-         getEditList();
-       
-    });
-    
-    $('#filter-edit-date').on('change', function(){
-    	currentPage = 1;
-    	 getEditTotalPages();
-         getEditList();
-    });
-    
-    $('#filter-edit-result').on('change', function(){
-    	currentPage = 1;
-    	 getEditTotalPages();
-         getEditList();
-    });
-    
-    
-    // 근태수정리스트 호출
-    function getEditList() {
-    	getEditSearchValue();
-        $.ajax({
-            url: '/totalEditList.ajax',
-            type: 'GET',
-            data: {
-                'searchEditText': searchEditText,
-                'filterEditResult': filterEditResult,
-                'filterEditDate':filterEditDate,
-                'page': currentPage
-               
-            },
-            dataType: 'JSON',
-            success: function (data) {
-                drawEditList(data.empList);
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        });
-    }
-
-    // 토탈 페이지 호출
-    function getEditTotalPages() {
-    	getEditSearchValue();
-        $.ajax({
-            url: '/getEditTotalPages.ajax',
-            type: 'GET',
-            data: {
-            	 'searchEditText': searchEditText,
-                 'filterEditResult': filterEditResult,
-                 'filterEditDate':filterEditDate,
-            },
-            dataType: 'JSON',
-            success: function (data) {
-                console.log(data);
-                $('#pagination2').twbsPagination('destroy');
-                $('#pagination2').twbsPagination({
-                    totalPages: data.totalPages, // 서버에서 받은 총 페이지 수
-                    visiblePages: 5,
-                    startPage: currentPage,
-                    paginationClass: 'pagination align-items-center',
-                    onPageClick: function (event, page) {
-                        currentPage = page;
-                        getEditList();
-                    }
-                });
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        });
-    }
-    
-    
-    
-    // 리스트 보여주기
-    function drawEditList(list) {
-        var content = '';
-        if (list.length > 0) {
-            for (item of list) {
-            	
-                var att_apply_status = item.att_apply_status === true ? 'Y' : 'N';
-                var process_status = item.process_status === 'true' ? 'Y' : 'N';
-                
-                
-             // ISO 8601 날짜 문자열을 Date 객체로 변환
-                var date = new Date(item.att_applicant_date);
-                // 한국 시간으로 변환
-                var kstDate = new Date(date.getTime() + (9 * 60 * 60 * 1000));
-                // 날짜만 추출 (yyyy-mm-dd 형식)
-                var formattedDate = kstDate.toISOString().split('T')[0];
-              
-                content += '<tr class="att-Edit-list-tbody-tr" id="' + item.att_management_idx + '">'
-                	+ '<td class="text-center">' + item.att_management_idx+ '</td>'
-                	+ '<td class="text-center">' + item.emp_name+ '</td>'
-                	+ '<td class="text-center">' + formattedDate + '</td>'
-                    + '<td class="text-center">' + att_apply_status  + '</td>'
-                    + '<td class="text-center">' + process_status + '</td>'
-                    + '</tr>';
-            }
-        } else {
-            content = '<tr><td colspan="7" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
-        }
-        $('#att-Edit-list').html(content);
-    }
-    
-     $(document).on('click', '.att-Edit-list-tbody-tr', function () {
-        console.log($(this).attr('id'));
-        var attidx = $(this).attr('id');
-        
-        getAttEditList(attidx).done(function(data) {
-        	console.log(data);
-        	
-        	// ISO 8601 날짜 문자열을 Date 객체로 변환
-            var date = new Date(data.att.att_modify_date);
-            // 한국 시간으로 변환
-            var kstDate = new Date(date.getTime() + (9 * 60 * 60 * 1000));
-            // 날짜만 추출 (yyyy-mm-dd 형식)
-            var formattedDate = kstDate.toISOString().split('T')[0];
-        	
-        	$('#ddetail-idx').val(attidx);
-            $('#ddetail-no').val(data.att.att_applicant);
-            $('#ddetail-name').val(data.att.emp_name);
-            $('#ddetail-workday').val(data.att.work_day);
-            $('#ddetail-att-time').val(toKoreanTime(data.att.att_time));
-            $('#ddetail-leave-time').val(toKoreanTime(data.att.leave_time));
-            $('#ddetail-before-att').val(data.att.att_previous_attresult);
-            $('#ddetail-after-att').val(data.att.att_modify_attresult);
-            $('#ddetail-reason').val(data.att.att_reason);
-            
-          
-            
-            
-            
-            const rejectionReason = data.att.att_modify_reject != null ? data.att.att_modify_reject : '';
-            const handler = data.att.att_modifier != 0 ? data.att.att_modifier : '${sessionScope.loginId}';
-            const processDate = data.att.att_modify_date ? formattedDate : today;
-            
-            
-          
-         
-            $('#ddetail-rejection-reason').val(rejectionReason);
-            $('#ddetail-handler').val(handler);
-            $('#ddetail-process-date').val(processDate);
-            
-            console.log(data.att.att_apply_status);
-            
-            
-            if (data.att.att_modifier == '0') {
-                // 수정자 정보가 0이면 처리 전
-                $('#attApproval').show();
-                
-                $('#edit-att-btn').show();
-            } else {
-                // 이미 처리된 경우
-                $('#attApproval').hide();
-                $('#ddetail-rejection-reason').prop('readonly', true);
-                $('#edit-att-btn').hide();
-            }
-          
-            $('#attApplyModal').modal('show');
-        }); 
-    });
-    
-    function getAttEditList(attidx) {//사원 상세보기 
-        return $.ajax({
-            url: '/getAttEditListDetail.ajax',
-            type: 'GET',
-            data: {
-                'att_management_idx': attidx     
-            },
-            dataType: 'JSON',           
-            success: function(data) {
-                return data;
-            },
-            error: function(xhr, status, error) {
-                console.error('근태 수정 내역 데이터를 가져오는 중 오류 발생:', status, error);
-            }
-        });
-    }
-    
-    
-    $('#ddetail-approval').on('change', function() {
-        var approval = document.getElementById('ddetail-approval').value;
-        var isApproved = (approval === 'true');
-        var rejectionReasonInput = document.getElementById('ddetail-rejection-reason');
-
-        if (!isApproved && approval !== "") {
-            rejectionReasonInput.disabled = false;
-        } else {
-            rejectionReasonInput.disabled = true;
-        }
-    });
-    
- function attEdit(){
-    	
-    	var no = document.getElementById('ddetail-handler').value;
-    	var idx = document.getElementById('ddetail-idx').value;
-    	var previousResult = document.getElementById('ddetail-before-att').value;
-    	var modifyResult = document.getElementById('ddetail-after-att').value;
-    	var rejectReason = document.getElementById('ddetail-rejection-reason').value;
-    	var approval = document.getElementById('ddetail-approval').value;
-    	var isApproved = (approval === 'true');
-    	
-    	if (approval === false) {
-    		if (rejectReason === '' || rejectReason.trim() === '') {
-        		alert('수정 거부 사유를 입력해주세요!');
-    			
-    		}else{
-        	
-        	$.ajax({
-    	        type: "GET",
-    	        url: "/approvalReject.ajax",
-    	        data: {
-    	        	'att_management_idx': idx,
-    	        	'att_modifier': no,
-    	        	'att_modify_attresult': modifyResult,
-    	        	'att_modify_reject': rejectReason,
-    	        	'att_apply_status':isApproved
-    	        },
-    	        dataType: "json",
-    			success: function(data) {
-    				if (data.isSuccess) {
-    					$('#attApplyModal').modal('hide');
-                        showAlert('success', '근태 수정 거부가 완료되었습니다.');
-                       
-                    } else {
-                    	$('#attApplyModal').modal('hide');
-                        showAlert('danger', '근태 수정 거부에 실패했습니다.');
-                    }  
-    	        },
-    	        error: function(xhr, status, error) {
-    	            // 에러 처리
-    	            $("#result").html("<p>There was an error: " + error + "</p>");
-    	        }
-    	    });
-    		}
-			
-		}else{
-			
-			$.ajax({
-    	        type: "GET",
-    	        url: "/approvalPermit.ajax",
-    	        data: {
-    	        	'att_management_idx': idx,
-    	        	'att_modifier': no,
-    	        	'att_modify_attresult': modifyResult,
-    	        	'att_apply_status':isApproved
-    	        },
-    	        dataType: "json",
-    			success: function(data) {
-    				if (data.isSuccess) {
-    					$('#attApplyModal').modal('hide');
-                        showAlert('success', '근태 수정 승인이 완료되었습니다.');
-                       
-                    } else {
-                    	$('#attApplyModal').modal('hide');
-                        showAlert('danger', '근태 수정 승인에 실패했습니다.');
-                    }  
-    	        },
-    	        error: function(xhr, status, error) {
-    	            // 에러 처리
-    	            $("#result").html("<p>There was an error: " + error + "</p>");
-    	        }
-    	    });
-			
-			
-		}
-    	
-    }
-    
+}
 
 
-        
 
 </script>
 

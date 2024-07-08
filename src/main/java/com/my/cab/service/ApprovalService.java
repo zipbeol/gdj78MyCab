@@ -1,5 +1,11 @@
 package com.my.cab.service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.sql.Date;
+import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -120,6 +126,31 @@ public class ApprovalService {
 	public List<ApprovalDocDTO> getFilteredApprovalData(String loginId) {
 		return apprDAO.getFilteredApprovalData(loginId);
 	}
+	// 다시시작
+	public String getUserType(Map<String, Object> params) {
+	    try {
+	        List<String> userTypes = apprDAO.getUserType(params);
+	        if (userTypes.isEmpty()) {
+	            return "unknown";
+	        }
+	        return userTypes.get(0); // 첫 번째 결과를 반환
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return null;
+	    }
+	}
+
+	public String getUserNameById(String loginId) {
+	    return apprDAO.getUserNameById(loginId);
+	}
+
+	public String getUserTitleById(String loginId) {
+	    return apprDAO.getUserTitleById(loginId);
+	}
+
+	
+
+
 
 
 

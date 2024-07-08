@@ -40,4 +40,6 @@ public interface ResourceDAO {
 
 	List<ResourceDTO> getSelectRsvDate(String resource_idx, String resource_reserve_start_date);
 
+	ResourceDTO getReservationCarInfo(int resource_idx);
+
 }

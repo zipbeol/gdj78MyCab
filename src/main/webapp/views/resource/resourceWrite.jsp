@@ -48,6 +48,8 @@
     
     <style >
 
+
+
     	
     </style>
    
@@ -124,109 +126,86 @@
 
 						<!-- Row start -->
 
-						<div class="row">
-							<div class="col-12">
-								<div class="card mb-3">
-									<div class="card-header">
-										<h4 class="card-title">자원 등록</h4>
-									</div>
-									<div class="card-body">
-										<!-- 기본 정보 -->
-										<div class="card mb-4">
-											<div class="card-header">기본 정보</div>
-											<div class="card-body">
-												<form id="resourceForm" action="/resource/resourceWrite.do" method="post" enctype="multipart/form-data">
-													<div class="row">
-														<div class="col-md-6 form-group">
-															<label for="resourceName">자원명</label> <input type="text"
-																class="form-control" id="resourceName"
-																name="resource_name" required>
-															<!-- 추가 옵션들 -->
-															</select>
-														</div>
-														<div class="col-md-6 form-group">
-															<label for="location">위치</label> <input type="text"
-																class="form-control" id="resourceLocation"
-																name="resource_location" required>
-														</div>
-													</div>
-													<div class="row">
-														<div class="col-md-6 form-group">
-															<label for="resourceType">타입</label> <select
-																class="form-control" id="resourceType"
-																name="resource_category" required>
-																<option value="">선택</option>
-																<option value="차량">차량</option>
-																<option value="회의실">회의실</option>
-																<option value="비품">비품</option>
-															</select>
-														</div>
-														<div class="col-md-6 form-group">
-															<label for="status">사용 가능 여부</label>
-															<div>
-																<div class="form-check form-check-inline">
-																	<input class="form-check-input" type="radio"
-																		name="resource_state" id="statusUse" value="use" checked>
-																	<label class="form-check-label" for="statusUse">사용가능</label>
-																</div>
-																<div class="form-check form-check-inline">
-																	<input class="form-check-input" type="radio"
-																		name="resource_state" id="statusNotUse" value="not_use">
-																	<label class="form-check-label" for="statusNotUse">사용불가</label>
-																</div>
-															</div>
-
-														</div>
-													</div>
-
-													<div class="row">
-														<div class="form-group col-md-6">
-															<div id="dynamic-fields"></div>
-														</div>
-
-
-													</div>
-													<div class="row">
-
-														<div class="form-group">
-															<label for="detail">세부사항</label>
-															<div
-																class="main-container ckeditor-div main-container-custom">
-																<div
-																	class="editor-container editor-container_classic-editor editor-container_include-style"
-																	id="editor-container">
-																	<div class="editor-container__editor">
-																		<div id="editor"></div>
-																	</div>
-																</div>
-																<input type="hidden" name="resource_content" id="content">
-															</div>
-														</div>
-													</div>
-													<br>
-													<br>
-													<br>
-													<br>
-													<br>
-													<br>
-													<br>
-													<br>
-													<br>
-													<br>
-													<div class="d-flex justify-content-end mb-5">
-														<button type="button" class="btn btn-secondary mr-2">취소</button>
-														<button type="button" class="btn btn-primary" onclick="submitClk()" id="submitBtn">저장</button>
-													</div>
-												</form>
-											</div>
+						<div class="container mt-5">
+	    <div class="row">
+	        <div class="col-12">
+	            <div class="card mb-3">
+	                <div class="card-header">
+	                    <h4 class="card-title">자원 등록</h4>
+	                </div>
+	                <div class="card-body">
+	                    <!-- 기본 정보 -->
+	                    <div class="card mb-4">
+	                        <div class="card-body">
+	                            <form id="resourceForm" action="/resource/resourceWrite.do" method="post" enctype="multipart/form-data">
+	                                <div class="row mb-3">
+	                                    <div class="col-md-6">
+	                                        <label for="resourceName" class="form-label">자원명</label>
+	                                        <input type="text" class="form-control" id="resourceName" name="resource_name" required>
+	                                    </div>
+	                                    <div class="col-md-6">
+	                                        <label for="location" class="form-label">위치</label>
+	                                        <input type="text" class="form-control" id="resourceLocation" name="resource_location" required>
+	                                    </div>
+	                                </div>
+	                                <div class="row mb-3">
+	                                    <div class="col-md-6">
+	                                        <label for="resourceType" class="form-label">타입</label>
+	                                        <select class="form-select" id="resourceType" name="resource_category" required>
+	                                            <option value="">선택</option>
+	                                            <option value="차량">차량</option>
+	                                            <option value="회의실">회의실</option>
+	                                            <option value="비품">비품</option>
+	                                        </select>
+	                                    </div>
+	                                    <div class="col-md-6">
+	                                        <label for="status" class="form-label">사용 가능 여부</label>
+	                                        <div>
+	                                            <div class="form-check form-check-inline">
+	                                                <input class="form-check-input" type="radio" name="resource_state" id="statusUse" value="use" checked>
+	                                                <label class="form-check-label" for="statusUse">사용가능</label>
+	                                            </div>
+	                                            <div class="form-check form-check-inline">
+	                                                <input class="form-check-input" type="radio" name="resource_state" id="statusNotUse" value="not_use">
+	                                                <label class="form-check-label" for="statusNotUse">사용불가</label>
+	                                            </div>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                                <div class="row">
+										<div class="form-group col-md-6">
+											<div id="dynamic-fields"></div>
 										</div>
-
-										<!-- 버튼 -->
-										
 									</div>
-								</div>
-							</div>
-						</div>
+	                              	<div class="row mb-3">
+	                                    <div class="col-12">
+	                                        <label for="detail" class="form-label">세부사항</label>
+	                                        <div class="main-container main-container-custom">
+	                                            <div class="editor-container" id="editor-container">
+	                                                <div class="editor-container__editor">
+	                                                    <div id="editor"></div>
+	                                                </div>
+	                                            </div>
+	                                            <input type="hidden" name="resource_content" id="content">
+	                                        </div>
+	                                    </div>
+                                	</div>
+	
+	                                <div class="d-flex justify-content-end">
+	                                    <button type="button" class="btn btn-secondary me-2">취소</button>
+	                                    <button type="button" class="btn btn-primary" onclick="submitClk()" id="submitBtn">저장</button>
+	                                </div>
+	                            </form>
+	                        </div>
+	                    </div>
+	
+	                    <!-- 버튼 -->
+	                    
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
 					<!-- Row end -->
 					</div>
 					<!-- Container ends -->
@@ -350,6 +329,10 @@
 	                        <label for="capacity">수용 인원</label>
 	                        <input type="number" class="form-control" id="meetRoomCapacity" name="meeting_room_capacity" required>
 	                    </div>
+	                    <div class="col-md-5 form-group">
+	                        <label for="carPhoto">좌석 배치도</label>
+	                        <input type="file" class="form-control" id="carPhoto" name="carPhoto" multiple="multiple">
+          				</div> 
 	                </div>	                
 	            `);
 	        } else if (type === '비품') {

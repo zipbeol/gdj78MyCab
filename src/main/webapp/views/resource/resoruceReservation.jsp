@@ -58,6 +58,49 @@
     	height: 20px;
     	float: right;
     }	
+    .create-rsv-btn{
+    	position: absolute;
+    	right: 10px;
+    	top : 10px;
+    }
+    #timeCheckboxes {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 20px;
+    }
+
+    .util-box-category {
+        flex: 1 0 48%; /* 2 items per row with some gap */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 20px;
+        background-color: lightblue;
+    }
+
+    .util-box-category:hover {
+        transform: scale(1.05);
+    }
+
+    .form-check-label {
+        font-size: 16px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .form-check-input {
+        margin-left: 10px;
+        transform: scale(1.2);
+    }
+
+    @media (max-width: 768px) {
+        .util-box-category {
+            flex: 1 0 100%; /* 1 item per row for smaller screens */
+        }
+    }
     </style>
    
   </head>
@@ -144,9 +187,9 @@
 											<div class="container mt-5">
 									        <div class="row">
 									            <div class="col-12">
-									                <h1 class="mb-4">자원 이름</h1>
+									                <h1 class="mb-4">${dto.resource_name}</h1>
 									                <div class="card mb-3">
-									                    <div class="card-header">
+									                    <div class="card-header" style = "position:relative";>
 											                <ul class="nav nav-tabs card-header-tabs" id="taxiTabs" role="tablist">
 											                    <li class="nav-item" role="presentation">
 											                        <button class="nav-link active" id="rsv-detail-tab" data-bs-toggle="tab"
@@ -160,6 +203,9 @@
 											                                aria-controls="rsv-calendar" aria-selected="false">예약 정보
 											                        </button>
 											                    </li>
+											                       <button type="button" class="btn btn-primary create-rsv-btn" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
+											                        	일정추가
+											                    	</button>
 											                </ul>
 											            </div>
 									                    <div class="card-body tab-content" id="newTabsContent">
@@ -180,7 +226,7 @@
 											                <div class="tab-pane fade active" id="rsv-calendar" role="tabpanel"
 											                     aria-labelledby="rsv-calendar-tab">
 											                    <!-- 전체 근태 내역 -->
-											                    <h2>차량 예약</h2>
+											                    <h2>예약 정보</h2>
 											                    <div class="text-end mb-1">
 											                    </div>
 											              		<div class="row">
@@ -194,7 +240,7 @@
 												              				</div>
 												              				<div class="col-auto ml-auto">
 												              					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
-														                        	Vertically centered modal
+														                        	일정추가
 														                    	</button>
 											              					</div>
 											              				</div>												                    		
@@ -288,64 +334,64 @@
 	
 	
 	<!-- 예약하기 모달창 -->
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" aria-labelledby="exampleModalCenterTitle" style="display: none;" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalCenterTitle">자원 예약하기</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="input-group mb-3">
-                    <label class="input-group-text" for="resource_name">자원명</label>
-                    <input type="text" class="form-control" id="resource_name" name="resource_name" value="${dto.resource_name}" readOnly>
-                </div>
-                <div class="input-group mb-3">
-                    <label class="input-group-text" for="resource_category">자원분류</label>
-                    <input type="text" class="form-control" id="resource_category" name="resource_category" value="${dto.resource_category}" readOnly>
-                </div>
-                <div class="input-group mb-3">
-                    <label class="input-group-text" for="reservation-date">예약 날짜</label>
-                    <input type="text" class="createDatepickerStart" id="reservation_date" name="reservation_date">
-                </div>
-                
-                <!-- 시간 선택 탭 -->
-                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="start-time-tab" data-bs-toggle="tab" data-bs-target="#start-time" type="button" role="tab" aria-controls="start-time" aria-selected="true">시간 선택</button>
-                    </li>
-                </ul>
-                <div class="tab-content" id="myTabContent">
-				    <div class="tab-pane fade show active" id="start-time" role="tabpanel" aria-labelledby="start-time-tab">
-				        <div class="input-group mt-3">
-				            <label>시작 시간과 종료 시간을 선택하세요:</label><br>
-				            <div id="timeCheckboxes">
-				                <c:forEach begin="9" end="18" var="hour" varStatus="status">
-							        <c:set var="timeString" value="${hour < 10 ? '0' += hour : hour}:00" />
-							           		<div class="util-box-category alert alert-secondary rounded-3  util-box${status.index}" 
-							             style="background-color: lightblue" data-share-idx="${item.calendar_idx}" data-time="${timeString}">
-									            <label class="form-check-label" for="thirdCheckbox">${timeString}</label>
-									            <input class="form-check-input me-1 chk-no-${status.index}" type="checkbox" 
-										         value="${timeString}" id="thirdCheckbox" onchange="changeChkBox(this)" data-chkbox="${status.index}">
-							           		</div>
-							    </c:forEach>
-				            </div>
-				        </div>
-				    </div>
-				</div>
-
-                <div class="input-group mb-3 mt-3">
-                    <label class="input-group-text" for="resource_reserve_content">예약 사유</label>
-                    <textarea class="form-control" id="resource_reserve_content" name="resource_reserve_content" cols="100" wrap="hard" required></textarea>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소하기</button>
-                <button type="button" class="btn btn-primary" onclick="saveReservation()">예약하기</button>
-            </div>
-        </div>
-    </div>
-</div>
+	<div class="modal fade" id="exampleModalCenter" tabindex="-1" aria-labelledby="exampleModalCenterTitle" style="display: none;" aria-hidden="true">
+	    <div class="modal-dialog modal-dialog-centered">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h5 class="modal-title" id="exampleModalCenterTitle">자원 예약하기</h5>
+	                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	            </div>
+	            <div class="modal-body">
+	                <div class="input-group mb-3">
+	                    <label class="input-group-text" for="resource_name">자원명</label>
+	                    <input type="text" class="form-control" id="resource_name" name="resource_name" value="${dto.resource_name}" readOnly>
+	                </div>
+	                <div class="input-group mb-3">
+	                    <label class="input-group-text" for="resource_category">자원분류</label>
+	                    <input type="text" class="form-control" id="resource_category" name="resource_category" value="${dto.resource_category}" readOnly>
+	                </div>
+	                <div class="input-group mb-3">
+	                    <label class="input-group-text" for="reservation-date">예약 날짜</label>
+	                    <input type="text" class="form-control createDatepickerStart" id="reservation_date" name="reservation_date">
+	                </div>
+	
+	                <!-- 시간 선택 탭 -->
+	                <ul class="nav nav-tabs mb-3" id="myTab" role="tablist">
+	                    <li class="nav-item" role="presentation">
+	                        <button class="nav-link active" id="start-time-tab" data-bs-toggle="tab" data-bs-target="#start-time" type="button" role="tab" aria-controls="start-time" aria-selected="true">시간 선택</button>
+	                    </li>
+	                </ul>
+	                <div class="tab-content" id="myTabContent">
+	                    <div class="tab-pane fade show active" id="start-time" role="tabpanel" aria-labelledby="start-time-tab">
+	                        <div class="input-group mt-3">
+	                            <label class="form-label">예약 시간을 선택 해주세요</label><br>
+	                            <div id="timeCheckboxes">
+	                                <c:forEach begin="9" end="18" var="hour" varStatus="status">
+	                                    <c:set var="timeString" value="${hour < 10 ? '0' += hour : hour}:00" />
+	                                    <div class="util-box-category alert alert-secondary rounded-3 util-box${status.index}"
+	                                         data-share-idx="${item.calendar_idx}" data-time="${timeString}">
+	                                        <label class="form-check-label" for="chk-${status.index}">${timeString}</label>
+	                                        <input class="form-check-input me-1 chk-no-${status.index}" type="checkbox"
+	                                               value="${timeString}" id="chk-${status.index}" onchange="changeChkBox(this)" data-chkbox="${status.index}">
+	                                    </div>
+	                                </c:forEach>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+	
+	                <div class="input-group mb-3 mt-3">
+	                    <label class="input-group-text" for="resource_reserve_content">예약 사유</label>
+	                    <textarea class="form-control" id="resource_reserve_content" name="resource_reserve_content" cols="100" wrap="hard" required></textarea>
+	                </div>
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소하기</button>
+	                <button type="button" class="btn btn-primary" onclick="saveReservation()" data-bs-dismiss="modal">예약하기</button>
+	            </div>
+	        </div>
+	    </div>
+	</div>
 	<!-- 예약하기 모달창 끝 -->
 
 </body>
@@ -464,28 +510,20 @@
 			headerToolbar: {
 				left: "prev,next today",
 				center: "title",
-				right: 'insertScheduleButton'
+				right: false
 			},
-			customButtons: {
-	          insertScheduleButton: {
-	            text: '일정추가',
-	            click: function(arg) {
-	            }
-	          }
-	        },
+
 			locale: 'ko',
 			initialDate: new Date(),
-			navLinks: true, // can click day/week names to navigate views
 			selectable: true,
 			selectMirror: true,
 			select: function (arg) {
 				getSelectRsvDate(arg.startStr);
 			},
-
-			eventDidMount: function(info) {
-		    },
+			dateClick: false,
+			eventClick : false,
 			
-			editable: true,
+			editable: false,
 			dayMaxEvents: true,
 		  	views: {
 			    timeGrid: {
@@ -615,7 +653,9 @@
 	        data: jsonData,
         	contentType:'application/json; charset=utf-8',
 			success: function(response) {
-				
+				var date = getCurrentDateTime()
+				getSelectRsvDate(date)
+				calendar.refetchEvents();
 	        },
 	        error: function(xhr, status, error) {
 	            // 에러 처리

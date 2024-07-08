@@ -143,15 +143,16 @@ public class ResourceService {
 			ResourceDTO dto = resourceDao.getReservationMrInfo(resource_idx);
 			model.addAttribute("dto",dto);
 			model.addAttribute("rsvTime",rsvTime);
-		} /*
-			 * else if(category.equals("차량")){ ResourceDTO dto =
-			 * resourceDao.getReservationCarInfo(resource_idx); }else
-			 * if(category.equals("비품")){ ResourceDTO dto =
-			 * resourceDao.getReservationEqInfo(resource_idx); }
-			 */else {
+		} 
+			  else if(category.equals("차량")){ 
+//				  ResourceDTO dto =
+//			  resourceDao.getReservationCarInfo(resource_idx); 
+			  }else if(category.equals("비품")){ 
+//				  ResourceDTO dto =
+//			  resourceDao.getReservationEqInfo(resource_idx);
+			  }else {
 			logger.info("카테고리 불러오기 실패 ");
 		}
-		
 		
 	}
 

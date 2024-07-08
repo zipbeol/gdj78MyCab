@@ -207,22 +207,22 @@
 					                        </div>
 					                        <div class="row mb-3">
 					                            <div class="col-1">
-					                                <div class="input-group" id="meet-room-capacity">
+					                                <div class="input-group" >
 					                                    <input type="number" class="form-control" id="search-mr-capacity" min="0"> 
 					                                </div>
 					                            </div>
-					                            <div class="col-2 d-flex" id = "search-mr-date">
+					                            <div class="col-2 d-flex" >
 					                                <input type="text" class="form-control datePicker" id = "search-mr-date">					                                
 					                            </div>
 					                            <div class="col-2 d-flex">					                               
 					                                <select id=search-mr-start-time name="search-mr-start-time">
-					                                	<option value="선택">날짜선택</option>
+					                                	<option value="">날짜선택</option>
 														
 								                    </select>
 					                            </div>
 					                            <div class="col-2 d-flex">
 					                             	<select id="search-mr-end-time" name="search-mr-end-time">
-					                             	<option value="선택">날짜선택</option>			
+					                             	<option value="">날짜선택</option>			
 								                    </select>
 					                            </div>
 					                            <div class="col-2 d-flex">
@@ -319,13 +319,13 @@
 					                            </div>
 					                            <div class="col-2 d-flex">
 					                                <select id="search-car-start-time" name="search-car-start-time">
-					                                	<option value="선택">날짜선택</option>
+					                                	<option value="">날짜선택</option>
 
 								                    </select>
 					                            </div>
 					                            <div class="col-2 d-flex">
 					                             	<select id="search-car-end-time" name="search-car-end-time">
-					                             		<option value="선택">날짜선택</option>
+					                             		<option value="">날짜선택</option>
 
 								                    </select>
 					                            </div>
@@ -416,12 +416,12 @@
 					                            <div class="col-2 d-flex">
 					                                <input type="text" class="form-control datePicker" id = "search-eq-date">
 					                                <select id="search-eq-start-time" name="search-eq-start-time">
-					                                	<option value="선택">날짜선택</option>
+					                                	<option value="">날짜선택</option>
 								                    </select>
 					                            </div>
 					                            <div class="col-2 d-flex">
 					                             	<select id="search-eq-end-time" name="search-eq-end-time">
-					                             		<option value="선택">날짜선택</option>
+					                             		<option value="">날짜선택</option>
 								                    </select>
 					                            </div>
 					                            <div class="col-2 d-flex">
@@ -544,7 +544,7 @@
 	var resOption = '';
     var currentPage = 1; // 현재 페이지 번호
 	var today = moment().format('YYYY/MM/DD');
- 
+	var showPage =1;
 
  
 $(document).ready(function(){
@@ -560,7 +560,7 @@ $(document).ready(function(){
 	resSerachCategory = "회의실"
 	filterStartDate = today
 	
-	 getMrPages();
+
 	 getMrList();
 });
  
@@ -569,7 +569,7 @@ $(document).ready(function(){
 	//카테고리 설정
 	resSerachCategory = "차량"
 	filterStartDate = today
- 	getCarPages();
+
      getCarList();
 });
 
@@ -579,33 +579,48 @@ $(document).ready(function(){
 	resSerachCategory = "비품"
 	filterStartDate = today
 	
-	 getEqPages();
 	 getEqList();
 });
 
  function getSearchValue() {
  	if(resSerachCategory == '회의실'){
+
  		resSearchDate = document.getElementById("search-mr-date").value;
- 		resSearchStartTime = document.getElementById("search-mr-date").value;
- 		resSearchEndTime= document.getElementById("search-mr-start-time").value;
- 		resStatus = document.getElementById("search-mr-end-time").value;
+ 		var startTime = document.getElementById("search-mr-start-time").value;
+ 		var endTime= document.getElementById("search-mr-end-time").value;
+ 		resStatus = document.getElementById("search-mr-status").value;
  		resOption = document.getElementById("search-mr-capacity").value;
+ 		resSearchStartTime = setDateTimeFormat(resSearchDate,startTime)
+ 		resSearchEndTime = setDateTimeFormat(resSearchDate,endTime)
+ 		
  	}else if(resSerachCategory == '차량'){
  		resSearchDate = document.getElementById("search-car-date").value;
- 		resSearchStartTime = document.getElementById("search-car-date").value;
- 		resSearchEndTime= document.getElementById("search-car-start-time").value;
- 		resStatus = document.getElementById("search-car-end-time").value;
+ 		var startTime = document.getElementById("search-car-start-time").value;
+ 		var endTime= document.getElementById("search-car-end-time").value;
+ 		resStatus = document.getElementById("search-car-status").value;
  		resOption = document.getElementById("search-car-category").value;
+ 		resSearchStartTime = setDateTimeFormat(resSearchDate,startTime)
+ 		resSearchEndTime = setDateTimeFormat(resSearchDate,endTime)
  	}else if(resSerachCategory == '비품'){
  		resSearchDate = document.getElementById("search-mr-date").value;
- 		resSearchStartTime = document.getElementById("search-car-date").value;
- 		resSearchEndTime= document.getElementById("search-car-start-time").value;
- 		resStatus = document.getElementById("search-car-end-time").value;
+ 		var startTime = document.getElementById("ssearch-car-start-time").value;
+ 		var endTime= document.getElementById("search-car-end-time").value;
+ 		resStatus = document.getElementById("search-car-status").value;
  		resOption = document.getElementById("search-car-category").value;
+ 		resSearchStartTime = setDateTimeFormat(resSearchDate,startTime)
+ 		resSearchEndTime = setDateTimeFormat(resSearchDate,endTime)
  	}
  	
  }
  
+ 
+ function setDateTimeFormat(date,time){
+	 console.log(date);
+	 console.log(time);
+	 var dateTime = date + " " + time;
+	 console.log(dateTime);
+	 return dateTime;
+ };
 
  // 회의실 리스트 호출
  function getMrList() {
@@ -623,14 +638,156 @@ $(document).ready(function(){
          },
          dataType: 'JSON',
          success: function (data) {
-             drawList(data.list);
+             drawMrList(data.list);
+             
+             var startPage = 1;
+             
+             $('#pagination').twbsPagination({
+ 	    		startPage:data.currPage, // 시작 페이지
+ 	    		totalPages:data.totalPages, // 총 페이지 갯수
+ 	    		visiblePages:5,  // 보여줄 페이지 수[1][2][3][4][5]
+ 	    		onPageClick:function(evt,pg){ // 페이지 클릭시 실행 함수
+ 	    			console.log(evt); // 이벤트 객체
+ 	    			console.log(pg); //클릭한 페이지 번호 의미
+ 	        		showPage = pg;
+ 	        		getMrList(pg);
+ 	    			
+ 	    		}
+ 	       	});
          },
          error: function (error) {
              console.log(error);
          }
      });
  }
- function drawList(list) {
+ 
+ function getCarList() {
+     getSearchValue();
+     $.ajax({
+         url: '/resource/resourceList.ajax',
+         type: 'GET',
+         data: {
+             'resSerachCategory': resSerachCategory,
+             'resSearchDate': resSearchDate,
+             'resSearchStartTime':resSearchStartTime,
+             'resSearchEndTime': resSearchEndTime,
+             'resStatus' : resStatus,
+             'resOption' : resOption            
+         },
+         dataType: 'JSON',
+         success: function (data) {
+             draCarList(data.list);
+             
+             var startPage = 1;
+             
+             $('#pagination').twbsPagination({
+ 	    		startPage:data.currPage, // 시작 페이지
+ 	    		totalPages:data.totalPages, // 총 페이지 갯수
+ 	    		visiblePages:5,  // 보여줄 페이지 수[1][2][3][4][5]
+ 	    		onPageClick:function(evt,pg){ // 페이지 클릭시 실행 함수
+ 	    			console.log(evt); // 이벤트 객체
+ 	    			console.log(pg); //클릭한 페이지 번호 의미
+ 	        		showPage = pg;
+ 	        		getCarList(pg);
+ 	    			
+ 	    		}
+ 	       	});
+         },
+         error: function (error) {
+             console.log(error);
+         }
+     });
+ }
+ 
+ function getEqList() {
+     getSearchValue();
+     $.ajax({
+         url: '/resource/resourceList.ajax',
+         type: 'GET',
+         data: {
+             'resSerachCategory': resSerachCategory,
+             'resSearchDate': resSearchDate,
+             'resSearchStartTime':resSearchStartTime,
+             'resSearchEndTime': resSearchEndTime,
+             'resStatus' : resStatus,
+             'resOption' : resOption            
+         },
+         dataType: 'JSON',
+         success: function (data) {
+             drawEqList(data.list);
+             
+             var startPage = 1;
+             
+             $('#pagination').twbsPagination({
+ 	    		startPage:data.currPage, // 시작 페이지
+ 	    		totalPages:data.totalPages, // 총 페이지 갯수
+ 	    		visiblePages:5,  // 보여줄 페이지 수[1][2][3][4][5]
+ 	    		onPageClick:function(evt,pg){ // 페이지 클릭시 실행 함수
+ 	    			console.log(evt); // 이벤트 객체
+ 	    			console.log(pg); //클릭한 페이지 번호 의미
+ 	        		showPage = pg;
+ 	        		getEqList(pg);
+ 	    			
+ 	    		}
+ 	       	});
+         },
+         error: function (error) {
+             console.log(error);
+         }
+     });
+ }
+ 
+ function drawMrList(list) {
+     var content = '';
+     if (list.length > 0) {
+         for (item of list) {
+         	console.log(item.resource_name);
+           
+             content += '<tr class="total-att-list-tbody-tr" id="' + item.resource_idx + '">'
+             	+ '<td class="text-center">' + item.resource_name+ '</td>'
+             	+ '<td class="text-center">' + item.meeting_room_capacity+ '</td>'
+             	+ '<td class="text-center">' + item.resource_location+ '</td>'
+             	+ '<td class="text-center">' + item.resource_meeting_content+ '</td>'
+             	+ '<td class="text-center">' + item.resource_state+ '</td>'
+                + '</tr>';
+         }
+     } else {
+         content = '<tr><td colspan="7" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
+     }
+     $('#total-att-list').html(content);
+     
+     
+     $(document).on('click', '.total-att-list-tbody-tr', function () {
+         location.href = '/resource/resourceReservation.go?resource_idx=' + $(this).attr('id');
+     });
+ }
+ 
+ function drawCarList(list) {
+     var content = '';
+     if (list.length > 0) {
+         for (item of list) {
+         	console.log(item.resource_name);
+           
+             content += '<tr class="total-att-list-tbody-tr" id="' + item.resource_idx + '">'
+             	+ '<td class="text-center">' + item.resource_name+ '</td>'
+             	+ '<td class="text-center">' + item.meeting_room_capacity+ '</td>'
+             	+ '<td class="text-center">' + item.resource_location+ '</td>'
+             	+ '<td class="text-center">' + item.resource_meeting_content+ '</td>'
+             	+ '<td class="text-center">' + item.resource_state+ '</td>'
+                + '</tr>';
+         }
+     } else {
+         content = '<tr><td colspan="7" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
+     }
+     $('#total-att-list').html(content);
+     
+     
+     $(document).on('click', '.total-att-list-tbody-tr', function () {
+         location.href = '/resource/resourceReservation.go?resource_idx=' + $(this).attr('id');
+     });
+ }
+ 
+ function drawEqList(list) {
      var content = '';
      if (list.length > 0) {
          for (item of list) {
@@ -699,7 +856,6 @@ $(document).ready(function(){
             type: 'GET',
             data: {
                 'resSerachCategory': resSerachCategory,
-                'resSearchDate': resSearchDate,
                 'resSearchStartTime':resSearchStartTime,
                 'resSearchEndTime': resSearchEndTime,
                 'resStatus' : resStatus,
@@ -759,6 +915,7 @@ function addOptions(startHour, endHour, intervalMinutes, elem) {
         }
     }
 }
+
 
 
 </script>

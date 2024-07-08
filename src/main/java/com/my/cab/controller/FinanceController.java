@@ -150,10 +150,16 @@ public class FinanceController {
 	@GetMapping("/deal/totalAmounts.ajax")
 	@ResponseBody
 	public Map<String, Object> getTotalAmounts(@RequestParam Map<String, Object> financeDTO) {
-		Map<String, Object> map = new HashMap<String, Object>();
 
 		logger.info("param : {}", financeDTO);
 		return financeService.getTotalAmounts(financeDTO);
 
 	}
+
+    @RequestMapping("/dash.go")
+    public String financeDash(Model model) {
+        logger.info("재무관리 대시보드");
+
+        return "finance/financeDash";
+    }
 }

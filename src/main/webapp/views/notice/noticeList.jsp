@@ -398,13 +398,14 @@ td:hover {
         var importanceCount = 0;
 
         // 중요 공지사항과 일반 공지사항을 분리
-        for (item of noticeList) {
+        for (var item of noticeList) {
             var importance = item.notice_imp === 'true' ? '★ 중요 ★' : '일반';
             var inactiveClass = item.inactive ? ' inactive' : '';
+            var koreanField = getKoreanField(item.notice_field); // 한글로 변환
             var noticeRow = '<tr class="clickable-row' + (importance === '★ 중요 ★' && importanceCount < 3 ? ' important' : '') + inactiveClass + '" data-id="' + item.notice_idx + '">' +
                 '<td class="inactive-column" style="display:none;"><input type="checkbox" class="inactive-checkbox" data-id="' + item.notice_idx + '"></td>' +
                 '<td>' + importance + '</td>' +
-                '<td>' + item.notice_field + '</td>' +
+                '<td>' + koreanField + '</td>' + // 한글 변환된 값을 사용
                 '<td>' + item.notice_title + '</td>' +
                 '<td>' + item.notice_writer + '</td>' +
                 '<td>' + item.notice_date + '</td>' +
@@ -436,6 +437,7 @@ td:hover {
             event.stopPropagation();
         });
     }
+
 
 
     $('#toggleInactiveButton').click(function () {

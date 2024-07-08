@@ -6,7 +6,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>My Cab - Finance Profit</title>
+<title>My Cab - Finance</title>
 <!-- Meta -->
 <meta name="description"
     content="Marketplace for Bootstrap Admin Dashboards">
@@ -188,14 +188,14 @@ td:hover {
                                             
                                         </div>
 
-										<div class="d-flex align-items-center mb-2">
-										    <button class="btn btn-secondary me-2" onclick="resetFilters()">초기화</button>
-										    <div class="btn-group" role="group">
-										        <button type="button" class="btn btn-primary filter-btn flex-fill" data-category="택시">택시 수익</button>
-										        <button type="button" class="btn btn-primary filter-btn flex-fill" data-category="광고">광고 수익</button>
-										        <button type="button" class="btn btn-primary filter-btn flex-fill" data-category="기타">기타 수익</button>
-										    </div>
-										</div>
+                              <div class="d-flex align-items-center mb-2">
+                                  <button class="btn btn-secondary me-2" onclick="resetFilters()">초기화</button>
+                                  <div class="btn-group" role="group">
+                                      <button type="button" class="btn btn-primary filter-btn flex-fill" data-category="택시">택시 수익</button>
+                                      <button type="button" class="btn btn-primary filter-btn flex-fill" data-category="광고">광고 수익</button>
+                                      <button type="button" class="btn btn-primary filter-btn flex-fill" data-category="기타">기타 수익</button>
+                                  </div>
+                              </div>
 
                                         <!-- 수익 등록 버튼 -->
                                         <div class="text-end mb-2">
@@ -203,25 +203,25 @@ td:hover {
                                         </div>
 
                                         <!-- 수익 리스트 테이블 -->
-										<div class="table-outer mt-3">
-										    <table class="table table-hover align-middle custom-table m-0">
-										        <thead>
-										            <tr>
-										                <th>수익 발생일</th>
-										                <th>수익자</th>
-										                <th>수익 금액</th>
-										            </tr>
-										        </thead>
-										        <tbody id="profitTableBody">
-										            <!-- AJAX 요청으로 항목들이 여기에 추가됩니다 -->
-										        </tbody>
-										    </table>
-										    <!-- 페이지 네이션 시작 -->
-										    <nav aria-label="Page navigation example" class="mt-3">
-										        <ul class="pagination justify-content-center" id="pagination"></ul>
-										    </nav>
-										    <!-- 페이지 네이션 종료 -->
-										</div>
+                              <div class="table-outer mt-3">
+                                  <table class="table table-hover align-middle custom-table m-0">
+                                      <thead>
+                                          <tr>
+                                              <th>수익 발생일</th>
+                                              <th>수익자</th>
+                                              <th>수익 금액</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody id="profitTableBody">
+                                          <!-- AJAX 요청으로 항목들이 여기에 추가됩니다 -->
+                                      </tbody>
+                                  </table>
+                                  <!-- 페이지 네이션 시작 -->
+                                  <nav aria-label="Page navigation example" class="mt-3">
+                                      <ul class="pagination justify-content-center" id="pagination"></ul>
+                                  </nav>
+                                  <!-- 페이지 네이션 종료 -->
+                              </div>
 
                                         <!-- 모달 창 -->
                                         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -337,13 +337,13 @@ td:hover {
     
     // 날짜 변경 이벤트 핸들러 추가
     $('#startDate').on('change', function() {
-    	currentPage=1;
+       currentPage=1;
         getTotalPages();
         refreshExpensesList();
     });
 
     $('#endDate').on('change', function() {
-    	currentPage=1;
+       currentPage=1;
         getTotalPages();
         refreshExpensesList();
     });
@@ -457,34 +457,34 @@ td:hover {
     });
 
     // AJAX로 받은 수익 리스트를 테이블에 표시하는 함수
-	function displayProfitList(profitList) {
-	    var tbody = $('#profitTableBody');
-	    console.log(profitList);
-	    tbody.empty(); // 테이블 본문을 비웁니다.
-	    var row = '';
-	    for (item of profitList) {
-	        row += '<tr class="clickable-row">' +
-	            '<td>' + item.pro_actual_date + '</td>' +
-	            '<td>' + item.pro_who + '</td>' +
-	            '<td>' + formatNumberWithCommas(item.pro_cash) + '&nbsp;<strong>원</strong></td>' +
-	            '</tr>'+
-	            '<tr class="detail-row">'+
-	            '<td colspan="3" class="detail-content gap-2">'+
-	            '<div class="mb-2 mt-2"><strong>수익 발생일:</strong> ' + item.pro_actual_date + '</div>' +
-	            '<div class="mb-2 mt-2"><strong>수익 등록일:</strong> ' + item.pro_date + '</div>' +
-	            '<div class="mb-2 mt-2"><strong>수익 종류:</strong> ' + item.pro_category + '</div>' +
-	            '<div class="mb-2 mt-2"><strong>수익 내용:</strong> ' + item.pro_content + '</div>' +
-	            '<div class="mb-2 mt-2"><strong>수익 금액:</strong> ' + formatNumberWithCommas(item.pro_cash) +
-	            '<strong>원</strong></div>' +
-	            '</td>'+
-	            '</tr>';
-	    }
-	    tbody.html(row);
-	    // 각 행에 클릭 이벤트 추가
-	    $('.clickable-row').on('click', function() {
-	        $(this).next('.detail-row').toggleClass('active');
-	    });
-	}
+   function displayProfitList(profitList) {
+       var tbody = $('#profitTableBody');
+       console.log(profitList);
+       tbody.empty(); // 테이블 본문을 비웁니다.
+       var row = '';
+       for (item of profitList) {
+           row += '<tr class="clickable-row">' +
+               '<td>' + item.pro_actual_date + '</td>' +
+               '<td>' + item.pro_who + '</td>' +
+               '<td>' + formatNumberWithCommas(item.pro_cash) + '&nbsp;<strong>원</strong></td>' +
+               '</tr>'+
+               '<tr class="detail-row">'+
+               '<td colspan="3" class="detail-content gap-2">'+
+               '<div class="mb-2 mt-2"><strong>수익 발생일:</strong> ' + item.pro_actual_date + '</div>' +
+               '<div class="mb-2 mt-2"><strong>수익 등록일:</strong> ' + item.pro_date + '</div>' +
+               '<div class="mb-2 mt-2"><strong>수익 종류:</strong> ' + item.pro_category + '</div>' +
+               '<div class="mb-2 mt-2"><strong>수익 내용:</strong> ' + item.pro_content + '</div>' +
+               '<div class="mb-2 mt-2"><strong>수익 금액:</strong> ' + formatNumberWithCommas(item.pro_cash) +
+               '<strong>원</strong></div>' +
+               '</td>'+
+               '</tr>';
+       }
+       tbody.html(row);
+       // 각 행에 클릭 이벤트 추가
+       $('.clickable-row').on('click', function() {
+           $(this).next('.detail-row').toggleClass('active');
+       });
+   }
 
     // 수익 리스트 갱신 함수
     function refreshProfitList() {

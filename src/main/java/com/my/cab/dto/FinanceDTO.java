@@ -3,7 +3,6 @@ package com.my.cab.dto;
 import java.sql.Date;
 
 import org.apache.ibatis.type.Alias;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Alias(value = "finance")
 public class FinanceDTO {

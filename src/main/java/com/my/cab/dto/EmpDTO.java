@@ -28,11 +28,99 @@ public class EmpDTO {
 	private String acc_name;
 	private String dept_name;
 	private String title_name;
-	private String vac_left; //잔여 연차
 	private String profile_new; // 프로필 사진
 	private int work_year;
+	private String vac_left; //잔여 연차
 	private double vac_add;
 	private double vac_idx;
+	private int difference;
+	private double vac_use;
+	private String vac_type;
+	private String vac_apply_date;
+	private boolean vac_apply_status;
+	private String vac_reason;
+	private String vac_reject_reason;
+	private String vac_use_date;
+	private String vac_use_end_date;
+	private String vac_no;
+	private boolean vac_apply_status_final;
+	private String vac_reject_reason_final;
+	
+	
+	
+	
+	public double getVac_use() {
+		return vac_use;
+	}
+	public void setVac_use(double vac_use) {
+		this.vac_use = vac_use;
+	}
+	public String getVac_type() {
+		return vac_type;
+	}
+	public void setVac_type(String vac_type) {
+		this.vac_type = vac_type;
+	}
+	public String getVac_apply_date() {
+		return vac_apply_date;
+	}
+	public void setVac_apply_date(String vac_apply_date) {
+		this.vac_apply_date = vac_apply_date;
+	}
+	public boolean isVac_apply_status() {
+		return vac_apply_status;
+	}
+	public void setVac_apply_status(boolean vac_apply_status) {
+		this.vac_apply_status = vac_apply_status;
+	}
+	public String getVac_reason() {
+		return vac_reason;
+	}
+	public void setVac_reason(String vac_reason) {
+		this.vac_reason = vac_reason;
+	}
+	public String getVac_reject_reason() {
+		return vac_reject_reason;
+	}
+	public void setVac_reject_reason(String vac_reject_reason) {
+		this.vac_reject_reason = vac_reject_reason;
+	}
+	public String getVac_use_date() {
+		return vac_use_date;
+	}
+	public void setVac_use_date(String vac_use_date) {
+		this.vac_use_date = vac_use_date;
+	}
+	public String getVac_use_end_date() {
+		return vac_use_end_date;
+	}
+	public void setVac_use_end_date(String vac_use_end_date) {
+		this.vac_use_end_date = vac_use_end_date;
+	}
+	public String getVac_no() {
+		return vac_no;
+	}
+	public void setVac_no(String vac_no) {
+		this.vac_no = vac_no;
+	}
+	public boolean isVac_apply_status_final() {
+		return vac_apply_status_final;
+	}
+	public void setVac_apply_status_final(boolean vac_apply_status_final) {
+		this.vac_apply_status_final = vac_apply_status_final;
+	}
+	public String getVac_reject_reason_final() {
+		return vac_reject_reason_final;
+	}
+	public void setVac_reject_reason_final(String vac_reject_reason_final) {
+		this.vac_reject_reason_final = vac_reject_reason_final;
+	}
+	public int getDifference() {
+		return difference;
+	}
+	public void setDifference(int difference) {
+		this.difference = difference;
+	}
 	public int getEmp_no() {
 		return emp_no;
 	}

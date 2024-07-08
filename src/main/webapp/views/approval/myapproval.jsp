@@ -194,8 +194,7 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th><input type="checkbox" id="checkAll"></th>
-                                    <th>기안일자</th>
+                                    <th><input type="checkbox" id="checkAll"> 기안일자</th>
                                     <th>제목</th>
                                     <th>기안자</th>
                                     <th>중간결재자</th>
@@ -421,62 +420,38 @@ $(document).ready(function() {
         $('.approval-checkbox').prop('checked', isChecked);
     });
 
-    // 데이터 가져오기 함수
+ // 데이터 가져오기
     function loadApprovalData() {
         $.ajax({
-            url: '/getApprovalData.ajax', // 서버의 엔드포인트 URL
+            url: '/getApprovalData.ajax',
             type: 'POST',
-            dataType: 'json', // 데이터 타입을 JSON으로 명시
+            dataType: 'json',
             success: function(response) {
-                $('#approvalDataBody').empty(); // 기존 데이터를 초기화
+                $('#approvalDataBody').empty();
 
                 response.forEach(function(item) {
-                    // 테이블 행 생성
                     const row = $('<tr></tr>');
-
-                    // 각 데이터 셀 생성
-                    const checkboxCell = $('<td></td>').append($('<input>', {
+                    const writeDateCell = $('<td></td>').append($('<input>', {
                         type: 'checkbox',
                         class: 'approval-checkbox',
                         value: item.approval_doc_path
-                    }));
-
-                    const writeDateCell = $('<td></td>').text(item.approval_doc_write_date);
+                    })).append(' ' + item.approval_doc_write_date);
                     const titleCell = $('<td></td>').text(item.approval_doc_title);
                     const idCell = $('<td></td>').text(item.approval_doc_id);
                     const midApproverCell = $('<td></td>').text(item.appr_midapprover);
                     const finalApproverCell = $('<td></td>').text(item.appr_finalapprover);
-                    const appr_mngr_updt = $('<td></td>').text(item.appr_mngr_updt);
-                    const stateCell = $('<td></td>').text(item.approval_doc__state);
-                    
+                    const appr_mngr_updt = $('<td></td>').text(item.approval_doc_udt_dt);
+                    const stateCell = $('<td></td>').text(getApprovalStateText(item.approval_doc__state));
                     const buttonCell = $('<td></td>').append($('<button>', {
-                        class: 'btn btn-primary',
+                        
+                    	class: 'btn btn-primary',
                         text: '결재',
                         click: function() {
-                            // 파일 경로 처리
-                            let filePath = item.approval_doc_path;
-
-                            // 각 디렉토리별로 파일 이름 추출
-                            if (filePath.includes('/startApprover/')) {
-                                filePath = filePath.split('/startApprover/')[1];
-                            } else if (filePath.includes('/signatures/')) {
-                                filePath = filePath.split('/signatures/')[1];
-                            } else if (filePath.includes('/doc_file/')) {
-                                filePath = filePath.split('/doc_file/')[1];
-                            } else {
-                                filePath = filePath.split('C:/upload/')[1];
-                            }
-
-                            // 파일 이름을 Base64로 인코딩
-                            const encodedFilename = btoa(filePath);
-                            window.location.href = '/approval/viewFile/' + encodedFilename;
+                            window.location.href = '/approval/viewFile/' + btoa(item.approval_doc_path);
                         }
                     }));
 
-                    // 행에 각 셀 추가
-                    row.append(checkboxCell, writeDateCell, titleCell, idCell, midApproverCell, finalApproverCell, appr_mngr_updt, stateCell, buttonCell);
-
-                    // 테이블에 행 추가
+                    row.append(writeDateCell, titleCell, idCell, midApproverCell, finalApproverCell, appr_mngr_updt, stateCell, buttonCell);
                     $('#approvalDataBody').append(row);
                 });
             },
@@ -484,6 +459,13 @@ $(document).ready(function() {
                 console.error('데이터를 가져오는 중 오류 발생:', error);
             }
         });
+    }
+
+    // 결재 상태 텍스트 변환
+    function getApprovalStateText(state) {
+        if (state === 1) return '중간 결재 완료';
+        if (state === 2) return '최종 결재 완료';
+        return '진행 중';
     }
 
     // 페이지 로드 시 데이터 가져오기

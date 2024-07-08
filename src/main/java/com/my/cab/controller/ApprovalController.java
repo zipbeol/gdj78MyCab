@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
+import java.util.HashMap;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.sql.Date;
@@ -204,7 +205,7 @@ public class ApprovalController {
         }
     }
     
- // 서명 이미지 업로드 처리
+  //서명 이미지 업로드 처리
     @PostMapping("/uploadSignature")
     @ResponseBody
     public String uploadSignature(@RequestBody Map<String, String> requestBody, HttpSession session) {
@@ -264,7 +265,35 @@ public class ApprovalController {
         return null;
     }
     
+    @GetMapping("/getUserType")
+    @ResponseBody
+    public String getUserType(HttpSession session) {
+        String loginId = (String) session.getAttribute("loginId");
+        if (loginId == null) {
+            return "로그인 정보가 없습니다.";
+        }
 
-}
+        try {
+            // 로그인된 사용자의 이름과 직책을 가져옵니다.
+            String userName = apprservice.getUserNameById(loginId);
+            String userTitle = apprservice.getUserTitleById(loginId);
+
+            Map<String, Object> params = new HashMap<>();
+            params.put("userName", userName);
+            params.put("userTitle", userTitle);
+
+            // 결재자 유형 확인
+            String userType = apprservice.getUserType(params);
+            if (userType == null) {
+                return "결재자 유형을 찾을 수 없습니다.";
+            }
+            return userType;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "서버 오류가 발생했습니다.";
+        }
+    }
+    // 다시해보자
     
+}
 

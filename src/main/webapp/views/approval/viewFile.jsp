@@ -154,24 +154,22 @@
                                     <h4 class="card-title">결재 문서</h4>
                                     <!-- 결재 라인 테이블 -->
                                    <table class="approval-line-table" style="margin-left: 20px; margin-top: 20px;">
-								    <tr>
-								        <th rowspan="3">결</br>재</th>
-								        <th>&nbsp;&nbsp;기안자&nbsp;&nbsp;</th>
-								        <th>중간결재자</th>
-								        <th>최종결재자</th>
-								    </tr>
-								    <tr>
-								    	<td>&nbsp;</td>
-								        <td>&nbsp;</td>
-								        <td>&nbsp;</td>
-								       
-								    </tr>
-								    <tr>
-								        <td>&nbsp;</td>
-								        <td>&nbsp;</td>
-								        <td>&nbsp;</td>
-						
-								    </tr>
+    <tr>
+        <th rowspan="3">결재</th>
+        <th>&nbsp;&nbsp;기안자&nbsp;&nbsp;</th>
+        <th>중간결재자</th>
+        <th>최종결재자</th>
+    </tr>
+    <tr>
+        <td>&nbsp;</td>
+        <td id="midApproverSignature">&nbsp;</td>
+        <td id="finalApproverSignature">&nbsp;</td>
+    </tr>
+    <tr>
+        <td>&nbsp;</td>
+        <td id="midApproverSignatureDate">&nbsp;</td>
+        <td id="finalApproverSignatureDate">&nbsp;</td>
+    </tr>
 								</table>
                                 </div>
                                 <div class="card-body">
@@ -183,7 +181,7 @@
                                     </c:if>
                                 </div>
                     <div class="card-footer d-flex justify-content-end">
-                        <button class="btn btn-primary me-2" id="approve-button">결재</button>
+                        <button id="approve-button" class="btn btn-primary">결재</button>
                         <button class="btn btn-secondary" id="close-button">닫기</button>
                     </div>
                        
@@ -240,38 +238,55 @@
 </body>
 
 <script>
-$(document).ready(function() {
-    $('#approve-button').on('click', function() {
-        // 서버에서 서명 이미지를 불러와 결재라인에 표시
-        $.ajax({
-            url: '/getSignature',
-            type: 'GET',
-            success: function(response) {
-                if (response) {
-                    // 서명 이미지를 표시할 <img> 태그를 생성하고 결재라인에 추가
-                    const signatureImage = $('<img>', {
-                        src: 'data:image/png;base64,' + response,
-                        alt: 'Signature',
-                        style: 'width: 100px; height: auto;'
-                    });
+$('#approve-button').on('click', function() {
+    // 결재자 유형 확인
+    $.ajax({
+        url: '/getUserType',
+        type: 'GET',
+        success: function(response) {
+            const userType = response;
+            // 서버에서 서명 이미지를 불러와 결재라인에 표시
+            $.ajax({
+                url: '/getSignature',
+                type: 'GET',
+                success: function(response) {
+                    if (response) {
+                        // 서명 이미지를 표시할 <img> 태그를 생성하고 결재라인에 추가
+                        const signatureImage = $('<img>', {
+                            src: 'data:image/png;base64,' + response,
+                            alt: 'Signature',
+                            style: 'width: 100px; height: auto;'
+                        });
 
-                    // 결재라인 테이블에 서명 이미지 추가
-                    $('.approval-line-table tr:nth-child(2) td:nth-child(2)').html(signatureImage);
-                    alert('결재가 완료되었습니다.');
-                } else {
+                        // 현재 날짜를 구해서 형식에 맞게 변환
+                        const currentDate = new Date().toISOString().split('T')[0];
+
+                        // 결재라인 테이블에 서명 이미지와 날짜 추가
+                        if (userType === 'midApprover') {
+                            $('.approval-line-table tr:nth-child(2) td:nth-child(2)').html(signatureImage);
+                            $('.approval-line-table tr:nth-child(3) td:nth-child(2)').text(currentDate);
+                        } else if (userType === 'finalApprover') {
+                            $('.approval-line-table tr:nth-child(2) td:nth-child(3)').html(signatureImage);
+                            $('.approval-line-table tr:nth-child(3) td:nth-child(3)').text(currentDate);
+                        }
+
+                        alert('결재가 완료되었습니다.');
+                    } else {
+                        alert('서명 이미지를 불러오는 중 오류가 발생했습니다.');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('서명 이미지를 불러오는 중 오류 발생:', error);
                     alert('서명 이미지를 불러오는 중 오류가 발생했습니다.');
                 }
-            },
-            error: function(xhr, status, error) {
-                console.error('서명 이미지를 불러오는 중 오류 발생:', error);
-                alert('서명 이미지를 불러오는 중 오류가 발생했습니다.');
-            }
-        });
-    });
-
-    $('#close-button').on('click', function() {
-        window.close(); // 창 닫기
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error('결재자 유형을 확인하는 중 오류 발생:', error);
+            alert('결재자 유형을 확인하는 중 오류가 발생했습니다.');
+        }
     });
 });
+
 </script>
 </html>

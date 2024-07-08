@@ -85,6 +85,183 @@
         </set>
         WHERE emp_no = #{emp_no}
     </update>
+    
+    <select id="myVacList" resultType="myPage">
+    SELECT e.emp_name, d.dept_name, t.title_name, v.vac_left, v.vac_add
+	FROM employee e
+	JOIN department d ON e.dept_no = d.dept_no
+	JOIN title t ON e.title_no = t.title_no 
+	JOIN vacation v ON e.emp_no = v.emp_no 
+	WHERE e.emp_no = #{emp_no}
+    </select>
+    
+    
+    <insert id="vacApply" parameterType="myPage">
+        INSERT INTO vacation_apply (
+        emp_no,
+        vac_use,
+        vac_type,
+        vac_reason,
+        vac_use_date
+        <if test="vac_use_end_date != null and vac_use_end_date != ''">
+            , vac_use_end_date
+        </if>
+    	) VALUES (
+        #{emp_no},
+        #{vac_use},
+        #{vac_type},
+        #{vac_reason},
+        #{vac_use_date}
+        <if test="vac_use_end_date != null and vac_use_end_date != ''">
+            , #{vac_use_end_date}
+        </if>
+    )
+    </insert>
+    
+    <select id="myVacApplyList" resultType="myPage" parameterType="search">
+        SELECT va.vac_no, va.vac_apply_date, va.vac_type, va.vac_apply_status, va.vac_apply_status_final
+        FROM vacation_apply va
+        <where>
+        	va.emp_no = #{emp_no}
+            <if test="filterVacDate != null and filterVacDate != ''">
+            AND va.vac_apply_date = #{filterVacDate}
+        </if>
+        <if test="filterVacResult != null and filterVacResult != ''">
+            <choose>
+                <when test="filterVacResult == 'true'">
+                    AND va.vac_apply_status_final = true
+                </when>
+                <when test="filterVacResult == 'false'">
+                    AND va.vac_apply_status_final = false
+                </when>
+            </choose>
+        </if>
+        </where>
+        LIMIT #{pageSize} OFFSET #{page}
+    </select>
+    
+    <select id="getVacApplyTotal" resultType="int" parameterType="search">
+        SELECT COUNT(va.vac_no)
+        FROM vacation_apply va
+         <where>
+        	va.emp_no = #{emp_no}
+            <if test="filterVacDate != null and filterVacDate != ''">
+            AND va.vac_apply_date = #{filterVacDate}
+        </if>
+        <if test="filterVacResult != null and filterVacResult != ''">
+            <choose>
+                <when test="filterVacResult == 'true'">
+                    AND va.vac_apply_status_final = true
+                </when>
+                <when test="filterVacResult == 'false'">
+                    AND va.vac_apply_status_final = false
+                </when>
+            </choose>
+        </if>
+        </where>
+    </select>
+    
+    
+    <select id="vacApplyDetail" resultType="myPage">
+    SELECT 
+    d.dept_name, 
+    t.title_name, 
+    e.emp_name, 
+    va.vac_type, 
+    va.vac_use_date, 
+    va.vac_use_end_date, 
+    va.vac_reason, 
+    va.vac_apply_date,
+    va.vac_no,
+    va.vac_apply_status,
+    va.vac_apply_status_final,
+    va.vac_reject_reason,
+    va.vac_reject_reason_final
+	FROM 
+    vacation_apply va
+	JOIN 
+    employee e ON va.emp_no = e.emp_no
+	JOIN 
+    department d ON e.dept_no = d.dept_no
+	JOIN 
+    title t ON e.title_no = t.title_no
+	WHERE 
+    va.vac_no = #{vac_no}
+    </select>
+    
+    <select id="vacApprovalList" resultType="myPage" parameterType="search">
+        SELECT 
+   		va.vac_no, 
+    	va.vac_apply_date, 
+    	va.vac_type, 
+    	va.vac_apply_status, 
+    	va.vac_apply_status_final,
+    	e.emp_name
+		FROM 
+    	vacation_apply va
+		JOIN 
+    	employee e ON va.emp_no = e.emp_no
+		JOIN 
+    	department d ON e.dept_no = d.dept_no
+        <where>
+    	e.dept_no = (SELECT dept_no FROM employee WHERE emp_no = #{emp_no})
+            <if test="filterVacDate != null and filterVacDate != ''">
+            AND va.vac_apply_date = #{filterVacDate}
+      	  	</if>
+        	<if test="filterVacResult != null and filterVacResult != ''">
+            <choose>
+                <when test="filterVacResult == 'true'">
+                    AND va.vac_apply_status_final = true
+                </when>
+                <when test="filterVacResult == 'false'">
+                    AND va.vac_apply_status_final = false
+                </when>
+            </choose>
+        </if>
+        </where>
+        ORDER BY va.vac_no DESC
+        LIMIT #{pageSize} OFFSET #{page}
+    </select>
+    
+    <select id="getVacApprovalTotalPages" resultType="int" parameterType="search">
+        SELECT 
+   		COUNT(va.vac_no)
+		FROM 
+    	vacation_apply va
+		JOIN 
+    	employee e ON va.emp_no = e.emp_no
+		JOIN 
+    	department d ON e.dept_no = d.dept_no
+         <where>
+        	e.dept_no = (SELECT dept_no FROM employee WHERE emp_no = #{emp_no})
+           <if test="filterVacDate != null and filterVacDate != ''">
+            AND va.vac_apply_date = #{filterVacDate}
+        	</if>
+        	<if test="filterVacResult != null and filterVacResult != ''">
+            <choose>
+                <when test="filterVacResult == 'true'">
+                    AND va.vac_apply_status_final = true
+                </when>
+                <when test="filterVacResult == 'false'">
+                    AND va.vac_apply_status_final = false
+                </when>
+            </choose>
+        </if>
+        </where>
+    </select>
+    
+    
+    <update id="vacApproval" parameterType="myPage">
+   	 	UPDATE vacation_apply SET 
+   	 	vac_apply_status = true
+   	 	WHERE vac_no = #{vac_no}
+    </update>
+    
+     <update id="vacReject" parameterType="myPage">
+     	UPDATE vacation_apply SET 
+   	 	vac_reject_reason = #{vac_reject_reason}
+   	 	WHERE vac_no = #{vac_no}
+    </update>
 
 
 </mapper>

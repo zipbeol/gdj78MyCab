@@ -237,12 +237,248 @@
         WHERE e.emp_employment_status = 1
 #           AND e.dept_no = #{dept_no}
     </select>
+    
+    
     <update id="addVac" parameterType="emp">
         UPDATE vacation
         SET vac_left = #{work_year} + 15,
             vac_add  = #{work_year} + 15
         WHERE emp_no = #{emp_no};
     </update>
+    
+    <update id="vacEditValue" parameterType="emp">
+        UPDATE vacation
+        SET vac_left = #{vac_left},
+            vac_add  = vac_add +#{difference}
+        WHERE emp_no = #{emp_no};
+    </update>
+    
+    <select id="vacFinalList" resultType="emp" parameterType="search">
+        SELECT 
+   		va.vac_no, 
+    	va.vac_apply_date, 
+    	va.vac_type, 
+    	va.vac_apply_status, 
+    	va.vac_apply_status_final,
+    	e.emp_name
+		FROM 
+    	vacation_apply va
+		JOIN 
+    	employee e ON va.emp_no = e.emp_no
+		JOIN 
+    	department d ON e.dept_no = d.dept_no
+        <where>
+        va.vac_apply_status = true
+            <if test="filterVacDate != null and filterVacDate != ''">
+            AND va.vac_apply_date = #{filterVacDate}
+      	  	</if>
+        	<if test="filterVacResult != null and filterVacResult != ''">
+            <choose>
+                <when test="filterVacResult == 'true'">
+                    AND va.vac_apply_status_final = true
+                </when>
+                <when test="filterVacResult == 'false'">
+                    AND va.vac_apply_status_final = false
+                </when>
+            </choose>
+        </if>
+        </where>
+        ORDER BY va.vac_no DESC
+        LIMIT #{pageSize} OFFSET #{page}
+    </select>
+    
+    <select id="getVacFinalTotalPages" resultType="int" parameterType="search">
+        SELECT 
+   		COUNT(va.vac_no)
+		FROM 
+    	vacation_apply va
+		JOIN 
+    	employee e ON va.emp_no = e.emp_no
+		JOIN 
+    	department d ON e.dept_no = d.dept_no
+         <where>
+         va.vac_apply_status = true
+           <if test="filterVacDate != null and filterVacDate != ''">
+            AND va.vac_apply_date = #{filterVacDate}
+        	</if>
+        	<if test="filterVacResult != null and filterVacResult != ''">
+            <choose>
+                <when test="filterVacResult == 'true'">
+                    AND va.vac_apply_status_final = true
+                </when>
+                <when test="filterVacResult == 'false'">
+                    AND va.vac_apply_status_final = false
+                </when>
+            </choose>
+        </if>
+        </where>
+        
+    </select>
+    
+    <select id="vacApplyDetailFinal" resultType="emp">
+    SELECT 
+    d.dept_name, 
+    t.title_name,
+    e.emp_no,
+    e.emp_name, 
+    va.vac_type, 
+    va.vac_use_date, 
+    va.vac_use_end_date, 
+    va.vac_reason, 
+    va.vac_apply_date,
+    va.vac_no,
+    va.vac_apply_status,
+    va.vac_apply_status_final,
+    va.vac_reject_reason,
+    va.vac_reject_reason_final
+	FROM 
+    vacation_apply va
+	JOIN 
+    employee e ON va.emp_no = e.emp_no
+	JOIN 
+    department d ON e.dept_no = d.dept_no
+	JOIN 
+    title t ON e.title_no = t.title_no
+	WHERE 
+    va.vac_no = #{vac_no}
+    </select>
+    
+    
+    <update id="vacFinalApproval" parameterType="emp">
+   	 	UPDATE vacation_apply SET 
+   	 	vac_apply_status_final = true
+   	 	WHERE vac_no = #{vac_no}
+    </update>
+    
+     <update id="vacFinalReject" parameterType="emp">
+     	UPDATE vacation_apply SET 
+   	 	vac_reject_reason_final = #{vac_reject_reason}
+   	 	WHERE vac_no = #{vac_no}
+    </update>
+    
+    <!-- 반차 삽입 -->
+    <insert id="insertVacAtt" parameterType="emp">
+        INSERT INTO attendance (emp_no, work_day, att_result)
+        VALUES (#{emp_no}, #{vac_use_date}, #{vac_type})
+    </insert>
+
+    <!-- 연차 삽입 -->
+    <insert id="insertVacAttFull" parameterType="emp">
+        INSERT INTO attendance (emp_no, work_day, att_result)
+        VALUES (#{emp_no}, #{new_work_day}, #{vac_type})
+    </insert>
+    
+    <!-- 사용한 연차만큼 vac_left 업데이트 -->
+    <update id="updateVac" parameterType="map">
+        UPDATE vacation
+        SET vac_left = vac_left - #{use}
+        WHERE emp_no = #{emp_no}
+    </update>
+    
+    
+    <select id="getEmpDetailModal" resultType="emp">
+    SELECT
+    e.emp_no,
+    e.emp_name,
+    e.emp_email,
+    e.emp_extension_number,
+    t.title_name,
+    d.dept_name,
+    pp.profile_new
+    FROM
+    employee e
+    JOIN
+    department d ON e.dept_no = d.dept_no
+    JOIN
+    title t ON e.title_no = t.title_no
+    JOIN
+    vacation v ON e.emp_no = v.emp_no
+    LEFT JOIN
+    profile_photo pp ON e.emp_no = pp.emp_no
+    WHERE
+    e.emp_no = #{param1}
+    </select>
+    
+    
+    <select id="empList" resultType="emp" parameterType="search">
+        SELECT e.emp_no, e.emp_name, t.title_name, d.dept_name
+        FROM employee e
+        JOIN department d ON e.dept_no = d.dept_no
+        JOIN title t ON e.title_no = t.title_no
+        <where>
+        e.emp_employment_status = 1
+            <if test="filterForSearch != null and filterForSearch != ''">
+                <choose>
+                    <when test="filterForSearch == 'emp_no'">
+                        AND e.emp_no LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterForSearch == 'emp_name'">
+                        AND e.emp_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterForSearch == 'title_name'">
+                        AND t.title_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterForSearch == 'dept_name'">
+                        AND d.dept_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                </choose>
+            </if>
+        </where>
+        <choose>
+            <when test="sortColumn != null and sortColumn == 'emp-no'">
+                ORDER BY e.emp_no
+            </when>
+            <when test="sortColumn != null and sortColumn == 'emp-name'">
+                ORDER BY e.emp_name
+            </when>
+            <when test="sortColumn != null and sortColumn == 'title-name'">
+                ORDER BY t.title_name
+            </when>
+            <when test="sortColumn != null and sortColumn == 'dept-name'">
+                ORDER BY d.dept_name
+            </when>
+            <otherwise>
+                ORDER BY e.emp_no
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="sortOrder != null and sortOrder == 'desc'">
+                DESC
+            </when>
+            <when test="sortOrder != null and sortOrder == 'asc'">
+                ASC
+            </when>
+        </choose>
+        LIMIT #{pageSize} OFFSET #{page}
+    </select>
+    
+    
+    <select id="getEmpTotalPagesForEmp" resultType="int" parameterType="search">
+        SELECT COUNT(e.emp_no)
+        FROM employee e
+        JOIN department d ON e.dept_no = d.dept_no
+        JOIN title t ON e.title_no = t.title_no
+        <where>
+        e.emp_employment_status = 1
+            <if test="filterForSearch != null and filterForSearch != ''">
+                <choose>
+                    <when test="filterForSearch == 'emp_no'">
+                        AND e.emp_no LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterForSearch == 'emp_name'">
+                        AND e.emp_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterForSearch == 'title_name'">
+                       AND t.title_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterForSearch == 'dept_name'">
+                        AND d.dept_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                </choose>
+            </if>
+        </where>
+    </select>
+    
 
 
 </mapper>

@@ -12,10 +12,11 @@
     </select>
     
     
-    <select id="getProfile" resultType="String">
-        SELECT profile_new
-        FROM profile_photo
-        WHERE emp_no = #{emp_no}
+    <select id="getInfo" resultType="login">
+    SELECT p.profile_new, e.dept_no, e.title_no, e.emp_level
+    FROM employee e
+    LEFT JOIN profile_photo p ON e.emp_no = p.emp_no
+    WHERE e.emp_no = #{emp_no}
     </select>
 
     <!-- 최초 로그인 여부를 확인하는 쿼리 -->

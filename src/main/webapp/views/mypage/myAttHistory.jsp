@@ -248,6 +248,8 @@
 																style="width: 20%;" data-value="emp-name">신청일</th>
 															<th class="text-center" id="th-dept-name"
 																style="width: 20%;" data-value="dept-name">승인 여부</th>
+																<th class="text-center" id="th-dept-name"
+																style="width: 20%;" data-value="dept-name">처리 여부</th>
 														</tr>
 													</thead>
 													<tbody id="att-Edit-list">
@@ -469,7 +471,7 @@
 <script src="/assets/vendor/daterange/custom-daterange.js"></script>
 <!-- Custom JS files -->
 <script src="/assets/js/custom.js"></script>
-<script src="/assets/js/LocalStorage.js"></script>
+<script src="/assets/js/localStorage.js"></script>
 <script src="/assets/js/showAlert.js"></script>
 <!-- 페이지네이션 -->
 <script src="/assets/js/jquery.twbsPagination.min.js"></script>
@@ -526,6 +528,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     for (var i = 0; i < response.dto.length; i++) {
                         var res = response.dto[i];
                         var event;
+
                         if (res.att_time != null) {
                             event = {
                                 id: res.attendance_idx,
@@ -536,50 +539,37 @@ document.addEventListener("DOMContentLoaded", function() {
                                 color: "#38ff38"
                             };
                             events.push(event);
-                                if(res.leave_time != null){
-                                	event = {
-                                            id: res.attendance_idx,
-                                            title: "퇴근",
-                                            start: res.leave_time,
-                                            end: res.leave_time,
-                                            day: res.work_day,
-                                            color: "#28d4c4"	
-                                        };
-                                	events.push(event);
-                                	if (res.att_result != null) {
-                                		event={
-                                    			id: res.attendance_idx,
-                                                title: res.att_result,
-                                                start: res.att_time,
-                                                end: res.leave_time,
-                                                allDay: true,
-                                                color: res.att_result === '지각' ? '#ff8d22' :
-                                                		 res.att_result === '결근' ? '#fd1616' :
-                                                		res.att_result === '근무' ? '#56ca31' :
-                                                		res.att_result === '연차' ? '#ff6820' : 'gray'
-                                    	};
-                                    	events.push(event);
-									}
-                                	
-                                	
-                                }else if (res.att_result != null) {
-                                	event={
-                                			id: res.attendance_idx,
-                                            title: res.att_result,
-                                            start: res.att_time,
-                                            end: res.leave_time,
-                                            allDay: true,
-                                            color: res.att_result === '지각' ? '#ff8d22' :
-                                            		 res.att_result === '결근' ? '#fd1616' :
-                                            		res.att_result === '근무' ? '#56ca31' :
-                                            		res.att_result === '연차' ? '#ff6820' : 'gray'
-                                	};
-                                	events.push(event);
-									
-								}
-                        } 
-                        
+                            if (res.leave_time != null) {
+                                event = {
+                                    id: res.attendance_idx,
+                                    title: "퇴근",
+                                    start: res.leave_time,
+                                    end: res.leave_time,
+                                    day: res.work_day,
+                                    color: "#28d4c4"
+                                };
+                                events.push(event);
+                            }
+                        }
+
+                        if (res.att_result != null) {
+                            event = {
+                                id: res.attendance_idx,
+                                title: res.att_result,
+                                start: res.work_day, 
+                                end: res.work_day,  
+                                allDay: true,
+                                color: res.att_result === '지각' ? '#ff8d22' :
+                                       res.att_result === '결근' ? '#fd1616' :
+                                       res.att_result === '근무' ? '#56ca31' :
+                                       res.att_result === '오전 반차' ? '#3CB4FF' :
+                                       res.att_result === '오후 반차' ? '#3CB4FF' :
+                                       res.att_result === '연차' ? '#B24BE5' : 'gray'
+                            };
+                            events.push(event);
+                        }
                     }
+
                     console.log('Events:', events);
                     successCallback(events);
                 },
@@ -733,7 +723,7 @@ document.addEventListener("DOMContentLoaded", function() {
             for (item of list) {
             	console.log(item.att_apply_status);
                 var att_apply_status = item.att_apply_status === true ? 'Y' : 'N';
-                
+                var att_modifier = item.att_modifier != 0 ? '처리 완료' : '처리중';
                 
              // ISO 8601 날짜 문자열을 Date 객체로 변환
                 var date = new Date(item.att_applicant_date);
@@ -741,11 +731,14 @@ document.addEventListener("DOMContentLoaded", function() {
                 var kstDate = new Date(date.getTime() + (9 * 60 * 60 * 1000));
                 // 날짜만 추출 (yyyy-mm-dd 형식)
                 var formattedDate = kstDate.toISOString().split('T')[0];
+                
+                
               
                 content += '<tr class="att-Edit-list-tbody-tr" id="' + item.att_management_idx + '">'
                 	+ '<td class="text-center">' + item.att_management_idx+ '</td>'
                     + '<td class="text-center">' + formattedDate  + '</td>'
                     + '<td class="text-center">' + att_apply_status + '</td>'
+                    + '<td class="text-center">' + att_modifier + '</td>'
                     + '</tr>';
             }
         } else {

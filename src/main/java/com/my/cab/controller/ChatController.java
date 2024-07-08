@@ -7,12 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
@@ -22,12 +20,14 @@ import java.util.Map;
 @RequestMapping("/chat")
 public class ChatController {
 
+    private final ServletConfig servletConfig;
     Logger logger = LoggerFactory.getLogger(getClass());
 
     private final ChatService chatService;
 
-    public ChatController(ChatService chatService) {
+    public ChatController(ChatService chatService, ServletConfig servletConfig) {
         this.chatService = chatService;
+        this.servletConfig = servletConfig;
     }
 
     @RequestMapping("/chat.go")
@@ -68,4 +68,13 @@ public class ChatController {
     public Map<String, Object> deleteMessage(ChatDTO chatDTO) {
         return Map.of("result", chatService.deleteMessage(chatDTO));
     }
+
+    @PostMapping("/createChatRoom.ajax")
+    @ResponseBody
+    public Map<String, Object> createChatRoom(@RequestBody ChatRoomDTO chatRoomDTO) {
+        logger.info("chatRoomDTO: {}", chatRoomDTO.getRoomName());
+        logger.info("chatRoomDTO: {}", chatRoomDTO.getRoomEmpIdx());
+        return Map.of("result", chatService.createChatRoom(chatRoomDTO));
+    }
+
 }

@@ -8,6 +8,7 @@ import com.my.cab.dto.EmpDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Files;
@@ -83,5 +84,18 @@ public class ChatService {
 
     public boolean deleteMessage(ChatDTO chatDTO) {
         return chatDAO.deleteMessage(chatDTO);
+    }
+
+    @Transactional
+    public boolean createChatRoom(ChatRoomDTO chatRoomDTO) {
+        boolean createChatRoom = chatDAO.createChatRoom(chatRoomDTO);
+        boolean flag = true;
+        for (EmpDTO dto : chatRoomDTO.getEmpList()) {
+            chatRoomDTO.setRoomEmpIdx(dto.getEmp_no());
+            if (!chatDAO.joinMember(chatRoomDTO)) {
+                flag = false;
+            }
+        }
+        return createChatRoom && flag;
     }
 }

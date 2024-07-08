@@ -26,8 +26,8 @@
 
     <insert id="insertChatAttachment" parameterType="attachment">
         INSERT INTO chat_attachment(chat_attachment_message_id, chat_attachment_type,
-                                    chat_attachment_name,chat_attachment_ori_name)
-        VALUES (#{chatIdx}, #{fileType}, #{fileName},#{oriFileName})
+                                    chat_attachment_name, chat_attachment_ori_name)
+        VALUES (#{chatIdx}, #{fileType}, #{fileName}, #{oriFileName})
     </insert>
 
     <select id="getChatRoomList" resultType="chatRoom">
@@ -91,4 +91,15 @@
         SET chat_message_is_delete = true
         WHERE chat_message_idx = #{chatId}
     </update>
+
+    <insert id="createChatRoom" parameterType="chatRoom" keyProperty="roomIdx" keyColumn="chat_room_idx"
+            useGeneratedKeys="true">
+        INSERT INTO chat_room(chat_room_emp_no, chat_room_name,
+                              chat_room_is_active)
+        VALUES (#{roomEmpIdx}, #{roomName}, true)
+    </insert>
+    <insert id="joinMember" parameterType="chatRoom">
+        INSERT INTO chat_room_member(chat_room_member_id, chat_room_member_emp_no, chat_room_member_is_join)
+        VALUES (#{roomIdx}, #{roomEmpIdx}, true)
+    </insert>
 </mapper>

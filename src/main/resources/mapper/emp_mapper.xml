@@ -235,7 +235,7 @@
         FROM employee e
                  JOIN department d ON d.dept_no = e.dept_no
         WHERE e.emp_employment_status = 1
-          AND e.dept_no = #{dept_no}
+#           AND e.dept_no = #{dept_no}
     </select>
     <update id="addVac" parameterType="emp">
         UPDATE vacation

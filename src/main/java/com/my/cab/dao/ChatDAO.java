@@ -7,6 +7,7 @@ import com.my.cab.dto.EmpDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface ChatDAO {
@@ -30,4 +31,8 @@ public interface ChatDAO {
     boolean exitChatRoom(ChatRoomDTO chatRoomDTO);
 
     boolean deleteMessage(ChatDTO chatDTO);
+
+    boolean createChatRoom(ChatRoomDTO chatRoomDTO);
+
+    boolean joinMember(ChatRoomDTO chatRoomDTO);
 }

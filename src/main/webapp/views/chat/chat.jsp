@@ -414,85 +414,198 @@
 <script>
     var wsChat = null;
     var selectedRoomId = null;
+    var selectedEmployeeIds = new Set(); // Set to track selected employees
+    var myId = '${sessionScope.loginId}'; // 로그인한 사용자의 ID
 
-    chatRoomWebSocketConnect();
+    // Initialize roomInfo and create a mapping from empNo to empName
+    var roomInfo = [];
+    var empNameMapping = {}; // Mapping for empNo to empName
 
-    function chatRoomList() {
-        let roomInfo = [];
-        <c:forEach items="${chatRoomList}" var="roomInfo">
-        roomInfo.push({
-            'roomIdx': '${roomInfo.roomIdx}',
-            'roomName': '${roomInfo.roomName}',
-            'roomLastMessage': '${roomInfo.roomLastMessage}',
-            'roomLastMessageDate': '${roomInfo.roomLastMessageDate}',
-            'roomUserCount': '${roomInfo.roomMemberCount}'
+    <c:forEach items="${chatRoomList}" var="room">
+    var empList = [];
+    <c:forEach items="${room.empList}" var="emp">
+    empList.push({
+        empNo: '${emp.emp_no}',
+        empName: '${emp.emp_name}',
+        empPhoto: '${emp.profile_new}'
+    });
+    empNameMapping['${emp.emp_no}'] = '${emp.emp_name}'; // Populate the mapping
+    </c:forEach>
+    roomInfo.push({
+        roomIdx: '${room.roomIdx}',
+        roomName: '${room.roomName}',
+        roomLastMessage: '${room.roomLastMessage}',
+        roomLastMessageDate: '${room.roomLastMessageDate}',
+        roomUserCount: '${room.roomMemberCount}',
+        empList: empList
+    });
+    </c:forEach>
+
+    $(document).ready(function () {
+        populateChatRoomList();
+
+        // Chat room list item click handler
+        $(document).on('click', '.chat-room-list', function () {
+            $('.list-group-item').removeClass('active');
+            $(this).addClass('active');
+
+            selectedRoomId = $(this).data("room-idx");
+            var selectedRoomName = $(this).data("room-name");
+            var selectedRoomUserCount = $(this).data("room-user-count");
+
+            $('#roomName').text(selectedRoomName);
+            $('#roomUserCount').text(selectedRoomUserCount);
+
+            $('#selectChatRoomMessage').hide();
+            $('#chatWindow').addClass('active');
+
+            fetchChatMessages();
         });
-        </c:forEach>
-        return roomInfo;
+
+        // Enter key handler for message input
+        $('#messageInput').on("keypress", function (event) {
+            if (event.key === "Enter" && $(this).val() !== '') {
+                sendMessage();
+            }
+        });
+
+        // File input change handler
+        $('#fileInput').on('change', function (event) {
+            var file = event.target.files[0];
+            fileUpload(file);
+        });
+
+        // Leave room button click handler
+        $(document).on('click', '#leaveRoomButton', function () {
+            leaveRoom();
+        });
+
+        // Implement the search functionality
+        $('#searchInput').on('keyup', function () {
+            var searchValue = $(this).val().toLowerCase();
+            $('#employeeList .employee-item').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(searchValue) > -1);
+            });
+        });
+
+        // New chat room creation confirmation
+        $('.modal-footer .btn-primary').on('click', function () {
+            createChatRoom();
+        });
+    });
+
+    function populateChatRoomList() {
+        var chatRoomListContainer = $('.list-group');
+        chatRoomListContainer.empty();
+
+        if (roomInfo.length > 0) {
+            roomInfo.forEach(function (room) {
+                var roomItem = $('<a href="#" class="list-group-item chat-room-list list-group-item-action"></a>');
+                roomItem.data('room-idx', room.roomIdx);
+                roomItem.data('room-name', room.roomName);
+                roomItem.data('room-user-count', room.roomUserCount);
+                roomItem.data('room-last-message', room.roomLastMessage);
+
+                var roomHeader = $('<div class="d-flex w-100 justify-content-between"></div>');
+                roomHeader.append('<h5 class="mb-1">' + room.roomName + '</h5>');
+
+                var roomLastMessage = room.roomLastMessage ? room.roomLastMessage : '메세지가 없습니다.';
+                var roomMessagePreview = $('<small></small>').text(roomLastMessage.length > 7 ? roomLastMessage.substring(0, 7) + '...' : roomLastMessage);
+
+                roomItem.append(roomHeader);
+                roomItem.append(roomMessagePreview);
+                chatRoomListContainer.append(roomItem);
+            });
+        } else {
+            chatRoomListContainer.append('채팅방을 만들어 주세요');
+        }
     }
 
-    function chatRoomWebSocketConnect() {
-        let wsChatRoom = new WebSocket("ws://" + window.location.host + "/chatRoom");
-        wsChatRoom.onopen = function () {
-            console.log('채팅방 감시 연결');
-        };
-        wsChatRoom.onmessage = function (event) {
-            alert('new chatRoom' + event);
-        };
+    function fetchChatMessages() {
+        $.ajax({
+            url: '/chat/messages.ajax',
+            method: 'GET',
+            data: {roomId: selectedRoomId},
+            success: function (data) {
+                console.log(data);
+                var chatMessages = $('#message-container');
+                chatMessages.empty();
+
+                if (data && data.messages && Array.isArray(data.messages)) {
+                    data.messages.forEach(function (chatMessage) {
+                        handleIncomingMessage(chatMessage);
+                    });
+
+                    chatMessages.scrollTop(chatMessages[0].scrollHeight);
+                    wsChat = chatWebSocketConnect(wsChat);
+                } else {
+                    console.error('Invalid messages data:', data);
+                }
+            },
+            error: function (error) {
+                console.log('Error fetching chat messages:', error);
+            }
+        });
     }
 
     function chatWebSocketConnect(ws) {
         if (ws) {
             ws.close();
         }
-        let myId = '${sessionScope.loginId}';
         ws = new WebSocket("ws://" + window.location.host + "/chat/" + selectedRoomId);
         ws.onmessage = function (event) {
-            let chatMessage = JSON.parse(event.data);
-            handleIncomingMessage(chatMessage, myId);
+            var chatMessage = JSON.parse(event.data);
+            console.log("chatMessage: {}", chatMessage);
+            handleIncomingMessage(chatMessage);
         };
         return ws;
     }
 
-    function handleIncomingMessage(chatMessage, myId) {
-        let messageElement = $('<div>').addClass('message').attr('data-chat-idx', chatMessage.chatIdx);
+    function handleIncomingMessage(chatMessage) {
+        var messageElement = $('<div>').addClass('message').attr('data-chat-idx', chatMessage.chatIdx);
         if (chatMessage.sender === myId) {
             messageElement.addClass('sent');
         } else {
             messageElement.addClass('received');
         }
 
-        let profilePic = $('<img>').attr('src', 'profile.png').addClass('profile-pic');
-        let messageContent = $('<div>').addClass('message-content');
-        let senderName = $('<span>').addClass('sender-name').text(chatMessage.sender);
-        let timestamp = $('<div>').addClass('timestamp').text(new Date().toLocaleTimeString());
+        var profilePic = $('<img>').attr('src', 'profile.png').addClass('profile-pic');
+        var messageContent = $('<div>').addClass('message-content');
+        var senderName = $('<span>').addClass('sender-name').text(empNameMapping[chatMessage.sender]);
+        var timestamp = $('<div>').addClass('timestamp').text(new Date().toLocaleTimeString());
 
         messageContent.append(senderName);
         if (chatMessage.messageIsDelete) {
-            let deletedText = $('<div>').addClass('deleted-message').text('Message deleted');
+            var deletedText = $('<div>').addClass('deleted-message').text('Message deleted');
             messageContent.append(deletedText);
         } else {
             if (chatMessage.type === 'file' && chatMessage.attachments && chatMessage.attachments.length > 0) {
-                let file = chatMessage.attachments[0];
+                var file = chatMessage.attachments[0];
 
-                if (file.fileType.startsWith('image/')) {
-                    let imagePreview = $('<img>').attr('src', '/src/main/resources/static/upload/' + file.fileName).css('max-width', '100%');
+                if (file.fileType.startsWith('image')) {
+                    var imagePreview = $('<img>').attr('src', '/src/main/resources/static/upload/' + file.fileName).css('max-width', '100%');
                     messageContent.append(imagePreview);
                 }
-                let fileLink = $('<a>')
-                    .attr('href', '/src/main/resources/static/upload/' + file.fileName)
-                    .attr('download', file.oriFileName)
-                    .text('Download ' + file.oriFileName);
+                var fileLink = $('<a>')
+                    .attr('href', '/api/download/' + file.fileName)
+                    .attr('download', file.fileName)
+                    .text('Download ' + file.fileName);
                 messageContent.append(fileLink);
             } else {
-                let messageText = $('<div>').text(chatMessage.message);
+                var messageText = $('<div>')
+                    .addClass('chat-messages-div')
+                    .attr('id', chatMessage.chatId)
+                    .text(chatMessage.message);
                 messageContent.append(messageText);
             }
 
             if (chatMessage.sender === myId) {
-                let deleteButton = $('<button>').addClass('delete-button').data("chatId", chatMessage.chatId).text('삭제').click(function () {
-                    deleteMessage(chatMessage.chatIdx, chatMessage.type, chatMessage.chatId);
-                });
+                var deleteButton = $('<button>')
+                    .addClass('delete-button')
+                    .text('삭제')
+                    .click(function () {
+                        deleteMessage(chatMessage.chatIdx, chatMessage.type, chatMessage.chatId, $(this));
+                    });
                 messageContent.append(deleteButton);
             }
         }
@@ -507,19 +620,19 @@
             messageElement.append(timestamp);
         }
 
-        let chatMessages = $('.chat-messages');
+        var chatMessages = $('.chat-messages');
         chatMessages.append(messageElement);
         chatMessages.scrollTop(chatMessages[0].scrollHeight);
     }
 
     function sendMessage() {
-        let message = $('#messageInput').val();
-        sendMessageToServer(wsChat, 'text', message, '${sessionScope.loginId}', selectedRoomId, null);
+        var message = $('#messageInput').val();
+        sendMessageToServer(wsChat, 'text', message, myId, selectedRoomId, null);
         $('#messageInput').val('');
     }
 
     function sendMessageToServer(ws, type, message, sender, room, attachment) {
-        let chatMessage = {
+        var chatMessage = {
             type: type,
             message: message,
             sender: sender,
@@ -529,7 +642,8 @@
         ws.send(JSON.stringify(chatMessage));
     }
 
-    function deleteMessage(chatIdx, type, chatId) {
+    function deleteMessage(chatIdx, type, chatId, deleteButton) {
+        console.log(chatId);
         $.ajax({
             url: '/chat/deleteMessage.ajax',
             type: 'GET',
@@ -540,8 +654,9 @@
             success: function (data) {
                 if (data.result) {
                     alert('메시지가 삭제되었습니다.');
-                    let messageElement = $('.message[data-chat-idx="' + chatIdx + '"]');
-                    messageElement.find('.message-content').empty().append('<div class="deleted-message">Message deleted</div>');
+                    var messageElement = $('#' + chatId);
+                    messageElement.empty().append('<div class="deleted-message">Message deleted</div>');
+                    deleteButton.remove();
                 } else {
                     alert('메시지 삭제에 실패했습니다.');
                 }
@@ -553,61 +668,9 @@
         });
     }
 
-    $(document).on('click', '.chat-room-list', function () {
-        let myId = '${sessionScope.loginId}';
-        $('.list-group-item').removeClass('active');
-        $(this).addClass('active');
-
-        selectedRoomId = $(this).data("room-idx");
-        let selectedRoomName = $(this).data("room-name");
-        let selectedRoomUserCount = $(this).data("room-user-count");
-
-        $('#roomName').text(selectedRoomName);
-        $('#roomUserCount').text(selectedRoomUserCount);
-
-        $('#selectChatRoomMessage').hide();
-        $('#chatWindow').addClass('active');
-
-        $.ajax({
-            url: '/chat/messages.ajax',
-            method: 'GET',
-            data: {roomId: selectedRoomId},
-            success: function (data) {
-                console.log(data);
-                let chatMessages = $('#message-container');
-                chatMessages.empty();
-
-                if (data && data.messages && Array.isArray(data.messages)) {
-                    for (let chatMessage of data.messages) {
-                        handleIncomingMessage(chatMessage, myId);
-                    }
-
-                    chatMessages.scrollTop(chatMessages[0].scrollHeight);
-                    wsChat = chatWebSocketConnect(wsChat);
-                } else {
-                    console.error('Invalid messages data:', data);
-                }
-            },
-            error: function (error) {
-                console.log('Error fetching chat messages:', error);
-            }
-        });
-    });
-
-    $('#messageInput').on("keypress", function (event) {
-        if (event.key === "Enter") {
-            sendMessage();
-        }
-    });
-
-    $('#fileInput').on('change', function (event) {
-        var file = event.target.files[0];
-        fileUpload(file);
-    });
-
     function fileUpload(file) {
-        let uploadFileName = '';
-        let formData = new FormData();
+        var uploadFileName = '';
+        var formData = new FormData();
         formData.append('file', file);
         $.ajax({
             url: '/chat/uploadAttachment.ajax',
@@ -627,10 +690,10 @@
     }
 
     function fileSend(fileName, fileType, oriFileName) {
-        let chatMessage = {
+        var chatMessage = {
             type: 'file',
             message: '',
-            sender: '${sessionScope.loginId}',
+            sender: myId,
             room: selectedRoomId,
             attachments: [
                 {
@@ -643,14 +706,14 @@
         wsChat.send(JSON.stringify(chatMessage));
     }
 
-    $(document).on('click', '#leaveRoomButton', function () {
+    function leaveRoom() {
         if (selectedRoomId !== null) {
             $.ajax({
                 url: '/chat/exitChatRoom.ajax',
                 method: 'POST',
                 data: {
                     roomIdx: selectedRoomId,
-                    roomEmpIdx: ${sessionScope.loginId}
+                    roomEmpIdx: myId
                 },
                 success: function (data) {
                     if (data.result) {
@@ -671,6 +734,104 @@
                 }
             });
         }
+    }
+
+    $('#newChatModal').on('show.bs.modal', function (e) {
+        fetchEmployeeList();
     });
+
+    function fetchEmployeeList() {
+        $.ajax({
+            url: '/emp/emp/noOffsetEmpList.ajax',
+            method: 'GET',
+            success: function (data) {
+                console.log(data);
+                renderEmployeeList(data.EmpList);
+            },
+            error: function (error) {
+                console.log('Error fetching employee list:', error);
+            }
+        });
+    }
+
+    function renderEmployeeList(data) {
+        var employeeListContainer = $('#employeeList');
+        employeeListContainer.empty();
+
+        if (data && Array.isArray(data)) {
+            data.forEach(function (employee) {
+                if (!selectedEmployeeIds.has(employee.emp_no) && employee.emp_no !== myId) {
+                    var employeeItem = $('<div class="employee-item list-group-item"></div>');
+                    employeeItem.text(employee.emp_name + " (" + employee.emp_no + ")");
+                    employeeItem.data('employee-id', employee.emp_no);
+                    employeeListContainer.append(employeeItem);
+                }
+            });
+        } else {
+            employeeListContainer.append('<div>No employees found</div>');
+        }
+    }
+
+    $(document).on('click', '.employee-item', function () {
+        var employeeId = $(this).data('employee-id');
+        var employeeName = $(this).text();
+
+        selectedEmployeeIds.add(employeeId);
+
+        var selectedEmployeesContainer = $('#selectedEmployees');
+        var selectedEmployeeItem = $('<div class="selected-item list-group-item"></div>');
+        selectedEmployeeItem.text(employeeName);
+        selectedEmployeeItem.data('employee-id', employeeId);
+
+        var removeButton = $('<button class="btn btn-danger btn-sm ml-2">Remove</button>');
+        removeButton.on('click', function () {
+            selectedEmployeeItem.remove();
+            selectedEmployeeIds.delete(employeeId);
+            fetchEmployeeList();
+        });
+
+        selectedEmployeeItem.append(removeButton);
+        selectedEmployeesContainer.append(selectedEmployeeItem);
+
+        $(this).remove();
+    });
+
+    $('#newChatModal').on('hidden.bs.modal', function () {
+        selectedEmployeeIds.clear();
+        $('#selectedEmployees').empty();
+    });
+
+    function createChatRoom() {
+        selectedEmployeeIds.add(myId);
+        var selectedEmployeeNoArray = Array.from(selectedEmployeeIds).map(id => ({ emp_no: id }));
+        console.log(selectedEmployeeNoArray);
+
+        $.ajax({
+            url: '/chat/createChatRoom.ajax',
+            type: 'POST',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify({
+                roomName: 'chat_room',
+                empList: selectedEmployeeNoArray,
+                roomEmpIdx: myId
+            }),
+            success: function (response) {
+                if (response.result) {
+                    $('#newChatModal').modal('hide');
+                    alert('채팅방이 생성되었습니다.');
+                    location.reload();
+                } else {
+                    alert('채팅방 생성에 실패했습니다. 다시 시도해주세요.');
+                }
+            },
+            error: function (error) {
+                console.error('Error creating chat room:', error);
+                alert('채팅방 생성에 실패했습니다. 다시 시도해주세요.');
+            }
+        });
+    }
+
 </script>
+
 </html>

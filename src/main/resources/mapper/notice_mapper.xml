@@ -23,54 +23,58 @@
 		WHERE notice_imp = 'true' and notice_stat = '공개'
 	</select>
 
-	<!-- 첨부 파일 등록 쿼리 -->
-	<insert id="insertAttachment" parameterType="notice">
-		INSERT INTO
-		notice_attach_file (notice_idx, notice_file_name,
-		notice_attach_file)
-		VALUES (#{notice_idx}, #{notice_file_name}, #{notice_attach_file})
-	</insert>
+    <!-- 첨부 파일 등록 쿼리 -->
+    <insert id="insertAttachment" parameterType="notice">
+        INSERT INTO
+        notice_attach_file (notice_idx, notice_file_name,
+        notice_attach_file)
+        VALUES (#{notice_idx}, #{notice_file_name}, #{notice_attach_file})
+    </insert>
 
-<select id="getNoticeList" parameterType="search" resultType="notice">
-    SELECT
-        notice_idx,
-        notice_writer,
-        notice_field,
-        notice_imp,
-        notice_stat,
-        notice_title,
-        notice_date
-    FROM
-        notice
-    WHERE
-        notice_stat != '비활성화'
-        <if test="category != null and category != ''">
-            AND (notice_field = 'all' OR notice_field = #{category})
-        </if>
-        <if test="filterStartDate != null and filterStartDate != ''">
-            AND notice_date <![CDATA[>=]]> #{filterStartDate}
-        </if>
-        <if test="filterEndDate != null and filterEndDate != ''">
-            AND notice_date <![CDATA[<=]]> #{filterEndDate}
-        </if>
-        <if test="searchFilter != null and searchFilter != '' and searchQuery != null and searchQuery != ''">
-            <choose>
-                <when test="searchFilter == 'noticeWriter'">
-                    AND notice_writer LIKE CONCAT('%', #{searchQuery}, '%')
-                </when>
-                <when test="searchFilter == 'noticeTitle'">
-                    AND notice_title LIKE CONCAT('%', #{searchQuery}, '%')
-                </when>
-            </choose>
-        </if>
-    ORDER BY
-        notice_imp DESC,
-        notice_date DESC
-    LIMIT #{pageSize} OFFSET #{page}
-</select>
-
-
-
+	<select id="getNoticeList" parameterType="search"
+		resultType="notice">
+		SELECT
+		notice_idx,
+		notice_writer,
+		notice_field,
+		notice_imp,
+		notice_stat,
+		notice_title,
+		notice_date
+		FROM
+		notice
+		WHERE
+		notice_stat != '비활성화'
+		<if test="category != null and category != ''">
+			AND (notice_field = 'all' OR notice_field = #{category})
+		</if>
+		<if test="filterStartDate != null and filterStartDate != ''">
+			AND notice_date <![CDATA[>=]]>
+			#{filterStartDate}
+		</if>
+		<if test="filterEndDate != null and filterEndDate != ''">
+			AND notice_date <![CDATA[<=]]>
+			#{filterEndDate}
+		</if>
+		<if
+			test="searchFilter != null and searchFilter != '' and searchQuery != null and searchQuery != ''">
+			<choose>
+				<when test="searchFilter == 'noticeWriter'">
+					AND notice_writer LIKE CONCAT('%', #{searchQuery},
+					'%')
+				</when>
+				<when test="searchFilter == 'noticeTitle'">
+					AND notice_title LIKE CONCAT('%', #{searchQuery},
+					'%')
+				</when>
+			</choose>
+		</if>
+		ORDER BY
+		notice_imp DESC,
+		notice_date DESC
+		LIMIT #{pageSize} OFFSET
+		#{page}
+	</select>
 
 
 	<!-- 비활성화 -->
@@ -84,49 +88,82 @@
 	</update>
 
 
-<!-- 토탈 페이지 출력 -->
-<select id="getNoticeCount" resultType="int" parameterType="search">
-    SELECT COUNT(notice_idx)
-    FROM notice
-    <where>
-        notice_stat != '비활성화'
-        <if test="category != null and category != ''">
-            AND (notice_field = 'all' OR notice_field = #{category})
-        </if>
-        <if test="filterStartDate != null and filterStartDate != ''">
-            AND notice_date <![CDATA[>=]]> #{filterStartDate}
-        </if>
-        <if test="filterEndDate != null and filterEndDate != ''">
-            AND notice_date <![CDATA[<=]]> #{filterEndDate}
-        </if>
-        <if test="searchFilter != null and searchFilter == 'noticeWriter' and searchQuery != null and searchQuery != ''">
-            AND notice_writer LIKE CONCAT('%', #{searchQuery}, '%')
-        </if>
-        <if test="searchFilter != null and searchFilter == 'noticeTitle' and searchQuery != null and searchQuery != ''">
-            AND notice_title LIKE CONCAT('%', #{searchQuery}, '%')
-        </if>
-    </where>
-</select>
+	<!-- 토탈 페이지 출력 -->
+	<select id="getNoticeCount" resultType="int"
+		parameterType="search">
+		SELECT COUNT(notice_idx)
+		FROM notice
+		<where>
+			notice_stat != '비활성화'
+			<if test="category != null and category != ''">
+				AND (notice_field = 'all' OR notice_field = #{category})
+			</if>
+			<if test="filterStartDate != null and filterStartDate != ''">
+				AND notice_date <![CDATA[>=]]>
+				#{filterStartDate}
+			</if>
+			<if test="filterEndDate != null and filterEndDate != ''">
+				AND notice_date <![CDATA[<=]]>
+				#{filterEndDate}
+			</if>
+			<if
+				test="searchFilter != null and searchFilter == 'noticeWriter' and searchQuery != null and searchQuery != ''">
+				AND notice_writer LIKE CONCAT('%', #{searchQuery}, '%')
+			</if>
+			<if
+				test="searchFilter != null and searchFilter == 'noticeTitle' and searchQuery != null and searchQuery != ''">
+				AND notice_title LIKE CONCAT('%', #{searchQuery}, '%')
+			</if>
+		</where>
+	</select>
 
 
 
 	<select id="getDetail" resultType="notice">
-	    SELECT n.notice_idx,
-	           n.notice_writer,
-	           n.notice_title,
-	           n.notice_content,
-	           n.notice_date
-	    FROM notice n
-	    WHERE n.notice_idx = #{param1}
-	</select>
-	
-		<select id="getList" resultType="notice">
-	    SELECT 
-	           notice_attach_file
-	    FROM notice_attach_file
-	    WHERE notice_idx = #{param1}
+		SELECT notice_idx,
+		notice_writer,
+		notice_title,
+		notice_content,
+		notice_date,
+		notice_field,
+		notice_stat,
+		notice_imp
+		FROM notice
+		WHERE notice_idx = #{param1}
 	</select>
 
+	<select id="getList" resultType="notice">
+		SELECT
+		notice_attach_file_idx,
+		notice_attach_file
+		FROM
+		notice_attach_file
+		WHERE notice_idx = #{param1}
+	</select>
 
+    
+    <!-- 첨부 파일 삭제 쿼리 -->
+    <delete id="deleteAttachment" parameterType="int">
+        DELETE FROM notice_attach_file
+        WHERE notice_attach_file_idx = #{param1}
+    </delete>
+    
+    <!-- 공지사항 업데이트 쿼리 -->
+    <update id="updateNotice" parameterType="notice">
+        UPDATE notice
+        SET
+        notice_title = #{notice_title},
+        notice_content = #{notice_content},
+        notice_imp = #{notice_imp},
+        notice_field = #{notice_field},
+        notice_stat = #{notice_stat}
+        WHERE notice_idx = #{notice_idx}
+    </update>
+
+	<select id="getExistingFileNames" parameterType="int" resultType="string">
+	    SELECT notice_file_name 
+	    FROM notice_attach_file 
+	    WHERE notice_idx = #{notice_idx}
+	</select>
 
 </mapper>

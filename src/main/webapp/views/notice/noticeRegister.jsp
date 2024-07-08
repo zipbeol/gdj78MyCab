@@ -6,7 +6,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>My Cab - Notice</title>
+<title>My Cab - Notice Register</title>
 <!-- Meta -->
 <meta name="description"
 	content="Marketplace for Bootstrap Admin Dashboards">
@@ -136,7 +136,7 @@ td:hover {
 						<li class="breadcrumb-item"><a href="/"><i
 								class="bi bi-house lh-1"></i></a> <a href="/"
 							class="text-decoration-none">메인</a></li>
-						<li class="breadcrumb-item"><a href="/notice/list.go"
+						<li class="breadcrumb-item"><a href="./list"
 							class="text-decoration-none">공지사항</a></li>
 						<li class="breadcrumb-item"><a href="#!"
 							class="text-decoration-none">새 공지사항 작성</a></li>
@@ -288,7 +288,7 @@ td:hover {
 	        }
 
 	        // 확인창 띄우기
-	        if (!confirm('공지를 등록하시겠습니까?')) {
+	        if (!confirm('공지사항을 등록하시겠습니까?')) {
 	            return;
 	        }
 

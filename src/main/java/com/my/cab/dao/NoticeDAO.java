@@ -26,4 +26,16 @@ public interface NoticeDAO {
 
 	List<NoticeDTO> getList(String notice_idx);
 
+	List<NoticeDTO> getModify(String notice_idx);
+
+	void updateNotice(NoticeDTO noticeDTO);
+
+	NoticeDTO getAttachment(int notice_idx);
+
+	void updateAttachment(NoticeDTO noticeDTO);
+
+	void deleteAttachment(int notice_attach_file_idx);
+
+	List<String> getExistingFileNames(int notice_idx);
+
 }

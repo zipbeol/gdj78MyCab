@@ -5,7 +5,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>My Cab - Notice</title>
+<title>My Cab - Notice Detail</title>
 <!-- Meta -->
 <meta name="description" content="Marketplace for Bootstrap Admin Dashboards">
 <meta name="author" content="Bootstrap Gallery">
@@ -116,7 +116,8 @@
                     </div>
                     <ol class="breadcrumb d-none d-lg-flex ms-3">
                         <li class="breadcrumb-item"><a href="/"><i class="bi bi-house lh-1"></i></a> <a href="/" class="text-decoration-none">메인</a></li>
-                        <li class="breadcrumb-item"><a href="notice/list" class="text-decoration-none">공지사항</a></li>
+                        <li class="breadcrumb-item"><a href="./list" class="text-decoration-none">공지사항</a></li>
+                        <li class="breadcrumb-item"><a href="./detail.go?notice_idx=${noticeDetail.notice_idx}" class="text-decoration-none">상세보기</a></li>
                     </ol>
                     <jsp:include page="../appHeader.jsp" />
                 </div>
@@ -134,11 +135,13 @@
                                                 <tbody>
                                                     <tr>
                                                         <td class="detail-label" style="width: 15%">작성자</td>
-                                                        <td class="detail-content" style="width: 85%">${noticeAttach.notice_writer}</td>
+                                                        <td class="detail-content" style="width: 35%">${noticeDetail.notice_writer}</td>
+                                                        <td class="detail-label" style="width: 15%">공지사항 대상</td>
+                                                        <td class="detail-content" style="width: 35%">${noticeDetail.notice_field}</td>
                                                     </tr>
                                                     <tr>
                                                         <td class="detail-label">첨부 파일</td>
-                                                        <td class="detail-content">
+                                                        <td class="detail-content" colspan="3">
                                                             <c:if test="${list.size()>0 }">
                                                                 <c:forEach items="${list}" var="path">
                                                                     <a href="download/${path.notice_attach_file}">${path.notice_attach_file} 다운로드</a>
@@ -148,23 +151,23 @@
                                                     </tr>
                                                     <tr>
                                                         <td class="detail-label">제목</td>
-                                                        <td class="detail-content">${noticeAttach.notice_title}</td>
+                                                        <td class="detail-content" colspan="3">${noticeDetail.notice_title}</td>
                                                     </tr>
                                                     <tr>
                                                         <td class="detail-label">내용</td>
-                                                        <td class="detail-content content-height">
-                                                            ${noticeAttach.notice_content}
+                                                        <td class="detail-content content-height" colspan="3">
+                                                            ${noticeDetail.notice_content}
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <td class="detail-label" style="text-align: right;">작성 일시</td>
-                                                        <td class="detail-content" style="text-align: right;">${noticeAttach.notice_date}</td>
+                                                        <td class="detail-content" style="text-align: right;" colspan="3">${noticeDetail.notice_date}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                         </div>
                                         <div class="action-buttons mt-3">
-                                            <button type="button" id="noticeModify" class="btn btn-primary" data-notice_idx="${noticeAttach.notice_idx}">수정</button>
+                                            <button type="button" id="noticeModify" class="btn btn-primary" data-notice_idx="${noticeDetail.notice_idx}">수정</button>
                                             <a href="./list" class="btn btn-secondary">목록</a>
                                         </div>
                                     </div>
@@ -191,7 +194,7 @@
     $(document).ready(function() {
         // 수정 버튼 클릭 시 등록 페이지로 이동
         $('#noticeModify').click(function() {
-            window.location.href = '/notice/modify.go?notice_idx=' + ${noticeAttach.notice_idx};
+            window.location.href = '/notice/modify.go?notice_idx=' + ${noticeDetail.notice_idx};
         });
     });
     </script>

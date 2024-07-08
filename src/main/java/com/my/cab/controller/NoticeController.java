@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -134,10 +135,10 @@ public class NoticeController {
 	@RequestMapping("/detail.go")
 	public String noticeDetail(Model model, String notice_idx, NoticeDTO noticeDTO) {
 		logger.info("notice_idx : {}", notice_idx);
-		List<NoticeDTO> list = noticeService.getDetail(notice_idx);
-		NoticeDTO dto = noticeService.fileList(notice_idx);
-		model.addAttribute("noticeAttach", dto);
-		model.addAttribute("list",list);
+		NoticeDTO dto = noticeService.getDetail(notice_idx);
+		List<NoticeDTO> list = noticeService.fileList(notice_idx);
+		model.addAttribute("noticeDetail", dto);
+		model.addAttribute("list", list);
 		return "notice/noticeDetail";
 	}
 
@@ -156,8 +157,48 @@ public class NoticeController {
 	@RequestMapping("/modify.go")
 	public String noticeModify(Model model, String notice_idx, NoticeDTO noticeDTO) {
 		logger.info("공지사항 작성");
-
+		NoticeDTO dto = noticeService.getDetail(notice_idx);
+		List<NoticeDTO> list = noticeService.fileList(notice_idx);
+		model.addAttribute("noticeModi", dto);
+		model.addAttribute("list", list);
 		return "notice/noticeModify";
 	}
-	
+
+	// 공지사항 수정
+	@PostMapping("/noticeUpdate.ajax")
+	@ResponseBody
+	public Map<String, Object> noticeModiAjax(NoticeDTO noticeDTO,
+	        @RequestParam(value = "fileAttachment", required = false) MultipartFile[] files) throws IOException {
+	    logger.info("공지사항 수정페이지 - AJAX 요청");
+	    logger.info("DTO Title: {}", noticeDTO.getNotice_title());
+	    logger.info("DTO Field: {}", noticeDTO.getNotice_field());
+	    logger.info("DTO Content: {}", noticeDTO.getNotice_content());
+	    logger.info("DTO Important: {}", noticeDTO.getNotice_imp());
+
+	    Map<String, Object> response = new HashMap<>();
+	    int result = noticeService.noticeModiAjax(noticeDTO, files);
+
+	    if (result == -1) {
+	        response.put("status", "error");
+	        response.put("message", "중요 공지는 최대 3개까지만 등록할 수 있습니다.");
+	        return response;
+	    }
+
+	    response.put("status", "success");
+	    response.put("message", "수정이 성공적으로 완료되었습니다.");
+	    return response;
+	}
+
+	@PostMapping("/deleteAttachment.ajax")
+	@ResponseBody
+	public ResponseEntity<String> deleteAttachment(@RequestParam int notice_attach_file_idx) {
+		try {
+			noticeService.deleteAttachment(notice_attach_file_idx);
+			return ResponseEntity.ok("파일이 성공적으로 삭제되었습니다.");
+		} catch (Exception e) {
+			// 자세한 오류 로그를 기록
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일 삭제에 실패하였습니다.");
+		}
+	}
 }

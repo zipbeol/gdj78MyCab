@@ -136,8 +136,8 @@
                                                     <tr>
                                                         <td class="detail-label" style="width: 15%">작성자</td>
                                                         <td class="detail-content" style="width: 35%">${noticeDetail.notice_writer}</td>
-                                                        <td class="detail-label" style="width: 15%">공지사항 대상</td>
-                                                        <td class="detail-content" style="width: 35%">${noticeDetail.notice_field}</td>
+<td class="detail-label" style="width: 15%">공지사항 대상</td>
+<td class="detail-content" style="width: 35%" id="noticeField">${noticeDetail.notice_field}</td>
                                                     </tr>
                                                     <tr>
                                                         <td class="detail-label">첨부 파일</td>
@@ -192,6 +192,35 @@
     <script src="/assets/js/jquery.twbsPagination.min.js"></script>
     <script>
     $(document).ready(function() {
+        // 수정 버튼 클릭 시 등록 페이지로 이동
+        $('#noticeModify').click(function() {
+            window.location.href = '/notice/modify.go?notice_idx=' + ${noticeDetail.notice_idx};
+        });
+    });
+    
+    $(document).ready(function() {
+        // 공지사항 대상 한글 변환 함수
+        function getKoreanField(field) {
+            switch(field) {
+                case 'all':
+                    return '전체';
+                case 'humanResources':
+                    return '인사부';
+                case 'sales':
+                    return '영업부';
+                case 'salesSupport':
+                    return '영업지원부';
+                case 'TaxiManagement':
+                    return '택시관리부';
+                default:
+                    return field;
+            }
+        }
+
+        // 공지사항 대상 값 변환하여 출력
+        var noticeField = $('#noticeField').text().trim();
+        $('#noticeField').text(getKoreanField(noticeField));
+
         // 수정 버튼 클릭 시 등록 페이지로 이동
         $('#noticeModify').click(function() {
             window.location.href = '/notice/modify.go?notice_idx=' + ${noticeDetail.notice_idx};

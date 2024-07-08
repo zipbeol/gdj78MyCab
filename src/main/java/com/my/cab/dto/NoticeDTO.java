@@ -8,7 +8,7 @@ import org.apache.ibatis.type.Alias;
 public class NoticeDTO {
 
 	private int notice_idx;
-	private int notice_writer;
+	private String notice_writer;
 	private String notice_field;
 	private String notice_imp;
 	private String notice_stat;
@@ -16,6 +16,8 @@ public class NoticeDTO {
 	private String notice_content;
 	private Date notice_date;
 	
+	private int emp_no;
+	private String emp_name;
 	private int notice_attach_file_idx;
 	private String notice_file_name;
 	private String notice_attach_file;
@@ -26,10 +28,10 @@ public class NoticeDTO {
 	public void setNotice_idx(int notice_idx) {
 		this.notice_idx = notice_idx;
 	}
-	public int getNotice_writer() {
+	public String getNotice_writer() {
 		return notice_writer;
 	}
-	public void setNotice_writer(int notice_writer) {
+	public void setNotice_writer(String notice_writer) {
 		this.notice_writer = notice_writer;
 	}
 	public String getNotice_field() {
@@ -85,6 +87,18 @@ public class NoticeDTO {
 	}
 	public void setNotice_attach_file(String notice_attach_file) {
 		this.notice_attach_file = notice_attach_file;
+	}
+	public int getEmp_no() {
+		return emp_no;
+	}
+	public void setEmp_no(int emp_no) {
+		this.emp_no = emp_no;
+	}
+	public String getEmp_name() {
+		return emp_name;
+	}
+	public void setEmp_name(String emp_name) {
+		this.emp_name = emp_name;
 	}
 	
 }

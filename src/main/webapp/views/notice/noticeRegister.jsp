@@ -208,9 +208,7 @@ td:hover {
 						        </div>
 						    </div>
 									</div>
-								</div>
-							</div>
-						</div>
+								
 						<!-- Row end -->
 
 					</div>

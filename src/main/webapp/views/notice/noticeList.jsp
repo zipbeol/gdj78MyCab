@@ -162,7 +162,7 @@ td:hover {
                     <!-- Breadcrumb start -->
                     <ol class="breadcrumb d-none d-lg-flex ms-3">
                         <li class="breadcrumb-item"><a href="/"><i class="bi bi-house lh-1"></i></a> <a href="/" class="text-decoration-none">메인</a></li>
-                        <li class="breadcrumb-item"><a href="notice/list" class="text-decoration-none">공지사항</a></li>
+                        <li class="breadcrumb-item"><a href="#!" class="text-decoration-none">공지사항</a></li>
                     </ol>
                     <!-- Breadcrumb end -->
 
@@ -359,6 +359,23 @@ td:hover {
         }, 500);
     }
 
+    function getKoreanField(field) {
+        switch(field) {
+            case 'all':
+                return '전체';
+            case 'humanResources':
+                return '인사부';
+            case 'sales':
+                return '영업부';
+            case 'salesSupport':
+                return '영업지원부';
+            case 'TaxiManagement':
+                return '택시관리부';
+            default:
+                return field;
+        }
+    }
+    
     document.getElementById('startDate').addEventListener('change', function() {
         var startDate = this.value;
         var endDateInput = document.getElementById('endDate');

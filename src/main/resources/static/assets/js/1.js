@@ -1,6 +1,5 @@
 var chatSocket = new WebSocket("ws://" + window.location.host + "/chat");
 chatSocket.onopen = function () {
-    sender
 };
 chatSocket.onmessage = function (event) {
     var chatMessage = JSON.parse(event.data);
@@ -37,17 +36,4 @@ chatSocket.onmessage = function (event) {
     chatMessages.scrollTop(chatMessages[0].scrollHeight);
 };
 
-chatSocket.onclose = function () {
-    console.log("Disconnected from the chat server");
-};
 
-function sendMessage(type, message, sender, room) {
-    var chatMessage = {
-        type: type,
-        message: message,
-        sender: sender,
-        room: room
-    };
-
-    ws.send(JSON.stringify(chatMessage));
-}

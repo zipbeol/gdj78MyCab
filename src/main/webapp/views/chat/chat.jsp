@@ -22,19 +22,19 @@
     <link rel="stylesheet" href="/assets/css/main.min.css">
     <!-- Vendor Css Files -->
     <link rel="stylesheet" href="/assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
-    <!-- 폰트 -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
     <!-- Date Range CSS -->
     <link rel="stylesheet" href="/assets/vendor/daterange/daterange.css">
-    <!-- 따로 적용한 CSS -->
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="/assets/css/default.css">
-    <!-- FontAwesome 추가 -->
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         .chat-container {
-            height: 500px; /* 적절한 높이로 설정하세요 */
+            height: 500px;
             display: flex;
             flex-direction: column;
             border: 1px solid #dee2e6;
@@ -45,8 +45,8 @@
             overflow-y: auto;
             padding: 10px;
             background-color: #ffffff;
-            height: 400px; /* 기본 높이 */
-            max-height: 400px; /* 최대 높이 */
+            height: 400px;
+            max-height: 400px;
         }
 
         .message {
@@ -82,6 +82,7 @@
             padding: 10px;
             border-radius: 10px;
             background-color: #f1f0f0;
+            position: relative;
         }
 
         .message.sent .message-content {
@@ -145,23 +146,95 @@
         .chat-date.received {
             text-align: left;
         }
+
+        /* Initially hide chat window */
+        .chat-window {
+            display: none;
+        }
+
+        /* Show chat window when a chat room is selected */
+        .chat-window.active {
+            display: block;
+        }
+
+        .search-result, .selected-employees {
+            margin-top: 15px;
+        }
+
+        .employee-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .employee-item {
+            cursor: pointer;
+        }
+
+        .employee-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .selected-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-name {
+            font-size: 0.8em;
+            color: #999;
+            margin-left: 10px;
+            align-self: center;
+        }
+
+        .delete-button {
+            background: none;
+            border: none;
+            color: red;
+            cursor: pointer;
+            font-size: 0.8em;
+            margin-left: 5px;
+            display: none;
+        }
+
+        .message-content:hover .delete-button {
+            display: block;
+        }
+
+        .deleted-message .delete-button {
+            display: none;
+        }
+
+
+        .deleted-message {
+            color: #999;
+            font-style: italic;
+        }
+
     </style>
 </head>
-
 <body>
-<!-- Page wrapper start -->
 <div class="page-wrapper">
-    <!-- Main container start -->
     <div class="main-container">
-        <!-- Sidebar wrapper start -->
         <jsp:include page="../sidebar.jsp"/>
-        <!-- Sidebar wrapper end -->
-
-        <!-- App container starts -->
         <div class="app-container">
-            <!-- App header starts -->
             <div class="app-header d-flex align-items-center">
-                <!-- Toggle buttons start -->
                 <div class="d-flex">
                     <button class="btn btn-outline-primary me-2 toggle-sidebar" id="toggle-sidebar">
                         <i class="bi bi-list fs-5"></i>
@@ -170,17 +243,11 @@
                         <i class="bi bi-list fs-5"></i>
                     </button>
                 </div>
-                <!-- Toggle buttons end -->
-
-                <!-- App brand sm start -->
                 <div class="app-brand-sm d-lg-none d-sm-block">
                     <a href="/">
                         <img src="/assets/images/logo-sm.svg" class="logo" alt="Bootstrap Gallery">
                     </a>
                 </div>
-                <!-- App brand sm end -->
-
-                <!-- Breadcrumb start -->
                 <ol class="breadcrumb d-none d-lg-flex ms-3">
                     <li class="breadcrumb-item">
                         <a href="/"><i class="bi bi-house lh-1"></i></a>
@@ -190,19 +257,10 @@
                         <a href="/chat/chat.go" class="text-decoration-none">채팅</a>
                     </li>
                 </ol>
-                <!-- Breadcrumb end -->
-
-                <!-- App header actions start -->
                 <jsp:include page="../appHeader.jsp"/>
-                <!-- App header actions end -->
             </div>
-            <!-- App header ends -->
-
-            <!-- App body starts -->
             <div class="app-body">
-                <!-- Container starts -->
                 <div class="container-fluid">
-                    <!-- Row start -->
                     <div class="row">
                         <div class="col-12">
                             <div class="card mb-3">
@@ -210,7 +268,6 @@
                                     <h4 class="card-title">메신저</h4>
                                 </div>
                                 <div class="card-body chat-container">
-                                    <!-- 메시지 UI 시작 -->
                                     <div class="row h-100">
                                         <div class="col-3 chat-list p-3">
                                             <button class="btn btn-success btn-block mb-3" data-toggle="modal"
@@ -221,13 +278,32 @@
                                                 <c:choose>
                                                     <c:when test="${chatRoomList.size() > 0}">
                                                         <c:forEach items="${chatRoomList}" var="room">
-                                                            <a href="#" class="list-group-item list-group-item-action"
-                                                               data-roomID="${room.chatRoomIdx}">
+                                                            <a href="#"
+                                                               class="list-group-item chat-room-list list-group-item-action"
+                                                               data-room-idx="${room.roomIdx}"
+                                                               data-room-name="${room.roomName}"
+                                                               data-room-user-count="${room.roomMemberCount}"
+                                                               data-room-last-message="${room.roomLastMessage}">
                                                                 <div class="d-flex w-100 justify-content-between">
-                                                                    <h5 class="mb-1">${room.chatRoomName}</h5>
-                                                                    <small>${room.chatRoomLastMessage}</small>
+                                                                    <h5 class="mb-1">${room.roomName}</h5>
                                                                 </div>
-                                                                <small>${room.chatRoomLastMessage}</small>
+                                                                <small>
+                                                                    <c:choose>
+                                                                        <c:when test="${room.roomLastMessage == ''}">
+                                                                            메세지가 없습니다.
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            <c:choose>
+                                                                                <c:when test="${room.roomLastMessage.length() > 7}">
+                                                                                    ${room.roomLastMessage.substring(0, 7)}...
+                                                                                </c:when>
+                                                                                <c:otherwise>
+                                                                                    ${room.roomLastMessage}
+                                                                                </c:otherwise>
+                                                                            </c:choose>
+                                                                        </c:otherwise>
+                                                                    </c:choose>
+                                                                </small>
                                                             </a>
                                                         </c:forEach>
                                                     </c:when>
@@ -238,12 +314,14 @@
                                             </div>
                                         </div>
                                         <div class="col-9 d-flex flex-column p-0 position-relative">
-                                            <div class="chat-window p-3">
+                                            <div class="chat-window p-3" id="chatWindow">
                                                 <div class="d-flex w-100 justify-content-between border-bottom pb-2 mb-3">
-                                                    <h5 class="mb-1">테스트</h5>
-                                                    <small>멤버 1</small>
+                                                    <small>멤버 <span id="roomUserCount"></span></small>
+                                                    <h5 class="mb-1" id="roomName">테스트</h5>
+                                                    <button class="btn btn-danger btn-sm" id="leaveRoomButton">방 나가기
+                                                    </button>
                                                 </div>
-                                                <div class="chat-messages">
+                                                <div class="chat-messages" id="message-container">
                                                     <div class="text-center text-muted small my-2">2024.7.1. (월)</div>
                                                     <div class="text-center text-muted small my-2">박채현님이 그룹 메시지방에
                                                         참여합니다.
@@ -254,43 +332,35 @@
                                                         <input type="text" class="form-control" id="messageInput"
                                                                placeholder="메시지를 입력해주세요. (Enter: 전송)">
                                                         <div class="input-group-append">
-                                                            <button class="btn btn-secondary" type="button"><i
-                                                                    class="far fa-smile"></i></button>
-                                                            <button class="btn btn-secondary" type="button"><i
-                                                                    class="fas fa-paperclip"></i></button>
+                                                            <div class="file-input-wrapper btn btn-secondary">
+                                                                파일 선택
+                                                                <input type="file" id="fileInput" class="file-input">
+                                                            </div>
                                                             <button class="btn btn-primary" type="button"
                                                                     onclick="sendMessage()">전송
                                                             </button>
                                                         </div>
+                                                        <div id="fileName" class="file-name"></div>
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="text-center p-5" id="selectChatRoomMessage">
+                                                <h5>채팅방을 선택해 주세요</h5>
+                                            </div>
                                         </div>
                                     </div>
-                                    <!-- 메시지 UI 끝 -->
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- Row end -->
                 </div>
-                <!-- Container ends -->
             </div>
-            <!-- App body ends -->
-
-            <!-- App footer start -->
             <div class="app-footer">
                 <span>GDJ78FINALPROJECTMYCAB</span>
             </div>
-            <!-- App footer end -->
         </div>
-        <!-- App container ends -->
     </div>
-    <!-- Main container end -->
 </div>
-<!-- Page wrapper end -->
-
-<!-- New Chat Modal -->
 <div class="modal fade" id="newChatModal" tabindex="-1" role="dialog" aria-labelledby="newChatModalLabel"
      aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -302,32 +372,21 @@
                 </button>
             </div>
             <div class="modal-body">
-                <input type="text" class="form-control mb-3" placeholder="이름, 부서 검색" id="memberSearch">
-                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="organization-tab" data-toggle="tab" href="#organization"
-                           role="tab"
-                           aria-controls="organization" aria-selected="true">조직도</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="groups-tab" data-toggle="tab" href="#groups" role="tab"
-                           aria-controls="groups" aria-selected="false">그룹</a>
-                    </li>
-                </ul>
-                <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="organization" role="tabpanel"
-                         aria-labelledby="organization-tab">
-                        <div class="list-group mt-3">
-                            <a href="#"
-                               class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                                <span>박채현</span>
-                                <span class="badge badge-primary badge-pill">관리직</span>
-                            </a>
+                <div class="row">
+                    <div class="col-md-12">
+                        <input type="text" class="form-control" id="searchInput" placeholder="Search for employees...">
+                    </div>
+                </div>
+                <div class="row search-result">
+                    <div class="col-md-12">
+                        <div class="employee-list" id="employeeList">
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="groups" role="tabpanel" aria-labelledby="groups-tab">
-                        <div class="list-group mt-3">
-                            <span class="list-group-item">그룹에 추가된 멤버가 없습니다.</span>
+                </div>
+                <div class="row selected-employees">
+                    <div class="col-md-12">
+                        <h6>Selected Employees:</h6>
+                        <div id="selectedEmployees">
                         </div>
                     </div>
                 </div>
@@ -339,113 +398,440 @@
         </div>
     </div>
 </div>
-
 </body>
-<!-- Required jQuery first, then Bootstrap Bundle JS -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-<!-- Vendor JS Files -->
 <script src="/assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
 <script src="/assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
-<!-- Moment JS -->
 <script src="/assets/js/moment.min.js"></script>
-<!-- Date Range JS -->
 <script src="/assets/vendor/daterange/daterange.js"></script>
 <script src="/assets/vendor/daterange/custom-daterange.js"></script>
-<!-- Custom JS files -->
 <script src="/assets/js/custom.js"></script>
 <script src="/assets/js/LocalStorage.js"></script>
 <script src="/assets/js/showAlert.js"></script>
-<!-- 페이지네이션 -->
-<script src="/assets/js/jquery.twbsPagination.min.js"></script>
+
 <script>
-    var ws;
-    var sender = '${sessionScope.loginId}';
+    var wsChat = null;
+    var selectedRoomId = null;
+    var selectedEmployeeIds = new Set(); // Set to track selected employees
+    var myId = '${sessionScope.loginId}'; // 로그인한 사용자의 ID
+
+    // Initialize roomInfo and create a mapping from empNo to empName
     var roomInfo = [];
-    var selectedRoom = '';
-    function chatRoomList() {
-        <c:forEach items="${chatRoomList}" var="room">
-        var roomIdx = '${room.chatRoomIdx}';
-        var roomName = '${room.chatRoomName}';
-        var roomLastMessage = '${room.chatRoomLastMessage}';
-        roomInfo.push(
-            {
-                roomIdx: roomIdx,
-                roomName: roomName,
-                roomLastMessage: roomLastMessage
+    var empNameMapping = {}; // Mapping for empNo to empName
+
+    <c:forEach items="${chatRoomList}" var="room">
+    var empList = [];
+    <c:forEach items="${room.empList}" var="emp">
+    empList.push({
+        empNo: '${emp.emp_no}',
+        empName: '${emp.emp_name}',
+        empPhoto: '${emp.profile_new}'
+    });
+    empNameMapping['${emp.emp_no}'] = '${emp.emp_name}'; // Populate the mapping
+    </c:forEach>
+    roomInfo.push({
+        roomIdx: '${room.roomIdx}',
+        roomName: '${room.roomName}',
+        roomLastMessage: '${room.roomLastMessage}',
+        roomLastMessageDate: '${room.roomLastMessageDate}',
+        roomUserCount: '${room.roomMemberCount}',
+        empList: empList
+    });
+    </c:forEach>
+
+    $(document).ready(function () {
+        populateChatRoomList();
+
+        // Chat room list item click handler
+        $(document).on('click', '.chat-room-list', function () {
+            $('.list-group-item').removeClass('active');
+            $(this).addClass('active');
+
+            selectedRoomId = $(this).data("room-idx");
+            var selectedRoomName = $(this).data("room-name");
+            var selectedRoomUserCount = $(this).data("room-user-count");
+
+            $('#roomName').text(selectedRoomName);
+            $('#roomUserCount').text(selectedRoomUserCount);
+
+            $('#selectChatRoomMessage').hide();
+            $('#chatWindow').addClass('active');
+
+            fetchChatMessages();
+        });
+
+        // Enter key handler for message input
+        $('#messageInput').on("keypress", function (event) {
+            if (event.key === "Enter" && $(this).val() !== '') {
+                sendMessage();
             }
-        );
-        </c:forEach>
+        });
+
+        // File input change handler
+        $('#fileInput').on('change', function (event) {
+            var file = event.target.files[0];
+            fileUpload(file);
+        });
+
+        // Leave room button click handler
+        $(document).on('click', '#leaveRoomButton', function () {
+            leaveRoom();
+        });
+
+        // Implement the search functionality
+        $('#searchInput').on('keyup', function () {
+            var searchValue = $(this).val().toLowerCase();
+            $('#employeeList .employee-item').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(searchValue) > -1);
+            });
+        });
+
+        // New chat room creation confirmation
+        $('.modal-footer .btn-primary').on('click', function () {
+            createChatRoom();
+        });
+    });
+
+    function populateChatRoomList() {
+        var chatRoomListContainer = $('.list-group');
+        chatRoomListContainer.empty();
+
+        if (roomInfo.length > 0) {
+            roomInfo.forEach(function (room) {
+                var roomItem = $('<a href="#" class="list-group-item chat-room-list list-group-item-action"></a>');
+                roomItem.data('room-idx', room.roomIdx);
+                roomItem.data('room-name', room.roomName);
+                roomItem.data('room-user-count', room.roomUserCount);
+                roomItem.data('room-last-message', room.roomLastMessage);
+
+                var roomHeader = $('<div class="d-flex w-100 justify-content-between"></div>');
+                roomHeader.append('<h5 class="mb-1">' + room.roomName + '</h5>');
+
+                var roomLastMessage = room.roomLastMessage ? room.roomLastMessage : '메세지가 없습니다.';
+                var roomMessagePreview = $('<small></small>').text(roomLastMessage.length > 7 ? roomLastMessage.substring(0, 7) + '...' : roomLastMessage);
+
+                roomItem.append(roomHeader);
+                roomItem.append(roomMessagePreview);
+                chatRoomListContainer.append(roomItem);
+            });
+        } else {
+            chatRoomListContainer.append('채팅방을 만들어 주세요');
+        }
     }
 
-    console.log(roomInfo);
+    function fetchChatMessages() {
+        $.ajax({
+            url: '/chat/messages.ajax',
+            method: 'GET',
+            data: {roomId: selectedRoomId},
+            success: function (data) {
+                console.log(data);
+                var chatMessages = $('#message-container');
+                chatMessages.empty();
 
-    function connect(roomIdx) {
-        ws = new WebSocket("ws://" + window.location.host + "/chat/test");
+                if (data && data.messages && Array.isArray(data.messages)) {
+                    data.messages.forEach(function (chatMessage) {
+                        handleIncomingMessage(chatMessage);
+                    });
 
-        ws.onopen = function () {
-            var firstMessage = sender + ' 님이 입장하셨습니다.';
-            sendMessage('join', firstMessage, sender, roomIdx);
-        };
+                    chatMessages.scrollTop(chatMessages[0].scrollHeight);
+                    wsChat = chatWebSocketConnect(wsChat);
+                } else {
+                    console.error('Invalid messages data:', data);
+                }
+            },
+            error: function (error) {
+                console.log('Error fetching chat messages:', error);
+            }
+        });
+    }
 
+    function chatWebSocketConnect(ws) {
+        if (ws) {
+            ws.close();
+        }
+        ws = new WebSocket("ws://" + window.location.host + "/chat/" + selectedRoomId);
         ws.onmessage = function (event) {
             var chatMessage = JSON.parse(event.data);
-            console.log(chatMessage);
-
-            var messageElement = $('<div>').addClass('message');
-            if (chatMessage.sender === sender) {
-                messageElement.addClass('sent');
-            } else {
-                messageElement.addClass('received');
-            }
-
-            var profilePic = $('<img>').attr('src', 'profile.png').addClass('profile-pic');
-            var messageContent = $('<div>').addClass('message-content');
-            var senderName = $('<span>').addClass('sender-name').text(chatMessage.sender);
-            var messageText = $('<div>').text(chatMessage.message);
-            var timestamp = $('<div>').addClass('timestamp').text(new Date().toLocaleTimeString());
-
-            messageContent.append(senderName);
-            messageContent.append(messageText);
-
-            if (chatMessage.sender === sender) {
-                messageElement.append(timestamp);
-                messageElement.append(messageContent);
-                messageElement.append(profilePic);
-            } else {
-                messageElement.append(profilePic);
-                messageElement.append(messageContent);
-                messageElement.append(timestamp);
-            }
-
-            var chatMessages = $('.chat-messages');
-            chatMessages.append(messageElement);
-            chatMessages.scrollTop(chatMessages[0].scrollHeight);
+            console.log("chatMessage: {}", chatMessage);
+            handleIncomingMessage(chatMessage);
         };
-
-        ws.onclose = function () {
-            console.log("Disconnected from the chat server");
-        };
+        return ws;
     }
 
-
-
-    $('.list-group-item').on('click', function () {
-        $('.list-group-item').removeClass('active');
-        $(this).addClass('active');
-        selectedRoom = $(this).data("room-id");
-
-        connect(selectedRoom);
-    });
-
-
-    $('#messageInput').on("keypress", function (event) {
-        if (event.key === "Enter") {
-            var message = $(this).val();
-            sendMessage('text', message, sender, selectedRoom);
+    function handleIncomingMessage(chatMessage) {
+        var messageElement = $('<div>').addClass('message').attr('data-chat-idx', chatMessage.chatIdx);
+        if (chatMessage.sender === myId) {
+            messageElement.addClass('sent');
+        } else {
+            messageElement.addClass('received');
         }
+
+        var profilePic = $('<img>').attr('src', 'profile.png').addClass('profile-pic');
+        var messageContent = $('<div>').addClass('message-content');
+        var senderName = $('<span>').addClass('sender-name').text(empNameMapping[chatMessage.sender]);
+        var timestamp = $('<div>').addClass('timestamp').text(new Date().toLocaleTimeString());
+
+        messageContent.append(senderName);
+        if (chatMessage.messageIsDelete) {
+            var deletedText = $('<div>').addClass('deleted-message').text('Message deleted');
+            messageContent.append(deletedText);
+        } else {
+            if (chatMessage.type === 'file' && chatMessage.attachments && chatMessage.attachments.length > 0) {
+                var file = chatMessage.attachments[0];
+
+                if (file.fileType.startsWith('image')) {
+                    var imagePreview = $('<img>').attr('src', '/src/main/resources/static/upload/' + file.fileName).css('max-width', '100%');
+                    messageContent.append(imagePreview);
+                }
+                var fileLink = $('<a>')
+                    .attr('href', '/api/download/' + file.fileName)
+                    .attr('download', file.fileName)
+                    .text('Download ' + file.fileName);
+                messageContent.append(fileLink);
+            } else {
+                var messageText = $('<div>')
+                    .addClass('chat-messages-div')
+                    .attr('id', chatMessage.chatId)
+                    .text(chatMessage.message);
+                messageContent.append(messageText);
+            }
+
+            if (chatMessage.sender === myId) {
+                var deleteButton = $('<button>')
+                    .addClass('delete-button')
+                    .text('삭제')
+                    .click(function () {
+                        deleteMessage(chatMessage.chatIdx, chatMessage.type, chatMessage.chatId, $(this));
+                    });
+                messageContent.append(deleteButton);
+            }
+        }
+
+        if (chatMessage.sender === myId) {
+            messageElement.append(timestamp);
+            messageElement.append(messageContent);
+            messageElement.append(profilePic);
+        } else {
+            messageElement.append(profilePic);
+            messageElement.append(messageContent);
+            messageElement.append(timestamp);
+        }
+
+        var chatMessages = $('.chat-messages');
+        chatMessages.append(messageElement);
+        chatMessages.scrollTop(chatMessages[0].scrollHeight);
+    }
+
+    function sendMessage() {
+        var message = $('#messageInput').val();
+        sendMessageToServer(wsChat, 'text', message, myId, selectedRoomId, null);
+        $('#messageInput').val('');
+    }
+
+    function sendMessageToServer(ws, type, message, sender, room, attachment) {
+        var chatMessage = {
+            type: type,
+            message: message,
+            sender: sender,
+            room: room,
+            attachments: attachment
+        };
+        ws.send(JSON.stringify(chatMessage));
+    }
+
+    function deleteMessage(chatIdx, type, chatId, deleteButton) {
+        console.log(chatId);
+        $.ajax({
+            url: '/chat/deleteMessage.ajax',
+            type: 'GET',
+            data: {
+                chatId: chatId,
+                type: type
+            },
+            success: function (data) {
+                if (data.result) {
+                    alert('메시지가 삭제되었습니다.');
+                    var messageElement = $('#' + chatId);
+                    messageElement.empty().append('<div class="deleted-message">Message deleted</div>');
+                    deleteButton.remove();
+                } else {
+                    alert('메시지 삭제에 실패했습니다.');
+                }
+            },
+            error: function (error) {
+                console.error('Error deleting message:', error);
+                alert('메시지 삭제에 실패했습니다.');
+            }
+        });
+    }
+
+    function fileUpload(file) {
+        var uploadFileName = '';
+        var formData = new FormData();
+        formData.append('file', file);
+        $.ajax({
+            url: '/chat/uploadAttachment.ajax',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                uploadFileName = data.fileName;
+                console.log(uploadFileName);
+                fileSend(uploadFileName, file.type, file.name);
+            },
+            error: function (error) {
+                console.error('File upload failed:', error);
+            }
+        });
+    }
+
+    function fileSend(fileName, fileType, oriFileName) {
+        var chatMessage = {
+            type: 'file',
+            message: '',
+            sender: myId,
+            room: selectedRoomId,
+            attachments: [
+                {
+                    fileName: fileName,
+                    fileType: fileType,
+                    oriFileName: oriFileName
+                }
+            ]
+        };
+        wsChat.send(JSON.stringify(chatMessage));
+    }
+
+    function leaveRoom() {
+        if (selectedRoomId !== null) {
+            $.ajax({
+                url: '/chat/exitChatRoom.ajax',
+                method: 'POST',
+                data: {
+                    roomIdx: selectedRoomId,
+                    roomEmpIdx: myId
+                },
+                success: function (data) {
+                    if (data.result) {
+                        alert('방에서 나갔습니다.');
+                        $('#chatWindow').removeClass('active');
+                        $('#selectChatRoomMessage').show();
+                        selectedRoomId = null;
+                        $('#message-container').empty();
+                        wsChat.close();
+                        location.reload();
+                    } else {
+                        alert('방 나가기에 실패했습니다. 다시 시도해주세요.');
+                    }
+                },
+                error: function (error) {
+                    console.log('Error leaving room:', error);
+                    alert('방 나가기에 실패했습니다. 다시 시도해주세요.');
+                }
+            });
+        }
+    }
+
+    $('#newChatModal').on('show.bs.modal', function (e) {
+        fetchEmployeeList();
     });
+
+    function fetchEmployeeList() {
+        $.ajax({
+            url: '/emp/emp/noOffsetEmpList.ajax',
+            method: 'GET',
+            success: function (data) {
+                console.log(data);
+                renderEmployeeList(data.EmpList);
+            },
+            error: function (error) {
+                console.log('Error fetching employee list:', error);
+            }
+        });
+    }
+
+    function renderEmployeeList(data) {
+        var employeeListContainer = $('#employeeList');
+        employeeListContainer.empty();
+
+        if (data && Array.isArray(data)) {
+            data.forEach(function (employee) {
+                if (!selectedEmployeeIds.has(employee.emp_no) && employee.emp_no !== myId) {
+                    var employeeItem = $('<div class="employee-item list-group-item"></div>');
+                    employeeItem.text(employee.emp_name + " (" + employee.emp_no + ")");
+                    employeeItem.data('employee-id', employee.emp_no);
+                    employeeListContainer.append(employeeItem);
+                }
+            });
+        } else {
+            employeeListContainer.append('<div>No employees found</div>');
+        }
+    }
+
+    $(document).on('click', '.employee-item', function () {
+        var employeeId = $(this).data('employee-id');
+        var employeeName = $(this).text();
+
+        selectedEmployeeIds.add(employeeId);
+
+        var selectedEmployeesContainer = $('#selectedEmployees');
+        var selectedEmployeeItem = $('<div class="selected-item list-group-item"></div>');
+        selectedEmployeeItem.text(employeeName);
+        selectedEmployeeItem.data('employee-id', employeeId);
+
+        var removeButton = $('<button class="btn btn-danger btn-sm ml-2">Remove</button>');
+        removeButton.on('click', function () {
+            selectedEmployeeItem.remove();
+            selectedEmployeeIds.delete(employeeId);
+            fetchEmployeeList();
+        });
+
+        selectedEmployeeItem.append(removeButton);
+        selectedEmployeesContainer.append(selectedEmployeeItem);
+
+        $(this).remove();
+    });
+
+    $('#newChatModal').on('hidden.bs.modal', function () {
+        selectedEmployeeIds.clear();
+        $('#selectedEmployees').empty();
+    });
+
+    function createChatRoom() {
+        selectedEmployeeIds.add(myId);
+        var selectedEmployeeNoArray = Array.from(selectedEmployeeIds).map(id => ({ emp_no: id }));
+        console.log(selectedEmployeeNoArray);
+
+        $.ajax({
+            url: '/chat/createChatRoom.ajax',
+            type: 'POST',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify({
+                roomName: 'chat_room',
+                empList: selectedEmployeeNoArray,
+                roomEmpIdx: myId
+            }),
+            success: function (response) {
+                if (response.result) {
+                    $('#newChatModal').modal('hide');
+                    alert('채팅방이 생성되었습니다.');
+                    location.reload();
+                } else {
+                    alert('채팅방 생성에 실패했습니다. 다시 시도해주세요.');
+                }
+            },
+            error: function (error) {
+                console.error('Error creating chat room:', error);
+                alert('채팅방 생성에 실패했습니다. 다시 시도해주세요.');
+            }
+        });
+    }
+
 </script>
+
 </html>

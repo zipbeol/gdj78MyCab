@@ -256,5 +256,33 @@ public class EmpController {
 		return "HR/empList";
 	}
 	
+	
+	@GetMapping(value="/getEmpDetail.ajax")
+	@ResponseBody
+	public Map<String, Object> getEmpDetail(EmpDTO empDTO){
+		logger.info("사원 모달 요청");
+	
+		return service.getEmpDetailModal(empDTO);
+	}
+	
+	
+	
+	@GetMapping(value = "/empList.ajax")
+	@ResponseBody
+	public Map<String, Object> empList(SearchDTO searchDTO) {
+		logger.info("\nsearchDTO SearchText:" + searchDTO.getSearchText()
+				+ "\nsearchDTO page:" + searchDTO.getPage());
+
+		return service.empList(searchDTO);
+
+	}
+
+	@GetMapping(value = "/getEmpTotalPages.ajax")
+	@ResponseBody
+	public Map<String, Object> getEmpTotalPages(SearchDTO searchDTO) {
+
+		return service.getEmpTotalPagesForEmp(searchDTO);
+	}
+	
 
 }

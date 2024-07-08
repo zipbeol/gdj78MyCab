@@ -56,4 +56,10 @@ public interface EmpDAO {
 
 	void updateVac(int emp_no, double use);
 
+	EmpDTO getEmpDetailModal(int emp_no);
+
+	List<EmpDTO> empList(SearchDTO searchDTO);
+
+	int getEmpTotalPagesForEmp(SearchDTO searchDTO);
+
 }

@@ -260,6 +260,8 @@ th.sortable.desc::after {
 								</div>
 							</div>
 						</div>
+						</div>
+						
 						<!-- Row end -->
 						<!-- 정들었지만 죽은 모달 -->
 						<!-- <div class="modal fade" id="empModal" tabindex="-1"

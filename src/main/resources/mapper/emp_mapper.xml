@@ -375,6 +375,110 @@
         WHERE emp_no = #{emp_no}
     </update>
     
+    
+    <select id="getEmpDetailModal" resultType="emp">
+    SELECT
+    e.emp_no,
+    e.emp_name,
+    e.emp_email,
+    e.emp_extension_number,
+    t.title_name,
+    d.dept_name,
+    pp.profile_new
+    FROM
+    employee e
+    JOIN
+    department d ON e.dept_no = d.dept_no
+    JOIN
+    title t ON e.title_no = t.title_no
+    JOIN
+    vacation v ON e.emp_no = v.emp_no
+    LEFT JOIN
+    profile_photo pp ON e.emp_no = pp.emp_no
+    WHERE
+    e.emp_no = #{param1}
+    </select>
+    
+    
+    <select id="empList" resultType="emp" parameterType="search">
+        SELECT e.emp_no, e.emp_name, t.title_name, d.dept_name
+        FROM employee e
+        JOIN department d ON e.dept_no = d.dept_no
+        JOIN title t ON e.title_no = t.title_no
+        <where>
+        e.emp_employment_status = 1
+            <if test="filterForSearch != null and filterForSearch != ''">
+                <choose>
+                    <when test="filterForSearch == 'emp_no'">
+                        AND e.emp_no LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterForSearch == 'emp_name'">
+                        AND e.emp_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterForSearch == 'title_name'">
+                        AND t.title_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterForSearch == 'dept_name'">
+                        AND d.dept_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                </choose>
+            </if>
+        </where>
+        <choose>
+            <when test="sortColumn != null and sortColumn == 'emp-no'">
+                ORDER BY e.emp_no
+            </when>
+            <when test="sortColumn != null and sortColumn == 'emp-name'">
+                ORDER BY e.emp_name
+            </when>
+            <when test="sortColumn != null and sortColumn == 'title-name'">
+                ORDER BY t.title_name
+            </when>
+            <when test="sortColumn != null and sortColumn == 'dept-name'">
+                ORDER BY d.dept_name
+            </when>
+            <otherwise>
+                ORDER BY e.emp_no
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="sortOrder != null and sortOrder == 'desc'">
+                DESC
+            </when>
+            <when test="sortOrder != null and sortOrder == 'asc'">
+                ASC
+            </when>
+        </choose>
+        LIMIT #{pageSize} OFFSET #{page}
+    </select>
+    
+    
+    <select id="getEmpTotalPagesForEmp" resultType="int" parameterType="search">
+        SELECT COUNT(e.emp_no)
+        FROM employee e
+        JOIN department d ON e.dept_no = d.dept_no
+        JOIN title t ON e.title_no = t.title_no
+        <where>
+        e.emp_employment_status = 1
+            <if test="filterForSearch != null and filterForSearch != ''">
+                <choose>
+                    <when test="filterForSearch == 'emp_no'">
+                        AND e.emp_no LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterForSearch == 'emp_name'">
+                        AND e.emp_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterForSearch == 'title_name'">
+                       AND t.title_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="filterForSearch == 'dept_name'">
+                        AND d.dept_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                </choose>
+            </if>
+        </where>
+    </select>
+    
 
 
 </mapper>

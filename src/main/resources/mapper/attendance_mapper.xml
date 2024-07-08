@@ -96,6 +96,7 @@
             </if>
         </if>
     </where>
+    LIMIT #{pageSize} OFFSET #{page}
 </select>
 	
 	<select id="getAttTotal" resultType="int" parameterType="map">

@@ -203,13 +203,17 @@
                                                 <div class="node ceo">대표이사</div>
                                                 <div class="line vertical" style="top: 140px; left: 50%; height: 60px;"></div>
                                                 <div class="line horizontal" style="top: 200px; left: 20%; width: 59%;"></div>
-                                                <div class="node department" style="top: 260px; left: 14%;"><a href="#">인사부</a></div>
+                                                <div class="node department" style="top: 260px; left: 14%;">
+                                                <a href="/emp/emp/list.go?searchText=인사부&filterForSearch=dept_name&filterIsRetired=&page=1&sortColumn=default&sortOrder=asc">인사부</a></div>
                                                 <div class="line vertical" style="top: 200px; left: 20%; height: 60px;"></div>
-                                                <div class="node department" style="top: 260px; left: 33%;"><a href="#">영업부</a></div>
+                                                <div class="node department" style="top: 260px; left: 33%;">
+                                                <a href="/emp/emp/list.go?searchText=영업부&filterForSearch=dept_name&filterIsRetired=&page=1&sortColumn=default&sortOrder=asc">영업부</a></div>
                                                 <div class="line vertical" style="top: 200px; left: 39%; height: 60px;"></div>
-                                                <div class="node department" style="top: 260px; left: 54%;"><a href="#">영업지원부</a></div>
+                                                <div class="node department" style="top: 260px; left: 54%;">
+                                                <a href="/emp/emp/list.go?searchText=영업지원부&filterForSearch=dept_name&filterIsRetired=&page=1&sortColumn=default&sortOrder=asc">영업지원부</a></div>
                                                 <div class="line vertical" style="top: 200px; left: 79%; height: 60px;"></div>
-                                                <div class="node department" style="top: 260px; left: 73%;"><a href="#">택시관리부</a></div>
+                                                <div class="node department" style="top: 260px; left: 73%;">
+                                                <a href="/emp/emp/list.go?searchText=택시관리부&filterForSearch=dept_name&filterIsRetired=&page=1&sortColumn=default&sortOrder=asc">택시관리부</a></div>
                                                 <div class="line vertical" style="top: 200px; left: 60%; height: 60px;"></div>
                                             	</div>
                                             </div>

@@ -295,4 +295,52 @@ public class EmpService {
         return result;
 	}
 
+
+	public Map<String, Object> getEmpDetailModal(EmpDTO empDTO) {
+		
+        int emp_no = empDTO.getEmp_no();
+        
+        EmpDTO dto = dao.getEmpDetailModal(emp_no);
+        
+        Map<String, Object> result = new HashMap<String, Object>();
+        
+        result.put("profile_new", dto.getProfile_new());
+        result.put("emp_no", dto.getEmp_no());
+        result.put("emp_name", dto.getEmp_name());
+        result.put("dept_name", dto.getDept_name());
+        result.put("title_name", dto.getTitle_name());
+        result.put("emp_email", dto.getEmp_email());
+        result.put("emp_extension_number", dto.getEmp_extension_number());
+		
+		return result;
+	}
+
+
+	public Map<String, Object> empList(SearchDTO searchDTO) {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+        int page = (searchDTO.getPage() - 1) * PAGE_SIZE;
+        searchDTO.setPage(page);
+        searchDTO.setPageSize(PAGE_SIZE);
+        logger.info("page {}", page);
+        logger.info("searchDTO page {}", searchDTO.getPage());
+        List<EmpDTO> empList = dao.empList(searchDTO);
+        logger.info("empList {}", empList);
+        result.put("empList", empList);
+
+
+        return result;
+	}
+
+
+	public Map<String, Object> getEmpTotalPagesForEmp(SearchDTO searchDTO) {
+		
+		 int empTotal = dao.getEmpTotalPagesForEmp(searchDTO);
+	        int totalPages = (int) Math.ceil((double) empTotal / PAGE_SIZE);
+	        logger.info("총페이지"+totalPages);
+	        totalPages = totalPages > 0 ? totalPages : 1;
+
+	        return Map.of("totalPages", totalPages);
+	}
+
 }

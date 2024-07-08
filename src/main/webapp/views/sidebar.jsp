@@ -137,16 +137,19 @@
                         <a id="menu-emp-4" href="/emp/vac/list.go">연차 관리</a>
                     </li>
                     <li>
-                        <a id="menu-emp-5" href="/emp/dept/list.go">부서 관리</a>
+                        <a id="menu-emp-5" href="/emp/vac/finalList.go">연차 승인 및 반려</a>
                     </li>
                     <li>
-                        <a id="menu-emp-6" href="/emp/sal/list.go">급여 관리</a>
+                        <a id="menu-emp-6" href="/emp/dept/list.go">부서 관리</a>
                     </li>
                     <li>
-                        <a id="menu-emp-7" href="/emp/driver/list.go">기사 정산 관리</a>
+                        <a id="menu-emp-7" href="/emp/sal/list.go">급여 관리</a>
                     </li>
                     <li>
-                        <a id="menu-emp-8" href="/emp/orgchart/list.go">조직도</a>
+                        <a id="menu-emp-8" href="/emp/driver/list.go">기사 정산 관리</a>
+                    </li>
+                    <li>
+                        <a id="menu-emp-9" href="/emp/orgchart/list.go">조직도</a>
                     </li>
                     <li>
                         <a href="/emp/emp/list.go">사원 조회</a>

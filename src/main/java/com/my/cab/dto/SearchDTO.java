@@ -43,12 +43,42 @@ public class SearchDTO {
     private String filterMaxDistance;
     private String filterMinFare;
     private String filterMaxFare;
+    
+    private String filterVacResult;
+    private String filterVacDate;
 
     private String dealCheckBox;
 
     private String dept_no;
+    private String emp_no;
+    
+    
+    
+    public String getEmp_no() {
+		return emp_no;
+	}
 
-    public String getDept_no() {
+	public void setEmp_no(String emp_no) {
+		this.emp_no = emp_no;
+	}
+
+	public String getFilterVacResult() {
+		return filterVacResult;
+	}
+
+	public void setFilterVacResult(String filterVacResult) {
+		this.filterVacResult = filterVacResult;
+	}
+
+	public String getFilterVacDate() {
+		return filterVacDate;
+	}
+
+	public void setFilterVacDate(String filterVacDate) {
+		this.filterVacDate = filterVacDate;
+	}
+
+	public String getDept_no() {
         return dept_no;
     }
 

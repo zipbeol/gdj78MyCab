@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.my.cab.dto.EmpDTO;
 import com.my.cab.dto.MyPageDTO;
+import com.my.cab.dto.SearchDTO;
 import com.my.cab.service.MypageService;
 
 
@@ -118,6 +119,128 @@ public class MyPageController {
 		
 		return "redirect:/mypage/profile.go";
 	}
+	
+	@RequestMapping(value="mypage/vac/list.go")
+	public String myVacList(Model model, HttpSession session) {
+		logger.info("마이페이지 연차관리 이동");
+		String emp_no = (String) session.getAttribute("loginId");
+		
+		MyPageDTO mypageDTO = myPageService.myVacList(emp_no);
+		model.addAttribute("vacList",mypageDTO);
+		
+		return "mypage/myVacManagement";
+	}
+	
+	@GetMapping(value="vacApply.ajax")
+	@ResponseBody
+	public Map<String, Object> vacApply(MyPageDTO myPageDTO){
+		logger.info("사원 연차 신청");
+		logger.info("연차 신청한 사원 번호 : "+myPageDTO.getEmp_no());
+		
+		
+		boolean isSuccess = myPageService.vacApply(myPageDTO);
+		
+		return Map.of("isSuccess", isSuccess);
+		
+	}
+	
+	
+	@GetMapping(value="/myVacApplyList.ajax")
+	@ResponseBody
+	public Map<String, Object> myVacApplyList(SearchDTO searchDTO){
+		 logger.info("\nsearchDTO filterVacDate:" + searchDTO.getFilterVacDate()
+        + "\nsearchDTO filterVacResult:" + searchDTO.getFilterVacResult());
+		
+		return myPageService.myVacApplyList(searchDTO);
+		
+	}
+	
+	
+	
+	@GetMapping(value="/getVacApplyTotalPages.ajax")
+	@ResponseBody
+	public Map<String, Object> getVacApplyTotalPages(SearchDTO searchDTO){
+		
+		return myPageService.getVacApplyTotalPages(searchDTO);
+	}
+	
+	@RequestMapping(value="/vacApplyDetail.go")
+	public String vacApplyDetail(String vac_no, Model model) {
+		logger.info("연차 신청 상세페이지 이동");
+		MyPageDTO mypageDTO = myPageService.vacApplyDetail(vac_no);
+		model.addAttribute("vacList",mypageDTO);
+		
+		
+		return "mypage/vacApplyDetail";
+	}
+	
+	@RequestMapping(value="mypage/vacApply/list.go")
+	public String vacApplyManagement() {
+		logger.info("연차 승인 관리로 이동");
+		
+		
+		return "mypage/vacApproval";
+	}
+	
+	
+	
+	@GetMapping(value="/vacApprovalList.ajax")
+	@ResponseBody
+	public Map<String, Object> vacApprovalList(SearchDTO searchDTO){
+		 logger.info("\nsearchDTO filterVacDate:" + searchDTO.getFilterVacDate()
+        + "\nsearchDTO filterVacResult:" + searchDTO.getFilterVacResult());
+		
+		return myPageService.vacApprovalList(searchDTO);
+		
+	}
+	
+	
+	
+	@GetMapping(value="/getVacApprovalTotalPages.ajax")
+	@ResponseBody
+	public Map<String, Object> getVacApprovalTotalPages(SearchDTO searchDTO){
+		
+		return myPageService.getVacApprovalTotalPages(searchDTO);
+	}
+	
+	
+	@RequestMapping(value="/vacApprovalDetail.go")
+	public String vacApprovalDetail(String vac_no, Model model) {
+		logger.info("연차 신청 승인 상세페이지 이동");
+		MyPageDTO mypageDTO = myPageService.vacApplyDetail(vac_no);
+		model.addAttribute("vacList",mypageDTO);
+		
+		
+		return "mypage/vacApprovalDetail";
+	}
+	
+	@GetMapping(value="vacApproval.ajax")
+	@ResponseBody
+	public Map<String, Object> vacApproval(MyPageDTO myPageDTO){
+		logger.info("연차 승인");
+		logger.info("연차 승인한 vac_no : "+myPageDTO.getVac_no());
+		
+		
+		boolean isSuccess = myPageService.vacApproval(myPageDTO);
+		
+		return Map.of("isSuccess", isSuccess);
+		
+	}
+	
+	@GetMapping(value="vacReject.ajax")
+	@ResponseBody
+	public Map<String, Object> vacReject(MyPageDTO myPageDTO){
+		logger.info("연차 반려");
+		logger.info("연차 반려한 vac_no : "+myPageDTO.getVac_no());
+		
+		
+		boolean isSuccess = myPageService.vacReject(myPageDTO);
+		
+		return Map.of("isSuccess", isSuccess);
+		
+	}
+	
+	
 	
 	
 	

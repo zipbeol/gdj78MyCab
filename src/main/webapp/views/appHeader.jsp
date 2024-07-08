@@ -181,12 +181,12 @@
                 <h6 class="mb-1">${sessionScope.loginId}</h6>
                 <p class="m-0 small opacity-50">info@testing.com</p>
             </div>
-            <a class="dropdown-item d-flex align-items-center" href="profile.go"><i
-                    class="bi bi-person fs-4 me-2"></i>Profile</a>
-            <a class="dropdown-item d-flex align-items-center" href="settings.go"><i
-                    class="bi bi-gear fs-4 me-2"></i>Settings</a>
+            <a class="dropdown-item d-flex align-items-center" href="/mypage/profile.go"><i
+                    class="bi bi-person fs-4 me-2"></i>프로필</a>
+            
             <div class="d-grid p-3 py-2">
-                <a class="btn btn-danger" href="/login/logout.do">로그아웃</a>
+                <a class="btn btn-primary" href="/login/logout.do">로그아웃</a>
+                <div class="mt-2"></div>
                 <a id="getOff" class="btn btn-danger" onclick="getOff()">로그아웃 및 퇴근</a>
             </div>
         </div>

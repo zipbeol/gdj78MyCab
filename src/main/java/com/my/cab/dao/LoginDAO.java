@@ -2,6 +2,8 @@ package com.my.cab.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.my.cab.dto.LoginDTO;
+
 @Mapper
 public interface LoginDAO {
 
@@ -16,6 +18,6 @@ public interface LoginDAO {
 
 	int addGetOff(String emp_no);
 
-	String getProfile(String emp_no);
+	LoginDTO getInfo(String emp_no);
 
 }

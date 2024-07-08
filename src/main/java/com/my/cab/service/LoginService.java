@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.my.cab.dao.LoginDAO;
+import com.my.cab.dto.LoginDTO;
 
 
 @Service
@@ -78,9 +79,13 @@ public class LoginService {
 
 
 
-	public String getProfile(String emp_no) {
+	public LoginDTO getInfo(String emp_no) {
 		
-		return dao.getProfile(emp_no);
+		return dao.getInfo(emp_no);
 	}
+
+
+
+
 	
 }

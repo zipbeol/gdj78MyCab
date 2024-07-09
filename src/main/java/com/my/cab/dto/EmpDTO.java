@@ -47,8 +47,36 @@ public class EmpDTO {
 	private String vac_reject_reason_final;
 	private int sal_total;
 	private String salwrite;
+	private int sal_base;
+	private int sal_meal;
+	private int title_pay_idx;
+	private int title_add_pay;
 	
 	
+	public int getSal_base() {
+		return sal_base;
+	}
+	public void setSal_base(int sal_base) {
+		this.sal_base = sal_base;
+	}
+	public int getSal_meal() {
+		return sal_meal;
+	}
+	public void setSal_meal(int sal_meal) {
+		this.sal_meal = sal_meal;
+	}
+	public int getTitle_pay_idx() {
+		return title_pay_idx;
+	}
+	public void setTitle_pay_idx(int title_pay_idx) {
+		this.title_pay_idx = title_pay_idx;
+	}
+	public int getTitle_add_pay() {
+		return title_add_pay;
+	}
+	public void setTitle_add_pay(int title_add_pay) {
+		this.title_add_pay = title_add_pay;
+	}
 	public String getSalwrite() {
 		return salwrite;
 	}

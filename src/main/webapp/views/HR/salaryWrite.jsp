@@ -146,7 +146,10 @@
 									</div>
 									<div class="card-body">
 										<!-- 여기에 코딩 -->
-									
+										${emp.emp_name}
+										${emp.title_add_pay}
+										${sal.sal_base}
+										${sal.sal_meal}
 									</div>
 								</div>
 							</div>

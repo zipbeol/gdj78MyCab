@@ -377,4 +377,10 @@ public class EmpService {
 		return dao.salaryWrite(emp_no);
 	}
 
+
+	public EmpDTO salaryBase() {
+		
+		return dao.salaryBase();
+	}
+
 }

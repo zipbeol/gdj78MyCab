@@ -571,6 +571,33 @@
     </select>
     
     
+    <select id="salaryWrite" resultType="emp">
+    	 SELECT 
+            e.emp_no,
+            e.emp_name,
+            t.title_name,
+            d.dept_name,
+            tp.title_pay_idx,
+            tp.title_add_pay
+        FROM 
+            employee e
+        LEFT JOIN 
+            title t ON e.title_no = t.title_no
+        LEFT JOIN 
+            department d ON e.dept_no = d.dept_no
+        LEFT JOIN 
+            title_pay tp ON e.dept_no = tp.dept_no AND e.title_no = tp.title_no
+        WHERE 
+            e.emp_no = #{emp_no}
+    </select>
+    
+    <select id="salaryBase" resultType="emp">
+        SELECT 
+            sal_base,
+            sal_meal
+        FROM 
+            fix_sal
+    </select>
 
 
 </mapper>

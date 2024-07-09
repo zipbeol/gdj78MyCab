@@ -311,10 +311,13 @@ public class EmpController {
 	
 	@RequestMapping(value="/emp/sal/write.go")
 	public String salaryWrite(String emp_no, Model model) {
+		logger.info(emp_no + "급여명세서 작성");
 		
 		EmpDTO empDTO = service.salaryWrite(emp_no);
+		EmpDTO empDTO2 = service.salaryBase();
 		
 		model.addAttribute("emp", empDTO);
+		model.addAttribute("sal",empDTO2);
 		
 	
 		return "HR/salaryWrite";

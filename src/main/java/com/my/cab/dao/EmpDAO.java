@@ -68,4 +68,6 @@ public interface EmpDAO {
 
 	EmpDTO salaryWrite(String emp_no);
 
+	EmpDTO salaryBase();
+
 }

@@ -571,10 +571,6 @@
     </select>
     
     
-    <select id="getEmpDetail" resultType="emp">
-    </select>
-    
-    
 
 
 </mapper>

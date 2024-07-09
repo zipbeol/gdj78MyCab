@@ -1,6 +1,7 @@
 package com.my.cab.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.security.auth.message.callback.PrivateKeyCallback.Request;
@@ -397,7 +398,23 @@ public class EmpController {
 	}
 	
 	@RequestMapping(value="/emp/sal/setSal.go")
-	public String setSal() {
+	public String setSal(Model model) {
+		
+		List<EmpDTO> empDTOList = service.setSal();
+		EmpDTO empDTO2 = service.setBase();
+		
+		
+		Map<String, Integer> salMap = new HashMap<>();
+        if (!empDTOList.isEmpty()) {
+            
+            for (int i = 0; i < empDTOList.size(); i++) {
+                salMap.put("sal" + (i + 1), empDTOList.get(i).getSal_base());
+            }
+        }
+		
+		
+		model.addAttribute("sal", salMap);
+		model.addAttribute("base", empDTO2);
 		
 		return "HR/setSal";
 	}

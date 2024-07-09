@@ -723,6 +723,16 @@ WHERE
         </if>
     </where>
 </select>
+
+	<select id="setSal" resultType="emp">
+    	SELECT sal_base, sal_meal
+    	FROM fix_sal
+    </select>
+    
+    <select id="setBase" resultType="emp">
+    SELECT title_pay_idx, title_add_pay
+    FROM title_pay
+    </select>
     
     
 

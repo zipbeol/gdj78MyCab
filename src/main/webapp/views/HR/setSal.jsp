@@ -61,7 +61,51 @@
 	text-align: center;
 }
 
+body {
+	font-family: Arial, sans-serif;
+}
 
+.container {
+	width: 90%;
+	margin: auto;
+}
+
+.header {
+	text-align: center;
+	margin: 20px 0;
+}
+
+.salary-setup {
+	display: flex;
+	justify-content: center;
+	gap: 20px;
+	margin-bottom: 20px;
+}
+
+.table-container {
+	display: flex;
+	justify-content: space-between;
+}
+
+table {
+	border-collapse: collapse;
+	width: 22%;
+	margin: 10px 0;
+}
+
+th, td {
+	border: 1px solid #ddd;
+	padding: 8px;
+	text-align: center;
+}
+
+th {
+	background-color: #f2f2f2;
+}
+
+.input-box {
+	width: 130px;
+}
 </style>
 
 
@@ -116,7 +160,7 @@
 						<li class="breadcrumb-item"><a href="/emp/sal/list.go"
 							class="text-decoration-none">급여 관리</a></li>
 						<li class="breadcrumb-item"><a href="#"
-							class="text-decoration-none">급여명세서 상세</a></li>
+							class="text-decoration-none">급여 설정</a></li>
 					</ol>
 					<!-- Breadcrumb end -->
 
@@ -141,107 +185,117 @@
 							<div class="col-12">
 								<div class="card mb-3">
 									<div class="card-header">
-										<h4 class="card-title">급여명세서 상세</h4>
+										<h4 class="card-title">급여 설정</h4>
 									</div>
 									<div class="card-body">
 										<!-- 여기에 코딩 -->
-												<div class="header">
-            <h1>급여 설정</h1>
-            <div>
-                <label for="basicSalary">기본급:</label>
-                <input type="text" id="basicSalary" class="input-box">
-                <label for="mealAllowance">식대:</label>
-                <input type="text" id="mealAllowance" class="input-box">
-            </div>
-        </div>
-        <div class="table-container">
-            <table>
-                <tr>
-                    <th colspan="2">인사부</th>
-                </tr>
-                <tr>
-                    <td>부장</td>
-                    <td><input type="text" class="input-box"></td>
-                </tr>
-                <tr>
-                    <td>과장</td>
-                    <td><input type="text" class="input-box"></td>
-                </tr>
-                <tr>
-                    <td>대리</td>
-                    <td><input type="text" class="input-box"></td>
-                </tr>
-                <tr>
-                    <td>사원</td>
-                    <td><input type="text" class="input-box"></td>
-                </tr>
-            </table>
-            <table>
-                <tr>
-                    <th colspan="2">영업지원부</th>
-                </tr>
-                <tr>
-                    <td>부장</td>
-                    <td><input type="text" class="input-box"></td>
-                </tr>
-                <tr>
-                    <td>과장</td>
-                    <td><input type="text" class="input-box"></td>
-                </tr>
-                <tr>
-                    <td>대리</td>
-                    <td><input type="text" class="input-box"></td>
-                </tr>
-                <tr>
-                    <td>사원</td>
-                    <td><input type="text" class="input-box"></td>
-                </tr>
-            </table>
-        </div>
-        <div class="table-container">
-            <table>
-                <tr>
-                    <th colspan="2">영업부</th>
-                </tr>
-                <tr>
-                    <td>부장</td>
-                    <td><input type="text" class="input-box"></td>
-                </tr>
-                <tr>
-                    <td>과장</td>
-                    <td><input type="text" class="input-box"></td>
-                </tr>
-                <tr>
-                    <td>대리</td>
-                    <td><input type="text" class="input-box"></td>
-                </tr>
-                <tr>
-                    <td>사원</td>
-                    <td><input type="text" class="input-box"></td>
-                </tr>
-            </table>
-            <table>
-                <tr>
-                    <th colspan="2">택시관리부</th>
-                </tr>
-                <tr>
-                    <td>부장</td>
-                    <td><input type="text" class="input-box"></td>
-                </tr>
-                <tr>
-                    <td>과장</td>
-                    <td><input type="text" class="input-box"></td>
-                </tr>
-                <tr>
-                    <td>대리</td>
-                    <td><input type="text" class="input-box"></td>
-                </tr>
-                <tr>
-                    <td>사원</td>
-                    <td><input type="text" class="input-box"></td>
-                </tr>
-            </table>
-        </div>
+										<div class="text-end mb-1">
+											<button class="btn btn-primary">설정</button>
+											</div>
+										<div class="header">
+											<h1>급여 설정</h1>
+										</div>
+										<div class="salary-setup">
+											<div>
+												<label for="basicSalary">기본급:</label> <input type="text"
+													id="basicSalary" class="input-box">
+											</div>
+											<div>
+												<label for="mealAllowance">식대:</label> <input type="text"
+													id="mealAllowance" class="input-box">
+											</div>
+										</div>
+										<hr>
+										<div class="table-container">
+											<table>
+												<tr>
+													<th colspan="2">인사부</th>
+												</tr>
+												<tr>
+													<td>대표이사</td>
+													<td><input type="text" class="input-box"></td>
+												</tr>
+												<tr>
+													<td>부장</td>
+													<td><input type="text" class="input-box"></td>
+												</tr>
+												<tr>
+													<td>과장</td>
+													<td><input type="text" class="input-box"></td>
+												</tr>
+												<tr>
+													<td>대리</td>
+													<td><input type="text" class="input-box"></td>
+												</tr>
+												<tr>
+													<td>사원</td>
+													<td><input type="text" class="input-box"></td>
+												</tr>
+											</table>
+											<table>
+												<tr>
+													<th colspan="2">영업지원부</th>
+												</tr>
+												<tr>
+													<td>부장</td>
+													<td><input type="text" class="input-box"></td>
+												</tr>
+												<tr>
+													<td>과장</td>
+													<td><input type="text" class="input-box"></td>
+												</tr>
+												<tr>
+													<td>대리</td>
+													<td><input type="text" class="input-box"></td>
+												</tr>
+												<tr>
+													<td>사원</td>
+													<td><input type="text" class="input-box"></td>
+												</tr>
+											</table>
+											<table>
+												<tr>
+													<th colspan="2">영업부</th>
+												</tr>
+												<tr>
+													<td>부장</td>
+													<td><input type="text" class="input-box"></td>
+												</tr>
+												<tr>
+													<td>과장</td>
+													<td><input type="text" class="input-box"></td>
+												</tr>
+												<tr>
+													<td>대리</td>
+													<td><input type="text" class="input-box"></td>
+												</tr>
+												<tr>
+													<td>사원</td>
+													<td><input type="text" class="input-box"></td>
+												</tr>
+											</table>
+											<table>
+												<tr>
+													<th colspan="2">택시관리부</th>
+												</tr>
+												<tr>
+													<td>부장</td>
+													<td><input type="text" class="input-box"></td>
+												</tr>
+												<tr>
+													<td>과장</td>
+													<td><input type="text" class="input-box"></td>
+												</tr>
+												<tr>
+													<td>대리</td>
+													<td><input type="text" class="input-box"></td>
+												</tr>
+												<tr>
+													<td>사원</td>
+													<td><input type="text" class="input-box"></td>
+												</tr>
+											</table>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -305,6 +359,9 @@
 <script>
 
 $(document).ready(function() {
+	
+	var titlepay1 = '${sal['sal1']}';
+	
  
 	
 });

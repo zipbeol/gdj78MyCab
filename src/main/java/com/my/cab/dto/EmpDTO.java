@@ -1,6 +1,7 @@
 package com.my.cab.dto;
 
 import java.sql.Date;
+import java.util.List;
 
 import org.apache.ibatis.type.Alias;
 
@@ -69,8 +70,15 @@ public class EmpDTO {
     private String driver_name;
     private int total_fare;
     private int settlement_amount;
+    private List<Integer> salList;
     
 	
+	public List<Integer> getSalList() {
+		return salList;
+	}
+	public void setSalList(List<Integer> salList) {
+		this.salList = salList;
+	}
 	public int getDriver_idx() {
 		return driver_idx;
 	}

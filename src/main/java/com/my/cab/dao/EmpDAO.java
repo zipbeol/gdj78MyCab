@@ -79,5 +79,9 @@ public interface EmpDAO {
 
 	int getDriverTotalPages(SearchDTO searchDTO);
 
+	List<EmpDTO> setSal();
+
+	EmpDTO setBase();
+
 
 }

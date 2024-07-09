@@ -435,6 +435,18 @@ public class EmpService {
 
 	        return Map.of("totalPages", totalPages);
 	}
+
+
+	public List<EmpDTO> setSal() {
+
+		return dao.setSal();
+	}
+
+
+	public EmpDTO setBase() {
+		
+		return dao.setBase();
+	}
 	
 
 

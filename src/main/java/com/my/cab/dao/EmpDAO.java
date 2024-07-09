@@ -62,4 +62,10 @@ public interface EmpDAO {
 
 	int getEmpTotalPagesForEmp(SearchDTO searchDTO);
 
+	List<EmpDTO> totalSalList(SearchDTO searchDTO);
+
+	int getSalTotalPages(SearchDTO searchDTO);
+
+	EmpDTO salaryWrite(String emp_no);
+
 }

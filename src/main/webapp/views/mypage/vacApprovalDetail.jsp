@@ -142,6 +142,7 @@
         }
         .btn1{
         margin-left: 706px;
+        font-size: large;
         }
         #todayDate{
         	text-align: center;
@@ -152,7 +153,49 @@
        		text-align: center;
         	font-size: large;
         }
-        
+        .rejectReason {
+    border: 1px solid #e74c3c;
+    background-color: #f8d7da;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 10px 0;
+    color: #721c24;
+    width: 800;
+    margin-left: 485px;
+}
+
+.rejectHeader {
+    font-size: 18px;
+    font-weight: bold;
+    color: #c0392b;
+}
+
+.vacTable1 {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.vacTable1 .label {
+	text-align: center;
+    width: 20%;
+    font-weight: bold;
+    padding: 10px;
+    background-color: #f5c6cb;
+    color: #721c24;
+    border: 1px solid #f1b0b7;
+}
+
+.vacTable1 textarea {
+    width: 100%;
+    height: 100px;
+    border: 1px solid #f1b0b7;
+    border-radius: 5px;
+    padding: 10px;
+    resize: none;
+    background-color: #ffffff;
+    color: #495057;
+}
     </style>
 
 </head>
@@ -351,11 +394,19 @@
                     						<input type="button" class="btn btn-primary" id="vacApproval" value="승인">
                          					<input type="button" class="btn btn-secondary" id="vacReject" value="반려">
                 						</c:if>
-                						<c:if test="${not empty vacList.vac_reject_reason}">
-                   					 		<span>이미 반려된 신청서입니다.</span>
-                						</c:if>
             						</c:if>
-                    </div>
+                    				</div>
+                						<c:if test="${not empty vacList.vac_reject_reason}">
+                   					 		<div class="rejectReason">
+    									<span class="rejectHeader">반려된 신청서입니다.</span><br/>
+    									<table class="vacTable1">
+        									<tr>
+            									<td class="label">반려사유</td>
+           										<td><textarea id="apply_reason" readonly>${vacList.vac_reject_reason}</textarea></td>
+        									</tr>
+    									</table>
+										</div>
+                						</c:if>
                 </div>
                 <!-- 연차 신청 끝 -->
             </div>

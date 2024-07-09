@@ -45,10 +45,22 @@ public class EmpDTO {
 	private String vac_no;
 	private boolean vac_apply_status_final;
 	private String vac_reject_reason_final;
+	private int sal_total;
+	private String salwrite;
 	
 	
-	
-	
+	public String getSalwrite() {
+		return salwrite;
+	}
+	public void setSalwrite(String salwrite) {
+		this.salwrite = salwrite;
+	}
+	public int getSal_total() {
+		return sal_total;
+	}
+	public void setSal_total(int sal_total) {
+		this.sal_total = sal_total;
+	}
 	public double getVac_use() {
 		return vac_use;
 	}

@@ -78,8 +78,9 @@ public class ChatService {
         return chatDAO.getChatRoomMembers(chatRoomDTO);
     }
 
+    @Transactional
     public boolean exitChatRoom(ChatRoomDTO chatRoomDTO) {
-        return chatDAO.exitChatRoom(chatRoomDTO);
+        return chatDAO.exitChatRoom(chatRoomDTO) && chatDAO.updateChatRoomName(chatRoomDTO);
     }
 
     public boolean deleteMessage(ChatDTO chatDTO) {

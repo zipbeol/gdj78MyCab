@@ -35,4 +35,6 @@ public interface ChatDAO {
     boolean createChatRoom(ChatRoomDTO chatRoomDTO);
 
     boolean joinMember(ChatRoomDTO chatRoomDTO);
+
+    boolean updateChatRoomName(ChatRoomDTO chatRoomDTO);
 }

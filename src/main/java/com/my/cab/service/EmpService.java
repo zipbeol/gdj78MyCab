@@ -343,4 +343,38 @@ public class EmpService {
 	        return Map.of("totalPages", totalPages);
 	}
 
+
+	public Map<String, Object> totalSalList(SearchDTO searchDTO) {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+        int page = (searchDTO.getPage() - 1) * PAGE_SIZE;
+        searchDTO.setPage(page);
+        searchDTO.setPageSize(PAGE_SIZE);
+        logger.info("page {}", page);
+        logger.info("searchDTO page {}", searchDTO.getPage());
+        List<EmpDTO> empList = dao.totalSalList(searchDTO);
+        logger.info("empList {}", empList);
+        result.put("empList", empList);
+
+
+        return result;
+	}
+
+
+	public Map<String, Object> getSalTotalPages(SearchDTO searchDTO) {
+		
+		 int empTotal = dao.getSalTotalPages(searchDTO);
+	        int totalPages = (int) Math.ceil((double) empTotal / PAGE_SIZE);
+	        logger.info("총페이지"+totalPages);
+	        totalPages = totalPages > 0 ? totalPages : 1;
+
+	        return Map.of("totalPages", totalPages);
+	}
+
+
+	public EmpDTO salaryWrite(String emp_no) {
+		
+		return dao.salaryWrite(emp_no);
+	}
+
 }

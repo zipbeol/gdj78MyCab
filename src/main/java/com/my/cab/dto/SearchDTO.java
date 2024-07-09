@@ -50,6 +50,27 @@ public class SearchDTO {
     private String dealCheckBox;
 
     private String dept_no;
+    
+    private String filterSalResult;
+    private String filterSalMonth;
+    
+    
+
+	public String getFilterSalResult() {
+		return filterSalResult;
+	}
+
+	public void setFilterSalResult(String filterSalResult) {
+		this.filterSalResult = filterSalResult;
+	}
+
+	public String getFilterSalMonth() {
+		return filterSalMonth;
+	}
+
+	public void setFilterSalMonth(String filterSalMonth) {
+		this.filterSalMonth = filterSalMonth;
+	}
 
 	public String getSearchText() {
 		return searchText;

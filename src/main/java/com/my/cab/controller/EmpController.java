@@ -292,6 +292,35 @@ public class EmpController {
 	}
 	
 	
+	@GetMapping(value = "/totalSalList.ajax")
+	@ResponseBody
+	public Map<String, Object> totalSalList(SearchDTO searchDTO) {
+		logger.info("\nsearchDTO SearchText:" + searchDTO.getSearchText()
+				+ "\nsearchDTO page:" + searchDTO.getPage());
+
+		return service.totalSalList(searchDTO);
+
+	}
+
+	@GetMapping(value = "/getSalTotalPages.ajax")
+	@ResponseBody
+	public Map<String, Object> getSalTotalPages(SearchDTO searchDTO) {
+
+		return service.getSalTotalPages(searchDTO);
+	}
+	
+	@RequestMapping(value="/emp/sal/write.go")
+	public String salaryWrite(String emp_no, Model model) {
+		
+		EmpDTO empDTO = service.salaryWrite(emp_no);
+		
+		model.addAttribute("emp", empDTO);
+		
+	
+		return "HR/salaryWrite";
+	}
+	
+	
 	
 
 }

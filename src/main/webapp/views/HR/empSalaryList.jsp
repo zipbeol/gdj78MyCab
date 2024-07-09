@@ -48,8 +48,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-       
-
         .alert-placeholder {
             position: fixed;
             top: 0;
@@ -212,6 +210,8 @@
                     <!-- 전체 근태 내역 -->
                     <h2>급여 관리</h2>
                     <div class="text-end mb-1">
+                    <input type="button" class="btn btn-primary" onclick="filterReset()"
+                                       value="급여 설정">
                     </div>
                     <!-- 검색창 시작 -->
                     <div class="search-filter-container border border-2 p-3 rounded mb-3">
@@ -276,7 +276,7 @@
                                                             </div>
                                                             <div class="col-2 d-flex">
                                                                 <select class="form-select maintenance-search-filter"
-                                                                        id="filter-att-result">
+                                                                        id="filter-sal-result">
                                                                     <option value="">작성 여부</option>
                                                                     <option value="true">작성</option>
 																	<option value="false">미작성</option>
@@ -308,7 +308,7 @@
 																</th>
                                                                 </tr>
                                                                 </thead>
-                                                                <tbody id="total-att-list">
+                                                                <tbody id="total-sal-list">
                                     
                                     <!-- 테이블 내용 정의 -->
                                 </tbody>
@@ -394,250 +394,175 @@
     
 /* 전체 근태 내역 스크립트 시작  */
  
- 
- 
-$(document).ready(function(){
-	getTotalPages();
-	 getList();
-	
-	 
-	 var months = [];
-     var dateObj = new Date();
-     var selectYear = dateObj.getFullYear();
-     var disableYear = dateObj.getFullYear();
-     var month = dateObj.getMonth() + 1;
-     var j = 0 ;
-     // 해당하지 않는 월 disable
-     for ( var i = month + 1 ; i <=12; i ++){
-         months[j++] = i;
-     }
-     
-     var currentMonth = dateObj.getFullYear() + '-' + ('0' + month).slice(-2);
-     
+ var months = [];
+var dateObj = new Date();
+var selectYear = dateObj.getFullYear();
+var disableYear = dateObj.getFullYear();
+var month = dateObj.getMonth() + 1;
+var j = 0;
 
-     /* MonthPicker 옵션 */
-     options = {
-         pattern: 'yyyy-mm', // Default is 'mm/yyyy' and separator char is not mandatory
-         selectedYear: selectYear,
-         startYear: 2023,
-         finalYear: disableYear,
-         monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
-         openOnFocus : true
-     };
+// 해당하지 않는 월 disable
+for (var i = month + 1; i <= 12; i++) {
+    months[j++] = i;
+}
 
-     /* MonthPicker Set */
-     $('#monthpicker').val(currentMonth);
-     $('#monthpicker').monthpicker(options);
-     
-     if ( disableYear == selectYear ) {
-         $("#monthpicker").monthpicker('disableMonths', months);
-     }
-     // 년도 바꿀 경우 월 able
-     $('#monthpicker').monthpicker().on('monthpicker-change-year', function(e,year){
-         if ( year == selectYear.toString() ) {
-             $('#monthpicker').monthpicker('disableMonths', months);
-         } else {
-             $('#monthpicker').monthpicker('disableMonths', []);
-         }
-     })
-	
-	
+var currentMonth = dateObj.getFullYear() + '-' + ('0' + month).slice(-2);
+
+$(document).ready(function() {
+    getTotalPages();
+    getList();
+
+    /* MonthPicker 옵션 */
+    var options = {
+        pattern: 'yyyy-mm', // Default is 'mm/yyyy' and separator char is not mandatory
+        selectedYear: selectYear,
+        startYear: 2023,
+        finalYear: disableYear,
+        monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+        openOnFocus: true
+    };
+
+    /* MonthPicker Set */
+    $('#monthpicker').val(currentMonth);
+    $('#monthpicker').monthpicker(options);
+
+    if (disableYear == selectYear) {
+        $("#monthpicker").monthpicker('disableMonths', months);
+    }
+    // 년도 바꿀 경우 월 able
+    $('#monthpicker').monthpicker().on('monthpicker-change-year', function(e, year) {
+        if (year == selectYear.toString()) {
+            $('#monthpicker').monthpicker('disableMonths', months);
+        } else {
+            $('#monthpicker').monthpicker('disableMonths', []);
+        }
+    });
+
+    $('#search-emp').on('keyup', function() {
+        currentPage = 1;
+        getTotalPages();
+        getList();
+    });
+
+    $('#monthpicker').on('change', function() {
+        currentPage = 1;
+        getTotalPages();
+        getList();
+    });
+
+    $('#filter-sal-result').on('change', function() {
+        currentPage = 1;
+        getTotalPages();
+        getList();
+    });
+    
+    $(document).on('click', '.total-sal-list-tbody-tr', function() {
+        location.href = '/emp/sal/write.go?emp_no=' + $(this).attr('id');
+    });
 });
- 
-    var searchText = '';
-    var filterAttDate = '';
-    var filterAttResult = '';
-    var filterforSearch = '';
-    var currentPage = 1; // 현재 페이지 번호
-    var today = moment().format('YYYY/MM/DD');
-  
-    
-    // 검색 값들 변수에 저장
-    function getSearchValue() {
-    	filterAttResult = $('#filter-att-result').val();
-		filterforSearch = $('#filterforsearch').val();
-        searchText = $('#search-emp').val();
-        filterAttDate = $('#filter-att-date').val();
-    }
-    
-    // 필터 값 리셋
-    function filterReset() {
-        $('#filter-att-result').val('');
-        $('#search-emp').val('');
-        $('#filterforsearch').val('emp_no');
-        $('#filter-att-date').val(today);
-        filterAttDate = $('#filter-att-date').val(today);
-        currentPage = 1; // 페이지 번호 초기화
-        getTotalPages();
-        getList(); // 목록 새로고침
-    }
-    
-    
-    
-    $('#search-emp').on('keyup', function(){
-    	currentPage = 1;
-        getTotalPages();
-        getList();
-       
-    });
-    
-    $('#filter-att-date').on('change', function(){
-    	currentPage = 1;
-        getTotalPages();
-        getList();
-    });
-    
-    $('#filter-att-result').on('change', function(){
-    	currentPage = 1;
-        getTotalPages();
-        getList();
-    });
 
-  
-    
-    
-    
- // 근태리스트 호출
-    function getList() {
-        getSearchValue();
-        $.ajax({
-            url: '/totalAttList.ajax',
-            type: 'GET',
-            data: {
-                'searchText': searchText,
-                'filterAttResult': filterAttResult,
-                'filterForSearch': filterforSearch,
-                'filterAttDate':filterAttDate,
-                'page': currentPage
-               
-            },
-            dataType: 'JSON',
-            success: function (data) {
-                drawList(data.empList);
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        });
-    }
+var searchText = '';
+var filterSalMonth = '';
+var filterSalResult = '';
+var filterforSearch = '';
+var currentPage = 1; // 현재 페이지 번호
 
-    // 토탈 페이지 호출
-    function getTotalPages() {
-        getSearchValue();
-        $.ajax({
-            url: '/getTotalPages.ajax',
-            type: 'GET',
-            data: {
-            	 'searchText': searchText,
-                 'filterAttResult': filterAttResult,
-                 'filterForSearch': filterforSearch,
-                 'filterAttDate':filterAttDate
-            },
-            dataType: 'JSON',
-            success: function (data) {
-                console.log(data);
-                $('#pagination').twbsPagination('destroy');
-                $('#pagination').twbsPagination({
-                    totalPages: data.totalPages, // 서버에서 받은 총 페이지 수
-                    visiblePages: 5,
-                    startPage: currentPage,
-                    paginationClass: 'pagination align-items-center',
-                    onPageClick: function (event, page) {
+// 검색 값들 변수에 저장
+function getSearchValue() {
+    filterSalResult = $('#filter-sal-result').val();
+    filterforSearch = $('#filterforsearch').val();
+    searchText = $('#search-emp').val();
+    filterSalMonth = $('#monthpicker').val();
+}
+
+// 필터 값 리셋
+function filterReset() {
+    $('#filter-sal-result').val('');
+    $('#search-emp').val('');
+    $('#filterforsearch').val('emp_no');
+    $('#monthpicker').val(currentMonth);
+    currentPage = 1; // 페이지 번호 초기화
+    getTotalPages();
+    getList(); // 목록 새로고침
+}
+
+// 급여 리스트 호출
+function getList() {
+    getSearchValue();
+    $.ajax({
+        url: '/totalSalList.ajax',
+        type: 'GET',
+        data: {
+            'searchText': searchText,
+            'filterSalResult': filterSalResult,
+            'filterForSearch': filterforSearch,
+            'filterSalMonth': filterSalMonth,
+            'page': currentPage
+        },
+        dataType: 'JSON',
+        success: function(data) {
+            drawList(data.empList);
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+
+// 토탈 페이지 호출
+function getTotalPages() {
+    getSearchValue();
+    $.ajax({
+        url: '/getSalTotalPages.ajax',
+        type: 'GET',
+        data: {
+            'searchText': searchText,
+            'filterSalResult': filterSalResult,
+            'filterForSearch': filterforSearch,
+            'filterSalMonth': filterSalMonth
+        },
+        dataType: 'JSON',
+        success: function(data) {
+            console.log(data);
+            $('#pagination').twbsPagination('destroy');
+            $('#pagination').twbsPagination({
+                totalPages: data.totalPages, // 서버에서 받은 총 페이지 수
+                visiblePages: 5,
+                startPage: currentPage,
+                paginationClass: 'pagination align-items-center',
+                onPageClick: function(event, page) {
+                    if (page !== currentPage) {
                         currentPage = page;
                         getList();
                     }
-                });
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        });
-    }
-    
- 
-    // 리스트 보여주기
-    function drawList(list) {
-        var content = '';
-        if (list.length > 0) {
-            for (item of list) {
-            	console.log(item.att_time);
-            	
-              
-                content += '<tr class="total-att-list-tbody-tr" id="' + item.emp_no + '">'
-                	+ '<td class="text-center">' + item.emp_no+ '</td>'
-                	+ '<td class="text-center">' + item.emp_name+ '</td>'
-                	+ '<td class="text-center">' + item.title_name+ '</td>'
-                	+ '<td class="text-center">' + item.dept_name+ '</td>'
-                    + '<td class="text-center">' + item.leave_time  + '</td>'
-                    + '<td class="text-center">' + item.att_result + '</td>'
-                    + '</tr>';
-            }
-        } else {
-            content = '<tr><td colspan="6" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
+                }
+            });
+        },
+        error: function(error) {
+            console.log(error);
         }
-        $('#total-att-list').html(content);
-        
-        
-        $(document).on('click', '.total-att-list-tbody-tr', function () {
-            location.href = '/empAttHistory.go?emp_no=' + $(this).attr('id');
-        });
-    }
-    
-    
-    /* 수정 요청 내역 스크립트 시작  */
-    $('#taxi-schedule-tab').on('click', function(e) {
-    	getEditTotalPages();
-        getEditList();
-});
-    
-    
-    var searchEditText = '';
-    var filterEditDate = '';
-    var filterEditResult = '';
-   
-    
-    
-  
-    
-    // 검색 값들 변수에 저장
-    function getEditSearchValue() {
-    	filterEditResult = $('#filter-edit-result').val();
-		searchEditText = $('#search-edit').val();
-		filterEditDate = $('#filter-edit-date').val();
-    }
-    
-    // 필터 값 리셋
-    function EditfilterReset() {
-        $('#filter-edit-result').val('');
-        $('#search-edit').val('');
-        $('#filter-edit-date').val(today);
-        filterEditDate = $('#filter-edit-date').val(today);
-        currentPage = 1; // 페이지 번호 초기화
-        getEditTotalPages();
-        getEditList();
-    }
-    
-    
-    $('#search-edit').on('keyup', function(){
-    	currentPage = 1;
-    	 getEditTotalPages();
-         getEditList();
-       
     });
-    
-    $('#filter-edit-date').on('change', function(){
-    	currentPage = 1;
-    	 getEditTotalPages();
-         getEditList();
-    });
-    
-    $('#filter-edit-result').on('change', function(){
-    	currentPage = 1;
-    	 getEditTotalPages();
-         getEditList();
-    });
-    
-   
+}
+
+// 리스트 보여주기
+function drawList(list) {
+    var content = '';
+    if (list.length > 0) {
+        for (item of list) {
+            content += '<tr class="total-sal-list-tbody-tr" id="' + item.emp_no + '">'
+                + '<td class="text-center">' + item.emp_no + '</td>'
+                + '<td class="text-center">' + item.emp_name + '</td>'
+                + '<td class="text-center">' + item.title_name + '</td>'
+                + '<td class="text-center">' + item.dept_name + '</td>'
+                + '<td class="text-center">' + item.sal_total + '</td>'
+                + '<td class="text-center">' + item.salwrite + '</td>'
+                + '</tr>';
+        }
+    } else {
+        content = '<tr><td colspan="6" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
+    }
+    $('#total-sal-list').html(content);
+}
         
 
 </script>

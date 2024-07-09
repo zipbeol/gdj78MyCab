@@ -254,7 +254,7 @@
 					                                        <th class="text-center sortable" id="resource_state" style="width: 20%;">가능여부</th>
 					                                    </tr>
 					                                </thead>
-					                                <tbody id="total-att-list">
+					                                <tbody id="mr-list-table">
 					                                    <!-- 테이블 내용 정의 -->
 					                                </tbody>
 					                            </table>
@@ -270,7 +270,7 @@
 					                </div>
 					                
 					                
-					                <div class="tab-pane fade active" id="car-list-content" role="tabpanel"
+					                <div class="tab-pane fade" id="car-list-content" role="tabpanel"
 					                     aria-labelledby="car-list-tab">
 					                    <!-- 전체 근태 내역 -->
 					                    <h2>차량 예약</h2>
@@ -308,7 +308,7 @@
 					                        </div>
 					                        <div class="row mb-3">
 					                            <div class="col-1">
-					                                    <select id= "search-car-category">
+					                                    <select id= "search-car-category" class="form-control">
 					                                    	<option value="소형">소형</option>
 					                                    	<option value="소형">중형</option>
 					                                    	<option value="소형">대형</option>
@@ -339,7 +339,7 @@
 					                                </select>
 					                            </div>
 					                            <div class="col-2 d-flex">
-					                                <button class="btn-btn btn">검색</button>
+					                                <button class="btn btn-secondary">검색</button>
 					                            </div>
 					                        </div>
 					                    </div>
@@ -351,14 +351,15 @@
 					                            <table class="table align-middle table-hover m-0">
 					                                <thead>
 					                                    <tr>
-					                                        <th class="text-center" id="resorce_idx" style="width: 40%;">차량</th>
-					                                        <th class="text-center sortable" id="th-emp-name" style="width: 20%;">차종</th>
+					                                        <th class="text-center" id="resorce_idx" style="width: 20%;">차량</th>
+					                                        <th class="text-center sortable" id="th-emp-name" style="width: 10%;">차종</th>
+					                                        <th class="text-center sortable" id="th-emp-name" style="width: 10%;">번호판</th>
 					                                        <th class="text-center sortable" id="th-title-name" style="width: 10%;">위치</th>
-					                                        <th class="text-center sortable" id="th-dept-name" style="width: 20%;">비고</th>
-					                                        <th class="text-center sortable" id="th-dept-name" style="width: 20%;">가능여부</th>
+					                                        <th class="text-center sortable" id="th-dept-name" style="width: 10%;">비고</th>
+					                                        <th class="text-center sortable" id="th-dept-name" style="width: 10%;">가능여부</th>
 					                                    </tr>
 					                                </thead>
-					                                <tbody id="total-att-list">
+					                                <tbody id="car-list-table">
 					                                    <!-- 테이블 내용 정의 -->
 					                                </tbody>
 					                            </table>
@@ -373,7 +374,7 @@
 					                    <!-- 페이지 네이션 종료 -->
 					                </div>
 					                
-					                <div class="tab-pane fade active" id="equipment-list-content" role="tabpanel"
+					                <div class="tab-pane fade" id="equipment-list-content" role="tabpanel"
 					                     aria-labelledby="equipment-list-tab">
 					                    <!-- 전체 근태 내역 -->
 					                    <h2>전체 근태 내역</h2>
@@ -389,23 +390,23 @@
 					                        </div>
 					                        <div class="row">
 					                            <div class="col-1">
-					                                <label for="search-eq-category"
-					                                       class="form-label">종류</label>
+					                                <label for="search-car-category"
+					                                       class="form-label">차종</label>
 					                            </div>
 					                            <div class="col-2">
-					                                <label for="search-eq-date"
-					                                       class="form-label">예약날짜</label>
+					                                <label for="search-car-date"
+					                                       class="form-label">예약날</label>
 					                            </div>
 					                            <div class="col-2">
-					                                <label for="search-eq-start-time"
+					                                <label for="search-car-start-time"
 					                                       class="form-label">예약 시작시간</label>
 					                            </div>
 					                            <div class="col-2">
-					                                <label for="search-eq-end-time"
+					                                <label for="search-car-end-time"
 					                                       class="form-label">예약 종료시간</label>
 					                            </div>
 					                            <div class="col-2">
-					                                <label for="search-eq-status"
+					                                <label for="search-car-status"
 					                                       class="form-label">상태</label>
 					                            </div>
 					                        </div>
@@ -415,6 +416,8 @@
 					                            </div>
 					                            <div class="col-2 d-flex">
 					                                <input type="text" class="form-control datePicker" id = "search-eq-date">
+					                            </div>
+					                            <div class="col-2 d-flex">    
 					                                <select id="search-eq-start-time" name="search-eq-start-time">
 					                                	<option value="">날짜선택</option>
 								                    </select>
@@ -434,7 +437,7 @@
 					                                </select>
 					                            </div>
 					                            <div class="col-2 d-flex">
-					                                <button class="btn-btn btn">검색</button>
+					                                <button class="btn btn-secondary">검색</button>
 					                            </div>
 					                        </div>
 					                    </div>
@@ -453,7 +456,7 @@
 					                                        <th class="text-center sortable" id="th-dept-name" style="width: 20%;">가능여부</th>
 					                                    </tr>
 					                                </thead>
-					                                <tbody id="total-att-list">
+					                                <tbody id="eq-list-table">
 					                                    <!-- 테이블 내용 정의 -->
 					                                </tbody>
 					                            </table>
@@ -483,7 +486,7 @@
             </div>
             <!-- App footer end -->
 
-        </div>
+        </div>         
         <!-- App container ends -->
 
     </div>
@@ -549,7 +552,7 @@
  
 $(document).ready(function(){
 	getTotalPages();
-	getMrList();	
+	getMrList(currentPage);	
 	
 });
  
@@ -561,7 +564,7 @@ $(document).ready(function(){
 	filterStartDate = today
 	
 
-	 getMrList();
+	 getMrList(currentPage);
 });
  
 // 차량
@@ -570,7 +573,7 @@ $(document).ready(function(){
 	resSerachCategory = "차량"
 	filterStartDate = today
 
-     getCarList();
+     getCarList(currentPage);
 });
 
 // 비품
@@ -579,7 +582,7 @@ $(document).ready(function(){
 	resSerachCategory = "비품"
 	filterStartDate = today
 	
-	 getEqList();
+	 getEqList(currentPage);
 });
 
  function getSearchValue() {
@@ -602,11 +605,11 @@ $(document).ready(function(){
  		resSearchStartTime = setDateTimeFormat(resSearchDate,startTime)
  		resSearchEndTime = setDateTimeFormat(resSearchDate,endTime)
  	}else if(resSerachCategory == '비품'){
- 		resSearchDate = document.getElementById("search-mr-date").value;
- 		var startTime = document.getElementById("ssearch-car-start-time").value;
- 		var endTime= document.getElementById("search-car-end-time").value;
- 		resStatus = document.getElementById("search-car-status").value;
- 		resOption = document.getElementById("search-car-category").value;
+ 		resSearchDate = document.getElementById("search-eq-date").value;
+ 		var startTime = document.getElementById("search-eq-start-time").value;
+ 		var endTime= document.getElementById("search-eq-end-time").value;
+ 		resStatus = document.getElementById("search-eq-status").value;
+ 		resOption = document.getElementById("search-eq-category").value;
  		resSearchStartTime = setDateTimeFormat(resSearchDate,startTime)
  		resSearchEndTime = setDateTimeFormat(resSearchDate,endTime)
  	}
@@ -623,7 +626,7 @@ $(document).ready(function(){
  };
 
  // 회의실 리스트 호출
- function getMrList() {
+ function getMrList(currentPage) {
      getSearchValue();
      $.ajax({
          url: '/resource/resourceList.ajax',
@@ -634,7 +637,8 @@ $(document).ready(function(){
              'resSearchStartTime':resSearchStartTime,
              'resSearchEndTime': resSearchEndTime,
              'resStatus' : resStatus,
-             'resOption' : resOption            
+             'resOption' : resOption ,   
+             'currentPage' : currentPage
          },
          dataType: 'JSON',
          success: function (data) {
@@ -661,7 +665,7 @@ $(document).ready(function(){
      });
  }
  
- function getCarList() {
+ function getCarList(currentPage) {
      getSearchValue();
      $.ajax({
          url: '/resource/resourceList.ajax',
@@ -672,11 +676,13 @@ $(document).ready(function(){
              'resSearchStartTime':resSearchStartTime,
              'resSearchEndTime': resSearchEndTime,
              'resStatus' : resStatus,
-             'resOption' : resOption            
+             'resOption' : resOption,
+             'currentPage':currentPage
          },
          dataType: 'JSON',
          success: function (data) {
-             draCarList(data.list);
+        	 console.log("차량 리스트 불러오기 성공");
+             drawCarList(data.list);
              
              var startPage = 1;
              
@@ -699,7 +705,7 @@ $(document).ready(function(){
      });
  }
  
- function getEqList() {
+ function getEqList(currentPage) {
      getSearchValue();
      $.ajax({
          url: '/resource/resourceList.ajax',
@@ -710,7 +716,8 @@ $(document).ready(function(){
              'resSearchStartTime':resSearchStartTime,
              'resSearchEndTime': resSearchEndTime,
              'resStatus' : resStatus,
-             'resOption' : resOption            
+             'resOption' : resOption,
+             'currentPage':currentPage
          },
          dataType: 'JSON',
          success: function (data) {
@@ -741,9 +748,11 @@ $(document).ready(function(){
      var content = '';
      if (list.length > 0) {
          for (item of list) {
-         	console.log(item.resource_name);
+        	 console.log(item);
+         	console.log(item.new_file_name);
            
-             content += '<tr class="total-att-list-tbody-tr" id="' + item.resource_idx + '">'
+             content += '<tr class="mr-list-table-tbody-tr" id="' + item.resource_idx + '">'
+             	+ '<td class="text-center"><img src = "/photo/'+item.new_file_name+'"></td>'
              	+ '<td class="text-center">' + item.resource_name+ '</td>'
              	+ '<td class="text-center">' + item.meeting_room_capacity+ '</td>'
              	+ '<td class="text-center">' + item.resource_location+ '</td>'
@@ -754,10 +763,10 @@ $(document).ready(function(){
      } else {
          content = '<tr><td colspan="7" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
      }
-     $('#total-att-list').html(content);
+     $('#mr-list-table').html(content);
      
      
-     $(document).on('click', '.total-att-list-tbody-tr', function () {
+     $(document).on('click', '.mr-list-table-tbody-tr', function () {
          location.href = '/resource/resourceReservation.go?resource_idx=' + $(this).attr('id');
      });
  }
@@ -768,9 +777,11 @@ $(document).ready(function(){
          for (item of list) {
          	console.log(item.resource_name);
            
-             content += '<tr class="total-att-list-tbody-tr" id="' + item.resource_idx + '">'
+             content += '<tr class="car-list-table-tbody-tr" id="' + item.resource_idx + '">'
+             	+ '<td class="text-center"><img src = "/photo/'+item.new_file_name+'"></td>'
              	+ '<td class="text-center">' + item.resource_name+ '</td>'
-             	+ '<td class="text-center">' + item.meeting_room_capacity+ '</td>'
+             	+ '<td class="text-center">' + item.company_car_category+ '</td>'
+             	+ '<td class="text-center">' + item.company_car_license_plate+ '</td>'
              	+ '<td class="text-center">' + item.resource_location+ '</td>'
              	+ '<td class="text-center">' + item.resource_meeting_content+ '</td>'
              	+ '<td class="text-center">' + item.resource_state+ '</td>'
@@ -779,10 +790,10 @@ $(document).ready(function(){
      } else {
          content = '<tr><td colspan="7" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
      }
-     $('#total-att-list').html(content);
+     $('#car-list-table').html(content);
      
      
-     $(document).on('click', '.total-att-list-tbody-tr', function () {
+     $(document).on('click', '.car-list-table-tbody-tr', function () {
          location.href = '/resource/resourceReservation.go?resource_idx=' + $(this).attr('id');
      });
  }
@@ -793,7 +804,8 @@ $(document).ready(function(){
          for (item of list) {
          	console.log(item.resource_name);
            
-             content += '<tr class="total-att-list-tbody-tr" id="' + item.resource_idx + '">'
+             content += '<tr class="eq-list-table-tbody-tr" id="' + item.resource_idx + '">'
+             	+ '<td class="text-center"><img src = "/photo/'+item.new_file_name+'"></td>'
              	+ '<td class="text-center">' + item.resource_name+ '</td>'
              	+ '<td class="text-center">' + item.meeting_room_capacity+ '</td>'
              	+ '<td class="text-center">' + item.resource_location+ '</td>'
@@ -804,10 +816,10 @@ $(document).ready(function(){
      } else {
          content = '<tr><td colspan="7" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
      }
-     $('#total-att-list').html(content);
+     $('#eq-list-table').html(content);
      
      
-     $(document).on('click', '.total-att-list-tbody-tr', function () {
+     $(document).on('click', '.eq-list-table-tbody-tr', function () {
          location.href = '/resource/resourceReservation.go?resource_idx=' + $(this).attr('id');
      });
  }

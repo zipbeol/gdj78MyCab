@@ -42,28 +42,129 @@
 		SELECT *
 		FROM resource_management r 	
 		INNER JOIN resource_meeting_room rmr on rmr.meeting_room_resource_idx  = r.resource_idx
-		inner join resource_reservation rr ON  r.resource_idx  = rr.resource_idx 
-		WHERE r.resource_category = '회의실' and not exists 
+		left join resource_reservation rr ON  r.resource_idx  = rr.resource_idx 
+		left join resource_photo rp  on r.resource_idx = rp.res_management_idx 
+		WHERE r.resource_category = '회의실' 
+		 
 		<![CDATA[
-			(select 1 from resource_reservation rr2 
-			WHERE 
-			rr2.resource_reserve_start_date < #{resSearchEndTime} AND rr2.resource_reserve_end_date  > #{resSearchStartTime})
+			AND	(rr.resource_idx IS NULL OR NOT EXISTS (
+		    SELECT 1 
+		    FROM resource_reservation rr2 
+		    WHERE rr2.resource_reserve_start_date < #{resSearchEndTime}
+		    AND rr2.resource_reserve_end_date > #{resSearchStartTime}
+		))
 			]]>
 		<if test='resOption != ""'>
 			<![CDATA[
 				AND rmr.meeting_room_capacity >= #{resOption}
 			]]>
 		</if>
-		group by r.resource_idx 			
-		
+		group by r.resource_idx ORDER BY r.resource_idx DESC LIMIT	#{start},#{pagePerCnt}		
+	</select>
+	
+	<select id="getResMrListPageCount" parameterType="map" resultType="int">
+		SELECT CEIL(COUNT(DISTINCT r.resource_idx) / 10) AS pases
+		FROM resource_management r 	
+		INNER JOIN resource_meeting_room rmr on rmr.meeting_room_resource_idx  = r.resource_idx
+		left join resource_reservation rr ON  r.resource_idx  = rr.resource_idx 
+		WHERE r.resource_category = '회의실'
+		<![CDATA[
+			AND	(rr.resource_idx IS NULL OR NOT EXISTS (
+		    SELECT 1 
+		    FROM resource_reservation rr2 
+		    WHERE rr2.resource_reserve_start_date < #{resSearchEndTime}
+		    AND rr2.resource_reserve_end_date > #{resSearchStartTime}
+			))
+		]]>
+		<if test='resOption != ""'>
+			<![CDATA[
+				AND rmr.meeting_room_capacity >= #{resOption}
+			]]>
+		</if>
 	</select>
 	
 	<select id="getResCarList" parameterType="map" resultType="resourceDTO">
-		
+		SELECT *
+		FROM resource_management r 	
+		INNER JOIN resource_company_car rcc on rcc.company_car_resource_idx  = r.resource_idx
+		left join resource_reservation rr ON  r.resource_idx  = rr.resource_idx 
+		left join resource_photo rp  on r.resource_idx = rp.res_management_idx 
+		WHERE r.resource_category = '차량' 
+		<![CDATA[
+			AND	(rr.resource_idx IS NULL OR NOT EXISTS (
+		    SELECT 1 
+		    FROM resource_reservation rr2 
+		    WHERE rr2.resource_reserve_start_date < #{resSearchEndTime}
+		    AND rr2.resource_reserve_end_date > #{resSearchStartTime}
+			))
+		]]>
+		<if test='resOption != ""'>
+			<![CDATA[
+				AND rcc.company_car_capacity >= #{resOption}
+			]]>
+		</if>
+		group by r.resource_idx ORDER BY r.resource_idx DESC LIMIT	#{start},#{pagePerCnt}	
+	</select>
+	
+	<select id="getResCarListPageCount" parameterType="map" resultType="int">
+		SELECT CEIL(COUNT(DISTINCT r.resource_idx) / 10) AS pases
+		FROM resource_management r 	
+		INNER JOIN resource_company_car rcc on rcc.company_car_resource_idx  = r.resource_idx
+		left join resource_reservation rr ON  r.resource_idx  = rr.resource_idx 
+		WHERE r.resource_category = '차량'
+		<![CDATA[
+			AND	(rr.resource_idx IS NULL OR NOT EXISTS (
+		    SELECT 1 
+		    FROM resource_reservation rr2 
+		    WHERE rr2.resource_reserve_start_date < #{resSearchEndTime}
+		    AND rr2.resource_reserve_end_date > #{resSearchStartTime}
+			))
+		]]>
+		<if test='resOption != ""'>
+			<![CDATA[
+				AND rcc.company_car_capacity >= #{resOption}
+			]]>
+		</if>
 	</select>
 	
 	<select id="getResEqList" parameterType="map" resultType="resourceDTO">
-		
+		SELECT *
+		FROM resource_management r 	
+		INNER JOIN equipment e2  on  e2.resource_equipment_idx  = r.resource_idx
+		left join resource_reservation rr ON  r.resource_idx  = rr.resource_idx 
+		left join resource_photo rp  on r.resource_idx = rp.res_management_idx 
+		WHERE r.resource_category = '비품'
+		<![CDATA[
+			AND	(rr.resource_idx IS NULL OR NOT EXISTS (
+		    SELECT 1 
+		    FROM resource_reservation rr2 
+		    WHERE rr2.resource_reserve_start_date < #{resSearchEndTime}
+		    AND rr2.resource_reserve_end_date > #{resSearchStartTime}
+			))
+		]]>
+		<if test='resOption != ""'>
+				AND e2.resource_equipment_category = #{resOption}
+		</if>
+		group by r.resource_idx ORDER BY r.resource_idx DESC LIMIT	#{start},#{pagePerCnt}
+	</select>
+	
+	<select id="getResEqListPageCount" parameterType="map" resultType="int">
+		SELECT CEIL(COUNT(DISTINCT r.resource_idx) / 10) AS pases
+		FROM resource_management r 	
+		INNER JOIN equipment e2  on  e2.resource_equipment_idx  = r.resource_idx
+		left join resource_reservation rr ON  r.resource_idx  = rr.resource_idx 
+		WHERE r.resource_category = '비품'
+		<![CDATA[
+			AND	(rr.resource_idx IS NULL OR NOT EXISTS (
+		    SELECT 1 
+		    FROM resource_reservation rr2 
+		    WHERE rr2.resource_reserve_start_date < #{resSearchEndTime}
+		    AND rr2.resource_reserve_end_date > #{resSearchStartTime}
+			))
+		]]>
+		<if test='resOption != ""'>
+				AND e2.resource_equipment_category = #{resOption}
+		</if>
 	</select>
 	
 	<select id="getReservationCategory">
@@ -75,6 +176,20 @@
 		INNER JOIN  resource_meeting_room mr on rm.resource_idx = mr.meeting_room_resource_idx 
 		WHERE resource_idx = #{param1}
 	</select>
+	
+	<select id="getReservationCarInfo" resultType="resourceDTO">
+		SELECT * FROM resource_management rm
+		INNER JOIN  resource_company_car rcc on rm.resource_idx = rcc.company_car_resource_idx 
+		WHERE resource_idx = #{param1}
+	</select>
+	
+	<select id="getReservationEqInfo" resultType="resourceDTO">
+		SELECT * FROM resource_management rm
+		INNER JOIN  equipment e  on rm.resource_idx = e.resource_equipment_idx
+		WHERE resource_idx = #{param1}
+	</select>
+	
+	
 	
 	<select id="getReservationDate" resultType="resourceDTO">
 		SELECT * FROM resource_reservation WHERE resource_idx = #{param1}
@@ -103,10 +218,14 @@
 	</select>
 	
 	<select id="rsvList" resultType="resourceDTO">
-		SELECT * FROM resource_reservation WHERE resource_reserve_del = '0'
+		SELECT * FROM resource_reservation WHERE resource_reserve_del = '0' AND resource_idx = #{param1}
 	</select>
 	
 	<select id="getSelectRsvDate" resultType="resourceDTO">
 		SELECT * FROM resource_reservation WHERE resource_reserve_del = '0' AND resource_idx = #{param1} AND resource_reserve_start_date LIKE CONCAT('%', #{param2}, '%')
+	</select>
+	
+	<select id="getPhotoName">
+		SELECT new_file_name FROM resource_photo WHERE res_management_idx = #{param1}
 	</select>
 </mapper>

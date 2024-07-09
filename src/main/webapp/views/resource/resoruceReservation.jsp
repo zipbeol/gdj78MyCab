@@ -454,6 +454,7 @@
 	                <dl class="row">
 	                    <dt class="col-2 info-label">배치도</dt>
 	                    <dd class="col-2 info-value mb-3" >
+	                    <img src="/photo/${photoName}" alt="배치도 이미지" class="layout-image">
 	                    </dd>
 	                </dl>                    
                     <dl class="row">
@@ -477,6 +478,12 @@
 	                        <label for="capacity">수용 인원</label>
 	                        <input type="number" class="form-control" id="meetRoomCapacity" name="meeting_room_capacity" required>
 	                    </div>
+	                    <dl class="row">
+		                    <dt class="col-2 info-label">차량 이미지</dt>
+		                    <dd class="col-2 info-value mb-3" >
+		                    <img src="/photo/${photoName}" alt="배치도 이미지" class="layout-image">
+		                    </dd>
+	                	</dl>
 	                </div>	                
 	            `);
 	        } else if (category == '비품') {

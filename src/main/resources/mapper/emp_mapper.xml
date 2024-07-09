@@ -572,32 +572,76 @@
     
     
     <select id="salaryWrite" resultType="emp">
-    	 SELECT 
-            e.emp_no,
-            e.emp_name,
-            t.title_name,
-            d.dept_name,
-            tp.title_pay_idx,
-            tp.title_add_pay
-        FROM 
-            employee e
-        LEFT JOIN 
-            title t ON e.title_no = t.title_no
-        LEFT JOIN 
-            department d ON e.dept_no = d.dept_no
-        LEFT JOIN 
-            title_pay tp ON e.dept_no = tp.dept_no AND e.title_no = tp.title_no
-        WHERE 
-            e.emp_no = #{emp_no}
+    	SELECT 
+    e.emp_no,
+    e.emp_name,
+    t.title_name,
+    d.dept_name,
+    tp.title_pay_idx,
+    tp.title_add_pay,
+    (SELECT sal_base FROM fix_sal WHERE fix_sal_idx = 1) AS sal_base,
+    (SELECT sal_meal FROM fix_sal WHERE fix_sal_idx = 1) AS sal_meal
+FROM 
+    employee e
+LEFT JOIN 
+    title t ON e.title_no = t.title_no
+LEFT JOIN 
+    department d ON e.dept_no = d.dept_no
+LEFT JOIN 
+    title_pay tp ON e.dept_no = tp.dept_no AND e.title_no = tp.title_no
+WHERE 
+    e.emp_no = #{emp_no}
     </select>
     
-    <select id="salaryBase" resultType="emp">
-        SELECT 
-            sal_base,
-            sal_meal
-        FROM 
-            fix_sal
+    
+    <select id="calculateDeductions" parameterType="map" statementType="CALLABLE" >
+        {CALL calculateDeductions(
+            #{totalSalary, mode=IN, jdbcType=INTEGER}, 
+            #{empInsur, mode=OUT, jdbcType=DOUBLE}, 
+            #{healthInsur, mode=OUT, jdbcType=DOUBLE}, 
+            #{longtermInsur, mode=OUT, jdbcType=DOUBLE}, 
+            #{nationalPension, mode=OUT, jdbcType=DOUBLE}, 
+            #{incomeTax, mode=OUT, jdbcType=DOUBLE}, 
+            #{localIncomeTax, mode=OUT, jdbcType=DOUBLE}
+        )}
     </select>
+    
+    
+    <insert id="writeSalary" parameterType="emp">
+        INSERT INTO salary (sal_ded_idx, sal_emp_no, title_pay_idx, fix_sal_idx, sal_bonus, sal_total, sal_actual, sal_register)
+        VALUES (#{sal_ded_idx}, #{sal_emp_no}, #{title_pay_idx}, #{fix_sal_idx},#{sal_bonus}, #{sal_total}, #{sal_actual},  #{sal_register})
+    </insert>
+    
+    
+     <select id="salaryDetail" resultType="emp">
+	SELECT
+	e.emp_no,
+	e.emp_name,
+	t.title_name,
+	d.dept_name,
+	tp.title_pay_idx,
+	tp.title_add_pay,
+	(SELECT sal_base FROM fix_sal WHERE fix_sal_idx = 1) AS sal_base,
+	(SELECT sal_meal FROM fix_sal WHERE fix_sal_idx = 1) AS sal_meal,
+	s.sal_bonus,
+	s.sal_total,
+	s.sal_actual,
+	s.sal_register_date,
+	s.sal_register
+	FROM
+	employee e
+	LEFT JOIN
+	title t ON e.title_no = t.title_no
+	LEFT JOIN
+	department d ON e.dept_no = d.dept_no
+	LEFT JOIN
+	title_pay tp ON e.dept_no = tp.dept_no AND e.title_no = tp.title_no
+	LEFT JOIN
+	salary s ON e.emp_no = s.sal_emp_no
+	WHERE
+	e.emp_no = #{emp_no}
+    </select>
+    
 
 
 </mapper>

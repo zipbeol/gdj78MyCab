@@ -1,6 +1,7 @@
 package com.my.cab.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -68,6 +69,11 @@ public interface EmpDAO {
 
 	EmpDTO salaryWrite(String emp_no);
 
-	EmpDTO salaryBase();
+	void calculateDeductions(Map<String, Object> params);
+
+	boolean writeSalary(EmpDTO empDTO);
+
+	EmpDTO salaryDetail(String emp_no);
+
 
 }

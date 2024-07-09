@@ -45,14 +45,104 @@ public class EmpDTO {
 	private String vac_no;
 	private boolean vac_apply_status_final;
 	private String vac_reject_reason_final;
-	private int sal_total;
 	private String salwrite;
 	private int sal_base;
 	private int sal_meal;
-	private int title_pay_idx;
 	private int title_add_pay;
+	private int totalSalary;
+    private double empInsur;
+    private double healthInsur;
+    private double longtermInsur;
+    private double nationalPension;
+    private double incomeTax;
+    private double localIncomeTax;
+    private int sal_ded_idx;
+    private String sal_emp_no;
+    private int title_pay_idx;
+    private int fix_sal_idx;
+    private int sal_bonus;
+    private int sal_total;
+    private int sal_actual;
+    private int sal_register;
 	
-	
+	public int getSal_ded_idx() {
+		return sal_ded_idx;
+	}
+	public void setSal_ded_idx(int sal_ded_idx) {
+		this.sal_ded_idx = sal_ded_idx;
+	}
+	public String getSal_emp_no() {
+		return sal_emp_no;
+	}
+	public void setSal_emp_no(String sal_emp_no) {
+		this.sal_emp_no = sal_emp_no;
+	}
+	public int getFix_sal_idx() {
+		return fix_sal_idx;
+	}
+	public void setFix_sal_idx(int fix_sal_idx) {
+		this.fix_sal_idx = fix_sal_idx;
+	}
+	public int getSal_bonus() {
+		return sal_bonus;
+	}
+	public void setSal_bonus(int sal_bonus) {
+		this.sal_bonus = sal_bonus;
+	}
+	public int getSal_actual() {
+		return sal_actual;
+	}
+	public void setSal_actual(int sal_actual) {
+		this.sal_actual = sal_actual;
+	}
+	public int getSal_register() {
+		return sal_register;
+	}
+	public void setSal_register(int sal_register) {
+		this.sal_register = sal_register;
+	}
+	public int getTotalSalary() {
+		return totalSalary;
+	}
+	public void setTotalSalary(int totalSalary) {
+		this.totalSalary = totalSalary;
+	}
+	public double getEmpInsur() {
+		return empInsur;
+	}
+	public void setEmpInsur(double empInsur) {
+		this.empInsur = empInsur;
+	}
+	public double getHealthInsur() {
+		return healthInsur;
+	}
+	public void setHealthInsur(double healthInsur) {
+		this.healthInsur = healthInsur;
+	}
+	public double getLongtermInsur() {
+		return longtermInsur;
+	}
+	public void setLongtermInsur(double longtermInsur) {
+		this.longtermInsur = longtermInsur;
+	}
+	public double getNationalPension() {
+		return nationalPension;
+	}
+	public void setNationalPension(double nationalPension) {
+		this.nationalPension = nationalPension;
+	}
+	public double getIncomeTax() {
+		return incomeTax;
+	}
+	public void setIncomeTax(double incomeTax) {
+		this.incomeTax = incomeTax;
+	}
+	public double getLocalIncomeTax() {
+		return localIncomeTax;
+	}
+	public void setLocalIncomeTax(double localIncomeTax) {
+		this.localIncomeTax = localIncomeTax;
+	}
 	public int getSal_base() {
 		return sal_base;
 	}

@@ -456,9 +456,7 @@ $(document).ready(function() {
         getList();
     });
     
-    $(document).on('click', '.total-sal-list-tbody-tr', function() {
-        location.href = '/emp/sal/write.go?emp_no=' + $(this).attr('id');
-    });
+   
 });
 
 var searchText = '';
@@ -544,18 +542,25 @@ function getTotalPages() {
     });
 }
 
+function addCommasToNumber(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
 // 리스트 보여주기
 function drawList(list) {
     var content = '';
     if (list.length > 0) {
         for (item of list) {
+        	var salwrite = item.salwrite === '1' ? 'Y' : 'N';
+        	var dataSalwrite = item.salwrite === '1' ? 'Y' : 'N';
+        	
             content += '<tr class="total-sal-list-tbody-tr" id="' + item.emp_no + '">'
                 + '<td class="text-center">' + item.emp_no + '</td>'
                 + '<td class="text-center">' + item.emp_name + '</td>'
                 + '<td class="text-center">' + item.title_name + '</td>'
                 + '<td class="text-center">' + item.dept_name + '</td>'
-                + '<td class="text-center">' + item.sal_total + '</td>'
-                + '<td class="text-center">' + item.salwrite + '</td>'
+                + '<td class="text-center">' + addCommasToNumber(item.sal_total)+'원' + '</td>'
+                + '<td class="text-center">' + salwrite + '</td>'
                 + '</tr>';
         }
     } else {
@@ -563,6 +568,20 @@ function drawList(list) {
     }
     $('#total-sal-list').html(content);
 }
+
+$(document).on('click', '.total-sal-list-tbody-tr', function() {
+	
+		 var empNo = $(this).attr('id');
+	    var salwrite = $(this).attr('data-salwrite');
+	    
+	    if (salwrite === 'Y') {
+	        location.href = '/emp/sal/detail.go?emp_no=' + empNo;
+	    } else {
+	        location.href = '/emp/sal/write.go?emp_no=' + empNo;
+	    }
+	
+	
+});
         
 
 </script>

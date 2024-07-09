@@ -378,9 +378,39 @@ public class EmpService {
 	}
 
 
-	public EmpDTO salaryBase() {
+	public Map<String, Object> calculateDeductions(Map<String, Object> params) {
+        // 프로시저 호출
+        dao.calculateDeductions(params);
+
+        // 결과를 반환
+        Map<String, Object> result = new HashMap<>();
+        result.put("empInsur", params.get("empInsur"));
+        result.put("healthInsur", params.get("healthInsur"));
+        result.put("longtermInsur", params.get("longtermInsur"));
+        result.put("nationalPension", params.get("nationalPension"));
+        result.put("incomeTax", params.get("incomeTax"));
+        result.put("localIncomeTax", params.get("localIncomeTax"));
+
+        return result;
+    }
+
+
+	public boolean writeSalary(EmpDTO empDTO) {
 		
-		return dao.salaryBase();
+		boolean result = false;
+
+        result = dao.writeSalary(empDTO);
+
+        return result;
 	}
+
+
+	public EmpDTO salaryDetail(String emp_no) {
+		
+		return dao.salaryDetail(emp_no);
+	}
+	
+
+
 
 }

@@ -314,16 +314,54 @@ public class EmpController {
 		logger.info(emp_no + "급여명세서 작성");
 		
 		EmpDTO empDTO = service.salaryWrite(emp_no);
-		EmpDTO empDTO2 = service.salaryBase();
+		
 		
 		model.addAttribute("emp", empDTO);
-		model.addAttribute("sal",empDTO2);
 		
 	
 		return "HR/salaryWrite";
 	}
 	
+	@GetMapping(value="/calculateDeductions.ajax")
+	@ResponseBody
+	public Map<String, Object> calculateDeductions(@RequestParam("totalSalary") int totalSalary){
+		logger.info("급여 계산 요청");
+		logger.info("급여?"+totalSalary);
+		
+        
+        Map<String, Object> params = new HashMap<>();
+        params.put("totalSalary", totalSalary);
+
+
+	        return service.calculateDeductions(params);
+	}
 	
+	
+	@GetMapping(value = "/writeSalary.ajax")
+	@ResponseBody
+	public Map<String, Object> writeSalary(EmpDTO empDTO) {
+		logger.info("급여명세서 작성");
+		logger.info("급여명세서 작성 대상 : " + empDTO.getSal_emp_no());
+
+		boolean isSuccess = service.writeSalary(empDTO);
+
+		return Map.of("isSuccess", isSuccess);
+
+	}
+	
+	
+	@RequestMapping(value="/emp/sal/detail.go")
+	public String salaryDetail(String emp_no, Model model) {
+		logger.info(emp_no + "급여명세서 작성");
+		
+		EmpDTO empDTO = service.salaryDetail(emp_no);
+		
+		
+		model.addAttribute("emp", empDTO);
+		
+	
+		return "HR/salaryDetail";
+	}
 	
 
 }

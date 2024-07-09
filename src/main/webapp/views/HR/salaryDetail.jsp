@@ -173,7 +173,7 @@ input {
 						<li class="breadcrumb-item"><a href="/emp/sal/list.go"
 							class="text-decoration-none">급여 관리</a></li>
 						<li class="breadcrumb-item"><a href="#"
-							class="text-decoration-none">급여명세서 작성</a></li>
+							class="text-decoration-none">급여명세서 상세</a></li>
 					</ol>
 					<!-- Breadcrumb end -->
 
@@ -198,13 +198,13 @@ input {
 							<div class="col-12">
 								<div class="card mb-3">
 									<div class="card-header">
-										<h4 class="card-title">급여명세서 작성</h4>
+										<h4 class="card-title">급여명세서 상세</h4>
 									</div>
 									<div class="card-body">
 										<!-- 여기에 코딩 -->
 												
 										<div id="currMonth"></div>
-										<div class="mt-2 info2">등록자:${sessionScope.loginId}</div>
+										<div class="mt-2 info2">등록자:${emp.sal_register} 등록일:${emp.sal_register_date}</div>
   		 								<div class="mt-5 info">사번:${emp.emp_no}  성명:${emp.emp_name}  부서: ${emp.dept_name}  직급:${emp.title_name}</div>
   		 								<div class="mt-1"></div>
 										<table>

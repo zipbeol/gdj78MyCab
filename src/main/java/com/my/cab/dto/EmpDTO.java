@@ -64,7 +64,43 @@ public class EmpDTO {
     private int sal_total;
     private int sal_actual;
     private int sal_register;
+    private String sal_register_date;
+    private int driver_idx;
+    private String driver_name;
+    private int total_fare;
+    private int settlement_amount;
+    
 	
+	public int getDriver_idx() {
+		return driver_idx;
+	}
+	public void setDriver_idx(int driver_idx) {
+		this.driver_idx = driver_idx;
+	}
+	public String getDriver_name() {
+		return driver_name;
+	}
+	public void setDriver_name(String driver_name) {
+		this.driver_name = driver_name;
+	}
+	public int getTotal_fare() {
+		return total_fare;
+	}
+	public void setTotal_fare(int total_fare) {
+		this.total_fare = total_fare;
+	}
+	public int getSettlement_amount() {
+		return settlement_amount;
+	}
+	public void setSettlement_amount(int settlement_amount) {
+		this.settlement_amount = settlement_amount;
+	}
+	public String getSal_register_date() {
+		return sal_register_date;
+	}
+	public void setSal_register_date(String sal_register_date) {
+		this.sal_register_date = sal_register_date;
+	}
 	public int getSal_ded_idx() {
 		return sal_ded_idx;
 	}

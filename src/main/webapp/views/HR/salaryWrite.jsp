@@ -216,9 +216,9 @@ input {
 												<td class="add">보너스</td>
 											</tr>
 											<tr>
-												<td colspan="2"><input type="text" value="0" id="sal_base">원</td>
-												<td colspan="2"><input type="text" value="0" id="sal_meal">원</td>
-												<td colspan="2"><input type="text" value="0" id="title_pay">원</td>
+												<td colspan="2"><input type="text" value="0" id="sal_base" readonly>원</td>
+												<td colspan="2"><input type="text" value="0" id="sal_meal" readonly>원</td>
+												<td colspan="2"><input type="text" value="0" id="title_pay" readonly>원</td>
 												<td><input type="text" value="0" id="bonus" oninput="formatNumber(this)"></td>
 											</tr>
 											<tr>
@@ -234,12 +234,12 @@ input {
 												<td class="ded">지방소득세</td>
 											</tr>
 											<tr>
-												<td><input type="text" value="0" id="nationalPension" oninput="formatNumber(this)">원</td>
-												<td><input type="text" value="0" id="healthInsur"  oninput="formatNumber(this)">원</td>
-												<td colspan="2"><input type="text" id="longtermInsur" value="0" oninput="formatNumber(this)">원</td>
-												<td><input type="text" value="0" id="empInsur" oninput="formatNumber(this)">원</td>
-												<td><input type="text" value="0" id="incomeTax" oninput="formatNumber(this)">원</td>
-												<td><input type="text" value="0" id="localIncomeTax" oninput="formatNumber(this)">원</td>
+												<td><input type="text" value="0" id="nationalPension" oninput="formatNumber(this)" readonly>원</td>
+												<td><input type="text" value="0" id="healthInsur"  oninput="formatNumber(this)" readonly>원</td>
+												<td colspan="2"><input type="text" id="longtermInsur" value="0" oninput="formatNumber(this)" readonly>원</td>
+												<td><input type="text" value="0" id="empInsur" oninput="formatNumber(this)" readonly>원</td>
+												<td><input type="text" value="0" id="incomeTax" oninput="formatNumber(this)" readonly>원</td>
+												<td><input type="text" value="0" id="localIncomeTax" oninput="formatNumber(this)" readonly>원</td>
 											</tr>
 										</table>
 										
@@ -398,6 +398,8 @@ function calculateReal() {
     let real_sal = parseInt(dedT) - parseInt(salT);
     real_sal = Math.abs(real_sal);
     document.getElementById('real_sal').value = addCommasToNumber(real_sal);
+    
+    return real_sal;
 }
 
 	var total_sal = parseInt($('#total_sal').val().replace(/,/g, ''));
@@ -433,13 +435,17 @@ $('#calDed').on('click', function(){
 
 	var sal_bonus = parseInt($('#bonus').val().replace(/,/g, ''));
 	var sal_total = parseInt($('#total_sal').val().replace(/,/g, ''));
-	var sal_actual = parseInt($('#real_sal').val().replace(/,/g, ''));
 	var sal_register = '${sessionScope.loginId}';
+	
 
 
 $('#confirm').on('click', function(){
+	var sal_actual = calculateReal();
 	
-	if (chk === false) {
+	console.log(sal_actual);
+	
+	
+	 if (chk === false) {
 		showAlert('danger','공제액을 계산해주세요.');
 	}else{
 		
@@ -474,7 +480,7 @@ $('#confirm').on('click', function(){
         });
 		
 	}
-	
+	 
 	
 	
 });

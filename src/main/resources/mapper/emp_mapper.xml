@@ -642,6 +642,89 @@ WHERE
 	e.emp_no = #{emp_no}
     </select>
     
+    <select id="totalDriverList" resultType="emp" parameterType="search">
+    SELECT 
+        d.driver_idx,
+        d.driver_name,
+        SUM(tr.trip_record_fare) AS total_fare,
+        SUM(tr.trip_record_fare) * 0.6 AS settlement_amount
+    FROM 
+        trip_record tr
+    JOIN 
+        driver d ON tr.trip_record_driver_id = d.driver_idx
+    <where>
+        d.driver_is_retired = 0
+        <if test="filterSalMonth != null and filterSalMonth != ''">
+            AND DATE_FORMAT(tr.trip_record_date, '%Y-%m') = #{filterSalMonth}
+        </if>
+        <if test="filterForSearch != null and filterForSearch != ''">
+            <choose>
+                <when test="filterForSearch == 'driver_idx'">
+                    AND d.driver_idx LIKE CONCAT('%', #{searchText}, '%')
+                </when>
+                <when test="filterForSearch == 'driver_name'">
+                    AND d.driver_name LIKE CONCAT('%', #{searchText}, '%')
+                </when>
+            </choose>
+        </if>
+    </where>
+    GROUP BY 
+        d.driver_idx, d.driver_name
+    <choose>
+        <when test="sortColumn != null and sortColumn == 'driver-no'">
+            ORDER BY d.driver_idx
+        </when>
+        <when test="sortColumn != null and sortColumn == 'driver-name'">
+            ORDER BY d.driver_name
+        </when>
+        <when test="sortColumn != null and sortColumn == 'total-fare'">
+            ORDER BY total_fare
+        </when>
+        <when test="sortColumn != null and sortColumn == 'driver-sal'">
+            ORDER BY settlement_amount
+        </when>
+        <otherwise>
+            ORDER BY d.driver_idx
+        </otherwise>
+    </choose>
+    <choose>
+        <when test="sortOrder != null and sortOrder == 'desc'">
+            DESC
+        </when>
+        <when test="sortOrder != null and sortOrder == 'asc'">
+            ASC
+        </when>
+    </choose>
+    LIMIT #{pageSize} OFFSET #{page}
+</select>
+    
+    
+    <select id="getDriverTotalPages" resultType="int" parameterType="search">
+    SELECT 
+        COUNT(DISTINCT d.driver_idx) AS total
+    FROM 
+        trip_record tr
+    JOIN 
+        driver d ON tr.trip_record_driver_id = d.driver_idx
+    <where>
+        d.driver_is_retired = 0
+        <if test="filterSalMonth != null and filterSalMonth != ''">
+            AND DATE_FORMAT(tr.trip_record_date, '%Y-%m') = #{filterSalMonth}
+        </if>
+        <if test="filterForSearch != null and filterForSearch != ''">
+            <choose>
+                <when test="filterForSearch == 'driver_idx'">
+                    AND d.driver_idx LIKE CONCAT('%', #{searchText}, '%')
+                </when>
+                <when test="filterForSearch == 'driver_name'">
+                    AND d.driver_name LIKE CONCAT('%', #{searchText}, '%')
+                </when>
+            </choose>
+        </if>
+    </where>
+</select>
+    
+    
 
 
 </mapper>

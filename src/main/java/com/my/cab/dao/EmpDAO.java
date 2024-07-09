@@ -75,5 +75,9 @@ public interface EmpDAO {
 
 	EmpDTO salaryDetail(String emp_no);
 
+	List<EmpDTO> totalDriverList(SearchDTO searchDTO);
+
+	int getDriverTotalPages(SearchDTO searchDTO);
+
 
 }

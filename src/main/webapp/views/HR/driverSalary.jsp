@@ -48,6 +48,34 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
+    th.sortable {
+	position: relative;
+	cursor: pointer;
+}
+
+th.sortable::after {
+	content: '\f0dc'; /* FontAwesome 기본 sort 아이콘 */
+	font-family: 'Font Awesome 5 Free';
+	font-weight: 900;
+	position: absolute;
+	right: 8px;
+	opacity: 0;
+	transition: opacity 0.3s;
+}
+
+th.sortable:hover::after {
+	opacity: 0.3; /* 흐릿하게 설정 */
+}
+
+th.sortable.asc::after {
+	content: '\f0de'; /* FontAwesome sort up 아이콘 */
+	opacity: 1;
+}
+
+th.sortable.desc::after {
+	content: '\f0dd'; /* FontAwesome sort down 아이콘 */
+	opacity: 1;
+}
         .alert-placeholder {
             position: fixed;
             top: 0;
@@ -169,7 +197,7 @@
                         <a href="#" class="text-decoration-none">인사 관리</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="/attendance/attendance/list.go" class="text-decoration-none">급여 관리</a>
+                        <a href="/attendance/attendance/list.go" class="text-decoration-none">기사 정산 관리</a>
                     </li>
                 </ol>
                 <!-- Breadcrumb end -->
@@ -199,7 +227,7 @@
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="taxi-detail-tab" data-bs-toggle="tab"
                                 data-bs-target="#taxi-detail-content" type="button" role="tab"
-                                aria-controls="taxi-detail-content" aria-selected="true">급여 관리
+                                aria-controls="taxi-detail-content" aria-selected="true">기사 정산 관리
                         </button>
                     </li>
                 </ul>
@@ -208,10 +236,9 @@
                 <div class="tab-pane fade show active" id="taxi-detail-content" role="tabpanel"
                      aria-labelledby="taxi-detail-tab">
                     <!-- 전체 근태 내역 -->
-                    <h2>급여 관리</h2>
+                    <h2>기사 정산 관리</h2>
                     <div class="text-end mb-1">
-                    <input type="button" class="btn btn-primary"
-                                       id="setSal" value="급여 설정">
+                    
                     </div>
                     <!-- 검색창 시작 -->
                     <div class="search-filter-container border border-2 p-3 rounded mb-3">
@@ -242,8 +269,7 @@
                                                                        class="form-label">검색</label>
                                                             </div>
                                                             <div class="col-2">
-                                                                <label for="search-text-maintenance"
-                                                                       class="form-label">작성 여부</label>
+                                                                
                                                             </div>
                                                         </div>
                                                         <div class="row mb-3">
@@ -262,10 +288,8 @@
                                                             <div class="col-2 d-flex">
                                                                 <select class="form-select maintenance-search-filter"
                                                                         id="filterforsearch">
-                                                                    <option value="emp_no">사번</option>
-																	<option value="emp_name">이름</option>
-																	<option value="title_name">직급</option>
-																	<option value="dept_name">부서</option>
+                                                                    <option value="driver_idx">기사 번호</option>
+																	<option value="driver_name">기사 이름</option>
                                                                 </select>
                                                             </div>
                                                             <div class="col-4">
@@ -275,12 +299,7 @@
                                                                        placeholder="검색어를 입력해 주세요.">
                                                             </div>
                                                             <div class="col-2 d-flex">
-                                                                <select class="form-select maintenance-search-filter"
-                                                                        id="filter-sal-result">
-                                                                    <option value="">작성 여부</option>
-                                                                    <option value="1">작성</option>
-																	<option value="0">미작성</option>
-                                                                </select>
+                                                                
                                                             </div>
                                                         </div>
                                                     </div>
@@ -292,20 +311,14 @@
                             <table class="table align-middle table-hover m-0">
                                 <thead>
                                     <tr>
-                                        <th class="text-center" id="th-emp-no"
-																style="width: 20%;">사번</th>
+                                        <th class="text-center sortable" id="th-emp-no"
+																style="width: 20%;" data-value="driver-no">기사 번호</th>
 															<th class="text-center sortable" id="th-emp-name"
-																style="width: 20%;" >이름</th>
+																style="width: 20%;" data-value="driver-name" >기사 이름</th>
 															<th class="text-center sortable" id="th-title-name"
-																style="width: 10%;" >직급</th>
+																style="width: 10%;" data-value="total-fare" >총 운행 요금</th>
 															<th class="text-center sortable" id="th-dept-name"
-																style="width: 20%;" >부서</th>
-															<th class="text-center" id="th-att-time"
-																style="width: 10%;" >당월 급여
-																</th>
-																<th class="text-center" id="th-leave-time"
-																style="width: 10%;" >명세 작성 여부
-																</th>
+																style="width: 20%;" data-value="driver-sal" >정산금</th>
                                                                 </tr>
                                                                 </thead>
                                                                 <tbody id="total-sal-list">
@@ -393,8 +406,7 @@
 <script>
     
 /* 전체 근태 내역 스크립트 시작  */
- 
- var months = [];
+var months = [];
 var dateObj = new Date();
 var selectYear = dateObj.getFullYear();
 var disableYear = dateObj.getFullYear();
@@ -407,8 +419,13 @@ for (var i = month + 1; i <= 12; i++) {
 }
 
 var currentMonth = dateObj.getFullYear() + '-' + ('0' + month).slice(-2);
+var filterSalMonth = currentMonth; // 초기 로드시 현재 월로 설정
 
 $(document).ready(function() {
+    // 초기 로드시 필터 설정
+    $('#monthpicker').val(currentMonth);
+    filterSalMonth = currentMonth; // 초기 로드시 현재 월로 설정
+
     getTotalPages();
     getList();
 
@@ -440,34 +457,46 @@ $(document).ready(function() {
 
     $('#search-emp').on('keyup', function() {
         currentPage = 1;
+        getSearchValue(); // 검색 조건 업데이트
         getTotalPages();
         getList();
     });
 
     $('#monthpicker').on('change', function() {
         currentPage = 1;
+        getSearchValue(); // 검색 조건 업데이트
         getTotalPages();
         getList();
     });
 
-    $('#filter-sal-result').on('change', function() {
-        currentPage = 1;
-        getTotalPages();
-        getList();
-    });
-    
-   
 });
 
 var searchText = '';
-var filterSalMonth = '';
-var filterSalResult = '';
 var filterforSearch = '';
 var currentPage = 1; // 현재 페이지 번호
+var sortOrder = 'asc';
+var sortColumn = 'default';
+
+//테이블 헤더 클릭 이벤트 설정
+$('th.sortable').click(function () {
+    sortColumn = $(this).data('value');
+    // 현재 정렬 상태 확인
+    if ($(this).hasClass('asc')) {
+        $(this).removeClass('asc').addClass('desc');
+        sortOrder = 'desc';
+    } else if ($(this).hasClass('desc')) {
+        $(this).removeClass('desc').addClass('asc');
+        sortOrder = 'asc';
+    } else {
+        $('th.sortable').removeClass('asc desc');
+        $(this).addClass('asc');
+        sortOrder = 'asc';
+    }
+    getList();
+});
 
 // 검색 값들 변수에 저장
 function getSearchValue() {
-    filterSalResult = $('#filter-sal-result').val();
     filterforSearch = $('#filterforsearch').val();
     searchText = $('#search-emp').val();
     filterSalMonth = $('#monthpicker').val();
@@ -475,27 +504,29 @@ function getSearchValue() {
 
 // 필터 값 리셋
 function filterReset() {
-    $('#filter-sal-result').val('');
     $('#search-emp').val('');
     $('#filterforsearch').val('emp_no');
     $('#monthpicker').val(currentMonth);
+    filterSalMonth = currentMonth; // 초기화 시에도 현재 월로 설정
     currentPage = 1; // 페이지 번호 초기화
+    getSearchValue(); // 검색 조건 업데이트
     getTotalPages();
     getList(); // 목록 새로고침
 }
 
-// 급여 리스트 호출
+// 기사 리스트 호출
 function getList() {
     getSearchValue();
     $.ajax({
-        url: '/totalSalList.ajax',
+        url: '/totalDriverList.ajax',
         type: 'GET',
         data: {
             'searchText': searchText,
-            'filterSalResult': filterSalResult,
             'filterForSearch': filterforSearch,
             'filterSalMonth': filterSalMonth,
-            'page': currentPage
+            'page': currentPage,
+            'sortColumn': sortColumn,
+            'sortOrder': sortOrder
         },
         dataType: 'JSON',
         success: function(data) {
@@ -511,11 +542,10 @@ function getList() {
 function getTotalPages() {
     getSearchValue();
     $.ajax({
-        url: '/getSalTotalPages.ajax',
+        url: '/getDriverTotalPages.ajax',
         type: 'GET',
         data: {
             'searchText': searchText,
-            'filterSalResult': filterSalResult,
             'filterForSearch': filterforSearch,
             'filterSalMonth': filterSalMonth
         },
@@ -551,47 +581,53 @@ function drawList(list) {
     var content = '';
     if (list.length > 0) {
         for (item of list) {
-        	var salwrite = item.salwrite === '1' ? 'Y' : 'N';
-        	var dataSalwrite = item.salwrite === '1' ? 'Y' : 'N';
         	
-            content += '<tr class="total-sal-list-tbody-tr" id="' + item.emp_no + '" data-salwrite="' + salwrite + '">'
-                + '<td class="text-center">' + item.emp_no + '</td>'
-                + '<td class="text-center">' + item.emp_name + '</td>'
-                + '<td class="text-center">' + item.title_name + '</td>'
-                + '<td class="text-center">' + item.dept_name + '</td>'
-                + '<td class="text-center">' + addCommasToNumber(item.sal_total)+'원' + '</td>'
-                + '<td class="text-center">' + salwrite + '</td>'
+            content += '<tr class="total-sal-list-tbody-tr" id="' + item.driver_name + '">'
+                + '<td class="text-center">' + item.driver_idx + '</td>'
+                + '<td class="text-center">' + item.driver_name + '</td>'
+                + '<td class="text-center">' + addCommasToNumber(item.total_fare) + '원' + '</td>'
+                + '<td class="text-center">' + addCommasToNumber(item.settlement_amount) + '원' + '</td>'
                 + '</tr>';
         }
     } else {
-        content = '<tr><td colspan="6" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
+        content = '<tr><td colspan="4" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
     }
     $('#total-sal-list').html(content);
 }
 
 $(document).on('click', '.total-sal-list-tbody-tr', function() {
-	
-		 var empNo = $(this).attr('id');
-	    var salwrite = $(this).attr('data-salwrite');
-	    console.log(salwrite);
-	    
-	    if (salwrite === 'Y') {
-	        location.href = '/emp/sal/detail.go?emp_no=' + empNo;
-	    } else {
-	        location.href = '/emp/sal/write.go?emp_no=' + empNo;
-	    }
-	
-	
+    var driver_name = $(this).attr('id');
+    var selectedMonth = $('#monthpicker').val(); // 선택된 월 가져오기 (형식: yyyy-mm)
+    var selectedMonth = $('#monthpicker').val(); // 선택된 월 가져오기 (형식: yyyy-mm)
+
+    // 선택한 달의 시작 날짜와 종료 날짜 계산
+    var startDate = selectedMonth.replace('-', '/') + '/01 00:00 AM';
+    var endDate = new Date(selectedMonth.split('-')[0], selectedMonth.split('-')[1], 0);
+    endDate = endDate.getFullYear() + '/' + ('0' + (endDate.getMonth() + 1)).slice(-2) + '/' + endDate.getDate() + ' 11:59 PM';
+
+    // 필터 값 가져오기
+    var filterStartLocation = '';
+    var filterEndLocation = '';
+    var filterMinDistance = '';
+    var filterMaxDistance = '';
+    var filterMinFare = '';
+    var filterMaxFare = '';
+    
+
+    var url = '/triprecord/empList.go?' +
+    'filterStartDate=' + encodeURIComponent(startDate) +
+    '&filterEndDate=' + encodeURIComponent(endDate) +
+    '&filterDriverName=' + encodeURIComponent(driver_name) +
+    '&filterStartLocation=' + encodeURIComponent(filterStartLocation) +
+    '&filterEndLocation=' + encodeURIComponent(filterEndLocation) +
+    '&filterMinDistance=' + encodeURIComponent(filterMinDistance) +
+    '&filterMaxDistance=' + encodeURIComponent(filterMaxDistance) +
+    '&filterMinFare=' + encodeURIComponent(filterMinFare) +
+    '&filterMaxFare=' + encodeURIComponent(filterMaxFare);
+
+// 페이지 이동
+window.location.href = url;
 });
-
-$('#setSal').on('click', function(){
-	
-	location.href = '/emp/sal/setSal.go';
-	
-});
-
-
-
         
 
 </script>

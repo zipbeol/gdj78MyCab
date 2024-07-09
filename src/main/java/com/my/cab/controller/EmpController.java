@@ -3,6 +3,8 @@ package com.my.cab.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.security.auth.message.callback.PrivateKeyCallback.Request;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -296,7 +298,7 @@ public class EmpController {
 	@ResponseBody
 	public Map<String, Object> totalSalList(SearchDTO searchDTO) {
 		logger.info("\nsearchDTO SearchText:" + searchDTO.getSearchText()
-				+ "\nsearchDTO page:" + searchDTO.getPage());
+				+ "\nsearchDTO page:" + searchDTO.getPage()+ "\nsearchDTO page:" + searchDTO.getFilterSalResult());
 
 		return service.totalSalList(searchDTO);
 
@@ -361,6 +363,43 @@ public class EmpController {
 		
 	
 		return "HR/salaryDetail";
+	}
+	
+	@RequestMapping(value="/emp/driver/list.go")
+	public String driverSalList() {
+		
+		return "HR/driverSalary";
+	}
+	
+	
+	@GetMapping(value = "/totalDriverList.ajax")
+	@ResponseBody
+	public Map<String, Object> totalDriverList(SearchDTO searchDTO) {
+		logger.info("\nsearchDTO SearchText:" + searchDTO.getSearchText()
+				+ "\nsearchDTO page:" + searchDTO.getPage()+ "\nsearchDTO page:" + searchDTO.getFilterSalResult());
+
+		return service.totalDriverList(searchDTO);
+
+	}
+
+	@GetMapping(value = "/getDriverTotalPages.ajax")
+	@ResponseBody
+	public Map<String, Object> getDriverTotalPages(SearchDTO searchDTO) {
+
+		return service.getDriverTotalPages(searchDTO);
+	}
+	
+	
+	@RequestMapping(value="/triprecord/empList.go")
+	public String tripEmp() {
+		
+		return "HR/tripRecordEMP";
+	}
+	
+	@RequestMapping(value="/emp/sal/setSal.go")
+	public String setSal() {
+		
+		return "HR/setSal";
 	}
 	
 

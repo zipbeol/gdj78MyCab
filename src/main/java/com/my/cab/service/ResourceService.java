@@ -122,15 +122,39 @@ public class ResourceService {
 
 	public Map<String, Object> resourceListCall(Map<String, Object> param) {
 		Map<String, Object>map = new HashMap<String, Object>();
+		int currPage = Integer.parseInt((String) param.get("currentPage"));
+		int pagePerCnt = 10;
+		int start = (currPage-1)*pagePerCnt;
+		logger.info("페이징"+currPage);
+		logger.info("페이징"+currPage);
+		logger.info("페이징"+start);
+		
+		param.put("currentPage", currPage);
+		param.put("pagePerCnt", pagePerCnt);
+		param.put("start", start);
 		if (param.get("resSerachCategory").equals("회의실")) {
 			List<ResourceDTO> list = resourceDao.getResMrList(param);
+			int totalPages = resourceDao.getResMrListPageCount(param);
+			logger.info("페이징"+totalPages);
 			map.put("list", list);
+			map.put("totalPages", totalPages);
+			map.put("currPage", currPage);
 		}else if(param.get("resSerachCategory").equals("차량")) {
 			List<ResourceDTO> list = resourceDao.getResCarList(param);
 			map.put("list", list);
+			int totalPages = resourceDao.getResCarListPageCount(param);
+			logger.info("페이징"+totalPages);
+			map.put("list", list);
+			map.put("totalPages", totalPages);
+			map.put("currPage", currPage);
 		}else if(param.get("resSerachCategory").equals("비품")) {
 			List<ResourceDTO> list = resourceDao.getResEqList(param);
 			map.put("list", list);
+			int totalPages = resourceDao.getResEqListPageCount(param);
+			logger.info("페이징"+totalPages);
+			map.put("list", list);
+			map.put("totalPages", totalPages);
+			map.put("currPage", currPage);
 		}
 		return map;
 	}
@@ -141,17 +165,36 @@ public class ResourceService {
 		List<ResourceDTO> rsvTime =resourceDao.getReservationDate(resource_idx);
 		if(category.equals("회의실")) {
 			ResourceDTO dto = resourceDao.getReservationMrInfo(resource_idx);
+			String photoName = resourceDao.getPhotoName(resource_idx);
+			if(photoName != null) {
+				
+				model.addAttribute("photoName",photoName);
+			}
 			model.addAttribute("dto",dto);
 			model.addAttribute("rsvTime",rsvTime);
+
 		} 
-			  else if(category.equals("차량")){ 
-//				  ResourceDTO dto =
-//			  resourceDao.getReservationCarInfo(resource_idx); 
-			  }else if(category.equals("비품")){ 
-//				  ResourceDTO dto =
-//			  resourceDao.getReservationEqInfo(resource_idx);
-			  }else {
-			logger.info("카테고리 불러오기 실패 ");
+		else if(category.equals("차량")){ 
+			ResourceDTO dto = resourceDao.getReservationCarInfo(resource_idx); 
+			String photoName = resourceDao.getPhotoName(resource_idx);
+			if(photoName != null) {
+				
+				model.addAttribute("photoName",photoName);
+			}
+			model.addAttribute("dto",dto);
+			model.addAttribute("rsvTime",rsvTime);
+
+		}else if(category.equals("비품")){ 
+			ResourceDTO dto = resourceDao.getReservationEqInfo(resource_idx);
+			String photoName = resourceDao.getPhotoName(resource_idx);
+			if(photoName != null) {
+				
+				model.addAttribute("photoName",photoName);
+			}
+			model.addAttribute("dto",dto);
+			model.addAttribute("rsvTime",rsvTime);
+		}else {
+		logger.info("카테고리 불러오기 실패 ");
 		}
 		
 	}

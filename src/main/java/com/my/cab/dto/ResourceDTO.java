@@ -52,6 +52,12 @@ public class ResourceDTO {
 	
 	private int id ;
 	
+	//사진
+	private int resource_photo_idx;
+	private String ori_file_name;
+	private String new_file_name;
+	private String photo_path;
+	private String res_management_idx;
 	
 	public int getResource_idx() {
 		return resource_idx;
@@ -262,6 +268,36 @@ public class ResourceDTO {
 	}
 	public void setId(int id) {
 		this.id = id;
+	}
+	public int getResource_photo_idx() {
+		return resource_photo_idx;
+	}
+	public void setResource_photo_idx(int resource_photo_idx) {
+		this.resource_photo_idx = resource_photo_idx;
+	}
+	public String getOri_file_name() {
+		return ori_file_name;
+	}
+	public void setOri_file_name(String ori_file_name) {
+		this.ori_file_name = ori_file_name;
+	}
+	public String getNew_file_name() {
+		return new_file_name;
+	}
+	public void setNew_file_name(String new_file_name) {
+		this.new_file_name = new_file_name;
+	}
+	public String getPhoto_path() {
+		return photo_path;
+	}
+	public void setPhoto_path(String photo_path) {
+		this.photo_path = photo_path;
+	}
+	public String getRes_management_idx() {
+		return res_management_idx;
+	}
+	public void setRes_management_idx(String res_management_idx) {
+		this.res_management_idx = res_management_idx;
 	}
 	
 

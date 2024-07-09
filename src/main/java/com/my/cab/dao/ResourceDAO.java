@@ -42,4 +42,14 @@ public interface ResourceDAO {
 
 	ResourceDTO getReservationCarInfo(int resource_idx);
 
+	int getResMrListPageCount(Map<String, Object> param);
+
+	int getResCarListPageCount(Map<String, Object> param);
+
+	int getResEqListPageCount(Map<String, Object> param);
+
+	ResourceDTO getReservationEqInfo(int resource_idx);
+
+	String getPhotoName(int resource_idx);
+
 }

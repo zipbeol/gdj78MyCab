@@ -52,4 +52,8 @@ public interface ResourceDAO {
 
 	String getPhotoName(int resource_idx);
 
+	List<ResourceDTO> myReservationList(Map<String, Object> param);
+
+	int getmyReservationListPage(Map<String, Object> param);
+
 }

@@ -30,7 +30,7 @@
 	
 	<insert id="resourceWriteEquip" parameterType="map">
 		INSERT INTO equipment (resource_equipment_idx,resource_equipment_category)
-		VALUES (#{idx},#{company_car_capacity})
+		VALUES (#{idx},#{resource_equipment_category})
 	</insert>
 	
 	<insert id="saveResPhoto">
@@ -45,13 +45,14 @@
 		left join resource_reservation rr ON  r.resource_idx  = rr.resource_idx 
 		left join resource_photo rp  on r.resource_idx = rp.res_management_idx 
 		WHERE r.resource_category = '회의실' 
-		 
+		 	AND r.resoruce_del = false
 		<![CDATA[
 			AND	(rr.resource_idx IS NULL OR NOT EXISTS (
 		    SELECT 1 
 		    FROM resource_reservation rr2 
 		    WHERE rr2.resource_reserve_start_date < #{resSearchEndTime}
 		    AND rr2.resource_reserve_end_date > #{resSearchStartTime}
+		    AND rr2.resource_reserve_del = '0'
 		))
 			]]>
 		<if test='resOption != ""'>
@@ -63,17 +64,19 @@
 	</select>
 	
 	<select id="getResMrListPageCount" parameterType="map" resultType="int">
-		SELECT CEIL(COUNT(DISTINCT r.resource_idx) / 10) AS pases
+		SELECT CEIL(COUNT(DISTINCT r.resource_idx) / 5) AS pases
 		FROM resource_management r 	
 		INNER JOIN resource_meeting_room rmr on rmr.meeting_room_resource_idx  = r.resource_idx
 		left join resource_reservation rr ON  r.resource_idx  = rr.resource_idx 
 		WHERE r.resource_category = '회의실'
+			AND r.resoruce_del = false
 		<![CDATA[
 			AND	(rr.resource_idx IS NULL OR NOT EXISTS (
 		    SELECT 1 
 		    FROM resource_reservation rr2 
 		    WHERE rr2.resource_reserve_start_date < #{resSearchEndTime}
 		    AND rr2.resource_reserve_end_date > #{resSearchStartTime}
+		    AND rr2.resource_reserve_del = '0'
 			))
 		]]>
 		<if test='resOption != ""'>
@@ -89,35 +92,39 @@
 		INNER JOIN resource_company_car rcc on rcc.company_car_resource_idx  = r.resource_idx
 		left join resource_reservation rr ON  r.resource_idx  = rr.resource_idx 
 		left join resource_photo rp  on r.resource_idx = rp.res_management_idx 
-		WHERE r.resource_category = '차량' 
+		WHERE r.resource_category = '차량'
+			AND r.resoruce_del = false 
 		<![CDATA[
 			AND	(rr.resource_idx IS NULL OR NOT EXISTS (
 		    SELECT 1 
 		    FROM resource_reservation rr2 
 		    WHERE rr2.resource_reserve_start_date < #{resSearchEndTime}
 		    AND rr2.resource_reserve_end_date > #{resSearchStartTime}
+		    AND rr2.resource_reserve_del = '0'
 			))
 		]]>
 		<if test='resOption != ""'>
 			<![CDATA[
-				AND rcc.company_car_capacity >= #{resOption}
+				AND rcc.company_car_category = #{resOption}
 			]]>
 		</if>
 		group by r.resource_idx ORDER BY r.resource_idx DESC LIMIT	#{start},#{pagePerCnt}	
 	</select>
 	
 	<select id="getResCarListPageCount" parameterType="map" resultType="int">
-		SELECT CEIL(COUNT(DISTINCT r.resource_idx) / 10) AS pases
+		SELECT CEIL(COUNT(DISTINCT r.resource_idx) / 5) AS pases
 		FROM resource_management r 	
 		INNER JOIN resource_company_car rcc on rcc.company_car_resource_idx  = r.resource_idx
 		left join resource_reservation rr ON  r.resource_idx  = rr.resource_idx 
 		WHERE r.resource_category = '차량'
+			AND r.resoruce_del = false
 		<![CDATA[
 			AND	(rr.resource_idx IS NULL OR NOT EXISTS (
 		    SELECT 1 
 		    FROM resource_reservation rr2 
 		    WHERE rr2.resource_reserve_start_date < #{resSearchEndTime}
 		    AND rr2.resource_reserve_end_date > #{resSearchStartTime}
+		    AND rr2.resource_reserve_del = '0'
 			))
 		]]>
 		<if test='resOption != ""'>
@@ -134,12 +141,14 @@
 		left join resource_reservation rr ON  r.resource_idx  = rr.resource_idx 
 		left join resource_photo rp  on r.resource_idx = rp.res_management_idx 
 		WHERE r.resource_category = '비품'
+			AND r.resoruce_del = false
 		<![CDATA[
 			AND	(rr.resource_idx IS NULL OR NOT EXISTS (
 		    SELECT 1 
 		    FROM resource_reservation rr2 
 		    WHERE rr2.resource_reserve_start_date < #{resSearchEndTime}
 		    AND rr2.resource_reserve_end_date > #{resSearchStartTime}
+		    AND rr2.resource_reserve_del = '0'
 			))
 		]]>
 		<if test='resOption != ""'>
@@ -149,17 +158,19 @@
 	</select>
 	
 	<select id="getResEqListPageCount" parameterType="map" resultType="int">
-		SELECT CEIL(COUNT(DISTINCT r.resource_idx) / 10) AS pases
+		SELECT CEIL(COUNT(DISTINCT r.resource_idx) / 5) AS pases
 		FROM resource_management r 	
 		INNER JOIN equipment e2  on  e2.resource_equipment_idx  = r.resource_idx
 		left join resource_reservation rr ON  r.resource_idx  = rr.resource_idx 
 		WHERE r.resource_category = '비품'
+			AND r.resoruce_del = false
 		<![CDATA[
 			AND	(rr.resource_idx IS NULL OR NOT EXISTS (
 		    SELECT 1 
 		    FROM resource_reservation rr2 
 		    WHERE rr2.resource_reserve_start_date < #{resSearchEndTime}
 		    AND rr2.resource_reserve_end_date > #{resSearchStartTime}
+		    AND rr2.resource_reserve_del = '0'
 			))
 		]]>
 		<if test='resOption != ""'>
@@ -227,5 +238,36 @@
 	
 	<select id="getPhotoName">
 		SELECT new_file_name FROM resource_photo WHERE res_management_idx = #{param1}
+	</select>
+	
+	<select id="myReservationList" resultType="resourceDTO" parameterType="map">
+		SELECT * FROM resource_reservation rr 
+		LEFT JOIN resource_management rm ON  rr.resource_idx = rm.resource_idx
+		left join resource_photo rp  on rr.resource_idx = rp.res_management_idx  
+		WHERE rr.resource_reservation_emp_no = #{empNo}
+		AND (rr.resource_idx IS NULL OR NOT EXISTS (
+	        SELECT 1 
+	        FROM resource_reservation rr2 
+	        WHERE rr2.resource_reserve_del = 1
+	    ))
+	   	<if test="resSerachCategory != ''">
+	    	 and rm.resource_category =#{resSerachCategory}
+	    </if>
+		group by rr.resource_idx ORDER BY rr.resource_idx DESC LIMIT #{start},#{pagePerCnt}
+	</select>
+	
+	<select id="getmyReservationListPage" parameterType="map" resultType="int">
+		SELECT CEIL(COUNT(DISTINCT rr.resource_idx) / 5) AS pases
+		FROM resource_reservation rr 
+		LEFT JOIN resource_management rm ON  rr.resource_idx = rm.resource_idx 
+		WHERE resource_reservation_emp_no = #{empNo}
+		AND (rr.resource_idx IS NULL OR NOT EXISTS (
+	        SELECT 1 
+	        FROM resource_reservation rr2 
+	        WHERE rr2.resource_reserve_del = 1
+	    ))
+	    <if test="resSerachCategory != ''">
+	    	 and rm.resource_category =#{resSerachCategory}
+	    </if>
 	</select>
 </mapper>

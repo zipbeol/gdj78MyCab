@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,7 +44,7 @@ public class ResourceController {
 	}
 	
 	@RequestMapping(value = "resource/resourceWrite.do")
-	public String resourceWrite(@RequestParam(name = "carPhoto", required = false)MultipartFile file , @RequestParam Map<String,Object> param, ResourceDTO dto, HttpSession session) {
+	public String resourceWrite(@RequestParam(name = "photo", required = false)MultipartFile file , @RequestParam Map<String,Object> param, ResourceDTO dto, HttpSession session) {
 		logger.info("사진 받아온거 : " +file);
 		logger.info("사진 받아온거 : " +dto.getResource_content());
 		param.put("id", session.getAttribute("loginId"));
@@ -124,5 +125,20 @@ public class ResourceController {
 		 logger.info("gdasgdsagsd"+resource_reserve_start_date);
 	
 		return resourceService.getSelectRsvDate(resource_idx,resource_reserve_start_date);
+	}
+	
+	@RequestMapping(value = "resource/myReservationList.go")
+	public String myReservationListGo() {
+		
+		return "resource/myReservationList";
+	}
+	
+	@RequestMapping(value = "resource/myReservationList.ajax")
+	@ResponseBody
+	public Map<String, Object> myReservationList(@RequestParam Map<String,Object> param){
+		logger.info("내 예약 리스트"+param.get("resSerachCategory"));
+		logger.info("내 예약 리스트"+param.get("currentPage"));
+		logger.info("내 예약 리스트"+param.get("empNo"));
+		return resourceService.myReservationList(param);
 	}
 }

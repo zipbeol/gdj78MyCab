@@ -123,7 +123,7 @@ public class ResourceService {
 	public Map<String, Object> resourceListCall(Map<String, Object> param) {
 		Map<String, Object>map = new HashMap<String, Object>();
 		int currPage = Integer.parseInt((String) param.get("currentPage"));
-		int pagePerCnt = 10;
+		int pagePerCnt = 5;
 		int start = (currPage-1)*pagePerCnt;
 		logger.info("페이징"+currPage);
 		logger.info("페이징"+currPage);
@@ -141,7 +141,6 @@ public class ResourceService {
 			map.put("currPage", currPage);
 		}else if(param.get("resSerachCategory").equals("차량")) {
 			List<ResourceDTO> list = resourceDao.getResCarList(param);
-			map.put("list", list);
 			int totalPages = resourceDao.getResCarListPageCount(param);
 			logger.info("페이징"+totalPages);
 			map.put("list", list);
@@ -149,7 +148,6 @@ public class ResourceService {
 			map.put("currPage", currPage);
 		}else if(param.get("resSerachCategory").equals("비품")) {
 			List<ResourceDTO> list = resourceDao.getResEqList(param);
-			map.put("list", list);
 			int totalPages = resourceDao.getResEqListPageCount(param);
 			logger.info("페이징"+totalPages);
 			map.put("list", list);
@@ -230,6 +228,23 @@ public class ResourceService {
 		for (ResourceDTO resourceDTO : dto) {
 			logger.info("선택된 일정 가져온다 :" + resourceDTO.getResource_reserve_start_date());
 		}
+		return map;
+	}
+
+	public Map<String, Object> myReservationList(Map<String, Object> param) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		int currPage = Integer.parseInt((String) param.get("currentPage"));
+		int pagePerCnt = 5;
+		int start = (currPage-1)*pagePerCnt;
+		param.put("currentPage", currPage);
+		param.put("pagePerCnt", pagePerCnt);
+		param.put("start", start);
+		List<ResourceDTO> list = resourceDao.myReservationList(param);
+		int totalPages = resourceDao.getmyReservationListPage(param);
+		map.put("list", list);
+		map.put("totalPages", totalPages);
+		map.put("currPage", currPage);
+				
 		return map;
 	}
 

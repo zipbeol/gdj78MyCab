@@ -500,9 +500,33 @@ $(document).ready(function(){
         var content = '';
         if (list.length > 0) {
             for (item of list) {
-            	let approvalStatus = item.vac_apply_status && item.vac_apply_status_final ? '결재(2/2)' : 
-                item.vac_apply_status && !item.vac_apply_status_final ? '결재(1/2)' : '결재(0/2)';
-				let finalStatus = approvalStatus === '결재(2/2)' ? (item.vac_apply_status_final ? '승인' : '반려') : '검토중';
+                let finalStatus;
+                let approvalStatus;
+
+                if (item.vac_apply_status_final === false && item.vac_reject_reason_final && item.vac_reject_reason_final.trim() !== '') {
+                    finalStatus = '반려';
+                    approvalStatus = '결재(2/2)';
+                } else if (item.vac_apply_status === false && item.vac_reject_reason && item.vac_reject_reason.trim() !== '') {
+                    finalStatus = '반려';
+                    approvalStatus = '결재(1/2)';
+                } else if (item.vac_apply_status === true && item.vac_apply_status_final === false && (!item.vac_reject_reason_final || item.vac_reject_reason_final.trim() === '')) {
+                    finalStatus = '검토중';
+                    approvalStatus = '결재(1/2)';
+                } else if (item.vac_apply_status === true && item.vac_apply_status_final === true) {
+                    finalStatus = '승인';
+                    approvalStatus = '결재(2/2)';
+                } else if (item.vac_apply_status === false && item.vac_apply_status_final === false && 
+                           (!item.vac_reject_reason || item.vac_reject_reason.trim() === '') && 
+                           (!item.vac_reject_reason_final || item.vac_reject_reason_final.trim() === '')) {
+                    finalStatus = '검토중';
+                    approvalStatus = '결재(0/2)';
+                } else {
+                    finalStatus = '검토중';
+                    approvalStatus = '결재(0/2)';
+                }
+                
+                
+                
               
                 content += '<tr class="total-vac-list-tbody-tr" id="' + item.vac_no + '">'
                 	+ '<td class="text-center">' + item.vac_no + '</td>'
@@ -514,7 +538,7 @@ $(document).ready(function(){
                     + '</tr>';
             }
         } else {
-            content = '<tr><td colspan="7" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
+            content = '<tr><td colspan="6" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
         }
         $('#vac-apply-list').html(content);
         

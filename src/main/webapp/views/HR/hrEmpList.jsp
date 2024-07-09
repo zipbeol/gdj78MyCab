@@ -517,7 +517,7 @@ th.sortable.desc::after {
             type: 'GET',
             data: {
                 'searchText': searchText,
-                'filterForsearch': filterForSearch,
+                'filterForSearch': filterForSearch,
                 'filterIsRetired': filterIsRetired
             },
             dataType: 'JSON',

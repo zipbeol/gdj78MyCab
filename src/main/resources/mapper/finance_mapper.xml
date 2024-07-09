@@ -308,51 +308,104 @@
 		</where>
 		) AS deal_history
 	</select>
-	
+
 	<!-- 총 수익, 총 지출, 순수익 계산 쿼리 -->
-	<select id="getTotalAmounts" resultType="finance" parameterType="map">
-	    SELECT 
-	        IFNULL(SUM(profit_cash), 0) AS total_profit,
-	        IFNULL(SUM(expense_cash), 0) AS total_expense,
-	        (IFNULL(SUM(profit_cash), 0) - IFNULL(SUM(expense_cash), 0)) AS net_profit
-	    FROM (
-	        SELECT 
-	            pro.pro_cash AS profit_cash,
-	            0 AS expense_cash
-	        FROM profit pro
-	        JOIN deal_history dh ON pro.pro_idx = dh.deal_pro_idx
-	        <where>
-	            <if test="filterStartDate != null and filterEndDate != null and filterEndDate != '' and filterStartDate != ''">
-	                AND pro.pro_actual_date BETWEEN #{filterStartDate} AND #{filterEndDate}
-	            </if>
-	            <if test="category != null and category != ''">
+	<select id="getTotalAmounts" resultType="finance"
+		parameterType="map">
+		SELECT
+		IFNULL(SUM(profit_cash), 0) AS total_profit,
+		IFNULL(SUM(expense_cash), 0) AS total_expense,
+		(IFNULL(SUM(profit_cash), 0) - IFNULL(SUM(expense_cash), 0)) AS
+		net_profit
+		FROM (
+		SELECT
+		pro.pro_cash AS profit_cash,
+		0 AS expense_cash
+		FROM profit pro
+		JOIN deal_history dh ON pro.pro_idx = dh.deal_pro_idx
+		<where>
+			<if
+				test="filterStartDate != null and filterEndDate != null and filterEndDate != '' and filterStartDate != ''">
+				AND pro.pro_actual_date BETWEEN #{filterStartDate} AND
+				#{filterEndDate}
+			</if>
+			<if test="category != null and category != ''">
 				AND '수익' IN
 				<foreach item="cat" collection="category.split(',')"
 					open="(" separator="," close=")">
 					#{cat}
 				</foreach>
 			</if>
-	        </where>
-	        UNION ALL
-	        SELECT 
-	            0 AS profit_cash,
-	            exp.exp_cash AS expense_cash
-	        FROM expenses exp
-	        JOIN deal_history dh ON exp.exp_idx = dh.deal_exp_idx
-	        <where>
-	            <if test="filterStartDate != null and filterEndDate != null and filterEndDate != '' and filterStartDate != ''">
-	                AND exp.exp_actual_date BETWEEN #{filterStartDate} AND #{filterEndDate}
-	            </if>
-	            <if test="category != null and category != ''">
+		</where>
+		UNION ALL
+		SELECT
+		0 AS profit_cash,
+		exp.exp_cash AS expense_cash
+		FROM
+		expenses exp
+		JOIN deal_history dh ON exp.exp_idx = dh.deal_exp_idx
+		<where>
+			<if
+				test="filterStartDate != null and filterEndDate != null and filterEndDate != '' and filterStartDate != ''">
+				AND exp.exp_actual_date BETWEEN #{filterStartDate} AND
+				#{filterEndDate}
+			</if>
+			<if test="category != null and category != ''">
 				AND '지출' IN
 				<foreach item="cat" collection="category.split(',')"
 					open="(" separator="," close=")">
 					#{cat}
 				</foreach>
 			</if>
-	        </where>
-	    ) AS deal_amounts
+		</where>
+		) AS deal_amounts
 	</select>
+
+
+    <select id="getRevenueData" resultType="int">
+        SELECT
+            IFNULL(SUM(pro_cash), 0)
+        FROM
+            profit
+        WHERE
+            DATE_FORMAT(pro_actual_date, '%Y-%m') BETWEEN #{startYearMonth} AND #{endYearMonth}
+        GROUP BY
+            DATE_FORMAT(pro_actual_date, '%Y-%m')
+    </select>
+
+    <select id="getExpenseData" resultType="int">
+        SELECT
+            IFNULL(SUM(exp_cash), 0)
+        FROM
+            expenses
+        WHERE
+            DATE_FORMAT(exp_actual_date, '%Y-%m') BETWEEN #{startYearMonth} AND #{endYearMonth}
+        GROUP BY
+            DATE_FORMAT(exp_actual_date, '%Y-%m')
+    </select>
+
+    <select id="getRevenuePieData" resultType="int">
+        SELECT
+            IFNULL(SUM(pro_cash), 0)
+        FROM
+            profit
+        WHERE
+            DATE_FORMAT(pro_actual_date, '%Y-%m') BETWEEN #{startYearMonth} AND #{endYearMonth}
+        GROUP BY
+            pro_category
+    </select>
+
+    <select id="getExpensePieData" resultType="int">
+        SELECT
+            IFNULL(SUM(exp_cash), 0)
+        FROM
+            expenses
+        WHERE
+            DATE_FORMAT(exp_actual_date, '%Y-%m') BETWEEN #{startYearMonth} AND #{endYearMonth}
+        GROUP BY
+            exp_category
+    </select>
+
 
 
 

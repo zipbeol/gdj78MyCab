@@ -47,6 +47,9 @@ public class FinanceDTO {
 	private int expense_cash;
 	private Date filterStartDate;
 	private Date filterEndDate;
+	private Date startYearMonth;
+	private Date endYearMonth;
+
 	
 	public int getPro_idx() {
 		return pro_idx;
@@ -264,7 +267,18 @@ public class FinanceDTO {
 	public void setFilterEndDate(Date filterEndDate) {
 		this.filterEndDate = filterEndDate;
 	}
+	public Date getStartYearMonth() {
+		return startYearMonth;
+	}
+	public void setStartYearMonth(Date startYearMonth) {
+		this.startYearMonth = startYearMonth;
+	}
+	public Date getEndYearMonth() {
+		return endYearMonth;
+	}
+	public void setEndYearMonth(Date endYearMonth) {
+		this.endYearMonth = endYearMonth;
+	}
 	
-	
-	
+
 }

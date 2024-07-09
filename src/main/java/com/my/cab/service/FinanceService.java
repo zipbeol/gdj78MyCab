@@ -123,4 +123,27 @@ public class FinanceService {
 		map.put("dto", dto);
         return map;
     }
+
+	public Map<String, Object> getFilteredDashboardData(Map<String, Object> param) {
+	    Map<String, Object> result = new HashMap<>();
+
+	    String startYearMonth = (String) param.get("startYearMonth");
+	    String endYearMonth = (String) param.get("endYearMonth");
+
+	    List<Integer> revenueData = financeDAO.getRevenueData(startYearMonth, endYearMonth);
+	    List<Integer> expenseData = financeDAO.getExpenseData(startYearMonth, endYearMonth);
+
+	    result.put("revenueData", revenueData);
+	    result.put("expenseData", expenseData);
+
+	    return result;
+	}
+
+	public List<Integer> getRevenuePieData(Map<String, Object> param) {
+	    return financeDAO.getRevenuePieData(param);
+	}
+
+	public List<Integer> getExpensePieData(Map<String, Object> param) {
+	    return financeDAO.getExpensePieData(param);
+	}
 }

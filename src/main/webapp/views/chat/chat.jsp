@@ -708,12 +708,28 @@
 
     function leaveRoom() {
         if (selectedRoomId !== null) {
+            var userName = empNameMapping[myId];
+
+            // Get the current room name and remove the user's name
+            var currentRoomName = $('#roomName').text();
+            var updatedRoomName = currentRoomName.split(', ').filter(name => name !== userName).join(', ');
+
+            console.log("원래 이름: ", currentRoomName);
+            console.log("변경 후 이름:   ", updatedRoomName);
+
+
+            // If no names are left after removing the user's name, set the room name to "none"
+            if (updatedRoomName === '') {
+                updatedRoomName = 'none';
+            }
+
             $.ajax({
                 url: '/chat/exitChatRoom.ajax',
                 method: 'POST',
                 data: {
                     roomIdx: selectedRoomId,
-                    roomEmpIdx: myId
+                    roomEmpIdx: myId,
+                    roomName: updatedRoomName // Send the updated room name
                 },
                 success: function (data) {
                     if (data.result) {
@@ -757,10 +773,10 @@
     function renderEmployeeList(data) {
         var employeeListContainer = $('#employeeList');
         employeeListContainer.empty();
-
         if (data && Array.isArray(data)) {
             data.forEach(function (employee) {
-                if (!selectedEmployeeIds.has(employee.emp_no) && employee.emp_no !== myId) {
+                // Filter out the logged-in user's ID
+                if (!selectedEmployeeIds.has(employee.emp_no) && employee.emp_no != myId) {
                     var employeeItem = $('<div class="employee-item list-group-item"></div>');
                     employeeItem.text(employee.emp_name + " (" + employee.emp_no + ")");
                     employeeItem.data('employee-id', employee.emp_no);
@@ -792,7 +808,6 @@
 
         selectedEmployeeItem.append(removeButton);
         selectedEmployeesContainer.append(selectedEmployeeItem);
-
         $(this).remove();
     });
 
@@ -802,8 +817,18 @@
     });
 
     function createChatRoom() {
-        selectedEmployeeIds.add(myId);
-        var selectedEmployeeNoArray = Array.from(selectedEmployeeIds).map(id => ({ emp_no: id }));
+        selectedEmployeeIds.add(Number(myId));
+        var selectedEmployeeNoArray = Array.from(selectedEmployeeIds).map(id => ({emp_no: id}));
+
+        var selectedEmployeeNames = [];
+        $('#selectedEmployees .selected-item').each(function () {
+            selectedEmployeeNames.push($(this).text().split(' (')[0]);
+        });
+
+        selectedEmployeeNames.push(empNameMapping[myId]);
+
+        var roomName = selectedEmployeeNames.join(', ');
+
         console.log(selectedEmployeeNoArray);
 
         $.ajax({
@@ -812,7 +837,7 @@
             contentType: 'application/json',
             dataType: 'json',
             data: JSON.stringify({
-                roomName: 'chat_room',
+                roomName: roomName,
                 empList: selectedEmployeeNoArray,
                 roomEmpIdx: myId
             }),

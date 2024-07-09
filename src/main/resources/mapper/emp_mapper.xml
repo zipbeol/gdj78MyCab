@@ -260,7 +260,9 @@
     	va.vac_type, 
     	va.vac_apply_status, 
     	va.vac_apply_status_final,
-    	e.emp_name
+    	e.emp_name,
+    	va.vac_reject_reason,
+    	va.vac_reject_reason_final
 		FROM 
     	vacation_apply va
 		JOIN 
@@ -478,6 +480,100 @@
             </if>
         </where>
     </select>
+    
+    
+    <select id="totalSalList" resultType="emp" parameterType="search">
+        SELECT 
+        e.emp_no,
+        e.emp_name,
+        t.title_name,
+        d.dept_name,
+        e.emp_employment_status,
+        s.sal_total,
+        CASE 
+            WHEN s.sal_emp_no IS NOT NULL THEN TRUE
+            ELSE FALSE
+        END AS salwrite
+    FROM 
+        employee e
+    LEFT JOIN 
+        title t ON e.title_no = t.title_no
+    LEFT JOIN 
+        department d ON e.dept_no = d.dept_no
+    LEFT JOIN 
+        salary s ON e.emp_no = s.sal_emp_no
+        <if test="filterSalMonth != null and filterSalMonth != ''">
+            AND DATE_FORMAT(s.sal_register_date, '%Y-%m') = #{filterSalMonth}
+        </if>
+    <where>
+        e.emp_employment_status = 1
+        <if test="filterForSearch != null and filterForSearch != ''">
+            <choose>
+                <when test="filterForSearch == 'emp_no'">
+                    AND e.emp_no LIKE CONCAT('%', #{searchText}, '%')
+                </when>
+                <when test="filterForSearch == 'emp_name'">
+                    AND e.emp_name LIKE CONCAT('%', #{searchText}, '%')
+                </when>
+                <when test="filterForSearch == 'title_name'">
+                    AND t.title_name LIKE CONCAT('%', #{searchText}, '%')
+                </when>
+                <when test="filterForSearch == 'dept_name'">
+                    AND d.dept_name LIKE CONCAT('%', #{searchText}, '%')
+                </when>
+            </choose>
+        </if>
+        <if test="filterSalResult != null and filterSalResult !=  ''">
+            AND (CASE WHEN s.sal_emp_no IS NOT NULL THEN TRUE ELSE FALSE END) = #{filterSalResult}
+        </if>
+    </where>
+    LIMIT #{pageSize} OFFSET #{page}
+    </select>
+    
+    
+    
+    <select id="getSalTotalPages" resultType="int" parameterType="search">
+          SELECT 
+            COUNT(e.emp_no)
+        FROM 
+        employee e
+    LEFT JOIN 
+        title t ON e.title_no = t.title_no
+    LEFT JOIN 
+        department d ON e.dept_no = d.dept_no
+    LEFT JOIN 
+        salary s ON e.emp_no = s.sal_emp_no
+        <if test="filterSalMonth != null and filterSalMonth != ''">
+            AND DATE_FORMAT(s.sal_register_date, '%Y-%m') = #{filterSalMonth}
+        </if>
+    <where>
+        e.emp_employment_status = 1
+        <if test="filterForSearch != null and filterForSearch != ''">
+            <choose>
+                <when test="filterForSearch == 'emp_no'">
+                    AND e.emp_no LIKE CONCAT('%', #{searchText}, '%')
+                </when>
+                <when test="filterForSearch == 'emp_name'">
+                    AND e.emp_name LIKE CONCAT('%', #{searchText}, '%')
+                </when>
+                <when test="filterForSearch == 'title_name'">
+                    AND t.title_name LIKE CONCAT('%', #{searchText}, '%')
+                </when>
+                <when test="filterForSearch == 'dept_name'">
+                    AND d.dept_name LIKE CONCAT('%', #{searchText}, '%')
+                </when>
+            </choose>
+        </if>
+        <if test="filterSalResult != null and filterSalResult !=  ''">
+            AND (CASE WHEN s.sal_emp_no IS NOT NULL THEN TRUE ELSE FALSE END) = #{filterSalResult}
+        </if>
+    </where>
+    </select>
+    
+    
+    <select id="getEmpDetail" resultType="emp">
+    </select>
+    
     
 
 

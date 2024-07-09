@@ -477,7 +477,7 @@ $(document).ready(function() {
             type: 'GET',
             data: {
                 'searchText': searchText,
-                'filterForsearch': filterForSearch,
+                'filterForSearch': filterForSearch,
             },
             dataType: 'JSON',
             success: function (data) {

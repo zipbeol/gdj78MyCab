@@ -933,7 +933,7 @@ $(document).ready(function(){
                     + '</tr>';
             }
         } else {
-            content = '<tr><td colspan="7" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
+            content = '<tr><td colspan="5" class="text-center">데이터가 존재하지 않습니다.</td></tr>';
         }
         $('#att-Edit-list').html(content);
     }

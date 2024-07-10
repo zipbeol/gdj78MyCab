@@ -75,7 +75,7 @@ public class CalendarController {
 	@RequestMapping(value = "calendar/createSchedule.ajax")
 	@ResponseBody
 	public Map<String, Object> createSchedule(CalendarDTO calendarDTO){
-		
+		Map<String, Object> map = new HashMap<String, Object>();
 		logger.info(calendarDTO.getSchedule_category());
 		logger.info("s"+calendarDTO.getSchedule_start_date());
 		int idx = calendarDTO.getCalendar_idx();
@@ -88,7 +88,7 @@ public class CalendarController {
 		
 		
 		
-		return null;
+		return map;
 	}
 	
 	@RequestMapping(value = "calendar/calendarDetail.ajax")

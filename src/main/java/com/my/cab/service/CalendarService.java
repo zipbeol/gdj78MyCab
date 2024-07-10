@@ -151,6 +151,7 @@ public class CalendarService {
 
 	public Map<String, Object> createShareCalendar(Map<String, Object> shareCalInfo) {
 		//값 꺼내오기
+		Map<String, Object> map = new HashMap<String, Object>();
 		String shareTitle = (String) shareCalInfo.get("shareTitle");
 		int id = Integer.parseInt((String) shareCalInfo.get("loginId"));
 		String shareColor = (String) shareCalInfo.get("shareColor");
@@ -166,14 +167,19 @@ public class CalendarService {
 		int idx = dto.getCalendar_idx();
 		logger.info("생성하고 만들어진 idx : "+ idx);
 		List<Map<String, Object>> list = (List<Map<String, Object>>) shareCalInfo.get("empList");
-		for (Map<String, Object> map : list) {
+		for (Map<String, Object> map1 : list) {
 
-			logger.info("list 에서 꺼낸거"+map.get("empNo"));
+			logger.info("list 에서 꺼낸거"+map1.get("empNo"));
 		}
 		// 일정공유 테이블에 idx ,emp no 넣기
 		int row = calendarDao.createSharedSchedule(idx,list);
 		logger.info("일정공유 테이블에 값 넣었지롱" + row);
-		return null;
+		if (row >0) {
+			map.put("success", true);
+		}else {
+			map.put("success", true);
+		}
+		return map;
 	}
 
 	public List<CalendarDTO> getShareCalInfo(String loginId) {
@@ -196,7 +202,7 @@ public class CalendarService {
 		int row = calendarDao.createShareSchedule(calendarDTO);
 		map.put("success", row);
 		
-		return null;
+		return map;
 	}
 
 	public List<Map<String, Object>> shareCalListCall(String schedule_editor) {

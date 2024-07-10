@@ -222,257 +222,242 @@
     console.log(monthName);
     	
     });
-    
-        $(document).ready(function() {
-            // 현재 연도와 월을 계산하는 함수
-            function getCurrentYear() {
-                const now = new Date();
-                return now.getFullYear();
-            }
+    $(document).ready(function() {
+        // 현재 연도와 월을 계산하는 함수
+        function getCurrentYear() {
+            const now = new Date();
+            return now.getFullYear();
+        }
 
-            // 1년 전 연도를 계산하는 함수
-            function getOneYearAgoYear() {
-                const now = new Date();
-                return now.getFullYear() - 1;
-            }
+        // 1년 전 연도를 계산하는 함수
+        function getOneYearAgoYear() {
+            const now = new Date();
+            return now.getFullYear() - 1;
+        }
 
-            // 연도 옵션 추가
-            function populateYearOptions() {
-                const currentYear = getCurrentYear();
-                const oneYearAgoYear = getOneYearAgoYear();
-                $('#filterYear').append(`<option value="${oneYearAgoYear}">${oneYearAgoYear}</option>`);
-                $('#filterYear').append(`<option value="${currentYear}" selected>${currentYear}</option>`);
-            }
+        // 연도 옵션 추가
+        function populateYearOptions() {
+            const currentYear = getCurrentYear();
+            const oneYearAgoYear = getOneYearAgoYear();
+            $('#filterYear').append(`<option value="${oneYearAgoYear}">${oneYearAgoYear}</option>`);
+            $('#filterYear').append(`<option value="${currentYear}" selected>${currentYear}</option>`);
+        }
 
-            // 초기 설정
-            populateYearOptions();
-            const currentMonth = (new Date().getMonth() + 1).toString().padStart(2, '0'); // 현재 월
+        // 초기 설정
+        populateYearOptions();
+        const currentMonth = (new Date().getMonth() + 1).toString().padStart(2, '0'); // 현재 월
 
-            // 필터의 초기 값을 설정
-            $('#startMonth').val(currentMonth);
-            $('#endMonth').val(currentMonth);
+        // 필터의 초기 값을 설정
+        $('#startMonth').val(currentMonth);
+        $('#endMonth').val(currentMonth);
 
-            // 그래프 변수 설정
-            var revenueChart, expenseChart, profitChart, revenuePieChart, expensePieChart;
-            
-            // 그래프 생성 함수
-            function createChart(ctx, type, data, options) {
-                return new Chart(ctx, {
-                    type: type,
-                    data: data,
-                    options: options
-                });
-            }
-
-            // 초기 데이터 로딩 함수
-            function loadInitialData() {
-                $.ajax({
-                    url: '/dash/initialData.ajax',
-                    method: 'GET',
-                    success: function(response) {
-                        var revenueData = response.revenueData;
-                        var expenseData = response.expenseData;
-                        var profitData = revenueData.map((revenue, index) => revenue - expenseData[index]);
-                        var revenuePieData = response.revenuePieData;
-                        var expensePieData = response.expensePieData;
-
-                        // 차트 데이터 설정 및 업데이트
-                        updateCharts(revenueData, expenseData, profitData, revenuePieData, expensePieData);
-                    },
-                    error: function(error) {
-                        console.error('Error fetching initial data', error);
-                    }
-                });
-            }
-
-            // 필터 데이터 로딩 함수
-            function loadFilteredData() {
-                const filterYear = $('#filterYear').val();
-                const startMonth = $('#startMonth').val();
-                const endMonth = $('#endMonth').val();
-
-                $.ajax({
-                    url: '/dash/filter.ajax',
-                    method: 'GET',
-                    data: {
-                        filterYear: filterYear,
-                        startMonth: startMonth,
-                        endMonth: endMonth
-                    },
-                    success: function(response) {
-                        var revenueData = response.revenueData;
-                        var expenseData = response.expenseData;
-                        var profitData = revenueData.map((revenue, index) => revenue - expenseData[index]);
-                        var revenuePieData = response.revenuePieData;
-                        var expensePieData = response.expensePieData;
-
-                        // 차트 데이터 설정 및 업데이트
-                        updateCharts(revenueData, expenseData, profitData, revenuePieData, expensePieData);
-                    },
-                    error: function(error) {
-                        console.error('Error fetching filtered data', error);
-                    }
-                });
-            }
-            
-            // 라벨 생성 함수
-            function generateLabels() {
-                const filterYear = $('#filterYear').val();
-                const startMonth = parseInt($('#startMonth').val());
-                const endMonth = parseInt($('#endMonth').val());
-                const labels = [];
-                const diffMonths = endMonth - startMonth + 1;
-
-                for (let i = 0; i < diffMonths; i++) {
-                    const month = (startMonth + i).toString().padStart(2, '0');
-                    labels.push(`${month}월`);
-                }
-
-                return labels;
-            }
-
-            // 차트 업데이트 함수
-            function updateCharts(revenueData, expenseData, profitData, revenuePieData, expensePieData) {
-                const labels = generateLabels();
-
-                // 수익 바 그래프 업데이트
-                if (!revenueChart) {
-                    var ctxRevenue = document.getElementById('revenueChart').getContext('2d');
-                    revenueChart = createChart(ctxRevenue, 'bar', {
-                        labels: labels,
-                        datasets: [{
-                            label: '수익',
-                            data: revenueData,
-                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                            borderColor: 'rgba(75, 192, 192, 1)',
-                            borderWidth: 1
-                        }]
-                    }, {
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
-                    });
-                } else {
-                    revenueChart.data.labels = labels;
-                    revenueChart.data.datasets[0].data = revenueData;
-                    revenueChart.update();
-                }
-
-                // 지출 바 그래프 업데이트
-                if (!expenseChart) {
-                    var ctxExpense = document.getElementById('expenseChart').getContext('2d');
-                    expenseChart = createChart(ctxExpense, 'bar', {
-                        labels: labels,
-                        datasets: [{
-                            label: '지출',
-                            data: expenseData,
-                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                            borderColor: 'rgba(255, 99, 132, 1)',
-                            borderWidth: 1
-                        }]
-                    }, {
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
-                    });
-                } else {
-                    expenseChart.data.labels = labels;
-                    expenseChart.data.datasets[0].data = expenseData;
-                    expenseChart.update();
-                }
-
-                // 손익 라인 그래프 업데이트
-                if (!profitChart) {
-                    var ctxProfit = document.getElementById('profitChart').getContext('2d');
-                    profitChart = createChart(ctxProfit, 'line', {
-                        labels: labels,
-                        datasets: [{
-                            label: '손익',
-                            data: profitData,
-                            backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                            borderColor: 'rgba(153, 102, 255, 1)',
-                            borderWidth: 1
-                        }]
-                    }, {
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
-                    });
-                } else {
-                    profitChart.data.labels = labels;
-                    profitChart.data.datasets[0].data = profitData;
-                    profitChart.update();
-                }
-
-                // 수익 파이 그래프 업데이트
-                if (!revenuePieChart) {
-                    var ctxRevenuePie = document.getElementById('revenuePieChart').getContext('2d');
-                    revenuePieChart = createChart(ctxRevenuePie, 'pie', {
-                        labels: ['택시', '광고', '기타'],
-                        datasets: [{
-                            data: revenuePieData,
-                            backgroundColor: [
-                                'rgba(75, 192, 192, 0.2)',
-                                'rgba(54, 162, 235, 0.2)',
-                                'rgba(255, 206, 86, 0.2)'
-                            ],
-                            borderColor: [
-                                'rgba(75, 192, 192, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(255, 206, 86, 1)'
-                            ],
-                            borderWidth: 1
-                        }]
-                    }, {
-                        responsive: true
-                    });
-                } else {
-                    revenuePieChart.data.datasets[0].data = revenuePieData;
-                    revenuePieChart.update();
-                }
-
-                // 지출 파이 그래프 업데이트
-                if (!expensePieChart) {
-                    var ctxExpensePie = document.getElementById('expensePieChart').getContext('2d');
-                    expensePieChart = createChart(ctxExpensePie, 'pie', {
-                        labels: ['택시', '사내', '기타'],
-                        datasets: [{
-                            data: expensePieData,
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-                                'rgba(54, 162, 235, 0.2)',
-                                'rgba(75, 192, 192, 0.2)'
-                            ],
-                            borderColor: [
-                                'rgba(255, 99, 132, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(75, 192, 192, 1)'
-                            ],
-                            borderWidth: 1
-                        }]
-                    }, {
-                        responsive: true
-                    });
-                } else {
-                    expensePieChart.data.datasets[0].data = expensePieData;
-                    expensePieChart.update();
-                }
-            }
-            
-            // 페이지 로딩 시 초기 데이터 로드
-            loadInitialData();
-
-            // 필터 적용 버튼 클릭 시
-            $('#filterButton').click(function() {
-                loadFilteredData();
+        // 그래프 변수 설정
+        var revenueChart, expenseChart, profitChart, revenuePieChart, expensePieChart;
+        
+        // 그래프 생성 함수
+        function createChart(ctx, type, data, options) {
+            return new Chart(ctx, {
+                type: type,
+                data: data,
+                options: options
             });
+        }
+
+        // 초기 데이터 로딩 함수
+        function loadInitialData() {
+            const filterYear = $('#filterYear').val();
+            const startMonth = $('#startMonth').val();
+            const endMonth = $('#endMonth').val();
+
+            $.ajax({
+                url: '/finance/dash/initialData.ajax',
+                method: 'GET',
+                data: {
+                    startYearMonth: `${filterYear}-${startMonth}`,
+                    endYearMonth: `${filterYear}-${endMonth}`
+                },
+                success: function(response) {
+                    var revenueData = response.revenueData;
+                    var expenseData = response.expenseData;
+                    var profitData = revenueData.map((revenue, index) => revenue - expenseData[index]);
+                    var revenuePieData = response.revenuePieData;
+                    var expensePieData = response.expensePieData;
+
+                    // 차트 데이터 설정 및 업데이트
+                    updateCharts(revenueData, expenseData, profitData, revenuePieData, expensePieData);
+                },
+                error: function(error) {
+                    console.error('Error fetching initial data', error);
+                }
+            });
+        }
+        
+        // 라벨 생성 함수
+        function generateLabels() {
+            const filterYear = $('#filterYear').val();
+            const startMonth = parseInt($('#startMonth').val());
+            const endMonth = parseInt($('#endMonth').val());
+            const labels = [];
+
+            if (startMonth <= endMonth) {
+                for (let month = startMonth; month <= endMonth; month++) {
+                    labels.push(`${month.toString().padStart(2, '0')}월`);
+                }
+            } else {
+                for (let month = startMonth; month <= 12; month++) {
+                    labels.push(`${month.toString().padStart(2, '0')}월`);
+                }
+                for (let month = 1; month <= endMonth; month++) {
+                    labels.push(`${month.toString().padStart(2, '0')}월`);
+                }
+            }
+
+            return labels;
+        }
+        
+        // 차트 업데이트 함수
+        function updateCharts(revenueData, expenseData, profitData, revenuePieData, expensePieData) {
+            const labels = generateLabels();
+            
+            // 수익 바 그래프 업데이트
+            if (!revenueChart) {
+                var ctxRevenue = document.getElementById('revenueChart').getContext('2d');
+                revenueChart = createChart(ctxRevenue, 'bar', {
+                    labels: labels,
+                    datasets: [{
+                        label: '수익',
+                        data: revenueData,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                }, {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                });
+            } else {
+                revenueChart.data.labels = labels;
+                revenueChart.data.datasets[0].data = revenueData;
+                revenueChart.update();
+            }
+
+            // 지출 바 그래프 업데이트
+            if (!expenseChart) {
+                var ctxExpense = document.getElementById('expenseChart').getContext('2d');
+                expenseChart = createChart(ctxExpense, 'bar', {
+                    labels: labels,
+                    datasets: [{
+                        label: '지출',
+                        data: expenseData,
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                }, {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                });
+            } else {
+                expenseChart.data.labels = labels;
+                expenseChart.data.datasets[0].data = expenseData;
+                expenseChart.update();
+            }
+
+            // 손익 라인 그래프 업데이트
+            if (!profitChart) {
+                var ctxProfit = document.getElementById('profitChart').getContext('2d');
+                profitChart = createChart(ctxProfit, 'line', {
+                    labels: labels,
+                    datasets: [{
+                        label: '손익',
+                        data: profitData,
+                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        borderWidth: 1
+                    }]
+                }, {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                });
+            } else {
+                profitChart.data.labels = labels;
+                profitChart.data.datasets[0].data = profitData;
+                profitChart.update();
+            }
+
+            // 수익 파이 그래프 업데이트
+            if (!revenuePieChart) {
+                var ctxRevenuePie = document.getElementById('revenuePieChart').getContext('2d');
+                revenuePieChart = createChart(ctxRevenuePie, 'pie', {
+                    labels: ['택시', '광고', '기타'],
+                    datasets: [{
+                        data: revenuePieData,
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                }, {
+                    responsive: true
+                });
+            } else {
+                revenuePieChart.data.datasets[0].data = revenuePieData;
+                revenuePieChart.update();
+            }
+
+            // 지출 파이 그래프 업데이트
+            if (!expensePieChart) {
+                var ctxExpensePie = document.getElementById('expensePieChart').getContext('2d');
+                expensePieChart = createChart(ctxExpensePie, 'pie', {
+                    labels: ['택시', '사내', '기타'],
+                    datasets: [{
+                        data: expensePieData,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(75, 192, 192, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(75, 192, 192, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                }, {
+                    responsive: true
+                });
+            } else {
+                expensePieChart.data.datasets[0].data = expensePieData;
+                expensePieChart.update();
+            }
+        }
+        
+        // 페이지 로딩 시 초기 데이터 로드
+        loadInitialData();
+
+        // 필터 적용 버튼 클릭 시
+        $('#filterButton').click(function() {
+            loadInitialData();
         });
+    });
+
     </script>
 </body>
 </html>

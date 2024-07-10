@@ -362,53 +362,53 @@
 	</select>
 
 
-    <select id="getRevenueData" resultType="int">
-        SELECT
-            IFNULL(SUM(pro_cash), 0)
-        FROM
-            profit
-        WHERE
-            DATE_FORMAT(pro_actual_date, '%Y-%m') BETWEEN #{startYearMonth} AND #{endYearMonth}
-        GROUP BY
-            DATE_FORMAT(pro_actual_date, '%Y-%m')
-    </select>
+	<select id="getRevenueData" resultType="int">
+		SELECT
+		IFNULL(SUM(pro_cash), 0)
+		FROM
+		profit
+		WHERE
+		DATE_FORMAT(pro_actual_date,
+		'%Y-%m') BETWEEN #{startYearMonth} AND #{endYearMonth}
+		GROUP BY
+		DATE_FORMAT(pro_actual_date, '%Y-%m')
+	</select>
 
-    <select id="getExpenseData" resultType="int">
-        SELECT
-            IFNULL(SUM(exp_cash), 0)
-        FROM
-            expenses
-        WHERE
-            DATE_FORMAT(exp_actual_date, '%Y-%m') BETWEEN #{startYearMonth} AND #{endYearMonth}
-        GROUP BY
-            DATE_FORMAT(exp_actual_date, '%Y-%m')
-    </select>
+	<select id="getExpenseData" resultType="int">
+		SELECT
+		IFNULL(SUM(exp_cash), 0)
+		FROM
+		expenses
+		WHERE
+		DATE_FORMAT(exp_actual_date,
+		'%Y-%m') BETWEEN #{startYearMonth} AND #{endYearMonth}
+		GROUP BY
+		DATE_FORMAT(exp_actual_date, '%Y-%m')
+	</select>
 
-    <select id="getRevenuePieData" resultType="int">
-        SELECT
-            IFNULL(SUM(pro_cash), 0)
-        FROM
-            profit
-        WHERE
-            DATE_FORMAT(pro_actual_date, '%Y-%m') BETWEEN #{startYearMonth} AND #{endYearMonth}
-        GROUP BY
-            pro_category
-    </select>
+	<select id="getRevenuePieData" resultType="int">
+		SELECT
+		IFNULL(SUM(pro_cash), 0)
+		FROM
+		profit
+		WHERE
+		DATE_FORMAT(pro_actual_date,
+		'%Y-%m') BETWEEN #{startYearMonth} AND #{endYearMonth}
+		GROUP BY
+		pro_category
+	</select>
 
-    <select id="getExpensePieData" resultType="int">
-        SELECT
-            IFNULL(SUM(exp_cash), 0)
-        FROM
-            expenses
-        WHERE
-            DATE_FORMAT(exp_actual_date, '%Y-%m') BETWEEN #{startYearMonth} AND #{endYearMonth}
-        GROUP BY
-            exp_category
-    </select>
-
-
-
-
+	<select id="getExpensePieData" resultType="int">
+		SELECT
+		IFNULL(SUM(exp_cash), 0)
+		FROM
+		expenses
+		WHERE
+		DATE_FORMAT(exp_actual_date,
+		'%Y-%m') BETWEEN #{startYearMonth} AND #{endYearMonth}
+		GROUP BY
+		exp_category
+	</select>
 
 
 </mapper>

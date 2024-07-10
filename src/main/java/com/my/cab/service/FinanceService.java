@@ -146,4 +146,5 @@ public class FinanceService {
 	public List<Integer> getExpensePieData(Map<String, Object> param) {
 	    return financeDAO.getExpensePieData(param);
 	}
+	
 }

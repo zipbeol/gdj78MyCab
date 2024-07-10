@@ -377,4 +377,87 @@ public class EmpService {
 		return dao.salaryWrite(emp_no);
 	}
 
+
+	public Map<String, Object> calculateDeductions(Map<String, Object> params) {
+        // 프로시저 호출
+        dao.calculateDeductions(params);
+
+        // 결과를 반환
+        Map<String, Object> result = new HashMap<>();
+        result.put("empInsur", params.get("empInsur"));
+        result.put("healthInsur", params.get("healthInsur"));
+        result.put("longtermInsur", params.get("longtermInsur"));
+        result.put("nationalPension", params.get("nationalPension"));
+        result.put("incomeTax", params.get("incomeTax"));
+        result.put("localIncomeTax", params.get("localIncomeTax"));
+
+        return result;
+    }
+
+
+	public boolean writeSalary(EmpDTO empDTO) {
+		
+		boolean result = false;
+
+        result = dao.writeSalary(empDTO);
+
+        return result;
+	}
+
+
+	public EmpDTO salaryDetail(String emp_no) {
+		
+		return dao.salaryDetail(emp_no);
+	}
+
+
+	public Map<String, Object> totalDriverList(SearchDTO searchDTO) {
+		Map<String, Object> result = new HashMap<String, Object>();
+        int page = (searchDTO.getPage() - 1) * PAGE_SIZE;
+        searchDTO.setPage(page);
+        searchDTO.setPageSize(PAGE_SIZE);
+        logger.info("page {}", page);
+        logger.info("searchDTO page {}", searchDTO.getPage());
+        List<EmpDTO> empList = dao.totalDriverList(searchDTO);
+        logger.info("empList {}", empList);
+        result.put("empList", empList);
+
+
+        return result;
+	}
+
+
+	public Map<String, Object> getDriverTotalPages(SearchDTO searchDTO) {
+		 int empTotal = dao.getDriverTotalPages(searchDTO);
+	        int totalPages = (int) Math.ceil((double) empTotal / PAGE_SIZE);
+	        logger.info("총페이지"+totalPages);
+	        totalPages = totalPages > 0 ? totalPages : 1;
+
+	        return Map.of("totalPages", totalPages);
+	}
+
+
+	public List<EmpDTO> setSal() {
+
+		return dao.setSal();
+	}
+
+
+	public EmpDTO setBase() {
+		
+		return dao.setBase();
+	}
+
+
+	public boolean editSalary(EmpDTO empDTO) {
+		boolean result = false;
+
+        result = dao.editSalary(empDTO);
+
+        return result;
+	}
+	
+
+
+
 }

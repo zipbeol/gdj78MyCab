@@ -175,7 +175,7 @@
                                 </div>
                                 <div class="card-body">
                                     <c:if test="${not empty fileContent}">
-                                        <iframe id="iframe-document" src="data:text/html;base64,${fileContent}" width="100%" height="700px"></iframe>
+                                        <iframe id="iframe-document" src="/api/document/${fileContent}" width="100%" height="700px"></iframe>
                                     </c:if>
                                     <c:if test="${not empty errorMessage}">
                                         <p style="color: red;">${errorMessage}</p>

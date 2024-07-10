@@ -414,6 +414,7 @@
     var wsChat = null;
     var selectedRoomId = null;
     var selectedEmployeeIds = new Set();
+    var selectedEmployeeNames = new Set();
     var myId = '${sessionScope.loginId}';
     var myName = '${sessionScope.emp_name}';
 
@@ -423,7 +424,7 @@
     initializeRoomInfo();
     populateChatRoomList();
     bindEvents();
-
+    
     function initializeRoomInfo() {
         <c:forEach items="${chatRoomList}" var="room">
         var empList = [];
@@ -444,6 +445,7 @@
             empList: empList
         });
         </c:forEach>
+        console.log(roomInfo);
     }
 
     function populateChatRoomList() {
@@ -766,6 +768,7 @@
                     var employeeItem = $('<div class="employee-item list-group-item"></div>');
                     employeeItem.text(employee.emp_name + " (" + employee.emp_no + ")");
                     employeeItem.data('employee-id', employee.emp_no);
+                    employeeItem.data('employee-name', employee.emp_name);
                     employeeListContainer.append(employeeItem);
                 }
             });
@@ -776,19 +779,22 @@
 
     $(document).on('click', '.employee-item', function () {
         var employeeId = $(this).data('employee-id');
-        var employeeName = $(this).text();
+        var employeeName = $(this).data('employee-name');
 
         selectedEmployeeIds.add(employeeId);
+        selectedEmployeeNames.add(employeeName);
 
         var selectedEmployeesContainer = $('#selectedEmployees');
         var selectedEmployeeItem = $('<div class="selected-item list-group-item"></div>');
         selectedEmployeeItem.text(employeeName);
         selectedEmployeeItem.data('employee-id', employeeId);
+        selectedEmployeeItem.data('employee-name', employeeName);
 
         var removeButton = $('<button class="btn btn-danger btn-sm ml-2">Remove</button>');
         removeButton.on('click', function () {
             selectedEmployeeItem.remove();
             selectedEmployeeIds.delete(employeeId);
+            selectedEmployeeNames.delete(employeeName); // Also remove from the name set
             fetchEmployeeList();
         });
 
@@ -799,19 +805,23 @@
 
     function resetModal() {
         selectedEmployeeIds.clear();
+        selectedEmployeeNames.clear(); // Clear the name set as well
         $('#selectedEmployees').empty();
     }
 
     function createChatRoom() {
-        selectedEmployeeIds.add(Number(myId));
-        var selectedEmployeeNoArray = Array.from(selectedEmployeeIds).map(id => ({emp_no: id}));
-        var selectedEmployeeNames = [];
-        $('#selectedEmployees .selected-item').each(function () {
-            selectedEmployeeNames.push($(this).text().split(' (')[0]);
-        });
-        selectedEmployeeNames.push(empNameMapping[myId]);
+        if (selectedEmployeeIds.size === 0) {
+            alert('채팅방에 추가할 멤버를 선택해 주세요.');
+            return;
+        }
+        var selectedEmployeeNoArray = Array.from(selectedEmployeeIds).map(id => ({ emp_no: id }));
+        var selectedEmployeeNameArray = Array.from(selectedEmployeeNames);
+        selectedEmployeeNameArray.push(myName); // Add the current user's name
 
-        var roomName = selectedEmployeeNames.join(', ');
+        selectedEmployeeIds.add(Number(myId));
+        selectedEmployeeNoArray.push({ emp_no: myId });
+
+        var roomName = selectedEmployeeNameArray.join(', ');
 
         $.ajax({
             url: '/chat/createChatRoom.ajax',

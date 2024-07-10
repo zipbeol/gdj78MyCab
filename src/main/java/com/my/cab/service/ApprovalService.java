@@ -26,6 +26,7 @@ import com.my.cab.dto.EmpDTO;
 @Service
 public class ApprovalService {
 	
+	private static final String ApprovalDocDTO = null;
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired ApprovalDAO apprDAO;
 	
@@ -148,8 +149,6 @@ public class ApprovalService {
 	    return apprDAO.getUserTitleById(loginId);
 	}
 
-	
-	// 오후
 	
 
 

@@ -101,6 +101,49 @@
             flex: 1 0 100%; /* 1 item per row for smaller screens */
         }
     }
+    /* 디테일 css */
+     .row {
+        display: flex;
+        flex-wrap: wrap;
+        margin-left: 0;
+    }
+    .col-md-6 {
+        flex: 0 0 50%;
+        max-width: 50%;
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .info-section {
+        padding-left: 0;
+    }
+    .info-item {
+        margin-bottom: 15px;
+    }
+    .info-label {
+        font-weight: bold;
+        text-align: right;
+        color: #007bff;
+    }
+    .info-value {
+        text-align: left;
+        color: #343a40;
+    }
+    .layout-image {
+        max-width: 100%;
+        height: auto;
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        margin-top: 10px;
+    }
+    .detail-content {
+        white-space: pre-wrap; /* 자동 줄바꿈 */
+        word-wrap: break-word; /* 단어 단위로 줄바꿈 */
+        background-color: white;
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 1em;
+        border: 1px solid #dee2e6;
+    }
     </style>
    
   </head>
@@ -223,7 +266,7 @@
 											                </div>
 											                
 											                
-											                <div class="tab-pane fade active" id="rsv-calendar" role="tabpanel"
+											                <div class="tab-pane fade" id="rsv-calendar" role="tabpanel"
 											                     aria-labelledby="rsv-calendar-tab">
 											                    <!-- 전체 근태 내역 -->
 											                    <h2>예약 정보</h2>
@@ -439,72 +482,99 @@
 	var category = '${dto.resource_category}'
 	        if (category == '회의실') {
 	        	resourceInfo.append(`
-	            	<dl class="row">
-                        <dt class="col-2 info-label">회의실명:</dt>
-                        <dd class="col-2 info-value mb-3">${dto.resource_name}</dd>
-                    </dl>
-                    <dl class="row">
-                        <dt class="col-2 info-label">위치</dt>
-                        <dd class="col-2 info-value mb-3" >${dto.resource_location}</dd>
-                    </dl>
-                    <dl class="row">
-                        <dt class="col-2 info-label">수용인원</dt>
-                        <dd class="col-2 info-value mb-3" >${dto.meeting_room_capacity}</dd>
-                    </dl>
-	                <dl class="row">
-	                    <dt class="col-2 info-label">배치도</dt>
-	                    <dd class="col-2 info-value mb-3" >
-	                    <img src="/photo/${photoName}" alt="배치도 이미지" class="layout-image">
-	                    </dd>
-	                </dl>                    
-                    <dl class="row">
-                        <dt class="col-1 info-label">상세내용</dt>
-                        <pre><dd class="row">${dto.resource_content}</dd></pre>
-                    </dl>
-
+	        		<div class="row">
+	        		    <div class="col-md-5 info-section">
+	        		        <dl class="row info-item">
+	        		            <dt class="col-2 info-label">회의실명:</dt>
+	        		            <dd class="col-6 info-value mb-3">${dto.resource_name}</dd>
+	        		        </dl>
+	        		        <dl class="row info-item">
+	        		            <dt class="col-2 info-label">위치:</dt>
+	        		            <dd class="col-6 info-value mb-3">${dto.resource_location}</dd>
+	        		        </dl>
+	        		        <dl class="row info-item">
+	        		            <dt class="col-2 info-label">수용인원:</dt>
+	        		            <dd class="col-6 info-value mb-3">${dto.meeting_room_capacity}</dd>
+	        		        </dl>
+	        		        <dl class="row info-item">
+	        		            <dt class="col-2 info-label">배치도:</dt>
+	        		            <dd class="col-6 info-value mb-3">
+	        		                <img src="/photo/${photoName}" alt="배치도 이미지" class="layout-image">
+	        		            </dd>
+	        		        </dl>
+	        		    </div>
+	        		    <div class="col-md-6">
+	        		        <h2>상세내용</h2>
+	        		        <pre class="detail-content">${dto.resource_content}</pre>
+	        		    </div>
+	        		</div>
 	            `);
 	        } else if (category == '차량') {
 	        	resourceInfo.append(`
-	                <div class="row">
-	                    <div class="col-md-3 form-group">
-	                        <label for="roomNumber">회의실 이름</label>
-	                        <input type="text" class="form-control" id="meetRoomName" name="meetRoomName" required>
-	                    </div>
-	                    <div class="col-md-3 form-group">
-	                        <label for="floor">층</label>
-	                        <input type="number" class="form-control" id="meetRoomLocation" name="meetRoomLocation" required>
-	                    </div>
-	                    <div class="col-md-3 form-group">
-	                        <label for="capacity">수용 인원</label>
-	                        <input type="number" class="form-control" id="meetRoomCapacity" name="meeting_room_capacity" required>
-	                    </div>
-	                    <dl class="row">
-		                    <dt class="col-2 info-label">차량 이미지</dt>
-		                    <dd class="col-2 info-value mb-3" >
-		                    <img src="/photo/${photoName}" alt="배치도 이미지" class="layout-image">
-		                    </dd>
-	                	</dl>
-	                </div>	                
+	        			<div class="row">
+	        		    <div class="col-md-5 info-section">
+	        		        <dl class="row info-item">
+	        		            <dt class="col-2 info-label">차량명:</dt>
+	        		            <dd class="col-6 info-value mb-3">${dto.resource_name}</dd>
+	        		        </dl>
+	        		        <dl class="row info-item">
+	        		            <dt class="col-2 info-label">위치:</dt>
+	        		            <dd class="col-6 info-value mb-3">${dto.resource_location}</dd>
+	        		        </dl>
+	        		        <dl class="row info-item">
+	        		            <dt class="col-2 info-label">차종</dt>
+	        		            <dd class="col-6 info-value mb-3">${dto.company_car_category}</dd>
+	        		        </dl>
+		        		    <dl class="row info-item">
+	        		            <dt class="col-2 info-label">차량번호</dt>
+	        		            <dd class="col-6 info-value mb-3">${dto.company_car_license_plate}</dd>
+	        		        </dl>
+	        		        <dl class="row info-item">
+	        		            <dt class="col-2 info-label">차량사진</dt>
+	        		            <dd class="col-6 info-value mb-3">
+	        		                <img src="/photo/${photoName}" alt="배치도 이미지" class="layout-image">
+	        		            </dd>
+	        		        </dl>
+	        		    </div>
+	        		    <div class="col-md-6">
+	        		        <h2>상세내용</h2>
+	        		        <pre class="detail-content">${dto.resource_content}</pre>
+	        		    </div>
+	        		</div>	                
 	            `);
 	        } else if (category == '비품') {
 	        	resourceInfo.append(`
-	                <div class="row">
-	                    <div class="col-md-3 form-group">
-	                        <label for="equipmentType">비품 종류</label>
-	                        <input type="text" class="form-control" id="equipmentCategory" name="resource_equipment_category" required>
-	                    </div>
-	                    <div class="col-md-3 form-group">
-	                        <label for="quantity">수량</label>
-	                        <input type="number" class="form-control" id="quantity" name="quantity" required>
-	                    </div>
-	                </div>
+	        			<div class="row">
+	        		    <div class="col-md-5 info-section">
+	        		        <dl class="row info-item">
+	        		            <dt class="col-2 info-label">비품명:</dt>
+	        		            <dd class="col-6 info-value mb-3">${dto.resource_name}</dd>
+	        		        </dl>
+	        		        <dl class="row info-item">
+	        		            <dt class="col-2 info-label">종류:</dt>
+	        		            <dd class="col-6 info-value mb-3">${dto.resource_equipment_category}</dd>
+        		       		</dl>
+	        		        <dl class="row info-item">
+	        		            <dt class="col-2 info-label">위치:</dt>
+	        		            <dd class="col-6 info-value mb-3">${dto.resource_location}</dd>
+	        		        </dl>
+	        		        <dl class="row info-item">
+	        		            <dt class="col-2 info-label">사진:</dt>
+	        		            <dd class="col-6 info-value mb-3">
+	        		                <img src="/photo/${photoName}" alt="배치도 이미지" class="layout-image">
+	        		            </dd>
+	        		        </dl>
+	        		    </div>
+	        		    <div class="col-md-6">
+	        		        <h2>상세내용</h2>
+	        		        <pre class="detail-content">${dto.resource_content}</pre>
+	        		    </div>
+	        		</div>
 	            `);
 	        }
 	
 	
 	
-	// 캘린더 불러오기
-
 	});
   // 캘린더 불러오기 
 	var calendar
@@ -614,6 +684,7 @@
     function saveReservation() {
         const resourceName = document.getElementById('resource_name').value;
         const resourceCategory = document.getElementById('resource_category').value;
+        console.log(resourceCategory);
         const reservationDate = document.getElementById('reservation_date').value;
         const reservationContent = document.getElementById('resource_reserve_content').value;
 

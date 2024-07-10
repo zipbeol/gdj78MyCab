@@ -93,7 +93,7 @@ th {
 	font-size: large;
 }
 .info2{
-	margin-left: 1450px;
+	margin-left: 1400px;
 	font-size: large;
 }
 .buttonPosition{
@@ -173,7 +173,7 @@ input {
 						<li class="breadcrumb-item"><a href="/emp/sal/list.go"
 							class="text-decoration-none">급여 관리</a></li>
 						<li class="breadcrumb-item"><a href="#"
-							class="text-decoration-none">급여명세서 작성</a></li>
+							class="text-decoration-none">급여명세서 상세</a></li>
 					</ol>
 					<!-- Breadcrumb end -->
 
@@ -198,13 +198,13 @@ input {
 							<div class="col-12">
 								<div class="card mb-3">
 									<div class="card-header">
-										<h4 class="card-title">급여명세서 작성</h4>
+										<h4 class="card-title">급여명세서 상세</h4>
 									</div>
 									<div class="card-body">
 										<!-- 여기에 코딩 -->
 												
 										<div id="currMonth"></div>
-										<div class="mt-2 info2">등록자:${sessionScope.loginId}</div>
+										<div class="mt-2 info2">등록자: ${emp.sal_register} <br/> 등록일: ${emp.sal_register_date}</div>
   		 								<div class="mt-5 info">사번:${emp.emp_no}  성명:${emp.emp_name}  부서: ${emp.dept_name}  직급:${emp.title_name}</div>
   		 								<div class="mt-1"></div>
 										<table>
@@ -219,7 +219,7 @@ input {
 												<td colspan="2"><input type="text" value="0" id="sal_base" readonly>원</td>
 												<td colspan="2"><input type="text" value="0" id="sal_meal" readonly>원</td>
 												<td colspan="2"><input type="text" value="0" id="title_pay" readonly>원</td>
-												<td><input type="text" value="0" id="bonus" oninput="formatNumber(this)"></td>
+												<td><input type="text" value="0" id="bonus" readonly></td>
 											</tr>
 											<tr>
 
@@ -243,7 +243,7 @@ input {
 											</tr>
 										</table>
 										
-										<div class="mt-2"><button class="btn btn-secondary buttonPosition" id="calDed">계산</button></div>
+										<div class="mt-2"></div>
 										<div class="mt-3"></div>
 										<table>
 											<tr>
@@ -259,7 +259,7 @@ input {
 											</tr>
 										</table>
 										<div class="mt-3"></div>
-										<div class="mt-3"><button class="btn btn-primary buttonPosition" id="confirm">작성</button></div>
+										<div class="mt-3"><button class="btn btn-primary buttonPosition" id="edit">수정</button></div>
 									</div>
 								</div>
 							</div>
@@ -321,63 +321,44 @@ input {
 <script src="/assets/js/jquery.twbsPagination.min.js"></script>
 
 <script>
-var chk = false;
-var dateObj = new Date();
-var year = dateObj.getFullYear();
-var month = ('0' + (dateObj.getMonth() + 1)).slice(-2);
 
-var currentMonth = year+'년 '+month+'월 급여명세서 작성';
+$(document).ready(function() {
+    
+	calDED();
+	calculateDed();
+	
+});
+
+
+function formatDateToYearMonth(dateString) {
+    return dateString.slice(0, 7); // yyyy-MM-dd 형식의 문자열을 yyyy-MM 형식으로 자름
+}
+
+
+var currentMonth = '${emp.sal_register_date}';
 console.log(currentMonth);
 
-$('#currMonth').text(currentMonth);
+$('#currMonth').text(formatDateToYearMonth(currentMonth)+' 급여 명세서');
+
 var sal_base = '${emp.sal_base}';
 var sal_meal = '${emp.sal_meal}';
 var title_pay = '${emp.title_add_pay}';
+var sal_bonus = '${emp.sal_bonus}';
+var sal_total = '${emp.sal_total}';
+var sal_actual = '${emp.sal_actual}';
+			
 
 $('#sal_base').val(addCommasToNumber(sal_base));
 $('#sal_meal').val(addCommasToNumber(sal_meal));
 $('#title_pay').val(addCommasToNumber(title_pay));
+$('#bonus').val(addCommasToNumber(sal_bonus));
+$('#total_sal').val(addCommasToNumber(sal_total));
+$('#real_sal').val(addCommasToNumber(sal_actual));
 
 function addCommasToNumber(number) {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
-$('#total_sal').val()
-
-calculateTotal();
-   
-   
-function formatNumber(input) {
-    // Remove non-digit characters
-    let value = input.value.replace(/\D/g, '');
-    // Add commas as thousand separators
-    input.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-}
-
-$('#bonus').on('keyup',function(){
-	calculateTotal();
-	chk = false;
-	$('#empInsur').val('0');
-    $('#healthInsur').val('0');
-    $('#longtermInsur').val('0');
-    $('#nationalPension').val('0');
-    $('#incomeTax').val('0');
-    $('#localIncomeTax').val('0');
-    $('#total_ded').val('0');
-    $('#real_sal').val('0');
-    
-});
-
-
-function calculateTotal() {
-    let salBase = document.getElementById('sal_base').value.replace(/,/g, '') || 0;
-    let salMeal = document.getElementById('sal_meal').value.replace(/,/g, '') || 0;
-    let titlePay = document.getElementById('title_pay').value.replace(/,/g, '') || 0;
-    let bonus = document.getElementById('bonus').value.replace(/,/g, '') || 0;
-
-    let total = parseInt(salBase) + parseInt(salMeal) + parseInt(titlePay) + parseInt(bonus);
-    document.getElementById('total_sal').value = addCommasToNumber(total);
-}
 
 function calculateDed() {
     let q = document.getElementById('empInsur').value.replace(/,/g, '') || 0;
@@ -391,22 +372,12 @@ function calculateDed() {
     document.getElementById('total_ded').value = addCommasToNumber(ded);
 }
 
-function calculateReal() {
-    let salT = document.getElementById('total_sal').value.replace(/,/g, '') || 0;
-    let dedT = document.getElementById('total_ded').value.replace(/,/g, '') || 0;
-
-    let real_sal = parseInt(dedT) - parseInt(salT);
-    real_sal = Math.abs(real_sal);
-    document.getElementById('real_sal').value = addCommasToNumber(real_sal);
-    
-    return real_sal;
-}
 
 	var total_sal = parseInt($('#total_sal').val().replace(/,/g, ''));
-	var sal_emp_no = '${emp.emp_no}';
-	var title_pay_idx = '${emp.title_pay_idx}';
+	
+	
 
-$('#calDed').on('click', function(){
+function calDED(){
 	
 	        $.ajax({
 	            url: '/calculateDeductions.ajax',
@@ -425,66 +396,23 @@ $('#calDed').on('click', function(){
                     
                     chk = true;
                     calculateDed();
-                    calculateReal();
+                    
 	            },
 	            error: function (error) {
 	                console.log(error);
 	            }
 	        });
-});
+}
+	        
 
-	var sal_bonus = parseInt($('#bonus').val().replace(/,/g, ''));
-	var sal_total = parseInt($('#total_sal').val().replace(/,/g, ''));
-	var sal_register = '${sessionScope.loginId}';
-	
+var empNo = '${emp.emp_no}';
 
-
-$('#confirm').on('click', function(){
-	var sal_actual = calculateReal();
+$('#edit').on('click', function(){
 	
-	console.log(sal_actual);
-	
-	
-	 if (chk === false) {
-		showAlert('danger','공제액을 계산해주세요.');
-	}else{
-		
-		$.ajax({
-            url: '/writeSalary.ajax',
-            type: 'GET',
-            data: 
-            {
-           	 'sal_ded_idx': 1,
-           	 'sal_emp_no': sal_emp_no,
-           	'title_pay_idx': title_pay_idx,
-           	'fix_sal_idx': 1,
-           	'sal_bonus': sal_bonus,
-           	'sal_total': sal_total,
-           	'sal_actual': sal_actual,
-           	'sal_register': sal_register
-            },
-            dataType: 'JSON',
-            success: function (data) {
-            	if (data.isSuccess) {
-                    showAlert('success', '급여 명세서 작성이 완료되었습니다.');
-                    setTimeout(function() {
-                        location.href='/emp/sal/list.go';
-                    }, 1200);
-                } else {
-                    showAlert('danger', '급여 명세서 작성에 실패했습니다.');
-                }  
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        });
-		
-	}
-	 
-	
+	location.href = '/emp/sal/salaryEdit.go?emp_no='+empNo;
 	
 });
-
+	
 
 
 

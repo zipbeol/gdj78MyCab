@@ -1,7 +1,10 @@
 package com.my.cab.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.security.auth.message.callback.PrivateKeyCallback.Request;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -296,7 +299,7 @@ public class EmpController {
 	@ResponseBody
 	public Map<String, Object> totalSalList(SearchDTO searchDTO) {
 		logger.info("\nsearchDTO SearchText:" + searchDTO.getSearchText()
-				+ "\nsearchDTO page:" + searchDTO.getPage());
+				+ "\nsearchDTO page:" + searchDTO.getPage()+ "\nsearchDTO page:" + searchDTO.getFilterSalResult());
 
 		return service.totalSalList(searchDTO);
 
@@ -311,8 +314,10 @@ public class EmpController {
 	
 	@RequestMapping(value="/emp/sal/write.go")
 	public String salaryWrite(String emp_no, Model model) {
+		logger.info(emp_no + "급여명세서 작성");
 		
 		EmpDTO empDTO = service.salaryWrite(emp_no);
+		
 		
 		model.addAttribute("emp", empDTO);
 		
@@ -320,7 +325,129 @@ public class EmpController {
 		return "HR/salaryWrite";
 	}
 	
+	@GetMapping(value="/calculateDeductions.ajax")
+	@ResponseBody
+	public Map<String, Object> calculateDeductions(@RequestParam("totalSalary") int totalSalary){
+		logger.info("급여 계산 요청");
+		logger.info("급여?"+totalSalary);
+		
+        
+        Map<String, Object> params = new HashMap<>();
+        params.put("totalSalary", totalSalary);
+
+
+	        return service.calculateDeductions(params);
+	}
 	
+	
+	@GetMapping(value = "/writeSalary.ajax")
+	@ResponseBody
+	public Map<String, Object> writeSalary(EmpDTO empDTO) {
+		logger.info("급여명세서 작성");
+		logger.info("급여명세서 작성 대상 : " + empDTO.getSal_emp_no());
+
+		boolean isSuccess = service.writeSalary(empDTO);
+
+		return Map.of("isSuccess", isSuccess);
+
+	}
+	
+	
+	@RequestMapping(value="/emp/sal/detail.go")
+	public String salaryDetail(String emp_no, Model model) {
+		logger.info(emp_no + "급여명세서 작성");
+		
+		EmpDTO empDTO = service.salaryDetail(emp_no);
+		
+		
+		model.addAttribute("emp", empDTO);
+		
+	
+		return "HR/salaryDetail";
+	}
+	
+	@RequestMapping(value="/emp/driver/list.go")
+	public String driverSalList() {
+		
+		return "HR/driverSalary";
+	}
+	
+	
+	@GetMapping(value = "/totalDriverList.ajax")
+	@ResponseBody
+	public Map<String, Object> totalDriverList(SearchDTO searchDTO) {
+		logger.info("\nsearchDTO SearchText:" + searchDTO.getSearchText()
+				+ "\nsearchDTO page:" + searchDTO.getPage()+ "\nsearchDTO page:" + searchDTO.getFilterSalResult());
+
+		return service.totalDriverList(searchDTO);
+
+	}
+
+	@GetMapping(value = "/getDriverTotalPages.ajax")
+	@ResponseBody
+	public Map<String, Object> getDriverTotalPages(SearchDTO searchDTO) {
+
+		return service.getDriverTotalPages(searchDTO);
+	}
+	
+	
+	@RequestMapping(value="/triprecord/empList.go")
+	public String tripEmp() {
+		
+		return "HR/tripRecordEMP";
+	}
+	
+	@RequestMapping(value="/emp/sal/setSal.go")
+	public String setSal(Model model) {
+		
+		List<EmpDTO> empDTOList = service.setSal();
+		EmpDTO empDTO2 = service.setBase();
+		
+		
+		Map<String, Integer> salMap = new HashMap<>();
+        if (!empDTOList.isEmpty()) {
+            
+            for (int i = 0; i < empDTOList.size(); i++) {
+                salMap.put("sal" + (i + 1), empDTOList.get(i).getTitle_add_pay());
+                
+                logger.info("값? : "+salMap.get("sal" + (i + 1)));
+            }
+        }
+		
+		
+		model.addAttribute("sal", salMap);
+		model.addAttribute("base", empDTO2);
+		
+		return "HR/setSal";
+		
+	}
+	
+	
+	@RequestMapping(value="/emp/sal/salaryEdit.go")
+	public String salaryEdit(String emp_no, Model model) {
+		logger.info(emp_no + "급여명세서 수정");
+		
+		EmpDTO empDTO = service.salaryDetail(emp_no);
+		
+		
+		model.addAttribute("emp", empDTO);
+		
+	
+		return "HR/salaryEdit";
+	}
+	
+	
+	@GetMapping(value = "/editSalary.ajax")
+	@ResponseBody
+	public Map<String, Object> editSalary(EmpDTO empDTO) {
+		logger.info("급여명세서 수정");
+		logger.info("급여명세서 수정 대상 : " + empDTO.getSal_emp_no());
+
+		boolean isSuccess = service.editSalary(empDTO);
+
+		return Map.of("isSuccess", isSuccess);
+
+	}
 	
 
 }

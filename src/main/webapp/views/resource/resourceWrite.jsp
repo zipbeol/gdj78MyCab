@@ -162,11 +162,11 @@
 	                                        <label for="status" class="form-label">사용 가능 여부</label>
 	                                        <div>
 	                                            <div class="form-check form-check-inline">
-	                                                <input class="form-check-input" type="radio" name="resource_state" id="statusUse" value="use" checked>
+	                                                <input class="form-check-input" type="radio" name="resource_state" id="statusUse" value="사용가능" checked>
 	                                                <label class="form-check-label" for="statusUse">사용가능</label>
 	                                            </div>
 	                                            <div class="form-check form-check-inline">
-	                                                <input class="form-check-input" type="radio" name="resource_state" id="statusNotUse" value="not_use">
+	                                                <input class="form-check-input" type="radio" name="resource_state" id="statusNotUse" value="사용불가">
 	                                                <label class="form-check-label" for="statusNotUse">사용불가</label>
 	                                            </div>
 	                                        </div>
@@ -308,8 +308,8 @@
 	                    </div>
 	                   
 	                    <div class="col-md-5 form-group">
-	                        <label for="carPhoto">차량 사진</label>
-	                        <input type="file" class="form-control" id="carPhoto" name="carPhoto" multiple="multiple">
+	                        <label for="mr-Photo">차량 사진</label>
+	                        <input type="file" class="form-control" id="mr-Photo" name="photo" multiple="multiple">
               			</div>             			
 	                </div>
 
@@ -318,20 +318,12 @@
 	            dynamicFields.append(`
 	                <div class="row">
 	                    <div class="col-md-3 form-group">
-	                        <label for="roomNumber">회의실 이름</label>
-	                        <input type="text" class="form-control" id="meetRoomName" name="meetRoomName" required>
-	                    </div>
-	                    <div class="col-md-3 form-group">
-	                        <label for="floor">층</label>
-	                        <input type="number" class="form-control" id="meetRoomLocation" name="meetRoomLocation" required>
-	                    </div>
-	                    <div class="col-md-3 form-group">
 	                        <label for="capacity">수용 인원</label>
 	                        <input type="number" class="form-control" id="meetRoomCapacity" name="meeting_room_capacity" required>
 	                    </div>
 	                    <div class="col-md-5 form-group">
-	                        <label for="carPhoto">좌석 배치도</label>
-	                        <input type="file" class="form-control" id="carPhoto" name="carPhoto" multiple="multiple">
+	                        <label for="car-Photo">좌석 배치도</label>
+	                        <input type="file" class="form-control" id="car-Photo" name="photo" multiple="multiple">
           				</div> 
 	                </div>	                
 	            `);
@@ -340,12 +332,21 @@
 	                <div class="row">
 	                    <div class="col-md-3 form-group">
 	                        <label for="equipmentType">비품 종류</label>
-	                        <input type="text" class="form-control" id="equipmentCategory" name="resource_equipment_category" required>
+	                        <select class="form-control" id="equipmentCategory" name="resource_equipment_category" required>
+		                        <option value="">선택하세요</option>
+		                        <option value="컴퓨터">컴퓨터</option>
+		                        <option value="프린터">프린터</option>
+		                        <option value="프로젝터">프로젝터</option>
+		                        <option value="책상">책상</option>
+		                        <option value="의자">의자</option>
+		                        <option value="전화기">전화기</option>
+		                        <option value="파일 캐비닛">파일 캐비닛</option>
+	                    	</select>
 	                    </div>
-	                    <div class="col-md-3 form-group">
-	                        <label for="quantity">수량</label>
-	                        <input type="number" class="form-control" id="quantity" name="quantity" required>
-	                    </div>
+	                    <div class="col-md-5 form-group">
+	                        <label for="eq-Photo">비품 사진</label>
+	                        <input type="file" class="form-control" id="eq-Photo" name="photo" multiple="multiple">
+      					</div> 
 	                </div>
 	            `);
 	        }

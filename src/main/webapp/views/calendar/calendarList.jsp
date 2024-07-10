@@ -575,16 +575,16 @@
   	var detailIdx;
 	var startStr;
 	var endStr;
-	var scheduleCategory = document.getElementById('create-category');
+	var createScheduleCategory = document.getElementById('create-category');
 	var loginId = "${sessionScope.loginId}";
 	console.log(loginId);
-
+	var calendar;
 	document.addEventListener("DOMContentLoaded", function(){
 
 			var modal = document.getElementById('mycab-cal-modal');
 			var calendarEl = document.getElementById("selectableCalendar");
 		
-			calendar = new FullCalendar.Calendar(calendarEl, {
+			 calendar = new FullCalendar.Calendar(calendarEl, {
 				headerToolbar: {
 					left: "prev,next today",
 					center: "title",
@@ -788,12 +788,11 @@
 		
 		//색깔 가져오기
 		
-		var selectedOption = scheduleCategory.options[scheduleCategory.selectedIndex];
+		var selectedOption = createScheduleCategory.options[createScheduleCategory.selectedIndex];
 		var shareCalIdx = selectedOption.dataset.idx;
-		console.log("공유선택시 뜨는 idx : "+shareCalIdx);
         var color = selectedOption.style.color;
        /* 	   아작스 안에 들어갈 값     	'schedule_end_date': document.getElementById("sel-end-date").value, */
-       
+       console.log("zz");
        // 유효성 검사
        var chkVal = checkValidation(document.getElementById('create-title'));
         console.log(color)
@@ -812,16 +811,15 @@
 		        	'calendar_idx' : shareCalIdx
 		        	
 		        },
-		        dataType: "json",
+		        dataType: "JSON",
 				success: function(response) {
-					var myModal = new bootstrap.Modal(document.getElementById('scheduleAddModal'));
-					var modalCloseButton = document.getElementById('scheduleAddModalCloseButton');
-					console.log(calendar.refetchEvents());
-					console.log(calendar);
+					console.log(response);
+					console.log("캘린더 추ㅏ 됌");
 					calendar.refetchEvents();
 					
 		        },
 		        error: function(xhr, status, error) {
+		        	console.log(xhr,status,error);
 		            // 에러 처리
 		            $("#result").html("<p>There was an error: " + error + "</p>");
 		        }

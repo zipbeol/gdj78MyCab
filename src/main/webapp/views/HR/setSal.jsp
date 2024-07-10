@@ -105,6 +105,7 @@ th {
 
 .input-box {
 	width: 130px;
+	text-align: end;
 }
 </style>
 
@@ -191,18 +192,18 @@ th {
 										<!-- 여기에 코딩 -->
 										<div class="text-end mb-1">
 											<button class="btn btn-primary">설정</button>
-											</div>
+										</div>
 										<div class="header">
 											<h1>급여 설정</h1>
 										</div>
 										<div class="salary-setup">
 											<div>
 												<label for="basicSalary">기본급:</label> <input type="text"
-													id="basicSalary" class="input-box">
+													id="basicSalary" value="${base.sal_base}" class="input-box">원
 											</div>
 											<div>
 												<label for="mealAllowance">식대:</label> <input type="text"
-													id="mealAllowance" class="input-box">
+													id="mealAllowance"  value="${base.sal_meal}" class="input-box">원
 											</div>
 										</div>
 										<hr>
@@ -213,23 +214,28 @@ th {
 												</tr>
 												<tr>
 													<td>대표이사</td>
-													<td><input type="text" class="input-box"></td>
+													<td><input type="text" class="input-box" id="sal1"
+														value="${sal['sal1']}">원</td>
 												</tr>
 												<tr>
 													<td>부장</td>
-													<td><input type="text" class="input-box"></td>
+													<td><input type="text" class="input-box" id="sal2"
+														value="${sal['sal2']}">원</td>
 												</tr>
 												<tr>
 													<td>과장</td>
-													<td><input type="text" class="input-box"></td>
+													<td><input type="text" class="input-box" id="sal3"
+														value="${sal['sal3']}">원</td>
 												</tr>
 												<tr>
 													<td>대리</td>
-													<td><input type="text" class="input-box"></td>
+													<td><input type="text" class="input-box" id="sal4"
+														value="${sal['sal4']}">원</td>
 												</tr>
 												<tr>
 													<td>사원</td>
-													<td><input type="text" class="input-box"></td>
+													<td><input type="text" class="input-box" id="sal5"
+														value="${sal['sal5']}">원</td>
 												</tr>
 											</table>
 											<table>
@@ -238,19 +244,23 @@ th {
 												</tr>
 												<tr>
 													<td>부장</td>
-													<td><input type="text" class="input-box"></td>
+													<td><input type="text" class="input-box" id="sal6"
+														value="${sal['sal6']}">원</td>
 												</tr>
 												<tr>
 													<td>과장</td>
-													<td><input type="text" class="input-box"></td>
+													<td><input type="text" class="input-box" id="sal7"
+														value="${sal['sal7']}">원</td>
 												</tr>
 												<tr>
 													<td>대리</td>
-													<td><input type="text" class="input-box"></td>
+													<td><input type="text" class="input-box" id="sal8"
+														value="${sal['sal8']}">원</td>
 												</tr>
 												<tr>
 													<td>사원</td>
-													<td><input type="text" class="input-box"></td>
+													<td><input type="text" class="input-box" id="sal9"
+														value="${sal['sal9']}">원</td>
 												</tr>
 											</table>
 											<table>
@@ -259,19 +269,23 @@ th {
 												</tr>
 												<tr>
 													<td>부장</td>
-													<td><input type="text" class="input-box"></td>
+													<td><input type="text" class="input-box" id="sal10"
+														value="${sal['sal10']}">원</td>
 												</tr>
 												<tr>
 													<td>과장</td>
-													<td><input type="text" class="input-box"></td>
+													<td><input type="text" class="input-box" id="sal11"
+														value="${sal['sal11']}">원</td>
 												</tr>
 												<tr>
 													<td>대리</td>
-													<td><input type="text" class="input-box"></td>
+													<td><input type="text" class="input-box" id="sal12"
+														value="${sal['sal12']}">원</td>
 												</tr>
 												<tr>
 													<td>사원</td>
-													<td><input type="text" class="input-box"></td>
+													<td><input type="text" class="input-box" id="sal13"
+														value="${sal['sal13']}">원</td>
 												</tr>
 											</table>
 											<table>
@@ -280,19 +294,23 @@ th {
 												</tr>
 												<tr>
 													<td>부장</td>
-													<td><input type="text" class="input-box"></td>
+													<td><input type="text" class="input-box" id="sal14"
+														value="${sal['sal14']}">원</td>
 												</tr>
 												<tr>
 													<td>과장</td>
-													<td><input type="text" class="input-box"></td>
+													<td><input type="text" class="input-box" id="sal15"
+														value="${sal['sal15']}">원</td>
 												</tr>
 												<tr>
 													<td>대리</td>
-													<td><input type="text" class="input-box"></td>
+													<td><input type="text" class="input-box" id="sal16"
+														value="${sal['sal16']}">원</td>
 												</tr>
 												<tr>
 													<td>사원</td>
-													<td><input type="text" class="input-box"></td>
+													<td><input type="text" class="input-box" id="sal17"
+														value="${sal['sal17']}">원</td>
 												</tr>
 											</table>
 										</div>
@@ -359,19 +377,29 @@ th {
 <script>
 
 $(document).ready(function() {
+	var sal_base = '${base.sal_base}';
+	var sal_meal = '${base.sal_meal}';
 	
-	var titlepay1 = '${sal['sal1']}';
 	
- 
+	$('#basicSalary').val(addCommasToNumber(sal_base));
+	$('#mealAllowance').val(addCommasToNumber(sal_meal));
+
 	
 });
-
-
 
 
 function addCommasToNumber(number) {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+    var ids = ['sal1', 'sal2', 'sal3', 'sal4', 'sal5', 'sal6', 'sal7', 'sal8', 'sal9', 'sal10', 'sal11', 'sal12', 'sal13', 'sal14', 'sal15', 'sal16', 'sal17'];
+    ids.forEach(function(id) {
+        var element = document.getElementById(id);
+        element.value = addCommasToNumber(element.value);
+    });
+});
+
 
 
 	        

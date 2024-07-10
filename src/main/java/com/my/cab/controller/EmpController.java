@@ -408,7 +408,9 @@ public class EmpController {
         if (!empDTOList.isEmpty()) {
             
             for (int i = 0; i < empDTOList.size(); i++) {
-                salMap.put("sal" + (i + 1), empDTOList.get(i).getSal_base());
+                salMap.put("sal" + (i + 1), empDTOList.get(i).getTitle_add_pay());
+                
+                logger.info("값? : "+salMap.get("sal" + (i + 1)));
             }
         }
 		
@@ -417,6 +419,34 @@ public class EmpController {
 		model.addAttribute("base", empDTO2);
 		
 		return "HR/setSal";
+		
+	}
+	
+	
+	@RequestMapping(value="/emp/sal/salaryEdit.go")
+	public String salaryEdit(String emp_no, Model model) {
+		logger.info(emp_no + "급여명세서 수정");
+		
+		EmpDTO empDTO = service.salaryDetail(emp_no);
+		
+		
+		model.addAttribute("emp", empDTO);
+		
+	
+		return "HR/salaryEdit";
+	}
+	
+	
+	@GetMapping(value = "/editSalary.ajax")
+	@ResponseBody
+	public Map<String, Object> editSalary(EmpDTO empDTO) {
+		logger.info("급여명세서 수정");
+		logger.info("급여명세서 수정 대상 : " + empDTO.getSal_emp_no());
+
+		boolean isSuccess = service.editSalary(empDTO);
+
+		return Map.of("isSuccess", isSuccess);
+
 	}
 	
 

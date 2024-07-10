@@ -559,7 +559,7 @@ function drawList(list) {
                 + '<td class="text-center">' + item.emp_name + '</td>'
                 + '<td class="text-center">' + item.title_name + '</td>'
                 + '<td class="text-center">' + item.dept_name + '</td>'
-                + '<td class="text-center">' + addCommasToNumber(item.sal_total)+'원' + '</td>'
+                + '<td class="text-center">' + addCommasToNumber(item.sal_actual)+'원' + '</td>'
                 + '<td class="text-center">' + salwrite + '</td>'
                 + '</tr>';
         }

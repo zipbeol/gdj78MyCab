@@ -489,7 +489,7 @@
         t.title_name,
         d.dept_name,
         e.emp_employment_status,
-        s.sal_total,
+        s.sal_actual,
         CASE 
             WHEN s.sal_emp_no IS NOT NULL THEN TRUE
             ELSE FALSE
@@ -627,7 +627,8 @@ WHERE
 	s.sal_total,
 	s.sal_actual,
 	s.sal_register_date,
-	s.sal_register
+	s.sal_register,
+	s.sal_idx
 	FROM
 	employee e
 	LEFT JOIN
@@ -724,15 +725,25 @@ WHERE
     </where>
 </select>
 
-	<select id="setSal" resultType="emp">
+	<select id="setBase" resultType="emp">
     	SELECT sal_base, sal_meal
     	FROM fix_sal
     </select>
     
-    <select id="setBase" resultType="emp">
+    <select id="setSal" resultType="emp">
     SELECT title_pay_idx, title_add_pay
     FROM title_pay
     </select>
+    
+     <update id="editSalary" parameterType="emp">
+        UPDATE salary
+        SET sal_bonus = #{sal_bonus},
+        sal_modifier = #{sal_modifier},
+        sal_total = #{sal_total},
+        sal_actual = #{sal_actual},
+        sal_modify_date = CURDATE()
+        WHERE sal_idx = #{sal_idx}
+    </update>
     
     
 

@@ -447,6 +447,15 @@ public class EmpService {
 		
 		return dao.setBase();
 	}
+
+
+	public boolean editSalary(EmpDTO empDTO) {
+		boolean result = false;
+
+        result = dao.editSalary(empDTO);
+
+        return result;
+	}
 	
 
 

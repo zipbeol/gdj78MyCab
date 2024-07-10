@@ -71,8 +71,29 @@ public class EmpDTO {
     private int total_fare;
     private int settlement_amount;
     private List<Integer> salList;
+    private int sal_idx;
+    private int sal_modifier;
+    private String sal_modify_date;
     
 	
+	public String getSal_modify_date() {
+		return sal_modify_date;
+	}
+	public void setSal_modify_date(String sal_modify_date) {
+		this.sal_modify_date = sal_modify_date;
+	}
+	public int getSal_modifier() {
+		return sal_modifier;
+	}
+	public void setSal_modifier(int sal_modifier) {
+		this.sal_modifier = sal_modifier;
+	}
+	public int getSal_idx() {
+		return sal_idx;
+	}
+	public void setSal_idx(int sal_idx) {
+		this.sal_idx = sal_idx;
+	}
 	public List<Integer> getSalList() {
 		return salList;
 	}

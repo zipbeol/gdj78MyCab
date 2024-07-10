@@ -173,7 +173,7 @@ input {
 						<li class="breadcrumb-item"><a href="/emp/sal/list.go"
 							class="text-decoration-none">급여 관리</a></li>
 						<li class="breadcrumb-item"><a href="#"
-							class="text-decoration-none">급여명세서 상세</a></li>
+							class="text-decoration-none">급여명세서 수정</a></li>
 					</ol>
 					<!-- Breadcrumb end -->
 
@@ -198,7 +198,7 @@ input {
 							<div class="col-12">
 								<div class="card mb-3">
 									<div class="card-header">
-										<h4 class="card-title">급여명세서 상세</h4>
+										<h4 class="card-title">급여명세서 수정</h4>
 									</div>
 									<div class="card-body">
 										<!-- 여기에 코딩 -->
@@ -219,7 +219,7 @@ input {
 												<td colspan="2"><input type="text" value="0" id="sal_base" readonly>원</td>
 												<td colspan="2"><input type="text" value="0" id="sal_meal" readonly>원</td>
 												<td colspan="2"><input type="text" value="0" id="title_pay" readonly>원</td>
-												<td><input type="text" value="0" id="bonus" readonly></td>
+												<td><input type="text" value="0" id="bonus" ></td>
 											</tr>
 											<tr>
 
@@ -243,7 +243,7 @@ input {
 											</tr>
 										</table>
 										
-										<div class="mt-2"></div>
+										<div class="mt-2"><button class="btn btn-secondary buttonPosition" onclick="calDED()" id="calDed">계산</button></div>
 										<div class="mt-3"></div>
 										<table>
 											<tr>
@@ -321,13 +321,48 @@ input {
 <script src="/assets/js/jquery.twbsPagination.min.js"></script>
 
 <script>
-
+var chk = false;
 $(document).ready(function() {
     
 	calDED();
 	calculateDed();
 	
 });
+
+$('#bonus').on('keyup',function(){
+	calculateTotal();
+	chk = false;
+	$('#empInsur').val('0');
+    $('#healthInsur').val('0');
+    $('#longtermInsur').val('0');
+    $('#nationalPension').val('0');
+    $('#incomeTax').val('0');
+    $('#localIncomeTax').val('0');
+    $('#total_ded').val('0');
+    $('#real_sal').val('0');
+    
+});
+
+function calculateTotal() {
+    let salBase = document.getElementById('sal_base').value.replace(/,/g, '') || 0;
+    let salMeal = document.getElementById('sal_meal').value.replace(/,/g, '') || 0;
+    let titlePay = document.getElementById('title_pay').value.replace(/,/g, '') || 0;
+    let bonus = document.getElementById('bonus').value.replace(/,/g, '') || 0;
+
+    let total = parseInt(salBase) + parseInt(salMeal) + parseInt(titlePay) + parseInt(bonus);
+    document.getElementById('total_sal').value = addCommasToNumber(total);
+}
+
+function calculateReal() {
+    let salT = document.getElementById('total_sal').value.replace(/,/g, '') || 0;
+    let dedT = document.getElementById('total_ded').value.replace(/,/g, '') || 0;
+
+    let real_sal = parseInt(dedT) - parseInt(salT);
+    real_sal = Math.abs(real_sal);
+    document.getElementById('real_sal').value = addCommasToNumber(real_sal);
+    
+    return real_sal;
+}
 
 
 function formatDateToYearMonth(dateString) {
@@ -373,9 +408,9 @@ function calculateDed() {
 }
 
 
-	var total_sal = parseInt($('#total_sal').val().replace(/,/g, ''));
 	
 	
+var total_sal = parseInt($('#total_sal').val().replace(/,/g, ''));
 
 function calDED(){
 	
@@ -396,6 +431,7 @@ function calDED(){
                     
                     chk = true;
                     calculateDed();
+                    calculateReal();
                     
 	            },
 	            error: function (error) {
@@ -403,13 +439,54 @@ function calDED(){
 	            }
 	        });
 }
+
+
+var sal_idx = '${emp.sal_idx}';
+var sal_modifier = '${sessionScope.loginId}';
 	        
-
-var empNo = '${emp.emp_no}';
-
 $('#edit').on('click', function(){
+	var sal_actual = calculateReal();
+	var salBonus = $('#bonus').val().replace(/,/g, '');
+	console.log(sal_actual);
+	console.log(sal_idx);
+	console.log(sal_modifier);
+	console.log(salBonus);
+	console.log(total_sal);
 	
-	location.href = '/emp/sal/salaryEdit.go?emp_no='+empNo;
+	 if (chk === false) {
+		showAlert('danger','공제액을 계산해주세요.');
+	}else{
+		
+		/* $.ajax({
+            url: '/editSalary.ajax',
+            type: 'GET',
+            data: 
+            {
+            'sal_idx': sal_idx,
+            'sal_modifier': sal_modifier,
+           	'sal_bonus': salBonus,
+           	'sal_total': total_sal,
+           	'sal_actual': sal_actual,
+            },
+            dataType: 'JSON',
+            success: function (data) {
+            	if (data.isSuccess) {
+                    showAlert('success', '급여 명세서 수정이 완료되었습니다.');
+                    setTimeout(function() {
+                        location.href='/emp/sal/list.go';
+                    }, 1200);
+                } else {
+                    showAlert('danger', '급여 명세서 수정에 실패했습니다.');
+                }  
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+		 */
+	} 
+	 
+	
 	
 });
 	

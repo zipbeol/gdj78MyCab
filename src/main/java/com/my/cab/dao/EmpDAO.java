@@ -83,5 +83,7 @@ public interface EmpDAO {
 
 	EmpDTO setBase();
 
+	boolean editSalary(EmpDTO empDTO);
+
 
 }

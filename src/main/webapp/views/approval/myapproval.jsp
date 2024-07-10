@@ -229,6 +229,7 @@
                 </div>
             </div>
         </div>
+        <input type="hidden" id="hiddenApprovalDocIdx">
         <!-- Row end -->
 <!-- My도장/서명 모달 -->
 <div class="modal fade" id="signatureModal" tabindex="-1" aria-labelledby="signatureModalLabel" aria-hidden="true">
@@ -471,7 +472,6 @@ $(document).ready(function() {
     // 페이지 로드 시 데이터 가져오기
     loadApprovalData();
 });
-
 
 </script>
 </html>

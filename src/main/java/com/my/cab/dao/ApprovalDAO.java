@@ -61,6 +61,14 @@ public interface ApprovalDAO {
 
 	String getUserTitleById(String loginId);
 
+	void saveApprovalData(ApprovalDocDTO approvalDoc);
+
+	void saveApprovalSignature(ApprovalDTO approval);
+
+	List<ApprovalDTO> getApprovalSignatures(int approvalDocIdx);
+
+	void updateDocumentApprovalStatus(Map<String, Object> params);
+
 
 
 

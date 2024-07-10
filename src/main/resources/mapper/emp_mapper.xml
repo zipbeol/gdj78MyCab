@@ -489,7 +489,7 @@
         t.title_name,
         d.dept_name,
         e.emp_employment_status,
-        s.sal_total,
+        s.sal_actual,
         CASE 
             WHEN s.sal_emp_no IS NOT NULL THEN TRUE
             ELSE FALSE
@@ -569,6 +569,181 @@
         </if>
     </where>
     </select>
+    
+    
+    <select id="salaryWrite" resultType="emp">
+    	SELECT 
+    e.emp_no,
+    e.emp_name,
+    t.title_name,
+    d.dept_name,
+    tp.title_pay_idx,
+    tp.title_add_pay,
+    (SELECT sal_base FROM fix_sal WHERE fix_sal_idx = 1) AS sal_base,
+    (SELECT sal_meal FROM fix_sal WHERE fix_sal_idx = 1) AS sal_meal
+FROM 
+    employee e
+LEFT JOIN 
+    title t ON e.title_no = t.title_no
+LEFT JOIN 
+    department d ON e.dept_no = d.dept_no
+LEFT JOIN 
+    title_pay tp ON e.dept_no = tp.dept_no AND e.title_no = tp.title_no
+WHERE 
+    e.emp_no = #{emp_no}
+    </select>
+    
+    
+    <select id="calculateDeductions" parameterType="map" statementType="CALLABLE" >
+        {CALL calculateDeductions(
+            #{totalSalary, mode=IN, jdbcType=INTEGER}, 
+            #{empInsur, mode=OUT, jdbcType=DOUBLE}, 
+            #{healthInsur, mode=OUT, jdbcType=DOUBLE}, 
+            #{longtermInsur, mode=OUT, jdbcType=DOUBLE}, 
+            #{nationalPension, mode=OUT, jdbcType=DOUBLE}, 
+            #{incomeTax, mode=OUT, jdbcType=DOUBLE}, 
+            #{localIncomeTax, mode=OUT, jdbcType=DOUBLE}
+        )}
+    </select>
+    
+    
+    <insert id="writeSalary" parameterType="emp">
+        INSERT INTO salary (sal_ded_idx, sal_emp_no, title_pay_idx, fix_sal_idx, sal_bonus, sal_total, sal_actual, sal_register)
+        VALUES (#{sal_ded_idx}, #{sal_emp_no}, #{title_pay_idx}, #{fix_sal_idx},#{sal_bonus}, #{sal_total}, #{sal_actual},  #{sal_register})
+    </insert>
+    
+    
+     <select id="salaryDetail" resultType="emp">
+	SELECT
+	e.emp_no,
+	e.emp_name,
+	t.title_name,
+	d.dept_name,
+	tp.title_pay_idx,
+	tp.title_add_pay,
+	(SELECT sal_base FROM fix_sal WHERE fix_sal_idx = 1) AS sal_base,
+	(SELECT sal_meal FROM fix_sal WHERE fix_sal_idx = 1) AS sal_meal,
+	s.sal_bonus,
+	s.sal_total,
+	s.sal_actual,
+	s.sal_register_date,
+	s.sal_register,
+	s.sal_idx
+	FROM
+	employee e
+	LEFT JOIN
+	title t ON e.title_no = t.title_no
+	LEFT JOIN
+	department d ON e.dept_no = d.dept_no
+	LEFT JOIN
+	title_pay tp ON e.dept_no = tp.dept_no AND e.title_no = tp.title_no
+	LEFT JOIN
+	salary s ON e.emp_no = s.sal_emp_no
+	WHERE
+	e.emp_no = #{emp_no}
+    </select>
+    
+    <select id="totalDriverList" resultType="emp" parameterType="search">
+    SELECT 
+        d.driver_idx,
+        d.driver_name,
+        SUM(tr.trip_record_fare) AS total_fare,
+        SUM(tr.trip_record_fare) * 0.6 AS settlement_amount
+    FROM 
+        trip_record tr
+    JOIN 
+        driver d ON tr.trip_record_driver_id = d.driver_idx
+    <where>
+        d.driver_is_retired = 0
+        <if test="filterSalMonth != null and filterSalMonth != ''">
+            AND DATE_FORMAT(tr.trip_record_date, '%Y-%m') = #{filterSalMonth}
+        </if>
+        <if test="filterForSearch != null and filterForSearch != ''">
+            <choose>
+                <when test="filterForSearch == 'driver_idx'">
+                    AND d.driver_idx LIKE CONCAT('%', #{searchText}, '%')
+                </when>
+                <when test="filterForSearch == 'driver_name'">
+                    AND d.driver_name LIKE CONCAT('%', #{searchText}, '%')
+                </when>
+            </choose>
+        </if>
+    </where>
+    GROUP BY 
+        d.driver_idx, d.driver_name
+    <choose>
+        <when test="sortColumn != null and sortColumn == 'driver-no'">
+            ORDER BY d.driver_idx
+        </when>
+        <when test="sortColumn != null and sortColumn == 'driver-name'">
+            ORDER BY d.driver_name
+        </when>
+        <when test="sortColumn != null and sortColumn == 'total-fare'">
+            ORDER BY total_fare
+        </when>
+        <when test="sortColumn != null and sortColumn == 'driver-sal'">
+            ORDER BY settlement_amount
+        </when>
+        <otherwise>
+            ORDER BY d.driver_idx
+        </otherwise>
+    </choose>
+    <choose>
+        <when test="sortOrder != null and sortOrder == 'desc'">
+            DESC
+        </when>
+        <when test="sortOrder != null and sortOrder == 'asc'">
+            ASC
+        </when>
+    </choose>
+    LIMIT #{pageSize} OFFSET #{page}
+</select>
+    
+    
+    <select id="getDriverTotalPages" resultType="int" parameterType="search">
+    SELECT 
+        COUNT(DISTINCT d.driver_idx) AS total
+    FROM 
+        trip_record tr
+    JOIN 
+        driver d ON tr.trip_record_driver_id = d.driver_idx
+    <where>
+        d.driver_is_retired = 0
+        <if test="filterSalMonth != null and filterSalMonth != ''">
+            AND DATE_FORMAT(tr.trip_record_date, '%Y-%m') = #{filterSalMonth}
+        </if>
+        <if test="filterForSearch != null and filterForSearch != ''">
+            <choose>
+                <when test="filterForSearch == 'driver_idx'">
+                    AND d.driver_idx LIKE CONCAT('%', #{searchText}, '%')
+                </when>
+                <when test="filterForSearch == 'driver_name'">
+                    AND d.driver_name LIKE CONCAT('%', #{searchText}, '%')
+                </when>
+            </choose>
+        </if>
+    </where>
+</select>
+
+	<select id="setBase" resultType="emp">
+    	SELECT sal_base, sal_meal
+    	FROM fix_sal
+    </select>
+    
+    <select id="setSal" resultType="emp">
+    SELECT title_pay_idx, title_add_pay
+    FROM title_pay
+    </select>
+    
+     <update id="editSalary" parameterType="emp">
+        UPDATE salary
+        SET sal_bonus = #{sal_bonus},
+        sal_modifier = #{sal_modifier},
+        sal_total = #{sal_total},
+        sal_actual = #{sal_actual},
+        sal_modify_date = CURDATE()
+        WHERE sal_idx = #{sal_idx}
+    </update>
     
     
 

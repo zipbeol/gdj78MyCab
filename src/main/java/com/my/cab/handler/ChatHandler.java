@@ -51,6 +51,7 @@ public class ChatHandler extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) {
         String payload = message.getPayload();
         logger.info("msg: {}", payload);
+        
 
         try {
             ChatDTO chatMessage = objectMapper.readValue(payload, ChatDTO.class);

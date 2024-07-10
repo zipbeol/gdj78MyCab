@@ -12,6 +12,7 @@ public class LoginDTO {
 	private String dept_no;
 	private String title_no;
 	private String emp_level;
+	private String emp_name;
 	
 	
 	public String getDept_no() {
@@ -55,6 +56,12 @@ public class LoginDTO {
 	}
 	public void setProfile_new(String profile_new) {
 		this.profile_new = profile_new;
+	}
+	public String getEmp_name() {
+		return emp_name;
+	}
+	public void setEmp_name(String emp_name) {
+		this.emp_name = emp_name;
 	}
 	
 	

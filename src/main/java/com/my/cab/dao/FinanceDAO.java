@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.my.cab.dto.FinanceDTO;
 import com.my.cab.dto.SearchDTO;
@@ -30,5 +31,13 @@ public interface FinanceDAO {
 	int getDealCount(SearchDTO searchDTO);
 	
 	FinanceDTO getTotalAmounts(Map<String, Object> financeDTO);
+
+    List<Integer> getRevenueData(@Param("startYearMonth") String startYearMonth, @Param("endYearMonth") String endYearMonth);
+
+    List<Integer> getExpenseData(@Param("startYearMonth") String startYearMonth, @Param("endYearMonth") String endYearMonth);
+
+	List<Integer> getRevenuePieData(Map<String, Object> param);
+
+	List<Integer> getExpensePieData(Map<String, Object> param);
 
 }

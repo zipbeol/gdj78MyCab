@@ -85,6 +85,11 @@
         WHERE chat_room_member_emp_no = #{roomEmpIdx}
           AND chat_room_member_id = #{roomIdx}
     </update>
+    <update id="updateChatRoomName" parameterType="chatRoom">
+        UPDATE chat_room
+        SET chat_room_name = #{roomName}
+        WHERE chat_room_idx = #{roomIdx}
+    </update>
 
     <update id="deleteMessage" parameterType="chat">
         UPDATE chat_message

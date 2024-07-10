@@ -448,7 +448,7 @@ $(document).ready(function() {
                     	class: 'btn btn-primary',
                         text: '결재',
                         click: function() {
-                            window.location.href = '/approval/viewFile/' + btoa(item.approval_doc_path);
+                            window.location.href = '/approval/viewFile/' + btoa(item.approval_doc_path) + '/' + item.approval_doc_idx;
                         }
                     }));
 

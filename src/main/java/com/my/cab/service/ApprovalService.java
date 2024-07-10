@@ -148,6 +148,10 @@ public class ApprovalService {
 	public String getUserTitleById(String loginId) {
 	    return apprDAO.getUserTitleById(loginId);
 	}
+	// 결재 상태 업데이트 요청 Service 
+	public boolean updateApprovalStatus(String approvalDocIdx, int approvalState, String approvalDate) {
+		  return apprDAO.updateApprovalStatus(approvalDocIdx, approvalState, approvalDate) > 0;
+	}
 
 	
 

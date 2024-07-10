@@ -69,6 +69,8 @@ public interface ApprovalDAO {
 
 	void updateDocumentApprovalStatus(Map<String, Object> params);
 
+	int updateApprovalStatus(String approvalDocIdx, int approvalState, String approvalDate);
+
 
 
 

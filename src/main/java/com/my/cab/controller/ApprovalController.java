@@ -183,9 +183,11 @@ public class ApprovalController {
 	}
     
     // 기안서 결재 페이지 불러오기
-    @GetMapping("/approval/viewFile/{encodedFilename}")
-    public String viewFile(@PathVariable String encodedFilename, Model model) {
+    @GetMapping("/approval/viewFile/{encodedFilename}/{approval_doc_idx}")
+    public String viewFile(HttpSession session, @PathVariable String encodedFilename, Model model
+    		, @PathVariable String approval_doc_idx) {
         try {
+        	session.setAttribute("approval_doc_idx", approval_doc_idx);
             String filename = new String(Base64.getDecoder().decode(encodedFilename));
             Path file = Paths.get("C:/upload").resolve(filename).normalize();
             System.out.println("Serving file: " + file.toString()); // 디버깅용 출력
@@ -269,10 +271,12 @@ public class ApprovalController {
     @ResponseBody
     public String getUserType(HttpSession session) {
         String loginId = (String) session.getAttribute("loginId");
+        String approval_doc_idx = (String) session.getAttribute("approval_doc_idx");
+        logger.info("approval_doc_idx : {}", approval_doc_idx);
         if (loginId == null) {
             return "로그인 정보가 없습니다.";
         }
-
+        
         try {
             // 로그인된 사용자의 이름과 직책을 가져옵니다.
             String userName = apprservice.getUserNameById(loginId);
@@ -294,8 +298,23 @@ public class ApprovalController {
         }
     }
     
-    ///
-    
-  
+    // 결재 상태 업데이트 요청 처리
+    @PostMapping("/updateApprovalStatus")
+    @ResponseBody
+    public String updateApprovalStatus(HttpSession session ,@RequestBody Map<String, Object> requestBody) {
+        String approvalDocIdx = (String) session.getAttribute("approval_doc_idx");
+        String userType = (String) requestBody.get("userType");
+        String approvalDate = (String) requestBody.get("approvalDate");
+        
+        int approvalState = 0;
+        if ("midApprover".equals(userType)) {
+            approvalState = 1;
+        } else if ("finalApprover".equals(userType)) {
+            approvalState = 2;
+        }
+
+        boolean success = apprservice.updateApprovalStatus(approvalDocIdx, approvalState, approvalDate);
+        return success ? "success" : "error";
+    }
 }
 

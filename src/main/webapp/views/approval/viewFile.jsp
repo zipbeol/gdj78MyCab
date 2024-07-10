@@ -20,6 +20,7 @@
         ************* -->
     <link rel="stylesheet" href="/assets/fonts/bootstrap/bootstrap-icons.css">
     <link rel="stylesheet" href="/assets/css/main.min.css">
+    
 
     <!-- *************
             ************ Vendor Css Files *************
@@ -183,6 +184,7 @@
                     <div class="card-footer d-flex justify-content-end">
                         <button id="approve-button" class="btn btn-primary">결재</button>
                         <button class="btn btn-secondary" id="close-button">닫기</button>
+                        <button class="btn btn-secondary" id="download-pdf-button" onclick="downloadPDF()">PDF 다운로드</button>
                     </div>
                        
 
@@ -235,6 +237,8 @@
 <!-- Custom JS files -->
 <script src="/assets/js/custom.js"></script>
 <script src="/assets/js/localStorage.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
 </body>
 
 <script>
@@ -246,6 +250,7 @@ $(document).ready(function() {
     const midApproverSignatureDate = localStorage.getItem(currentPage + '-midApproverSignatureDate');
     const finalApproverSignatureDate = localStorage.getItem(currentPage + '-finalApproverSignatureDate');
 
+
     if (midApproverSignature) {
         $('.approval-line-table tr:nth-child(2) td:nth-child(2)').html('<img src="' + midApproverSignature + '" style="width: 100px; height: auto;">');
         $('.approval-line-table tr:nth-child(3) td:nth-child(2)').text(midApproverSignatureDate);
@@ -255,6 +260,7 @@ $(document).ready(function() {
         $('.approval-line-table tr:nth-child(2) td:nth-child(3)').html('<img src="' + finalApproverSignature + '" style="width: 100px; height: auto;">');
         $('.approval-line-table tr:nth-child(3) td:nth-child(3)').text(finalApproverSignatureDate);
     }
+
 });
 
 // 결재 버튼 클릭 시 서명 추가 및 로컬 스토리지에 저장
@@ -265,7 +271,7 @@ $('#approve-button').on('click', function() {
         success: function(response) {
             const userType = response;
             const currentPage = window.location.pathname; // 현재 페이지 경로
-
+			
             $.ajax({
                 url: '/getSignature',
                 type: 'GET',
@@ -290,7 +296,28 @@ $('#approve-button').on('click', function() {
                             localStorage.setItem(currentPage + '-finalApproverSignatureDate', currentDate);
                         }
 
-                        alert('결재가 완료되었습니다.');
+                        // 결재 상태 업데이트
+                        $.ajax({
+                            url: '/updateApprovalStatus',
+                            type: 'POST',
+                            contentType: 'application/json',
+                            data: JSON.stringify({
+                                approvalDocIdx: '${approval_doc_idx}',
+                                userType: userType,
+                                approvalDate: currentDate
+                            }),
+                            success: function(response) {
+                                if (response === 'success') {
+                                    alert('결재가 완료되었습니다.');
+                                } else {
+                                    alert('결재 상태 업데이트 중 오류가 발생했습니다.');
+                                }
+                            },
+                            error: function() {
+                                alert('결재 상태 업데이트 중 오류가 발생했습니다.');
+                            }
+                        });
+
                     } else {
                         alert('서명 이미지를 불러오는 중 오류가 발생했습니다.');
                     }
@@ -308,5 +335,26 @@ $('#approve-button').on('click', function() {
     });
 });
 
+function downloadPDF() {
+    const element = document.getElementById('iframe-document'); // PDF로 변환하고자 하는 HTML 요소를 선택합니다. 예: document.getElementById('your-element-id')
+   console.log(element);
+    
+   const iframeDocument = element.contentDocument || element.contentWindow.document;
+    
+   const content = iframeDocument.body; 
+   
+     html2canvas(content, { scale: 2 }).then(canvas => {
+         const imgData = canvas.toDataURL('image/png');
+         const { jsPDF } = window.jspdf;
+         const pdf = new jsPDF('p', 'mm', 'a4');
+
+         const imgProps = pdf.getImageProperties(imgData);
+         const pdfWidth = pdf.internal.pageSize.getWidth();
+         const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+         pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+         pdf.save('document.pdf');
+     });
+}
 </script>
 </html>

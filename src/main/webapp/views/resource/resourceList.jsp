@@ -70,7 +70,10 @@
         }
 
       
-     
+     .table-img{
+     	width: 200px;
+     	height: 200px;
+     }
     </style>
 
 </head>
@@ -151,19 +154,20 @@
 					                    <li class="nav-item" role="presentation">
 					                        <button class="nav-link active" id="meetroom-list-tab" data-bs-toggle="tab"
 					                                data-bs-target="#meetroom-list-content" type="button" role="tab"
-					                                aria-controls="meetroom-list-content" aria-selected="true">회의실 예약
+					                                aria-controls="meetroom-list-content" aria-selected="true" onclick="mrListSearch()">회의실 예약
+					                                
 					                        </button>
 					                    </li>
 					                    <li class="nav-item" role="presentation">
 					                        <button class="nav-link" id="car-list-tab" data-bs-toggle="tab"
 					                                data-bs-target="#car-list-content" type="button" role="tab"
-					                                aria-controls="car-list-content" aria-selected="false">차량 예약
+					                                aria-controls="car-list-content" aria-selected="false" onclick="carListSearch()">차량 예약
 					                        </button>
 					                    </li>
 					                    <li class="nav-item" role="presentation">
 					                        <button class="nav-link" id="equipment-list-tab" data-bs-toggle="tab"
 					                                data-bs-target="#equipment-list-content" type="button" role="tab"
-					                                aria-controls="equipment-list-content" aria-selected="false">비품 예약
+					                                aria-controls="equipment-list-content" aria-selected="false" onclick="eqListSearch()">비품 예약
 					                        </button>
 					                    </li>
 					                </ul>
@@ -208,7 +212,19 @@
 					                        <div class="row mb-3">
 					                            <div class="col-1">
 					                                <div class="input-group" >
-					                                    <input type="number" class="form-control" id="search-mr-capacity" min="0"> 
+					                                    <select id=search-mr-capacity name="search-mr-capacity">
+						                                	<option value="">날짜선택</option>
+						                                	<option value="1">1명</option>
+						                                	<option value="2">2명</option>
+						                                	<option value="3">3명</option>
+						                                	<option value="4">4명</option>
+						                                	<option value="5">5명</option>
+						                                	<option value="6">6명</option>
+						                                	<option value="7">7명</option>
+						                                	<option value="8">8명</option>
+						                                	<option value="9">9명</option>
+						                                	<option value="10">10명이상</option>														
+								                    </select>
 					                                </div>
 					                            </div>
 					                            <div class="col-2 d-flex" >
@@ -235,7 +251,7 @@
 					                                </select>
 					                            </div>
 					                            <div class="col-2 d-flex">
-					                                <button class="btn btn-secondary">검색</button>
+					                                <button class="btn btn-secondary" onclick="mrListSearch()">검색</button>
 					                            </div>
 					                        </div>
 					                    </div>
@@ -247,11 +263,12 @@
 					                            <table class="table align-middle table-hover m-0">
 					                                <thead>
 					                                    <tr>
-					                                        <th class="text-center" id="resorce_name" style="width: 30%;">회의실</th>
+					                                   		<th class="text-center" id="meeting_room_photo" style="width: 20%;">사진</th>
+					                                        <th class="text-center" id="resorce_name" style="width: 20%;">회의실</th>
 					                                        <th class="text-center sortable" id="meeting_room_capacity" style="width: 15%;">인원</th>
-					                                        <th class="text-center sortable" id="resource_location" style="width: 20%;">위치</th>
-					                                        <th class="text-center" id="resource_meeting_content" style="width: 20%;">비고</th>
-					                                        <th class="text-center sortable" id="resource_state" style="width: 20%;">가능여부</th>
+					                                        <th class="text-center sortable" id="resource_location" style="width: 10%;">위치</th>
+					                                        <th class="text-center" id="resource_meeting_content" style="width: 10%;">비고</th>
+					                                        <th class="text-center sortable" id="resource_state" style="width: 10%;">가능여부</th>
 					                                    </tr>
 					                                </thead>
 					                                <tbody id="mr-list-table">
@@ -264,7 +281,7 @@
 					
 					                    <!-- 페이지 네이션 시작 -->
 					                    <nav aria-label="Page navigation example" class="mt-3">
-					                        <ul class="pagination justify-content-center" id="pagination"></ul>
+					                        <ul class="pagination justify-content-center" id="mr-pagination"></ul>
 					                    </nav>
 					                    <!-- 페이지 네이션 종료 -->
 					                </div>
@@ -309,6 +326,7 @@
 					                        <div class="row mb-3">
 					                            <div class="col-1">
 					                                    <select id= "search-car-category" class="form-control">
+					                                    	<option value="">전체</option>
 					                                    	<option value="소형">소형</option>
 					                                    	<option value="소형">중형</option>
 					                                    	<option value="소형">대형</option>
@@ -339,7 +357,7 @@
 					                                </select>
 					                            </div>
 					                            <div class="col-2 d-flex">
-					                                <button class="btn btn-secondary">검색</button>
+					                                <button class="btn btn-secondary" onclick="carListSearch()">검색</button>
 					                            </div>
 					                        </div>
 					                    </div>
@@ -351,7 +369,8 @@
 					                            <table class="table align-middle table-hover m-0">
 					                                <thead>
 					                                    <tr>
-					                                        <th class="text-center" id="resorce_idx" style="width: 20%;">차량</th>
+					                                    	<th class="text-center" id="resorce_car-photo" style="width: 20%;">사진</th>
+					                                        <th class="text-center" id="resorce_idx" style="width: 20%;">차량명</th>
 					                                        <th class="text-center sortable" id="th-emp-name" style="width: 10%;">차종</th>
 					                                        <th class="text-center sortable" id="th-emp-name" style="width: 10%;">번호판</th>
 					                                        <th class="text-center sortable" id="th-title-name" style="width: 10%;">위치</th>
@@ -369,7 +388,7 @@
 					
 					                    <!-- 페이지 네이션 시작 -->
 					                    <nav aria-label="Page navigation example" class="mt-3">
-					                        <ul class="pagination justify-content-center" id="pagination"></ul>
+					                        <ul class="pagination justify-content-center" id="car-pagination"></ul>
 					                    </nav>
 					                    <!-- 페이지 네이션 종료 -->
 					                </div>
@@ -390,23 +409,23 @@
 					                        </div>
 					                        <div class="row">
 					                            <div class="col-1">
-					                                <label for="search-car-category"
-					                                       class="form-label">차종</label>
+					                                <label for="search-eq-category"
+					                                       class="form-label">종류</label>
 					                            </div>
 					                            <div class="col-2">
-					                                <label for="search-car-date"
-					                                       class="form-label">예약날</label>
+					                                <label for="search-eq-date"
+					                                       class="form-label">예약날짜</label>
 					                            </div>
 					                            <div class="col-2">
-					                                <label for="search-car-start-time"
-					                                       class="form-label">예약 시작시간</label>
+					                                <label for="search-eq-start-time"
+					                                       class="form-label">시작시간</label>
 					                            </div>
 					                            <div class="col-2">
-					                                <label for="search-car-end-time"
+					                                <label for="search-eq-end-time"
 					                                       class="form-label">예약 종료시간</label>
 					                            </div>
 					                            <div class="col-2">
-					                                <label for="search-car-status"
+					                                <label for="search-eq-status"
 					                                       class="form-label">상태</label>
 					                            </div>
 					                        </div>
@@ -437,7 +456,7 @@
 					                                </select>
 					                            </div>
 					                            <div class="col-2 d-flex">
-					                                <button class="btn btn-secondary">검색</button>
+					                                <button class="btn btn-secondary" onclick="eqListSearch()">검색</button>
 					                            </div>
 					                        </div>
 					                    </div>
@@ -449,11 +468,12 @@
 					                            <table class="table align-middle table-hover m-0">
 					                                <thead>
 					                                    <tr>
-					                                        <th class="text-center" id="resorce_idx" style="width: 20%;">자원명</th>
-					                                        <th class="text-center sortable" id="th-emp-name" style="width: 20%;">분류</th>
+					                                    	<th class="text-center" id="resorce_idx" style="width: 20%;">사진</th>
+					                                        <th class="text-center" id="resorce_idx" style="width: 20%;">비품</th>
+					                                        <th class="text-center sortable" id="th-emp-name" style="width: 10%;">분류</th>
 					                                        <th class="text-center sortable" id="th-title-name" style="width: 10%;">위치</th>
-					                                        <th class="text-center sortable" id="th-dept-name" style="width: 20%;">비고</th>
-					                                        <th class="text-center sortable" id="th-dept-name" style="width: 20%;">가능여부</th>
+					                                        <th class="text-center sortable" id="th-dept-name" style="width: 10%;">비고</th>
+					                                        <th class="text-center sortable" id="th-dept-name" style="width: 10%;">가능여부</th>
 					                                    </tr>
 					                                </thead>
 					                                <tbody id="eq-list-table">
@@ -466,7 +486,7 @@
 					
 					                    <!-- 페이지 네이션 시작 -->
 					                    <nav aria-label="Page navigation example" class="mt-3">
-					                        <ul class="pagination justify-content-center" id="pagination"></ul>
+					                        <ul class="pagination justify-content-center" id="eq-pagination"></ul>
 					                    </nav>
 					                    <!-- 페이지 네이션 종료 -->
 					                </div>
@@ -474,6 +494,8 @@
 					        </div>
 					    </div>
 					</div>
+					
+					
 	
 <!-- Row end -->
                     
@@ -551,7 +573,7 @@
 
  
 $(document).ready(function(){
-	getTotalPages();
+	$('#pagination').twbsPagination('destroy');
 	getMrList(currentPage);	
 	
 });
@@ -563,8 +585,8 @@ $(document).ready(function(){
 	resSerachCategory = "회의실"
 	filterStartDate = today
 	
-
-	 getMrList(currentPage);
+	$('#pagination').twbsPagination('destroy');
+	getMrList(currentPage);
 });
  
 // 차량
@@ -572,8 +594,8 @@ $(document).ready(function(){
 	//카테고리 설정
 	resSerachCategory = "차량"
 	filterStartDate = today
-
-     getCarList(currentPage);
+	$('#pagination').twbsPagination('destroy');
+    getCarList(currentPage);
 });
 
 // 비품
@@ -581,9 +603,27 @@ $(document).ready(function(){
 	//카테고리 설정
 	resSerachCategory = "비품"
 	filterStartDate = today
-	
+	$('#pagination').twbsPagination('destroy');
 	 getEqList(currentPage);
 });
+
+	function mrListSearch(){
+		resSerachCategory = "회의실"
+		filterStartDate = today
+		getMrList(currentPage);
+	}
+	function carListSearch(){
+		resSerachCategory = "차량"
+		filterStartDate = today
+	    getCarList(currentPage);
+	}
+
+	function eqListSearch(){
+		resSerachCategory = "차량"
+		filterStartDate = today
+	    getCarList(currentPage);
+	}
+
 
  function getSearchValue() {
  	if(resSerachCategory == '회의실'){
@@ -646,7 +686,7 @@ $(document).ready(function(){
              
              var startPage = 1;
              
-             $('#pagination').twbsPagination({
+             $('#mr-pagination').twbsPagination({
  	    		startPage:data.currPage, // 시작 페이지
  	    		totalPages:data.totalPages, // 총 페이지 갯수
  	    		visiblePages:5,  // 보여줄 페이지 수[1][2][3][4][5]
@@ -667,6 +707,7 @@ $(document).ready(function(){
  
  function getCarList(currentPage) {
      getSearchValue();
+     console.log(resOption);
      $.ajax({
          url: '/resource/resourceList.ajax',
          type: 'GET',
@@ -686,7 +727,7 @@ $(document).ready(function(){
              
              var startPage = 1;
              
-             $('#pagination').twbsPagination({
+             $('#car-pagination').twbsPagination({
  	    		startPage:data.currPage, // 시작 페이지
  	    		totalPages:data.totalPages, // 총 페이지 갯수
  	    		visiblePages:5,  // 보여줄 페이지 수[1][2][3][4][5]
@@ -725,7 +766,7 @@ $(document).ready(function(){
              
              var startPage = 1;
              
-             $('#pagination').twbsPagination({
+             $('#eq-pagination').twbsPagination({
  	    		startPage:data.currPage, // 시작 페이지
  	    		totalPages:data.totalPages, // 총 페이지 갯수
  	    		visiblePages:5,  // 보여줄 페이지 수[1][2][3][4][5]
@@ -752,8 +793,13 @@ $(document).ready(function(){
          	console.log(item.new_file_name);
            
              content += '<tr class="mr-list-table-tbody-tr" id="' + item.resource_idx + '">'
-             	+ '<td class="text-center"><img src = "/photo/'+item.new_file_name+'"></td>'
-             	+ '<td class="text-center">' + item.resource_name+ '</td>'
+             	if (item.new_file_name ==null) {
+             		content += '<td class="text-center"><img src = "/assets/images/free-icon-no-image-11573069.png" class = "table-img"></td>'					
+				}else{
+					content +='<td class="text-center"><img src = "/photo/'+item.new_file_name+'" class = "table-img"></td>'	
+				}
+             
+             content += '<td class="text-center">' + item.resource_name+ '</td>'
              	+ '<td class="text-center">' + item.meeting_room_capacity+ '</td>'
              	+ '<td class="text-center">' + item.resource_location+ '</td>'
              	+ '<td class="text-center">' + item.resource_meeting_content+ '</td>'
@@ -778,8 +824,12 @@ $(document).ready(function(){
          	console.log(item.resource_name);
            
              content += '<tr class="car-list-table-tbody-tr" id="' + item.resource_idx + '">'
-             	+ '<td class="text-center"><img src = "/photo/'+item.new_file_name+'"></td>'
-             	+ '<td class="text-center">' + item.resource_name+ '</td>'
+          		if (item.new_file_name ==null) {
+          			content += '<td class="text-center"><img src = "/assets/images/free-icon-no-image-11573069.png" class = "table-img"></td>'					
+				}else{
+					content +='<td class="text-center"><img src = "/photo/'+item.new_file_name+'" class = "table-img"></td>'
+				}
+             content += '<td class="text-center">' + item.resource_name+ '</td>'
              	+ '<td class="text-center">' + item.company_car_category+ '</td>'
              	+ '<td class="text-center">' + item.company_car_license_plate+ '</td>'
              	+ '<td class="text-center">' + item.resource_location+ '</td>'
@@ -805,9 +855,13 @@ $(document).ready(function(){
          	console.log(item.resource_name);
            
              content += '<tr class="eq-list-table-tbody-tr" id="' + item.resource_idx + '">'
-             	+ '<td class="text-center"><img src = "/photo/'+item.new_file_name+'"></td>'
-             	+ '<td class="text-center">' + item.resource_name+ '</td>'
-             	+ '<td class="text-center">' + item.meeting_room_capacity+ '</td>'
+          		if (item.new_file_name ==null) {
+          			content += '<td class="text-center"><img src = "/assets/images/free-icon-no-image-11573069.png" class = "table-img"></td>'					
+				}else{
+					content += '<td class="text-center"><img src = "/photo/'+item.new_file_name+'" class = "table-img"></td>'
+				}
+             content += '<td class="text-center">' + item.resource_name+ '</td>'
+             	+ '<td class="text-center">' + item.resource_equipment_category+ '</td>'
              	+ '<td class="text-center">' + item.resource_location+ '</td>'
              	+ '<td class="text-center">' + item.resource_meeting_content+ '</td>'
              	+ '<td class="text-center">' + item.resource_state+ '</td>'
@@ -861,7 +915,7 @@ $(document).ready(function(){
 
 
     // 토탈 페이지 호출
-    function getTotalPages() {
+/*     function getTotalPages() {
         getSearchValue();
         $.ajax({
             url: '/resource/resGetPages.ajax',
@@ -892,7 +946,7 @@ $(document).ready(function(){
                 console.log(error);
             }
         });
-    }
+    } */
 
     
     

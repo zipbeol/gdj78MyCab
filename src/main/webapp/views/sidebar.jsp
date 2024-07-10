@@ -188,6 +188,10 @@
                     <li>
                         <a id="menu-resource-2" href="/resource/list.go">자원 예약</a>
                     </li>
+                    <li>
+                        <a id="menu-resource-3" href="/resource/myReservationList.go">내 예약</a>
+                    </li>
+                    
                 </ul>
             </li>
             <li id="menu-log" class="treeview">

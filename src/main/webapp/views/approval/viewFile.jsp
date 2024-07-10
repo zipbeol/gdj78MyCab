@@ -238,36 +238,56 @@
 </body>
 
 <script>
+//페이지 로드 시 로컬 스토리지에서 해당 페이지의 서명 정보 불러오기
+$(document).ready(function() {
+    const currentPage = window.location.pathname; // 현재 페이지 경로
+    const midApproverSignature = localStorage.getItem(currentPage + '-midApproverSignature');
+    const finalApproverSignature = localStorage.getItem(currentPage + '-finalApproverSignature');
+    const midApproverSignatureDate = localStorage.getItem(currentPage + '-midApproverSignatureDate');
+    const finalApproverSignatureDate = localStorage.getItem(currentPage + '-finalApproverSignatureDate');
+
+    if (midApproverSignature) {
+        $('.approval-line-table tr:nth-child(2) td:nth-child(2)').html('<img src="' + midApproverSignature + '" style="width: 100px; height: auto;">');
+        $('.approval-line-table tr:nth-child(3) td:nth-child(2)').text(midApproverSignatureDate);
+    }
+
+    if (finalApproverSignature) {
+        $('.approval-line-table tr:nth-child(2) td:nth-child(3)').html('<img src="' + finalApproverSignature + '" style="width: 100px; height: auto;">');
+        $('.approval-line-table tr:nth-child(3) td:nth-child(3)').text(finalApproverSignatureDate);
+    }
+});
+
+// 결재 버튼 클릭 시 서명 추가 및 로컬 스토리지에 저장
 $('#approve-button').on('click', function() {
-    // 결재자 유형 확인
     $.ajax({
         url: '/getUserType',
         type: 'GET',
         success: function(response) {
             const userType = response;
-            // 서버에서 서명 이미지를 불러와 결재라인에 표시
+            const currentPage = window.location.pathname; // 현재 페이지 경로
+
             $.ajax({
                 url: '/getSignature',
                 type: 'GET',
                 success: function(response) {
                     if (response) {
-                        // 서명 이미지를 표시할 <img> 태그를 생성하고 결재라인에 추가
-                        const signatureImage = $('<img>', {
-                            src: 'data:image/png;base64,' + response,
-                            alt: 'Signature',
-                            style: 'width: 100px; height: auto;'
-                        });
-
-                        // 현재 날짜를 구해서 형식에 맞게 변환
+                        const signatureImageSrc = 'data:image/png;base64,' + response;
                         const currentDate = new Date().toISOString().split('T')[0];
 
-                        // 결재라인 테이블에 서명 이미지와 날짜 추가
                         if (userType === 'midApprover') {
-                            $('.approval-line-table tr:nth-child(2) td:nth-child(2)').html(signatureImage);
+                            $('.approval-line-table tr:nth-child(2) td:nth-child(2)').html('<img src="' + signatureImageSrc + '" style="width: 100px; height: auto;">');
                             $('.approval-line-table tr:nth-child(3) td:nth-child(2)').text(currentDate);
+
+                            // 로컬 스토리지에 저장
+                            localStorage.setItem(currentPage + '-midApproverSignature', signatureImageSrc);
+                            localStorage.setItem(currentPage + '-midApproverSignatureDate', currentDate);
                         } else if (userType === 'finalApprover') {
-                            $('.approval-line-table tr:nth-child(2) td:nth-child(3)').html(signatureImage);
+                            $('.approval-line-table tr:nth-child(2) td:nth-child(3)').html('<img src="' + signatureImageSrc + '" style="width: 100px; height: auto;">');
                             $('.approval-line-table tr:nth-child(3) td:nth-child(3)').text(currentDate);
+
+                            // 로컬 스토리지에 저장
+                            localStorage.setItem(currentPage + '-finalApproverSignature', signatureImageSrc);
+                            localStorage.setItem(currentPage + '-finalApproverSignatureDate', currentDate);
                         }
 
                         alert('결재가 완료되었습니다.');

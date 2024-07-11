@@ -655,6 +655,9 @@ document.addEventListener("DOMContentLoaded", function() {
 				if (data.isSuccess) {
 					$('#scheduleDetailModal').modal('hide');
                     showAlert('success', '근태 수정 요청이 완료되었습니다.');
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1200);
                    
                 } else {
                 	$('#scheduleDetailModal').modal('hide');

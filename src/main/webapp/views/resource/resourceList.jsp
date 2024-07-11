@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Main</title>
+    <title>자원예약 리스트</title>
     <!-- Meta -->
     <meta name="description" content="Marketplace for Bootstrap Admin Dashboards">
     <meta name="author" content="Bootstrap Gallery">
@@ -121,10 +121,10 @@
                         <a href="/" class="text-decoration-none">메인</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="#" class="text-decoration-none">인사 관리</a>
+                        <a href="#" class="text-decoration-none">자원관리</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="/attendance/attendance/list.go" class="text-decoration-none">근태 관리</a>
+                        <a href="/resource/list.go" class="text-decoration-none">자원 예약</a>
                     </li>
                 </ol>
                 <!-- Breadcrumb end -->

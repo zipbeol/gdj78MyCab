@@ -45,6 +45,8 @@ public class ApprovalController {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired ApprovalService apprservice;
 	
+	// 파일 저장 디렉토리 설정 시작
+	
 	// 결재문서 저장 디렉토리
     private static final String APPROVAL_UPLOAD_DIR = "C:/upload/startApprover";
     // 서명 이미지 저장 디렉토리
@@ -67,6 +69,10 @@ public class ApprovalController {
             docFileDir.mkdirs();
         }
     }
+    
+    // 파일 저장 디렉토리 설정 종료
+    
+    // 기안서 작성 페이지 시작
 	
     // 기안서 작성 페이징 이동 요청
 	@RequestMapping(value="/approval/approvalWriteForm.go") // value 수정
@@ -174,18 +180,46 @@ public class ApprovalController {
 	    return apprservice.getApproverDetails(lineId);
 	}
 	
-	// 내 결재 관리 결재문서 리스트 조회
+	// 기안서 작성 페이지 종료
+	
+	// 내 결재 페이지 시작
+	
+	// 내 결재 관리 결재문서 리스트 조회 ( 페이징, 필터링, 검색 )
 	@PostMapping("/getApprovalData.ajax")
 	@ResponseBody
-	public List<ApprovalDocDTO> getApprovalData(HttpSession session) {
+	public Map<String, Object> getApprovalData(
+	        HttpSession session,
+	        @RequestParam(value = "page", defaultValue = "1") int page,
+	        @RequestParam(value = "query", defaultValue = "") String query,
+	        @RequestParam(value = "status", defaultValue = "") String status) {
+	    
 	    String loginId = (String) session.getAttribute("loginId");
-	    return apprservice.getFilteredApprovalData(loginId);
+	    int pageSize = 5;
+	    int start = (page - 1) * pageSize;
+
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("loginId", loginId);
+	    params.put("start", start);
+	    params.put("pageSize", pageSize);
+	    params.put("query", query);
+	    params.put("status", status);
+
+	    List<ApprovalDocDTO> data = apprservice.getFilteredApprovalData(params);
+	    int total = apprservice.getApprovalDocCount(params);
+
+	    Map<String, Object> result = new HashMap<>();
+	    result.put("data", data);
+	    result.put("totalPages", (int) Math.ceil((double) total / pageSize));
+
+	    return result;
 	}
     
     // 기안서 결재 페이지 불러오기
-    @GetMapping("/approval/viewFile/{encodedFilename}")
-    public String viewFile(@PathVariable String encodedFilename, Model model) {
+    @GetMapping("/approval/viewFile/{encodedFilename}/{approval_doc_idx}")
+    public String viewFile(HttpSession session, @PathVariable String encodedFilename, Model model
+    		, @PathVariable String approval_doc_idx) {
         try {
+        	session.setAttribute("approval_doc_idx", approval_doc_idx);
             String filename = new String(Base64.getDecoder().decode(encodedFilename));
             Path file = Paths.get("C:/upload").resolve(filename).normalize();
             System.out.println("Serving file: " + file.toString()); // 디버깅용 출력
@@ -193,7 +227,7 @@ public class ApprovalController {
             if (Files.exists(file) && Files.isReadable(file)) {
                 byte[] fileContent = Files.readAllBytes(file);
                 String encodedString = Base64.getEncoder().encodeToString(fileContent);
-                model.addAttribute("fileContent", encodedString);
+                model.addAttribute("fileContent", filename.substring(filename.indexOf("\\") + 1, filename.length()));
                 return "approval/viewFile";
             } else {
                 model.addAttribute("errorMessage", "파일을 읽을 수 없습니다.");
@@ -269,10 +303,12 @@ public class ApprovalController {
     @ResponseBody
     public String getUserType(HttpSession session) {
         String loginId = (String) session.getAttribute("loginId");
+        String approval_doc_idx = (String) session.getAttribute("approval_doc_idx");
+        logger.info("approval_doc_idx : {}", approval_doc_idx);
         if (loginId == null) {
             return "로그인 정보가 없습니다.";
         }
-
+        
         try {
             // 로그인된 사용자의 이름과 직책을 가져옵니다.
             String userName = apprservice.getUserNameById(loginId);
@@ -294,8 +330,75 @@ public class ApprovalController {
         }
     }
     
-    ///
+    // 결재 상태 업데이트 요청 처리
+    @PostMapping("/updateApprovalStatus")
+    @ResponseBody
+    public String updateApprovalStatus(HttpSession session ,@RequestBody Map<String, Object> requestBody) {
+        String approvalDocIdx = (String) session.getAttribute("approval_doc_idx");
+        String userType = (String) requestBody.get("userType");
+        String approvalDate = (String) requestBody.get("approvalDate");
+        
+        int approvalState = 0;
+        if ("midApprover".equals(userType)) {
+            approvalState = 1;
+        } else if ("finalApprover".equals(userType)) {
+            approvalState = 2;
+        }
+
+        boolean success = apprservice.updateApprovalStatus(approvalDocIdx, approvalState, approvalDate);
+        return success ? "success" : "error";
+    }
     
-  
+    // 내 결재 페이지 종료
+    
+    // 결재 통합 관리 페이지 시작 //
+    
+    // 결재 통합 관리 페이징 이동 요청
+	@RequestMapping(value="/approval/approvalIntegration.go") // value 수정
+	public String approvalIntegration() {
+		logger.info("결재 통합 관리 페이지 이동");	
+		return "approval/approvalIntegration";
+	}
+	
+	// 결재 통합 관리 결재 문서 전체 리스트업 ( 페이징, 필터링, 검색 )
+	@PostMapping("/getApprovalDocData.ajax")
+	@ResponseBody
+	public Map<String, Object> getApprovalDocData(
+	        @RequestParam(value = "page", defaultValue = "1") int page,
+	        @RequestParam(value = "query", defaultValue = "") String query,
+	        @RequestParam(value = "status", defaultValue = "") String status) {
+
+	    int pageSize = 5;
+	    int start = (page - 1) * pageSize;
+
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("start", start);
+	    params.put("pageSize", pageSize);
+	    params.put("query", query);
+	    params.put("status", status);
+
+	    List<ApprovalDocDTO> data = apprservice.getAllApprovalDocData(params);
+	    int total = apprservice.getAllApprovalDocCount(params);
+
+	    Map<String, Object> result = new HashMap<>();
+	    result.put("data", data);
+	    result.put("totalPages", (int) Math.ceil((double) total / pageSize));
+
+	    return result;
+	}
+	
+    // 결재 문서 삭제 기능
+    @PostMapping("/deleteApprovalDocs.ajax")
+    @ResponseBody
+    public Map<String, Object> deleteApprovalDocs(@RequestBody List<String> docs) {
+        boolean success = apprservice.deleteApprovalDocs(docs);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("success", success);
+        return result;
+    }
+    
+    
 }
+	
 

@@ -110,10 +110,7 @@
                         <a id="menu-approval-2" href="/approval/myapproval.go">내 결재 관리</a>
                     </li>
                     <li>
-                        <a id="menu-approval-3" href="/approval/list.go">결재 통합 관리</a>
-                    </li>
-                    <li>
-                        <a id="menu-approval-4" href="/approval/create.go">공통 양식 등록</a>
+                        <a id="menu-approval-3" href="/approval/approvalIntegration.go">결재 통합 관리</a>
                     </li>
                 </ul>
             </li>

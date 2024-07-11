@@ -172,7 +172,7 @@
                         <a id="menu-finance-3" href="/finance/deal/list.go">거래 내역</a>
                     </li>
                     <li>
-                        <a id="menu-finance-4" href="/finance/dash.go">대쉬 보드</a>
+                        <a id="menu-finance-4" href="/finance/dash.go">대시 보드</a>
                     </li>
                 </ul>
             </li>

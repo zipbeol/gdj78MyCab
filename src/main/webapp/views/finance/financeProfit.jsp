@@ -6,7 +6,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>My Cab - Finance</title>
+<title>My Cab - 수익</title>
 <!-- Meta -->
 <meta name="description"
     content="Marketplace for Bootstrap Admin Dashboards">

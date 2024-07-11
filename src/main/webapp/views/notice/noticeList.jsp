@@ -421,7 +421,7 @@ td:hover {
         tbody.html(row);
 
         // 각 행에 클릭 이벤트 추가
-        $('.clickable-row').on('click', function (event) {
+        $(document).on('click','.clickable-row', function (event) {
             if (isInactiveMode) {
                 // 비활성화 모드일 경우 체크박스를 체크하거나 체크 해제
                 var checkbox = $(this).find('.inactive-checkbox');
@@ -467,6 +467,7 @@ td:hover {
                 success: function (response) {
                     alert('선택된 항목이 비활성화 되었습니다.');
                     refreshNoticeList();
+                    isInactiveMode = !isInactiveMode;
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     alert('비활성화에 실패 하였습니다. 다시 시도해 주세요.');

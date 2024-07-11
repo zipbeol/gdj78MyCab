@@ -987,8 +987,8 @@ $(document).ready(function(){
             if (data.att.att_modifier == '0') {
                 // 수정자 정보가 0이면 처리 전
                 $('#attApproval').show();
-                
                 $('#edit-att-btn').show();
+                $('#ddetail-rejection-reason').prop('readonly', false);
             } else {
                 // 이미 처리된 경우
                 $('#attApproval').hide();
@@ -1030,83 +1030,80 @@ $(document).ready(function(){
         }
     });
     
- function attEdit(){
-    	
-    	var no = document.getElementById('ddetail-handler').value;
-    	var idx = document.getElementById('ddetail-idx').value;
-    	var previousResult = document.getElementById('ddetail-before-att').value;
-    	var modifyResult = document.getElementById('ddetail-after-att').value;
-    	var rejectReason = document.getElementById('ddetail-rejection-reason').value;
-    	var approval = document.getElementById('ddetail-approval').value;
-    	var isApproved = (approval === 'true');
-    	
-    	if (approval === false) {
-    		if (rejectReason === '' || rejectReason.trim() === '') {
-        		alert('수정 거부 사유를 입력해주세요!');
-    			
-    		}else{
-        	
-        	$.ajax({
-    	        type: "GET",
-    	        url: "/approvalReject.ajax",
-    	        data: {
-    	        	'att_management_idx': idx,
-    	        	'att_modifier': no,
-    	        	'att_modify_attresult': modifyResult,
-    	        	'att_modify_reject': rejectReason,
-    	        	'att_apply_status':isApproved
-    	        },
-    	        dataType: "json",
-    			success: function(data) {
-    				if (data.isSuccess) {
-    					$('#attApplyModal').modal('hide');
-                        showAlert('success', '근태 수정 거부가 완료되었습니다.');
-                       
-                    } else {
-                    	$('#attApplyModal').modal('hide');
-                        showAlert('danger', '근태 수정 거부에 실패했습니다.');
-                    }  
-    	        },
-    	        error: function(xhr, status, error) {
-    	            // 에러 처리
-    	            $("#result").html("<p>There was an error: " + error + "</p>");
-    	        }
-    	    });
-    		}
-			
-		}else{
-			
-			$.ajax({
-    	        type: "GET",
-    	        url: "/approvalPermit.ajax",
-    	        data: {
-    	        	'att_management_idx': idx,
-    	        	'att_modifier': no,
-    	        	'att_modify_attresult': modifyResult,
-    	        	'att_apply_status':isApproved
-    	        },
-    	        dataType: "json",
-    			success: function(data) {
-    				if (data.isSuccess) {
-    					$('#attApplyModal').modal('hide');
+    function attEdit() {
+        var no = document.getElementById('ddetail-handler').value;
+        var idx = document.getElementById('ddetail-idx').value;
+        var previousResult = document.getElementById('ddetail-before-att').value;
+        var modifyResult = document.getElementById('ddetail-after-att').value;
+        var rejectReason = document.getElementById('ddetail-rejection-reason').value;
+        var approval = document.getElementById('ddetail-approval').value;
+        
+        console.log('왜 뭔데?' + rejectReason);
+        console.log('자고싶다'+approval);
+        
+        if (approval === 'false') {
+            if (rejectReason === '' || rejectReason.trim() === '') {
+                alert('수정 거부 사유를 입력해주세요!');
+            } else {
+                $.ajax({
+                    type: "GET",
+                    url: "/approvalReject.ajax",
+                    data: {
+                        'att_management_idx': idx,
+                        'att_modifier': no,
+                        'att_modify_attresult': modifyResult,
+                        'att_modify_reject': rejectReason,
+                        'att_apply_status': approval
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        if (data.isSuccess) {
+                            $('#attApplyModal').modal('hide');
+                            showAlert('success', '근태 수정 거부가 완료되었습니다.');
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+                        } else {
+                            $('#attApplyModal').modal('hide');
+                            showAlert('danger', '근태 수정 거부에 실패했습니다.');
+                        }  
+                    },
+                    error: function(xhr, status, error) {
+                        // 에러 처리
+                        $("#result").html("<p>There was an error: " + error + "</p>");
+                    }
+                });  
+            }
+        } else {
+            $.ajax({
+                type: "GET",
+                url: "/approvalPermit.ajax",
+                data: {
+                    'att_management_idx': idx,
+                    'att_modifier': no,
+                    'att_modify_attresult': modifyResult,
+                    'att_apply_status': approval
+                },
+                dataType: "json",
+                success: function(data) {
+                    if (data.isSuccess) {
+                        $('#attApplyModal').modal('hide');
                         showAlert('success', '근태 수정 승인이 완료되었습니다.');
-                       
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000);
                     } else {
-                    	$('#attApplyModal').modal('hide');
+                        $('#attApplyModal').modal('hide');
                         showAlert('danger', '근태 수정 승인에 실패했습니다.');
                     }  
-    	        },
-    	        error: function(xhr, status, error) {
-    	            // 에러 처리
-    	            $("#result").html("<p>There was an error: " + error + "</p>");
-    	        }
-    	    });
-			
-			
-		}
-    	
+                },
+                error: function(xhr, status, error) {
+                    // 에러 처리
+                    $("#result").html("<p>There was an error: " + error + "</p>");
+                }
+            });
+        }
     }
-    
 
 
         

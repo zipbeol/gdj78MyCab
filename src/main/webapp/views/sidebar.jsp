@@ -180,7 +180,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li>
-                        <a id="menu-resource-1" href="/resource/create.go">자원 등록</a>
+                        <a id="menu-resource-1" href="/resource/resourceWrite.go">자원 등록</a>
                     </li>
                     <li>
                         <a id="menu-resource-2" href="/resource/list.go">자원 예약</a>

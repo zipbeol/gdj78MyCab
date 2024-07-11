@@ -37,7 +37,7 @@ public class ResourceController {
 	}
 
 	
-	@RequestMapping(value = "resource/create.go")
+	@RequestMapping(value = "resource/resourceWrite.go")
 	public String resourceWriteGo() {
 		
 		return "resource/resourceWrite";

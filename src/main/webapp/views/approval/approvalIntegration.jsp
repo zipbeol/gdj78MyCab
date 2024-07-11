@@ -145,11 +145,11 @@
                         <!-- 여기에 경로 추가 -->
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="/approval/approvalWriteForm.go" class="text-decoration-none">전자결재</a>
+                        <a href="#" class="text-decoration-none">전자결재</a>
                         <!-- 여기에 경로 추가 -->
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="/approval/myapproval.go" class="approvalWriteForm">내 결재 관리</a>
+                        <a href="/approval/approvalIntegration" class="approvalIntegration">결재 통합 관리</a>
                         <!-- 여기에 경로 추가 -->
                     </li>
                 </ol>
@@ -172,7 +172,7 @@
             <div class="col-12">
                 <div class="card mb-3">
                     <div class="card-header">
-                        <h4 class="card-title">내 결재 관리</h4>
+                        <h4 class="card-title">결재 통합 관리</h4>
                     </div>
                     <div class="card-body">
                         <div class="top-buttons mb-3">
@@ -208,13 +208,12 @@
    								</tbody>
                         </table>
                         <div class="btn-container">
-                            <button class="btn btn-outline-primary">신규(F2 </button>
-                            <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#signatureModal">My도장/서명</button>
-                            <button class="btn btn-outline-warning" >보내기</button>
+                            <button class="btn btn-outline-primary">삭제</button>
                             <button class="btn btn-outline-danger">결재</button>
+                            <button class="btn btn-outline-warning">PDF 다운로드</button>
                         </div>
                         <nav aria-label="Page navigation">
-                            <ul class="pagination">   
+                            <ul class="pagination">
                             </ul>
                         </nav>
                     </div>
@@ -225,49 +224,6 @@
         </div>
         <input type="hidden" id="hiddenApprovalDocIdx">
         <!-- Row end -->
-<!-- My도장/서명 모달 -->
-<div class="modal fade" id="signatureModal" tabindex="-1" aria-labelledby="signatureModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="signatureModalLabel">도장/서명 올리기</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="instructions mb-3">
-          1. 등록할 이미지를 선택한 후, 사용할 영역을 선택합니다.
-        </div>
-        <div class="row">
-          <div class="col-6">
-            <h6>Before : 원본사진</h6>
-            <input type="file" id="imageUpload" class="form-control mb-3" accept="image/*">
-            
-            </br>
-            <div class="image-container mb-3">
-              <canvas id="signatureCanvas" width="400" height="300" style="border: 1px solid #000; width: 100%;"></canvas>
-            </div>
-            <button class="btn btn-outline-primary" id="clearCanvas">서명 지우기</button>
-          </div>
-          <div class="col-6 text-center">
-            <h6>After</h6>
-            </br>
-            </br>
-            </br>
-            </br>
-            <div class="preview-container mb-3" style="width: 400px; height: 300px; margin: 0 auto;">
-              <img id="previewImage" src="" alt="미리보기 이미지">
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" id="saveSignature">저장(F8)</button>
-        <button type="button" class="btn btn-danger" id="deleteSignature">삭제</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-      </div>
-    </div>
-  </div>
-</div>
     </div>
                 <!-- Container ends -->
                 
@@ -310,105 +266,6 @@
 </body>
 <script>
 $(document).ready(function() {
-    const canvas = document.getElementById('signatureCanvas');
-    const ctx = canvas.getContext('2d');
-    let isDrawing = false;
-
-    // 캔버스 미리보기 업데이트
-    function updatePreview() {
-        const dataURL = canvas.toDataURL('image/png');
-        document.getElementById('previewImage').src = dataURL;
-    }
-
-    // 마우스 다운 이벤트 핸들러
-    canvas.addEventListener('mousedown', (e) => {
-        isDrawing = true;
-        ctx.beginPath();
-        ctx.moveTo(e.offsetX, e.offsetY);
-    });
-
-    // 마우스 무브 이벤트 핸들러
-    canvas.addEventListener('mousemove', (e) => {
-        if (isDrawing) {
-            ctx.lineTo(e.offsetX, e.offsetY);
-            ctx.stroke();
-            updatePreview();
-        }
-    });
-
-    // 마우스 업 이벤트 핸들러
-    canvas.addEventListener('mouseup', () => {
-        isDrawing = false;
-        updatePreview();
-    });
-
-    // 캔버스 지우기 버튼 이벤트 핸들러
-    document.getElementById('clearCanvas').addEventListener('click', function() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        updatePreview();
-    });
-
-    // 이미지 업로드 이벤트 핸들러
-    document.getElementById('imageUpload').addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        const reader = new FileReader();
-
-        reader.onload = function(e) {
-            const img = new Image();
-            img.onload = function() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                updatePreview();
-            };
-            img.src = e.target.result;
-        };
-
-        reader.readAsDataURL(file);
-    });
-
-    // 서명 저장 버튼 클릭 이벤트 핸들러
-    $('#saveSignature').click(function() {
-        const dataURL = canvas.toDataURL('image/png');
-        const loginId = '<%= session.getAttribute("loginId") %>';
-
-        $.ajax({
-            url: '/uploadSignature',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({
-                image: dataURL,
-                loginId: loginId
-            }),
-            success: function(response) {
-                alert(response);
-            },
-            error: function(xhr, status, error) {
-                console.error('서명 저장 중 오류 발생:', error);
-            }
-        });
-    });
-
-    // 기존 서명 이미지 로드
-    $.ajax({
-        url: '/getSignature',
-        type: 'GET',
-        success: function(response) {
-            if (response) {
-                const img = new Image();
-                img.onload = function() {
-                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    updatePreview();
-                };
-                img.src = 'data:image/png;base64,' + response;
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error('서명 이미지 로드 중 오류 발생:', error);
-        }
-    });
-});
-  
-$(document).ready(function() {
     // 전체 선택 기능
     $('#checkAll').on('change', function() {
         const isChecked = $(this).is(':checked');
@@ -431,7 +288,7 @@ $(document).ready(function() {
     // 데이터 가져오기
     function loadApprovalData(page = 1, query = '', status = '') {
         $.ajax({
-            url: '/getApprovalData.ajax',
+            url: '/getApprovalDocData.ajax',
             type: 'POST',
             data: {
                 page: page,
@@ -515,6 +372,5 @@ $(document).ready(function() {
     // 페이지 로드 시 데이터 가져오기
     loadApprovalData();
 });
-
 </script>
 </html>

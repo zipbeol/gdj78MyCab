@@ -50,7 +50,7 @@ public class FileDownloadController {
         }
     }
     
-    // 대현, 정원
+    // 대현
     @GetMapping("/document/{filePath}")
     public ResponseEntity<Resource> loadDocument(@PathVariable String filePath) {
         logger.info(filePath);

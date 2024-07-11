@@ -45,6 +45,8 @@ public class ApprovalController {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired ApprovalService apprservice;
 	
+	// 파일 저장 디렉토리 설정 시작
+	
 	// 결재문서 저장 디렉토리
     private static final String APPROVAL_UPLOAD_DIR = "C:/upload/startApprover";
     // 서명 이미지 저장 디렉토리
@@ -67,6 +69,10 @@ public class ApprovalController {
             docFileDir.mkdirs();
         }
     }
+    
+    // 파일 저장 디렉토리 설정 종료
+    
+    // 기안서 작성 페이지 시작
 	
     // 기안서 작성 페이징 이동 요청
 	@RequestMapping(value="/approval/approvalWriteForm.go") // value 수정
@@ -174,12 +180,38 @@ public class ApprovalController {
 	    return apprservice.getApproverDetails(lineId);
 	}
 	
-	// 내 결재 관리 결재문서 리스트 조회
+	// 기안서 작성 페이지 종료
+	
+	// 내 결재 페이지 시작
+	
+	// 내 결재 관리 결재문서 리스트 조회 ( 페이징, 필터링, 검색 )
 	@PostMapping("/getApprovalData.ajax")
 	@ResponseBody
-	public List<ApprovalDocDTO> getApprovalData(HttpSession session) {
+	public Map<String, Object> getApprovalData(
+	        HttpSession session,
+	        @RequestParam(value = "page", defaultValue = "1") int page,
+	        @RequestParam(value = "query", defaultValue = "") String query,
+	        @RequestParam(value = "status", defaultValue = "") String status) {
+	    
 	    String loginId = (String) session.getAttribute("loginId");
-	    return apprservice.getFilteredApprovalData(loginId);
+	    int pageSize = 5;
+	    int start = (page - 1) * pageSize;
+
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("loginId", loginId);
+	    params.put("start", start);
+	    params.put("pageSize", pageSize);
+	    params.put("query", query);
+	    params.put("status", status);
+
+	    List<ApprovalDocDTO> data = apprservice.getFilteredApprovalData(params);
+	    int total = apprservice.getApprovalDocCount(params);
+
+	    Map<String, Object> result = new HashMap<>();
+	    result.put("data", data);
+	    result.put("totalPages", (int) Math.ceil((double) total / pageSize));
+
+	    return result;
 	}
     
     // 기안서 결재 페이지 불러오기
@@ -316,5 +348,45 @@ public class ApprovalController {
         boolean success = apprservice.updateApprovalStatus(approvalDocIdx, approvalState, approvalDate);
         return success ? "success" : "error";
     }
+    
+    // 내 결재 페이지 종료
+    
+    // 결재 통합 관리 페이지 시작 //
+    
+    // 결재 통합 관리 페이징 이동 요청
+	@RequestMapping(value="/approval/approvalIntegration.go") // value 수정
+	public String approvalIntegration() {
+		logger.info("결재 통합 관리 페이지 이동");	
+		return "approval/approvalIntegration";
+	}
+	
+	// 결재 통합 관리 결재 문서 전체 리스트업 ( 페이징, 필터링, 검색 )
+	@PostMapping("/getApprovalDocData.ajax")
+	@ResponseBody
+	public Map<String, Object> getApprovalDocData(
+	        @RequestParam(value = "page", defaultValue = "1") int page,
+	        @RequestParam(value = "query", defaultValue = "") String query,
+	        @RequestParam(value = "status", defaultValue = "") String status) {
+
+	    int pageSize = 5;
+	    int start = (page - 1) * pageSize;
+
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("start", start);
+	    params.put("pageSize", pageSize);
+	    params.put("query", query);
+	    params.put("status", status);
+
+	    List<ApprovalDocDTO> data = apprservice.getApprovalDocData(params);
+	    int total = apprservice.getApprovalDocCount(params);
+
+	    Map<String, Object> result = new HashMap<>();
+	    result.put("data", data);
+	    result.put("totalPages", (int) Math.ceil((double) total / pageSize));
+
+	    return result;
+	}
+	
+	
 }
 

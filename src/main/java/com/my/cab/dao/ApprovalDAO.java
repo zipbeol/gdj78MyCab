@@ -45,15 +45,13 @@ public interface ApprovalDAO {
 
 	String getSignaturePath(String fileName);
 
-	List<ApprovalDocDTO> getFilteredApprovalData(String loginId);
+	List<ApprovalDocDTO> getFilteredApprovalData(Map<String, Object> params);
 
 	ApprovalDocDTO getDocumentById(int docId);
 
 	void updateDocumentStatus(Map<String, Object> params);
 
 	int isApproverSigned(String documentId, String approverType);
-
-	// 07.08
 	
 	List<String> getUserType(Map<String, Object> params);
 
@@ -70,6 +68,14 @@ public interface ApprovalDAO {
 	void updateDocumentApprovalStatus(Map<String, Object> params);
 
 	int updateApprovalStatus(String approvalDocIdx, int approvalState, String approvalDate);
+	
+	
+	
+	// 결재 통합 관리 페이지 결재 문서 리스트업
+	List<ApprovalDocDTO> getApprovalDocData(Map<String, Object> params);
+	
+	// 결재 통합 관리 페이징 처리
+	int getApprovalDocCount(Map<String, Object> params);
 
 
 

@@ -41,11 +41,14 @@ public class LoginController {
 			page = "redirect:/";
 			LoginDTO loginDTO = service.getInfo(emp_no);
 			logger.info("프로필?"+loginDTO.getProfile_new());
+			
 			session.setAttribute("loginId", emp_no);
 			session.setAttribute("profile", loginDTO.getProfile_new());
 			session.setAttribute("dept_no", loginDTO.getDept_no());
 			session.setAttribute("title_no", loginDTO.getTitle_no());
 			session.setAttribute("emp_name", loginDTO.getEmp_name());
+			session.setAttribute("title_name", loginDTO.getTitle_name());
+			session.setAttribute("dept_name", loginDTO.getDept_name());
 			
 		} else if (row == 2) {//로그인 성공, 최초 로그인시
 			page = "redirect:/login/pwFirstChange.go";

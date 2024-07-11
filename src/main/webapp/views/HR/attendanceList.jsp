@@ -385,8 +385,10 @@
 										<!-- 페이지 네이션 시작 -->
 										<nav aria-label="Page navigation example" class="mt-3">
 											<ul class="pagination justify-content-center" id="pagination2"></ul>
+							
 										</nav>
-										<!-- 페이지 네이션 종료 -->
+						
+					</div>					<!-- 페이지 네이션 종료 -->
                 </div>
             </div>
         </div>

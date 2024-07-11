@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap Gallery - My Cab Bootstrap 5 Dashboard</title>
+    <title>일정관리</title>
 
     <!-- Meta -->
     <meta name="description" content="Marketplace for Bootstrap Admin Dashboards">
@@ -49,6 +49,16 @@
     <link rel="stylesheet" href="/assets/vendor/daterange/daterange.css">
     
     <style >
+         .alert-placeholder {
+	         position: fixed;
+	         top: 0;
+	         left: 0;
+	         right: 0;
+	         z-index: 1050;
+	         margin: 0;
+	         padding: 10px;
+	         text-align: center;
+        }
     	#selectableCalendar{
     		width: 1000px;
     		height: 800px;
@@ -221,7 +231,7 @@
 						</button>
 					</div>
 					<!-- Toggle buttons end -->
-
+					<div id="alertPlaceholder" class="alert-placeholder"></div>
 					<!-- App brand sm start -->
 					<div class="app-brand-sm d-lg-none d-sm-block">
 						<a href="/"> <img src="/assets/images/logo-sm.svg"
@@ -235,10 +245,9 @@
 						<li class="breadcrumb-item"><a href="/"><i
 								class="bi bi-house lh-1"></i></a> <a href="/"
 							class="text-decoration-none">메인</a></li>
-						<li class="breadcrumb-item"><a href="#"
-							class="text-decoration-none">인사 관리</a></li>
-						<li class="breadcrumb-item"><a href="/emp/hremp/list.go"
-							class="text-decoration-none">사원 조회</a></li>
+						<li class="breadcrumb-item"><a href="/calemdar/calendar.go"
+							class="text-decoration-none">일정 관리</a></li>
+
 					</ol>
 					<!-- Breadcrumb end -->
 
@@ -374,8 +383,8 @@
                         	</c:forEach>
                         </c:if>
                     </select>
-                    <label class="input-group-text" for="create-share">공유 상대선택</label>
-                    <input type="text" id="create-share" onclick="shareModalOpen()">
+                    <label class="input-group-text" for="create-share">공유 상대</label>
+                    <input type="text" id="Shared-partner" onclick="shareModalOpen()">
                     
                 </div>
                 <div class="input-group mb-3">
@@ -506,10 +515,12 @@
 														
 														<c:forEach items="${empList}" varStatus="empStatus" var="emplist">
 															<c:if test="${deptlist eq emplist.dept_name}">
-																<button type="button" class="btn btn-primary" data-emp-no="${emplist.emp_no}"
-                                                                    onclick="selectEmployee('${emplist.emp_no}', '${emplist.title_name}', '${emplist.emp_name}')">
-                                                                ${emplist.title_name} ${emplist.emp_name}
-                                                            </button>
+																<c:if test="${emplist.emp_no ne loginId}">
+																	<button type="button" class="btn btn-primary" data-emp-no="${emplist.emp_no}"
+	                                                                    onclick="selectEmployee('${emplist.emp_no}', '${emplist.title_name}', '${emplist.emp_name}')">
+	                                                                	${emplist.title_name} ${emplist.emp_name}
+	                                                            	</button>
+                                                            	</c:if>
 															</c:if>										
 														</c:forEach>
 													</div>
@@ -528,7 +539,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-primary"
-						onclick="createSharedCalendar()">생성하기</button>
+						onclick="createSharedCalendar()" data-bs-dismiss="modal">생성하기</button>
 					<button type="button" class="btn btn-secondary"
 						data-bs-dismiss="modal">취소하기</button>
 				</div>
@@ -1047,9 +1058,6 @@
 		
 	}
 	
-	function shareModalOpen(){
-		
-	}
 	
 	//공유 캘린더 생성 모달창 열기
 	function createShareModalOpen(){
@@ -1106,7 +1114,12 @@
 
 	    // 캘린더 생성 버튼 클릭 시
 	    function createSharedCalendar() {
+	    	console.log(selectedEmployees);
+	    	if(selectedEmployees.length<=0){
+	    		showAlert('success', '최소한 한명이상을 선택 해주세요.');
+	    	}else{
 	    		var infoList = {};
+	    		selectedEmployees.push(loginId);
 	    		infoList.empList =selectedEmployees;
 	    		infoList.shareTitle = document.getElementById('create-share-title').value;
 	    		infoList.shareColor = document.getElementById('create-share-color').value;
@@ -1131,8 +1144,10 @@
 	        // 여기에 선택된 사원들을 서버로 전송하거나 다른 작업을 수행할 수 있습니다.
 	        
 	        // 모달 닫기
-	        var addSharedCalendarModal = new bootstrap.Modal(document.getElementById('addSharedCalendarModal'));
-	        addSharedCalendarModal.hide();
+		        var addSharedCalendarModal = new bootstrap.Modal(document.getElementById('addSharedCalendarModal'));
+		        addSharedCalendarModal.hide();
+	    	}
+	    		
 	    }
 	
 	    
@@ -1257,5 +1272,6 @@
 			};
 		});
 </script>
+<script src="/assets/js/showAlert.js"></script>
 
 </html>

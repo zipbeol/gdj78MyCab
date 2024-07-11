@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap Gallery - My Cab Bootstrap 5 Dashboard</title>
+    <title>자원등록</title>
 
     <!-- Meta -->
     <meta name="description" content="Marketplace for Bootstrap Admin Dashboards">
@@ -104,9 +104,9 @@
 								class="bi bi-house lh-1"></i></a> <a href="/"
 							class="text-decoration-none">메인</a></li>
 						<li class="breadcrumb-item"><a href="#"
-							class="text-decoration-none">인사 관리</a></li>
-						<li class="breadcrumb-item"><a href="/emp/hremp/list.go"
-							class="text-decoration-none">사원 조회</a></li>
+							class="text-decoration-none">자원 관리</a></li>
+						<li class="breadcrumb-item"><a href="/resource/resourceWrite.go"
+							class="text-decoration-none">자원 등록</a></li>
 					</ol>
 					<!-- Breadcrumb end -->
 

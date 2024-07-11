@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Main</title>
+    <title>내 결재 관리</title>
     <!-- Meta -->
     <meta name="description" content="Marketplace for Bootstrap Admin Dashboards">
     <meta name="author" content="Bootstrap Gallery">
@@ -208,10 +208,9 @@
    								</tbody>
                         </table>
                         <div class="btn-container">
-                            <button class="btn btn-outline-primary">신규(F2 </button>
+                            <button class="btn btn-outline-primary">결재</button>
                             <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#signatureModal">My도장/서명</button>
-                            <button class="btn btn-outline-warning" >보내기</button>
-                            <button class="btn btn-outline-danger">결재</button>
+                            <button class="btn btn-outline-warning" >PDF다운로드</button>
                         </div>
                         <nav aria-label="Page navigation">
                             <ul class="pagination">   
@@ -508,7 +507,7 @@ $(document).ready(function() {
     // 결재 상태 텍스트 변환
     function getApprovalStateText(state) {
         if (state === 1) return '중간 결재 완료';
-        if (state === 2) return '최종 결재 완료';
+        if (state === 2) return '결재 완료';
         return '진행 중';
     }
 

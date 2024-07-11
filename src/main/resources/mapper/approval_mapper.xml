@@ -230,5 +230,51 @@
     </if>
 </select>
 
+<!-- 모든 결재 문서 가져오기 (검색, 필터링, 페이징 적용) -->
+<select id="getAllApprovalDocData" parameterType="map" resultType="com.my.cab.dto.ApprovalDocDTO">
+    SELECT ad.*, 
+           a.appr_midapprover,
+           a.appr_finalapprover
+    FROM tb_approval_doc ad
+    JOIN tb_approval a ON ad.approval_doc_idx = a.approval_doc_idx
+    WHERE (ad.approval_doc_title LIKE CONCAT('%', #{query}, '%')
+    OR ad.approval_doc_id LIKE CONCAT('%', #{query}, '%')
+    OR a.appr_midapprover LIKE CONCAT('%', #{query}, '%')
+    OR a.appr_finalapprover LIKE CONCAT('%', #{query}, '%')
+    OR ad.approval_doc_write_date LIKE CONCAT('%', #{query}, '%'))
+    <if test="status != ''">
+        AND ad.approval_doc__state = #{status}
+    </if>
+    ORDER BY ad.approval_doc_write_date DESC
+    LIMIT #{start}, #{pageSize}
+</select>
+
+<!-- 전체 결재 문서 수 세기 (검색, 필터링 적용) -->
+<select id="getAllApprovalDocCount" parameterType="map" resultType="int">
+    SELECT COUNT(*)
+    FROM tb_approval_doc ad
+    JOIN tb_approval a ON ad.approval_doc_idx = a.approval_doc_idx
+    WHERE (ad.approval_doc_title LIKE CONCAT('%', #{query}, '%')
+    OR ad.approval_doc_id LIKE CONCAT('%', #{query}, '%')
+    OR a.appr_midapprover LIKE CONCAT('%', #{query}, '%')
+    OR a.appr_finalapprover LIKE CONCAT('%', #{query}, '%')
+    OR ad.approval_doc_write_date LIKE CONCAT('%', #{query}, '%'))
+    <if test="status != ''">
+        AND ad.approval_doc__state = #{status}
+    </if>
+</select>
+
+    <!-- 결재 문서 삭제 -->
+    <delete id="deleteByPath" parameterType="string">
+        DELETE FROM tb_approval_doc WHERE approval_doc_path = #{doc}
+    </delete>
+    
+        <!-- 관련된 tb_approval 데이터 삭제 -->
+    <delete id="deleteApprovalByDocPath" parameterType="string">
+        DELETE a FROM tb_approval a
+        JOIN tb_approval_doc d ON a.approval_doc_idx = d.approval_doc_idx
+        WHERE d.approval_doc_path = #{doc}
+    </delete>
+
 
 </mapper>

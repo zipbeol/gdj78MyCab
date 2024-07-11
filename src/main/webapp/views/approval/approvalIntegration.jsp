@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Main</title>
+    <title>결재 통합 관리</title>
     <!-- Meta -->
     <meta name="description" content="Marketplace for Bootstrap Admin Dashboards">
     <meta name="author" content="Bootstrap Gallery">
@@ -149,7 +149,7 @@
                         <!-- 여기에 경로 추가 -->
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="/approval/approvalIntegration" class="approvalIntegration">결재 통합 관리</a>
+                        <a href="/approval/approvalIntegration.go" class="approvalIntegration">결재 통합 관리</a>
                         <!-- 여기에 경로 추가 -->
                     </li>
                 </ol>
@@ -213,8 +213,7 @@
                             <button class="btn btn-outline-warning">PDF 다운로드</button>
                         </div>
                         <nav aria-label="Page navigation">
-                            <ul class="pagination">
-                            </ul>
+                            <ul class="pagination"></ul>
                         </nav>
                     </div>
                      <iframe id="form-document" style="display:none;"></iframe>
@@ -276,13 +275,46 @@ $(document).ready(function() {
     $('.search-form').on('submit', function(e) {
         e.preventDefault();
         const query = $('#query').val();
-        loadApprovalData(1, query);  // 페이지를 1로 초기화
+        loadApprovalData(1, query, '');  // 페이지를 1로 초기화
     });
 
     // 필터링 기능
     $('.status-btn').on('click', function() {
         const status = $(this).data('status');  // 버튼에 data-status 속성 사용
         loadApprovalData(1, '', status);
+    });
+    
+    // 삭제 기능
+    $('.btn-outline-primary').on('click', function() {
+        const selectedDocs = $('.approval-checkbox:checked').map(function() {
+            return $(this).val();
+        }).get();
+
+        if (selectedDocs.length === 0) {
+            alert('삭제할 항목을 선택하세요.');
+            return;
+        }
+
+        if (confirm('선택한 항목을 삭제하시겠습니까?')) {
+            $.ajax({
+                url: '/deleteApprovalDocs.ajax',
+                type: 'POST',
+                contentType: 'application/json', // 콘텐츠 타입 설정
+                data: JSON.stringify(selectedDocs), // 배열 자체를 JSON으로 변환
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        alert('삭제가 완료되었습니다.');
+                        loadApprovalData();
+                    } else {
+                        alert('삭제 중 오류가 발생했습니다.');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('삭제 중 오류 발생:', error);
+                }
+            });
+        }
     });
 
     // 데이터 가져오기
@@ -365,7 +397,7 @@ $(document).ready(function() {
     // 결재 상태 텍스트 변환
     function getApprovalStateText(state) {
         if (state === 1) return '중간 결재 완료';
-        if (state === 2) return '최종 결재 완료';
+        if (state === 2) return '결재 완료';
         return '진행 중';
     }
 

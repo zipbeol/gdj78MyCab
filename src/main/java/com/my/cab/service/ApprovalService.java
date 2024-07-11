@@ -166,7 +166,31 @@ public class ApprovalService {
 	}
 
 	
+	public List<ApprovalDocDTO> getAllApprovalDocData(Map<String, Object> params) {
+	    return apprDAO.getAllApprovalDocData(params);
+	}
 
+	public int getAllApprovalDocCount(Map<String, Object> params) {
+	    return apprDAO.getAllApprovalDocCount(params);
+	}
+
+    // 결재 문서 삭제 기능
+	// 결재 문서 삭제 기능
+    @Transactional
+    public boolean deleteApprovalDocs(List<String> docs) {
+        try {
+            for (String doc : docs) {
+                // tb_approval 테이블에서 관련 데이터 삭제
+                apprDAO.deleteApprovalByDocPath(doc);
+                // tb_approval_doc 테이블에서 문서 삭제
+                apprDAO.deleteByPath(doc);
+            }
+            return true;
+        } catch (Exception e) {
+            LoggerFactory.getLogger(getClass()).error("Error deleting approval documents", e);
+            return false;
+        }
+    }
 
 
 

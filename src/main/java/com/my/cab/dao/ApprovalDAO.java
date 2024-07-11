@@ -77,6 +77,15 @@ public interface ApprovalDAO {
 	// 결재 통합 관리 페이징 처리
 	int getApprovalDocCount(Map<String, Object> params);
 
+	List<ApprovalDocDTO> getAllApprovalDocData(Map<String, Object> params);
+
+	int getAllApprovalDocCount(Map<String, Object> params);
+	
+	// 결재 통합 관리 결재 문서 삭제
+	void deleteByPath(String doc);
+
+	void deleteApprovalByDocPath(String doc);
+
 
 
 

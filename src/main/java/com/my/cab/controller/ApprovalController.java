@@ -377,8 +377,8 @@ public class ApprovalController {
 	    params.put("query", query);
 	    params.put("status", status);
 
-	    List<ApprovalDocDTO> data = apprservice.getApprovalDocData(params);
-	    int total = apprservice.getApprovalDocCount(params);
+	    List<ApprovalDocDTO> data = apprservice.getAllApprovalDocData(params);
+	    int total = apprservice.getAllApprovalDocCount(params);
 
 	    Map<String, Object> result = new HashMap<>();
 	    result.put("data", data);
@@ -387,6 +387,18 @@ public class ApprovalController {
 	    return result;
 	}
 	
-	
+    // 결재 문서 삭제 기능
+    @PostMapping("/deleteApprovalDocs.ajax")
+    @ResponseBody
+    public Map<String, Object> deleteApprovalDocs(@RequestBody List<String> docs) {
+        boolean success = apprservice.deleteApprovalDocs(docs);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("success", success);
+        return result;
+    }
+    
+    
 }
+	
 

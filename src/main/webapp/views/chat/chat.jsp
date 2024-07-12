@@ -402,7 +402,7 @@
                 </div>
                 <div class="row selected-employees">
                     <div class="col-md-12">
-                        <h6>Selected Employees:</h6>
+                        <h6>선택된 멤버:</h6>
                         <div id="selectedEmployees">
                         </div>
                     </div>
@@ -537,21 +537,25 @@
         $(document).on('click', '.employee-item', function () {
             var employeeId = $(this).data('employee-id');
             var employeeName = $(this).data('employee-name');
+            var employeeDeptName = $(this).data('employee-dept-name');
+            var employeeTitleName = $(this).data('employee-title-name');
 
             selectedEmployeeIds.add(employeeId);
-            selectedEmployeeNames.add(employeeName);
+            selectedEmployeeNames.add(employeeName + " (" + employeeTitleName + ", " + employeeDeptName + ")");
 
             var selectedEmployeesContainer = $('#selectedEmployees');
             var selectedEmployeeItem = $('<div class="selected-item list-group-item"></div>');
-            selectedEmployeeItem.text(employeeName);
+            selectedEmployeeItem.text(employeeName + " (" + employeeTitleName + ", " + employeeDeptName + ")");
             selectedEmployeeItem.data('employee-id', employeeId);
             selectedEmployeeItem.data('employee-name', employeeName);
+            selectedEmployeeItem.data('employee-dept-name', employeeDeptName);
+            selectedEmployeeItem.data('employee-title-name', employeeTitleName);
 
             var removeButton = $('<button class="btn btn-danger btn-sm ml-2">Remove</button>');
             removeButton.on('click', function () {
                 selectedEmployeeItem.remove();
                 selectedEmployeeIds.delete(employeeId);
-                selectedEmployeeNames.delete(employeeName); // Also remove from the name set
+                selectedEmployeeNames.delete(employeeName + " (" + employeeTitleName + ", " + employeeDeptName + ")");
                 fetchEmployeeList();
             });
 
@@ -609,7 +613,6 @@
                 if (data && data.messages && Array.isArray(data.messages)) {
                     data.messages.forEach(handleIncomingMessage);
                     chatMessages.scrollTop(chatMessages[0].scrollHeight);
-                    // wsChat = chatWebSocketConnect(wsChat);
                 } else {
                     console.error('Invalid messages data:', data);
                 }
@@ -682,17 +685,21 @@
     function appendMessageContent(messageContent, chatMessage) {
         if (chatMessage.type === 'file' && chatMessage.attachments && chatMessage.attachments.length > 0) {
             var file = chatMessage.attachments[0];
+            var fileContainer = $('<div>').addClass('file-container');
+
             if (file.fileType.startsWith('image')) {
-                var imageContainer = $('<div>').addClass('image-container');
                 var imagePreview = $('<img>').attr('src', '/api/imgView/' + file.fileName).css('max-width', '100%');
-                imageContainer.append(imagePreview);
-                messageContent.append(imageContainer);
+                fileContainer.append(imagePreview);
+            } else {
+                var fileIcon = $('<i>').addClass('fas fa-file-alt').css('font-size', '24px'); // 파일 이모티콘
+                var fileLink = $('<a>')
+                    .attr('href', '/api/download/' + file.fileName + '/' + file.oriFileName)
+                    .attr('download', file.oriFileName)
+                    .text(' ' + file.oriFileName);
+                fileContainer.append(fileIcon).append(fileLink);
             }
-            var fileLink = $('<a>')
-                .attr('href', '/api/download/' + file.fileName + '/' + file.oriFileName)
-                .attr('download', file.oriFileName)
-                .text('Download ' + file.oriFileName);
-            messageContent.append(fileLink);
+
+            messageContent.append(fileContainer);
         } else {
             var messageText = $('<div>')
                 .addClass('chat-messages-div')
@@ -853,10 +860,11 @@
             data.forEach(function (employee) {
                 if (!selectedEmployeeIds.has(employee.emp_no) && employee.emp_no != myId) {
                     var employeeItem = $('<div class="employee-item list-group-item"></div>');
-                    // Include employee name, title, and department
                     employeeItem.text(employee.emp_name + " (" + employee.title_name + ", " + employee.dept_name + ")");
                     employeeItem.data('employee-id', employee.emp_no);
                     employeeItem.data('employee-name', employee.emp_name);
+                    employeeItem.data('employee-dept-name', employee.dept_name);
+                    employeeItem.data('employee-title-name', employee.title_name);
                     employeeListContainer.append(employeeItem);
                 }
             });
@@ -867,7 +875,7 @@
 
     function resetModal() {
         selectedEmployeeIds.clear();
-        selectedEmployeeNames.clear(); // Clear the name set as well
+        selectedEmployeeNames.clear();
         $('#selectedEmployees').empty();
     }
 

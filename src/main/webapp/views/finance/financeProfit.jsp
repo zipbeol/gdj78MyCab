@@ -406,6 +406,7 @@ td:hover {
     // 카테고리 이름을 출력하는 함수
     function categoryName(category) {
         console.log('Selected category:', category);
+        
     }
     
     // 등록 버튼 클릭 이벤트 처리
@@ -516,37 +517,48 @@ td:hover {
     });
 
     // 토탈 페이지 호출
-    function getTotalPages() {
-        $.ajax({
-            url: './getTotalPages.ajax',
-            type: 'GET',
-            data: {
-                'category': category,
-                'filterStartDate': $('#startDate').val(),
-                'filterEndDate': $('#endDate').val(),
-                'searchText': $('#searchQuery').val(),
-                'page' : currentPage
-            },
-            dataType: 'JSON',
-            success: function (data) {
-                console.log(data);
-                $('#pagination').twbsPagination('destroy');
-                $('#pagination').twbsPagination({
-                    totalPages: data.totalPages, // 서버에서 받은 총 페이지 수
-                    visiblePages: 5,
-                    startPage: currentPage,
-                    paginationClass: 'pagination align-items-center',
-                    onPageClick: function (event, page) {
-                        currentPage = page;
-                        refreshProfitList();
-                    }
-                });
-            },
-            error: function (error) {
-                console.log(error);
+function getTotalPages() {
+    $.ajax({
+        url: './getTotalPages.ajax',
+        type: 'GET',
+        data: {
+            'category': category,
+            'filterStartDate': $('#startDate').val(),
+            'filterEndDate': $('#endDate').val(),
+            'searchText': $('#searchQuery').val(),
+            'page': currentPage
+        },
+        dataType: 'JSON',
+        success: function (data) {
+            console.log('Total Pages:', data); // 총 페이지 수 로그 출력
+
+            var totalPages = parseInt(data.totalPages, 10); // 문자열로 반환될 수 있으므로 정수로 변환
+            if (isNaN(totalPages) || totalPages < 1) {
+                console.error('Invalid total pages:', totalPages);
+                return;
             }
-        });
-    }
+
+            if (currentPage < 1 || currentPage > totalPages) {
+                currentPage = 1; // currentPage 값이 유효 범위를 벗어나면 1로 초기화
+            }
+
+            $('#pagination').twbsPagination('destroy');
+            $('#pagination').twbsPagination({
+                totalPages: totalPages, // 서버에서 받은 총 페이지 수
+                visiblePages: 5,
+                startPage: currentPage,
+                paginationClass: 'pagination align-items-center',
+                onPageClick: function (event, page) {
+                    currentPage = page;
+                    refreshProfitList();
+                }
+            });
+        },
+        error: function (error) {
+            console.log('Total Pages Error:', error); // 오류 로그 출력
+        }
+    });
+}
     </script>
 </body>
 </html>

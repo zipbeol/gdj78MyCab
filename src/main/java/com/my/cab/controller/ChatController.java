@@ -5,6 +5,7 @@ import com.my.cab.dto.ChatRoomDTO;
 import com.my.cab.service.ChatService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,9 @@ public class ChatController {
 
     private final ChatService chatService;
 
+    @Value("${spring.servlet.multipart.location}")
+    private String uploadDir;
+
     public ChatController(ChatService chatService, ServletConfig servletConfig) {
         this.chatService = chatService;
         this.servletConfig = servletConfig;
@@ -37,7 +41,18 @@ public class ChatController {
             chatRoomDTO.setEmpList(chatService.getChatRoomMembers(chatRoomDTO));
         }
         model.addAttribute("chatRoomList", list);
+        model.addAttribute("uploadDir", uploadDir);
         return "chat/chat";
+    }
+
+    @RequestMapping("/getChatRoomList.ajax")
+    @ResponseBody
+    public Map<String, Object> chatGo(String emp_no) {
+        List<ChatRoomDTO> list = chatService.getChatRoomList(emp_no);
+        for (ChatRoomDTO chatRoomDTO : list) {
+            chatRoomDTO.setEmpList(chatService.getChatRoomMembers(chatRoomDTO));
+        }
+        return Map.of("list", list);
     }
 
     @RequestMapping("/admin/list.go")
@@ -75,6 +90,12 @@ public class ChatController {
         logger.info("chatRoomDTO: {}", chatRoomDTO.getRoomName());
         logger.info("chatRoomDTO: {}", chatRoomDTO.getRoomEmpIdx());
         return Map.of("result", chatService.createChatRoom(chatRoomDTO));
+    }
+
+    @PostMapping("/inviteMembers.ajax")
+    @ResponseBody
+    public Map<String, Object> inviteMembers(ChatRoomDTO chatRoomDTO) {
+        return Map.of("result", chatService.inviteMembers(chatRoomDTO));
     }
 
 }

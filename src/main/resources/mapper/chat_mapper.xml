@@ -107,4 +107,5 @@
         INSERT INTO chat_room_member(chat_room_member_id, chat_room_member_emp_no, chat_room_member_is_join)
         VALUES (#{roomIdx}, #{roomEmpIdx}, true)
     </insert>
+
 </mapper>

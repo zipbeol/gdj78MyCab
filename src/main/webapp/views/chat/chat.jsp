@@ -113,6 +113,7 @@
 
         .input-group {
             display: flex;
+            align-items: center;
         }
 
         .input-group input {
@@ -130,6 +131,58 @@
             border-radius: 0 4px 4px 0;
             background-color: #007bff;
             color: white;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0;
+            border-left: none;
+            border-right: none;
+        }
+
+        .file-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-name {
+            font-size: 0.8em;
+            color: #999;
+            margin-left: 10px;
+            align-self: center;
+        }
+
+        .delete-button {
+            background: none;
+            border: none;
+            color: red;
+            cursor: pointer;
+            font-size: 0.8em;
+            margin-left: 5px;
+            display: none;
+        }
+
+        .message-content:hover .delete-button {
+            display: block;
+        }
+
+        .deleted-message .delete-button {
+            display: none;
+        }
+
+        .deleted-message {
+            color: #999;
+            font-style: italic;
         }
 
         .chat-date {
@@ -181,50 +234,9 @@
             padding: 5px 0;
         }
 
-        .file-input-wrapper {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .file-input {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
-        }
-
-        .file-name {
-            font-size: 0.8em;
-            color: #999;
-            margin-left: 10px;
-            align-self: center;
-        }
-
-        .delete-button {
-            background: none;
-            border: none;
-            color: red;
-            cursor: pointer;
-            font-size: 0.8em;
-            margin-left: 5px;
-            display: none;
-        }
-
-        .message-content:hover .delete-button {
-            display: block;
-        }
-
-        .deleted-message .delete-button {
-            display: none;
-        }
-
-
-        .deleted-message {
-            color: #999;
-            font-style: italic;
+        .chat-list {
+            max-height: 400px; /* 고정된 높이 설정 */
+            overflow-y: auto; /* 스크롤바 활성화 */
         }
 
     </style>
@@ -273,7 +285,8 @@
                                             <button class="btn btn-success btn-block mb-3" data-toggle="modal"
                                                     data-target="#newChatModal">새로 만들기
                                             </button>
-                                            <input type="text" class="form-control mb-3" placeholder="메시지방, 메시지 검색">
+                                            <input type="text" class="form-control mb-3" id="searchChatRoom"
+                                                   placeholder="채팅방, 최근 메시지 검색">
                                             <div class="list-group">
                                                 <c:choose>
                                                     <c:when test="${chatRoomList.size() > 0}">
@@ -332,17 +345,21 @@
                                                         <input type="text" class="form-control" id="messageInput"
                                                                placeholder="메시지를 입력해주세요. (Enter: 전송)">
                                                         <div class="input-group-append">
-                                                            <div class="file-input-wrapper btn btn-secondary">
-                                                                파일 선택
-                                                                <input type="file" id="fileInput" class="file-input">
+                                                            <div class="input-group">
+                                                                <div class="file-input-wrapper btn btn-secondary">
+                                                                    파일 선택
+                                                                    <input type="file" id="fileInput"
+                                                                           class="file-input">
+                                                                </div>
+                                                                <button class="btn btn-primary" type="button"
+                                                                        onclick="sendMessage()">전송
+                                                                </button>
                                                             </div>
-                                                            <button class="btn btn-primary" type="button"
-                                                                    onclick="sendMessage()">전송
-                                                            </button>
                                                         </div>
                                                         <div id="fileName" class="file-name"></div>
                                                     </div>
                                                 </div>
+
                                             </div>
                                             <div class="text-center p-5" id="selectChatRoomMessage">
                                                 <h5>채팅방을 선택해 주세요</h5>
@@ -411,7 +428,7 @@
 <script src="/assets/js/LocalStorage.js"></script>
 <script src="/assets/js/showAlert.js"></script>
 <script>
-    var wsChat = null;
+    var wsChat = chatWebSocketConnect(wsChat);
     var selectedRoomId = null;
     var selectedEmployeeIds = new Set();
     var selectedEmployeeNames = new Set();
@@ -421,31 +438,50 @@
     var roomInfo = [];
     var empNameMapping = {};
 
-    initializeRoomInfo();
+    getRoomList();
     populateChatRoomList();
     bindEvents();
-    
-    function initializeRoomInfo() {
-        <c:forEach items="${chatRoomList}" var="room">
-        var empList = [];
-        <c:forEach items="${room.empList}" var="emp">
-        empList.push({
-            empNo: '${emp.emp_no}',
-            empName: '${emp.emp_name}',
-            empPhoto: '${emp.profile_new}'
+
+    function getRoomList() {
+        $.ajax({
+            url: '/chat/getChatRoomList.ajax',
+            type: 'GET',
+            data: {'emp_no': '${sessionScope.loginId}'},
+            dataType: 'JSON',
+            success: function (data) {
+                console.log(data.list);
+                roomInfo = data.list.map(room => ({
+                    roomIdx: room.roomIdx,
+                    roomName: room.roomName,
+                    roomLastMessage: room.roomLastMessage,
+                    roomLastMessageDate: room.roomLastMessageDate,
+                    roomUserCount: room.roomMemberCount,
+                    empList: room.empList.map(emp => ({
+                        empNo: emp.emp_no,
+                        empName: emp.emp_name,
+                        empPhoto: emp.profile_new
+                    }))
+                }));
+                empNameMapping = {};
+                data.list.forEach(room => {
+                    room.empList.forEach(emp => {
+                        empNameMapping[emp.emp_no] = {
+                            empName: emp.emp_name,
+                            empPhoto: emp.profile_new
+                        };
+                    });
+                });
+                populateChatRoomList();
+            },
+            error: function (error) {
+                console.log(error);
+            },
         });
-        empNameMapping['${emp.emp_no}'] = '${emp.emp_name}';
-        </c:forEach>
-        roomInfo.push({
-            roomIdx: '${room.roomIdx}',
-            roomName: '${room.roomName}',
-            roomLastMessage: '${room.roomLastMessage}',
-            roomLastMessageDate: '${room.roomLastMessageDate}',
-            roomUserCount: '${room.roomMemberCount}',
-            empList: empList
-        });
-        </c:forEach>
-        console.log(roomInfo);
+    }
+
+
+    function escapeQuotes(message) {
+        return message.replace(/'/g, "\\'").replace(/"/g, '\\"');
     }
 
     function populateChatRoomList() {
@@ -469,6 +505,11 @@
                 roomItem.append(roomHeader);
                 roomItem.append(roomMessagePreview);
                 chatRoomListContainer.append(roomItem);
+
+                // 현재 선택된 채팅방 유지
+                if (room.roomIdx == selectedRoomId) {
+                    roomItem.addClass('active');
+                }
             });
         } else {
             chatRoomListContainer.append('채팅방을 만들어 주세요');
@@ -534,7 +575,7 @@
                 if (data && data.messages && Array.isArray(data.messages)) {
                     data.messages.forEach(handleIncomingMessage);
                     chatMessages.scrollTop(chatMessages[0].scrollHeight);
-                    wsChat = chatWebSocketConnect(wsChat);
+                    // wsChat = chatWebSocketConnect(wsChat);
                 } else {
                     console.error('Invalid messages data:', data);
                 }
@@ -550,13 +591,21 @@
             ws.close();
         }
         ws = new WebSocket("ws://" + window.location.host + "/chat/" + selectedRoomId);
+        ws.onopen = function () {
+            var roomIdxList = roomInfo.map(room => room.roomIdx);
+            ws.send(JSON.stringify({type: 'joinRooms', roomIdxList: roomIdxList}));
+        };
         ws.onmessage = function (event) {
             var chatMessage = JSON.parse(event.data);
             console.log("chatMessage: {}", chatMessage);
-            handleIncomingMessage(chatMessage);
+            if (selectedRoomId != null && chatMessage.room == selectedRoomId) {
+                handleIncomingMessage(chatMessage);
+            }
+            getRoomList();
         };
         return ws;
     }
+
 
     function handleIncomingMessage(chatMessage) {
         var messageElement = $('<div>').addClass('message').attr('data-chat-idx', chatMessage.chatIdx);
@@ -566,9 +615,11 @@
             messageElement.addClass('received');
         }
 
-        var profilePic = $('<img>').attr('src', 'profile.png').addClass('profile-pic');
+        // 동적으로 empPhoto 경로 설정
+        var profilePicUrl = empNameMapping[chatMessage.sender].empPhoto;
+        var profilePic = $('<img>').attr('src', '/api/imgView/' + profilePicUrl).addClass('profile-pic');
         var messageContent = $('<div>').addClass('message-content');
-        var senderName = $('<span>').addClass('sender-name').text(empNameMapping[chatMessage.sender]);
+        var senderName = $('<span>').addClass('sender-name').text(empNameMapping[chatMessage.sender].empName);
         var timestamp = $('<div>').addClass('timestamp').text(new Date().toLocaleTimeString());
 
         messageContent.append(senderName);
@@ -594,17 +645,26 @@
         chatMessages.scrollTop(chatMessages[0].scrollHeight);
     }
 
+    $('#searchChatRoom').on('keyup', function () {
+        var searchValue = $(this).val().toLowerCase();
+        $('.chat-room-list').filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(searchValue) > -1);
+        });
+    });
+
     function appendMessageContent(messageContent, chatMessage) {
         if (chatMessage.type === 'file' && chatMessage.attachments && chatMessage.attachments.length > 0) {
             var file = chatMessage.attachments[0];
             if (file.fileType.startsWith('image')) {
-                var imagePreview = $('<img>').attr('src', '/src/main/resources/static/upload/' + file.fileName).css('max-width', '100%');
-                messageContent.append(imagePreview);
+                var imageContainer = $('<div>').addClass('image-container');
+                var imagePreview = $('<img>').attr('src', '/api/imgView/' + file.fileName).css('max-width', '100%');
+                imageContainer.append(imagePreview);
+                messageContent.append(imageContainer);
             }
             var fileLink = $('<a>')
-                .attr('href', '/api/download/' + file.fileName)
-                .attr('download', file.fileName)
-                .text('Download ' + file.fileName);
+                .attr('href', '/api/download/' + file.fileName + '/' + file.oriFileName)
+                .attr('download', file.oriFileName)
+                .text('Download ' + file.oriFileName);
             messageContent.append(fileLink);
         } else {
             var messageText = $('<div>')
@@ -722,7 +782,7 @@
                 data: {
                     roomIdx: selectedRoomId,
                     roomEmpIdx: myId,
-                    roomName: updatedRoomName 
+                    roomName: updatedRoomName
                 },
                 success: function (data) {
                     if (data.result) {
@@ -814,12 +874,12 @@
             alert('채팅방에 추가할 멤버를 선택해 주세요.');
             return;
         }
-        var selectedEmployeeNoArray = Array.from(selectedEmployeeIds).map(id => ({ emp_no: id }));
+        var selectedEmployeeNoArray = Array.from(selectedEmployeeIds).map(id => ({emp_no: id}));
         var selectedEmployeeNameArray = Array.from(selectedEmployeeNames);
         selectedEmployeeNameArray.push(myName); // Add the current user's name
 
         selectedEmployeeIds.add(Number(myId));
-        selectedEmployeeNoArray.push({ emp_no: myId });
+        selectedEmployeeNoArray.push({emp_no: myId});
 
         var roomName = selectedEmployeeNameArray.join(', ');
 

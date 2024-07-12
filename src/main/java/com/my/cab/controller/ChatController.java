@@ -89,7 +89,7 @@ public class ChatController {
     public Map<String, Object> createChatRoom(@RequestBody ChatRoomDTO chatRoomDTO) {
         logger.info("chatRoomDTO: {}", chatRoomDTO.getRoomName());
         logger.info("chatRoomDTO: {}", chatRoomDTO.getRoomEmpIdx());
-        return Map.of("result", chatService.createChatRoom(chatRoomDTO));
+        return Map.of("result", chatService.createChatRoom(chatRoomDTO), "roomIdx", chatRoomDTO.getRoomIdx());
     }
 
     @PostMapping("/inviteMembers.ajax")

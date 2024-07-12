@@ -231,9 +231,10 @@
     </select>
 
     <select id="getNoOffsetEmpList" resultType="emp" parameterType="search">
-        SELECT e.emp_no, e.emp_name, d.dept_name, d.dept_no
+        SELECT e.emp_no, e.emp_name, d.dept_name, d.dept_no, t.title_no, t.title_name
         FROM employee e
                  JOIN department d ON d.dept_no = e.dept_no
+                 JOIN title t ON t.title_no = e.title_no
         WHERE e.emp_employment_status = 1
 #           AND e.dept_no = #{dept_no}
     </select>

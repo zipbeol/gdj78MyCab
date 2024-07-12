@@ -459,7 +459,9 @@
                     empList: room.empList.map(emp => ({
                         empNo: emp.emp_no,
                         empName: emp.emp_name,
-                        empPhoto: emp.profile_new
+                        empPhoto: emp.profile_new,
+                        empDeptName: emp.dept_name,
+                        empTitleName: emp.title_name
                     }))
                 }));
                 empNameMapping = {};
@@ -467,7 +469,9 @@
                     room.empList.forEach(emp => {
                         empNameMapping[emp.emp_no] = {
                             empName: emp.emp_name,
-                            empPhoto: emp.profile_new
+                            empPhoto: emp.profile_new,
+                            empDeptName: emp.dept_name,
+                            empTitleName: emp.title_name
                         };
                     });
                 });
@@ -478,7 +482,6 @@
             },
         });
     }
-
 
     function escapeQuotes(message) {
         return message.replace(/'/g, "\\'").replace(/"/g, '\\"');
@@ -525,6 +528,37 @@
         $('.modal-footer .btn-primary').on('click', createChatRoom);
         $('#newChatModal').on('show.bs.modal', fetchEmployeeList);
         $('#newChatModal').on('hidden.bs.modal', resetModal);
+        $('#searchChatRoom').on('keyup', function () {
+            var searchValue = $(this).val().toLowerCase();
+            $('.chat-room-list').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(searchValue) > -1);
+            });
+        });
+        $(document).on('click', '.employee-item', function () {
+            var employeeId = $(this).data('employee-id');
+            var employeeName = $(this).data('employee-name');
+
+            selectedEmployeeIds.add(employeeId);
+            selectedEmployeeNames.add(employeeName);
+
+            var selectedEmployeesContainer = $('#selectedEmployees');
+            var selectedEmployeeItem = $('<div class="selected-item list-group-item"></div>');
+            selectedEmployeeItem.text(employeeName);
+            selectedEmployeeItem.data('employee-id', employeeId);
+            selectedEmployeeItem.data('employee-name', employeeName);
+
+            var removeButton = $('<button class="btn btn-danger btn-sm ml-2">Remove</button>');
+            removeButton.on('click', function () {
+                selectedEmployeeItem.remove();
+                selectedEmployeeIds.delete(employeeId);
+                selectedEmployeeNames.delete(employeeName); // Also remove from the name set
+                fetchEmployeeList();
+            });
+
+            selectedEmployeeItem.append(removeButton);
+            selectedEmployeesContainer.append(selectedEmployeeItem);
+            $(this).remove();
+        });
     }
 
     function handleRoomSelection() {
@@ -606,7 +640,6 @@
         return ws;
     }
 
-
     function handleIncomingMessage(chatMessage) {
         var messageElement = $('<div>').addClass('message').attr('data-chat-idx', chatMessage.chatIdx);
         if (chatMessage.sender === myId) {
@@ -616,10 +649,11 @@
         }
 
         // 동적으로 empPhoto 경로 설정
-        var profilePicUrl = empNameMapping[chatMessage.sender].empPhoto;
+        var empInfo = empNameMapping[chatMessage.sender];
+        var profilePicUrl = empInfo.empPhoto;
         var profilePic = $('<img>').attr('src', '/api/imgView/' + profilePicUrl).addClass('profile-pic');
         var messageContent = $('<div>').addClass('message-content');
-        var senderName = $('<span>').addClass('sender-name').text(empNameMapping[chatMessage.sender].empName);
+        var senderName = $('<span>').addClass('sender-name').text(empInfo.empName + ' (' + empInfo.empDeptName + ' ' + empInfo.empTitleName + ')');
         var timestamp = $('<div>').addClass('timestamp').text(new Date().toLocaleTimeString());
 
         messageContent.append(senderName);
@@ -644,13 +678,6 @@
         chatMessages.append(messageElement);
         chatMessages.scrollTop(chatMessages[0].scrollHeight);
     }
-
-    $('#searchChatRoom').on('keyup', function () {
-        var searchValue = $(this).val().toLowerCase();
-        $('.chat-room-list').filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(searchValue) > -1);
-        });
-    });
 
     function appendMessageContent(messageContent, chatMessage) {
         if (chatMessage.type === 'file' && chatMessage.attachments && chatMessage.attachments.length > 0) {
@@ -826,7 +853,8 @@
             data.forEach(function (employee) {
                 if (!selectedEmployeeIds.has(employee.emp_no) && employee.emp_no != myId) {
                     var employeeItem = $('<div class="employee-item list-group-item"></div>');
-                    employeeItem.text(employee.emp_name + " (" + employee.emp_no + ")");
+                    // Include employee name, title, and department
+                    employeeItem.text(employee.emp_name + " (" + employee.title_name + ", " + employee.dept_name + ")");
                     employeeItem.data('employee-id', employee.emp_no);
                     employeeItem.data('employee-name', employee.emp_name);
                     employeeListContainer.append(employeeItem);
@@ -836,32 +864,6 @@
             employeeListContainer.append('<div>No employees found</div>');
         }
     }
-
-    $(document).on('click', '.employee-item', function () {
-        var employeeId = $(this).data('employee-id');
-        var employeeName = $(this).data('employee-name');
-
-        selectedEmployeeIds.add(employeeId);
-        selectedEmployeeNames.add(employeeName);
-
-        var selectedEmployeesContainer = $('#selectedEmployees');
-        var selectedEmployeeItem = $('<div class="selected-item list-group-item"></div>');
-        selectedEmployeeItem.text(employeeName);
-        selectedEmployeeItem.data('employee-id', employeeId);
-        selectedEmployeeItem.data('employee-name', employeeName);
-
-        var removeButton = $('<button class="btn btn-danger btn-sm ml-2">Remove</button>');
-        removeButton.on('click', function () {
-            selectedEmployeeItem.remove();
-            selectedEmployeeIds.delete(employeeId);
-            selectedEmployeeNames.delete(employeeName); // Also remove from the name set
-            fetchEmployeeList();
-        });
-
-        selectedEmployeeItem.append(removeButton);
-        selectedEmployeesContainer.append(selectedEmployeeItem);
-        $(this).remove();
-    });
 
     function resetModal() {
         selectedEmployeeIds.clear();
@@ -894,6 +896,7 @@
                 roomEmpIdx: myId
             }),
             success: function (response) {
+                console.log(response.roomIdx);
                 if (response.result) {
                     $('#newChatModal').modal('hide');
                     alert('채팅방이 생성되었습니다.');

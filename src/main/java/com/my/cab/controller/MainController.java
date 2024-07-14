@@ -1,6 +1,7 @@
 package com.my.cab.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.my.cab.service.MainService;
 
@@ -34,11 +37,17 @@ Logger logger = LoggerFactory.getLogger(getClass());
 		return "main/main";
 	}
 	
+	@RequestMapping(value = "/main/getFuelInfo.ajax")
+	@ResponseBody
+	public Map<String, Object> getFuelCost() throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<Map<String, Object>> getFuelList = mainService.getFuelCostElem();
+		map.put("getFuelList", getFuelList);
+		
+		return map;
+	}
 	
 
-	
-	
-	
-	
+
 
 }

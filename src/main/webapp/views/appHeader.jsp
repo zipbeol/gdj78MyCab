@@ -178,8 +178,8 @@
         </a>
         <div class="dropdown-menu dropdown-menu-end shadow-sm">
             <div class="p-3 border-bottom mb-2">
-                <h6 class="mb-1">${sessionScope.loginId}</h6>
-                <p class="m-0 small opacity-50">info@testing.com</p>
+                <h6 class="mb-1">${sessionScope.emp_name}</h6>
+                <p class="m-0 small opacity-50">${sessionScope.email}</p>
             </div>
             <a class="dropdown-item d-flex align-items-center" href="/mypage/profile.go"><i
                     class="bi bi-person fs-4 me-2"></i>프로필</a>

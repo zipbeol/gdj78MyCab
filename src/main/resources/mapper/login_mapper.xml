@@ -13,7 +13,7 @@
     
     
     <select id="getInfo" resultType="login">
-    SELECT p.profile_new, e.dept_no, e.title_no, e.emp_level, e.emp_name, t.title_name, d.dept_name
+    SELECT p.profile_new, e.dept_no, e.title_no, e.emp_email, e.emp_level, e.emp_name, t.title_name, d.dept_name
     FROM employee e
     LEFT JOIN profile_photo p ON e.emp_no = p.emp_no
     JOIN title t ON e.title_no = t.title_no

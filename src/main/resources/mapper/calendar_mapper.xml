@@ -40,10 +40,15 @@
 	</insert>
 	
 	<select id="calendarDetail" resultType="calendarDTO">
-		SELECT s.*, e.emp_name as sechdule_emp_name , e.emp_email as schedule_emp_email, e.emp_extension_number as schedule_emp_extension_number,d.dept_name as schedule_dept_name
+		SELECT s.*, e.emp_name as sechdule_emp_name , 
+		e.emp_email as schedule_emp_email, 
+		e.emp_extension_number as schedule_emp_extension_number,
+		d.dept_name as schedule_dept_name,
+		c2.*
 			FROM schedule s
 			inner join employee e on s.schedule_emp_no = e.emp_no
 			inner join department d on e.dept_no =d.dept_no 
+			left join calendar c2 on c2.calendar_idx = s.schedule_cal_idx 
 			WHERE schedule_idx = #{param1}
 	</select>
 	
@@ -55,7 +60,18 @@
 		UPDATE schedule SET schedule_name = #{schedule_name},
 		schedule_content = #{schedule_content},schedule_start_date = #{schedule_start_date},
 		schedule_end_date = #{schedule_end_date},schedule_edit_date =#{schedule_edit_date},
-		schedule_editor= #{schedule_editor},schedule_category =#{schedule_category},
+		schedule_editor= #{schedule_editor},		
+		<choose>
+			<when test='share_category != null and share_category == "공유일정" '>
+				schedule_category = '공유일정',
+				schedule_cal_idx = #{calendar_idx},
+			</when>
+			<otherwise>
+				schedule_category = #{schedule_category},
+				schedule_cal_idx = null,
+			</otherwise>
+		</choose>
+		
 		schedule_color = #{schedule_color} WHERE schedule_idx = #{schedule_idx}
 		
 	</update>
@@ -89,7 +105,11 @@
 	</insert>
 	
 	<select id="getShareCalInfo" parameterType="calendarDTO">
-		SELECT * FROM calendar
+		SELECT * FROM calendar c
+		LEFT JOIN share_calendar sc ON c.calendar_idx = sc.share_cal_idx 
+		WHERE sc.shared_emp_no = #{param1}
+		GROUP BY c.calendar_idx
+		;
 	</select>
 	
 	<insert id="createShareSchedule">

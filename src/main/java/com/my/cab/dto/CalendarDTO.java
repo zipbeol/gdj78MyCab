@@ -28,6 +28,7 @@ public class CalendarDTO {
 	private String schedule_emp_email;
 	private String schedule_emp_extension_number;
 	private String schedule_dept_name;
+	private int schedule_cal_idx;
 	
 	//캘린더
 	private int calendar_idx;	
@@ -35,6 +36,7 @@ public class CalendarDTO {
 	private String calendar_name;	
 	private String calendar_category;
 	private String calendar_color;
+	private String share_category;
 	// 공유 캘린더
 	private int share_idx;	
 	private int share_cal_idx;
@@ -184,6 +186,18 @@ public class CalendarDTO {
 	}
 	public void setCalendar_color(String calendar_color) {
 		this.calendar_color = calendar_color;
+	}
+	public String getShare_category() {
+		return share_category;
+	}
+	public void setShare_category(String share_category) {
+		this.share_category = share_category;
+	}
+	public int getSchedule_cal_idx() {
+		return schedule_cal_idx;
+	}
+	public void setSchedule_cal_idx(int schedule_cal_idx) {
+		this.schedule_cal_idx = schedule_cal_idx;
 	}
 	
 	

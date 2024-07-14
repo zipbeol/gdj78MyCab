@@ -129,6 +129,7 @@ public class CalendarService {
 
 	public Map<String, Object> editSchedule(CalendarDTO calendarDTO) {
 		Map<String, Object>map = new HashMap<String, Object>();
+		logger.info("에딧 : "+calendarDTO.getShare_category());
 		int row = calendarDao.editSchedule(calendarDTO);
 		logger.info("수정 성공 여부 calendar : row : " + row);
 		if(row >0) {
@@ -159,7 +160,7 @@ public class CalendarService {
 		// dto 에 값 저장
 		dto.setCalendar_emp_no(id);
 		dto.setCalendar_name(shareTitle);
-		dto.setCalendar_category("일정공유");
+		dto.setCalendar_category("공유일정");
 		dto.setCalendar_color(shareColor);
 		logger.info("gasdgdsagsadg"+id);
 		// 캘린더 생성후 공유일정에 추가를위한 cal_idx 받아오기

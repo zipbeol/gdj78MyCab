@@ -378,7 +378,7 @@
                         <option  disabled="disabled"> 공유 캘린더</option>
                         <c:if test="${shareCalList.size()>0}">
                         	<c:forEach items="${shareCalList}" varStatus="status" var="item">
-                        	 	<option value="전사" style="color: ${item.calendar_color};" data-idx ="${item.calendar_idx}">공유일정${item.calendar_name}</option>
+                        	 	<option value="${item.calendar_name}" style="color: ${item.calendar_color};" data-idx ="${item.calendar_idx}">공유일정${item.calendar_name}</option>
                         	 	
                         	</c:forEach>
                         </c:if>
@@ -451,6 +451,9 @@
 	                            <option value="개인" style="color: #ffec63">개인</option>
 	                            <option value="부서" style="color: #28b9ff">부서</option>
 	                            <option value="전사" style="color: #71f371">전사</option>
+	                            <c:forEach items="${shareCalList}" varStatus="status" var="item">
+                        	 		<option value="${item.calendar_name}" style="color: ${item.calendar_color};" data-idx ="${item.calendar_idx}" data-type ="공유일정">공유일정${item.calendar_name}</option>                       	 	
+                        		</c:forEach>
 	                        </select>
 	                    </div>
 	                    
@@ -739,7 +742,12 @@
 					document.getElementById("detail-writer").value = response.dto.schedule_dept_name+" "+response.dto.sechdule_emp_name;
 					console.log(response.dto.schedule_emp_no);
 					var editor = response.dto.schedule_editor	;
-					document.getElementById('detail-category').value = response.dto.schedule_category	;
+					var category =response.dto.schedule_category;
+					if(category != "공유일정"){
+						document.getElementById('detail-category').value = response.dto.schedule_category	;						
+					}else{
+						document.getElementById('detail-category').value = response.dto.calendar_name;
+					}
 					var edit = response.dto.schedule_edit_date	;
 					var isDel = response.dto.schedule_del	;
 					document.getElementById('detail-start-date').value = response.divideStartDate;
@@ -922,6 +930,10 @@
 		// 카테고리 색 가져오기
 		var selectedOption = scheduleCategory.options[scheduleCategory.selectedIndex];
         var color = selectedOption.style.color;
+        var calIdx = selectedOption.dataset.idx;
+        var shareCategory = selectedOption.dataset.type;
+        console.log("gadsgasdgasdgsda"+calIdx);
+        console.log("gadsgasdgasdgsda"+shareCategory);
         // 유효성 검사"C:/Users/mh/OneDrive/바탕 화면/새 텍스트 문서 (2).txt"
         var chkVal = checkValidation(document.getElementById('detail-title'));
         console.log(chkVal);
@@ -942,10 +954,12 @@
 					'schedule_edit_date' : curTime,
 					'schedule_editor' : "${sessionScope.loginId}", // 세션으로 가져오기
 					'schedule_category': document.getElementById('detail-category').value,
-					'schedule_color' : color
+					'schedule_color' : color,
+					'calendar_idx' : calIdx,
+					'share_category' : shareCategory
 				},
 				dataType :"json",
-				suceess: function(response){
+				success: function(response){
 					if (response.success) {
 						alert("수정에 성공 했습니다")
 						calendar.refetchEvents();
@@ -1044,7 +1058,8 @@
 	function editButton(){
 		var editBtn =  document.getElementById("editButton");
 		editBtn.innerHTML = '수정완료';
-		editBtn.setAttribute("click",editSchedule());
+		editBtn.removeAttribute("onlick");
+		editBtn.setAttribute("onclick","editSchedule()");
 		document.getElementById("detail-category").disabled = false;
 		document.getElementById("detail-end-min").disabled = false;
 		document.getElementById("detail-end-hour").disabled = false;
@@ -1057,6 +1072,25 @@
 		document.getElementById("editButton").setAttribute('data-bs-dismiss',"modal");
 		
 	}
+	
+	$('#scheduleDetailModal').on('hidden.bs.modal', function (e) {
+		console.log("모달창 닫힘");
+		var editBtn =  document.getElementById("editButton");
+		editBtn.innerHTML = '수정';
+		editBtn.removeAttribute("onlick");
+		editBtn.setAttribute("onclick","editButton()");
+		document.getElementById("detail-category").disabled = true;
+		document.getElementById("detail-end-min").disabled = true;
+		document.getElementById("detail-end-hour").disabled = true;
+		document.getElementById("detail-start-min").disabled= true;
+		document.getElementById("detail-start-hour").disabled =true;
+		document.getElementById("detail-title").disabled = true;
+		document.getElementById("detail-start-date").disabled = true;
+		document.getElementById("detail-end-date").disabled = true;
+		document.getElementById("detail-content").disabled = true;
+		editBtn.removeAttribute("data-bs-dismiss");
+	});
+	
 	
 	
 	//공유 캘린더 생성 모달창 열기
@@ -1119,7 +1153,7 @@
 	    		showAlert('success', '최소한 한명이상을 선택 해주세요.');
 	    	}else{
 	    		var infoList = {};
-	    		selectedEmployees.push(loginId);
+	    		selectedEmployees.push({empNo : loginId});
 	    		infoList.empList =selectedEmployees;
 	    		infoList.shareTitle = document.getElementById('create-share-title').value;
 	    		infoList.shareColor = document.getElementById('create-share-color').value;
@@ -1136,6 +1170,7 @@
 	            	contentType:'application/json; charset=utf-8',
 	                success: function(response) {
 	                    console.log("Success:", response);
+	                    location.reload();
 	                },
 	                error: function(error) {
 	                    console.error("Error:", error);

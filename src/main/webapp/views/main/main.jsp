@@ -191,7 +191,7 @@
 											</ul>
 										</c:if>
 										<div class="moreNews-container">
-											<a class="moreNews" href="http://taxi-news.co.kr/bbs/board.php?bo_table=board_01">뉴스 더보기</a>
+											<a class="moreNews" href="http://taxi-news.co.kr/bbs/board.php?bo_table=board_01" target="_blank">뉴스 더보기</a>
 										</div>
 									</div>
 								</div>

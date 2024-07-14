@@ -32,6 +32,9 @@
     <link rel="stylesheet" href="/assets/css/default.css">
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- Emoji Button CSS and JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@latest/dist/index.min.css">
+
     <style>
         .chat-container {
             height: 500px;
@@ -109,11 +112,14 @@
             padding: 10px;
             background-color: #f8f9fa;
             border-top: 1px solid #dee2e6;
+            display: flex;
+            align-items: center;
         }
 
         .input-group {
             display: flex;
             align-items: center;
+            width: 100%;
         }
 
         .input-group input {
@@ -124,13 +130,9 @@
             border-radius: 4px 0 0 4px;
         }
 
-        .input-group button {
-            padding: 10px;
-            border: 1px solid #dee2e6;
-            border-left: none;
-            border-radius: 0 4px 4px 0;
-            background-color: #007bff;
-            color: white;
+        .input-group-append {
+            display: flex;
+            align-items: center;
         }
 
         .file-input-wrapper {
@@ -143,6 +145,7 @@
             border-radius: 0;
             border-left: none;
             border-right: none;
+            margin-right: 5px;
         }
 
         .file-input {
@@ -200,12 +203,10 @@
             text-align: left;
         }
 
-        /* Initially hide chat window */
         .chat-window {
             display: none;
         }
 
-        /* Show chat window when a chat room is selected */
         .chat-window.active {
             display: block;
         }
@@ -235,10 +236,13 @@
         }
 
         .chat-list {
-            max-height: 400px; /* 고정된 높이 설정 */
-            overflow-y: auto; /* 스크롤바 활성화 */
+            max-height: 400px;
+            overflow-y: auto;
         }
 
+        .file-input-wrapper, #emojiPickerButton {
+            margin-right: 0px;
+        }
     </style>
 </head>
 <body>
@@ -340,26 +344,28 @@
                                                         참여합니다.
                                                     </div>
                                                 </div>
+
                                                 <div class="message-input p-3">
                                                     <div class="input-group">
                                                         <input type="text" class="form-control" id="messageInput"
                                                                placeholder="메시지를 입력해주세요. (Enter: 전송)">
                                                         <div class="input-group-append">
-                                                            <div class="input-group">
-                                                                <div class="file-input-wrapper btn btn-secondary">
-                                                                    파일 선택
-                                                                    <input type="file" id="fileInput"
-                                                                           class="file-input">
-                                                                </div>
-                                                                <button class="btn btn-primary" type="button"
-                                                                        onclick="sendMessage()">전송
-                                                                </button>
+                                                            <div class="file-input-wrapper btn btn-secondary">
+                                                                파일 선택
+                                                                <input type="file" id="fileInput" class="file-input">
                                                             </div>
+                                                            <!-- Emoji Picker Button -->
+                                                            <button class="btn btn-secondary" type="button"
+                                                                    id="emojiPickerButton">
+                                                                <i class="fas fa-smile"></i>
+                                                            </button>
+                                                            <button class="btn btn-primary" type="button"
+                                                                    onclick="sendMessage()">전송
+                                                            </button>
                                                         </div>
-                                                        <div id="fileName" class="file-name"></div>
                                                     </div>
+                                                    <div id="fileName" class="file-name"></div>
                                                 </div>
-
                                             </div>
                                             <div class="text-center p-5" id="selectChatRoomMessage">
                                                 <h5>채팅방을 선택해 주세요</h5>
@@ -427,6 +433,8 @@
 <script src="/assets/js/custom.js"></script>
 <script src="/assets/js/LocalStorage.js"></script>
 <script src="/assets/js/showAlert.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@latest/dist/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.0.3/dist/index.min.js"></script>
 <script>
     var wsChat = chatWebSocketConnect(wsChat);
     var selectedRoomId = null;
@@ -503,7 +511,7 @@
                 roomHeader.append('<h5 class="mb-1">' + room.roomName + '</h5>');
 
                 var roomLastMessage = room.roomLastMessage ? room.roomLastMessage : '메세지가 없습니다.';
-                var roomMessagePreview = $('<small></small>').text(roomLastMessage.length > 7 ? roomLastMessage.substring(0, 7) + '...' : roomLastMessage);
+                var roomMessagePreview = $('<small></small>').text(roomLastMessage.length > 30 ? roomLastMessage.substring(0, 30) + '...' : roomLastMessage);
 
                 roomItem.append(roomHeader);
                 roomItem.append(roomMessagePreview);
@@ -583,7 +591,7 @@
     }
 
     function handleMessageInput(event) {
-        if (event.key === "Enter" && $(this).val() !== '') {
+        if (event.key === "Enter" && $('#messageInput').val() !== '') {
             sendMessage();
         }
     }
@@ -786,7 +794,7 @@
     function fileSend(fileName, fileType, oriFileName) {
         var chatMessage = {
             type: 'file',
-            message: '',
+            message: oriFileName,
             sender: myId,
             room: selectedRoomId,
             attachments: [
@@ -919,6 +927,19 @@
             }
         });
     }
+    const button = document.querySelector("#emojiPickerButton");
+    const picker = new EmojiButton({
+        position: 'bottom-start'
+    });
+
+    button.addEventListener('click', () => {
+        picker.togglePicker(button);
+    });
+
+    picker.on('emoji', emoji => {
+        const text_box = document.querySelector('#messageInput');
+        text_box.value += emoji;
+    });
 </script>
 
 </html>

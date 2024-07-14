@@ -324,7 +324,7 @@ th.sortable.desc::after {
 											</div>
 											</div>
 											<div class="button-position">
-											<button type="button" class="btn btn-outline-dark">
+											<button type="button" class="btn btn-outline-dark" id="chatCall">
                           					<i class="bi bi-chat-left-text"></i> 메세지 보내기
                         					</button>
                         					</div>
@@ -561,6 +561,15 @@ function showModal(emp_no){
     
     // 모달을 표시
     myModal.show();
+    
+    $('#chatCall').on('click', function(){
+    	var employeeNo = employee.emp_no;
+    	var employeeName = employee.emp_name;
+    	var currentUser = '${sessionScope.loginId}';
+    	var currentName = '${sessionScope.emp_name}';
+    	
+    	createChatRoomWithEmployee(employeeNo, employeeName, currentUser, currentName);
+    });
 });
 
 }
@@ -581,6 +590,55 @@ return $.ajax({
         console.error('직원 데이터를 가져오는 중 오류 발생:', status, error);
     }
 });
+}
+
+
+function createChatRoomWithEmployee(employeeNo, employeeName, currentUser, currentName) {
+	
+    if (!employeeNo || !currentUser) {
+        alert('유효한 사원 정보가 필요합니다.');
+        return;
+    }
+
+    var selectedEmployeeIds = new Set([employeeNo]);
+    var selectedEmployeeNames = new Set([employeeName]);
+    
+    // Include current user
+    selectedEmployeeIds.add(Number(currentUser));
+    selectedEmployeeNames.add(currentName);
+
+    var selectedEmployeeNoArray = Array.from(selectedEmployeeIds).map(id => ({ emp_no: id }));
+    var selectedEmployeeNameArray = Array.from(selectedEmployeeNames);
+    var roomName = selectedEmployeeNameArray.join(', ');
+    
+                // Create chat room
+                $.ajax({
+                    url: '/chat/createChatRoom.ajax',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify({
+                        roomName: roomName,
+                        empList: selectedEmployeeNoArray,
+                        roomEmpIdx: currentUser
+                    }),
+                    success: function (response) {
+                        if (response.result) {
+                           
+                             setTimeout(function() {
+                                location.href='/chat/chat.go';
+                            }, 1000); 
+                           
+                        } else {
+                            alert('채팅방 생성에 실패했습니다. 다시 시도해주세요.');
+                        }
+                    },
+                    error: function (error) {
+                        console.error('Error creating chat room:', error);
+                        alert('채팅방 생성에 실패했습니다. 다시 시도해주세요.');
+                    }
+                });
+
 }
     
     

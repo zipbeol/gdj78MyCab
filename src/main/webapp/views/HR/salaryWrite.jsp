@@ -326,7 +326,7 @@ var dateObj = new Date();
 var year = dateObj.getFullYear();
 var month = ('0' + (dateObj.getMonth() + 1)).slice(-2);
 
-var currentMonth = year+'년 '+month+'월 급여명세서 작성';
+var currentMonth = year+'년 '+month+'월 급여명세서';
 console.log(currentMonth);
 
 $('#currMonth').text(currentMonth);
@@ -441,6 +441,21 @@ $('#calDed').on('click', function(){
 
 $('#confirm').on('click', function(){
 	var sal_actual = calculateReal();
+	var total_ded = parseInt($('#total_ded').val().replace(/,/g, ''));
+	var emp_name = '${emp.emp_name}';  
+	var dept_name = '${emp.dept_name}'; 
+	var title_name = '${emp.title_name}';
+	var sal_base = parseInt($('#sal_base').val().replace(/,/g, ''));
+	var sal_meal = parseInt($('#sal_meal').val().replace(/,/g, ''));
+	var title_pay = parseInt($('#title_pay').val().replace(/,/g, ''));
+	
+	var insur1 = parseInt($('#nationalPension').val().replace(/,/g, ''));
+	var insur2 = parseInt($('#healthInsur').val().replace(/,/g, ''));
+	var insur3 = parseInt($('#longtermInsur').val().replace(/,/g, ''));
+	var insur4 = parseInt($('#empInsur').val().replace(/,/g, ''));
+	var insur5 = parseInt($('#incomeTax').val().replace(/,/g, ''));
+	var insur6 = parseInt($('#localIncomeTax').val().replace(/,/g, ''));
+	var emp_email = '${emp.emp_email}';
 	
 	console.log(sal_actual);
 	
@@ -461,7 +476,22 @@ $('#confirm').on('click', function(){
            	'sal_bonus': sal_bonus,
            	'sal_total': sal_total,
            	'sal_actual': sal_actual,
-           	'sal_register': sal_register
+           	'sal_register': sal_register,
+           	'emp_name':emp_name,
+           	'dept_name':dept_name,
+           	'title_name':title_name,
+           	'sal_base':sal_base,
+           	'sal_meal':sal_meal,
+           	'title_add_pay':title_pay,
+           	'insur1':insur1,
+           	'insur2':insur2,
+           	'insur3':insur3,
+           	'insur4':insur4,
+           	'insur5':insur5,
+           	'insur6':insur6,
+           	'total_ded': total_ded,
+           	'currMonth':currentMonth,
+           	'emp_email':emp_email
             },
             dataType: 'JSON',
             success: function (data) {

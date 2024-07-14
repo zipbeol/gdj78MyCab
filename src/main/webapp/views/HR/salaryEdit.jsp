@@ -447,17 +447,18 @@ var sal_modifier = '${sessionScope.loginId}';
 $('#edit').on('click', function(){
 	var sal_actual = calculateReal();
 	var salBonus = $('#bonus').val().replace(/,/g, '');
+	var totalSal = $('#total_sal').val().replace(/,/g, '');
 	console.log(sal_actual);
 	console.log(sal_idx);
 	console.log(sal_modifier);
 	console.log(salBonus);
-	console.log(total_sal);
+	console.log(totalSal);
 	
 	 if (chk === false) {
 		showAlert('danger','공제액을 계산해주세요.');
 	}else{
 		
-		/* $.ajax({
+		$.ajax({
             url: '/editSalary.ajax',
             type: 'GET',
             data: 
@@ -465,7 +466,7 @@ $('#edit').on('click', function(){
             'sal_idx': sal_idx,
             'sal_modifier': sal_modifier,
            	'sal_bonus': salBonus,
-           	'sal_total': total_sal,
+           	'sal_total': totalSal,
            	'sal_actual': sal_actual,
             },
             dataType: 'JSON',
@@ -483,7 +484,7 @@ $('#edit').on('click', function(){
                 console.log(error);
             }
         });
-		 */
+		 
 	} 
 	 
 	

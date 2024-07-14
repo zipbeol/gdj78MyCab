@@ -5,7 +5,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>My Cab - Finance Profit</title>
+<title>My Cab - 대시 보드</title>
 <!-- Meta -->
 <meta name="description" content="Marketplace for Bootstrap Admin Dashboards">
 <meta name="author" content="Bootstrap Gallery">
@@ -75,7 +75,7 @@
                     <ol class="breadcrumb d-none d-lg-flex ms-3">
                         <li class="breadcrumb-item"><a href="/"><i class="bi bi-house lh-1"></i></a> <a href="/" class="text-decoration-none">메인</a></li>
                         <li class="breadcrumb-item"><a href="#!" class="text-decoration-none">재무 관리</a></li>
-                        <li class="breadcrumb-item"><a href="/finance/profit/list.go" class="text-decoration-none">수익</a></li>
+                        <li class="breadcrumb-item"><a href="/finance/dash.go" class="text-decoration-none">대시 보드</a></li>
                     </ol>
                     <!-- Breadcrumb end -->
 
@@ -216,12 +216,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- AJAX 및 모달 스크립트 -->
     <script>
-    
-    $('#startMonth').on('change', function(){
-    var monthName = $('#startMonth').val();
-    console.log(monthName);
-    	
-    });
     $(document).ready(function() {
         // 현재 연도와 월을 계산하는 함수
         function getCurrentYear() {
@@ -248,8 +242,8 @@
         const currentMonth = (new Date().getMonth() + 1).toString().padStart(2, '0'); // 현재 월
 
         // 필터의 초기 값을 설정
-        $('#startMonth').val(currentMonth);
-        $('#endMonth').val(currentMonth);
+        $('#startMonth').val(currentMonth).prop('selected', true);
+        $('#endMonth').val(currentMonth).prop('selected', true);
 
         // 그래프 변수 설정
         var revenueChart, expenseChart, profitChart, revenuePieChart, expensePieChart;
@@ -266,8 +260,8 @@
         // 초기 데이터 로딩 함수
         function loadInitialData() {
             const filterYear = $('#filterYear').val();
-            const startMonth = $('#startMonth').val();
-            const endMonth = $('#endMonth').val();
+            const startMonth = $('#startMonth option:selected').val();
+            const endMonth = $('#endMonth option:selected').val();
 
             $.ajax({
                 url: '/finance/dash/initialData.ajax',
@@ -277,6 +271,7 @@
                     endYearMonth: `${filterYear}-${endMonth}`
                 },
                 success: function(response) {
+                    console.log("Initial data loaded:", response); // Console log 추가
                     var revenueData = response.revenueData;
                     var expenseData = response.expenseData;
                     var profitData = revenueData.map((revenue, index) => revenue - expenseData[index]);
@@ -288,6 +283,37 @@
                 },
                 error: function(error) {
                     console.error('Error fetching initial data', error);
+                }
+            });
+        }
+
+        // 필터 데이터 로딩 함수
+        function loadFilteredData() {
+            const filterYear = $('#filterYear').val();
+            const startMonth = $('#startMonth option:selected').val();
+            const endMonth = $('#endMonth option:selected').val();
+
+            $.ajax({
+                url: '/finance/dash/filter.ajax',
+                method: 'GET',
+                data: {
+                    filterYear: filterYear,
+                    startMonth: startMonth,
+                    endMonth: endMonth
+                },
+                success: function(response) {
+                    console.log("Filtered data loaded:", response); // Console log 추가
+                    var revenueData = response.revenueData;
+                    var expenseData = response.expenseData;
+                    var profitData = revenueData.map((revenue, index) => revenue - expenseData[index]);
+                    var revenuePieData = response.revenuePieData;
+                    var expensePieData = response.expensePieData;
+
+                    // 차트 데이터 설정 및 업데이트
+                    updateCharts(revenueData, expenseData, profitData, revenuePieData, expensePieData);
+                },
+                error: function(error) {
+                    console.error('Error fetching filtered data', error);
                 }
             });
         }
@@ -454,7 +480,7 @@
 
         // 필터 적용 버튼 클릭 시
         $('#filterButton').click(function() {
-            loadInitialData();
+            loadFilteredData();
         });
     });
 

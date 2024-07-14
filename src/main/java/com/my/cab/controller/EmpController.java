@@ -8,6 +8,8 @@ import javax.security.auth.message.callback.PrivateKeyCallback.Request;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,12 +22,20 @@ import com.my.cab.dto.EmpDTO;
 import com.my.cab.dto.MyPageDTO;
 import com.my.cab.dto.SearchDTO;
 import com.my.cab.service.EmpService;
+import com.my.cab.util.EmailUtil;
+import com.my.cab.util.PDFgen;
 
 @Controller
 public class EmpController {
 
 	Logger logger = LoggerFactory.getLogger(getClass());
 	private final EmpService service;
+	
+	@Value("${spring.servlet.multipart.location}")
+    private String uploadDir;
+	
+	@Autowired PDFgen pdfGen;
+	@Autowired EmailUtil emailUtil;
 
 	public EmpController(EmpService service) {
 		this.service = service;
@@ -319,6 +329,8 @@ public class EmpController {
 		EmpDTO empDTO = service.salaryWrite(emp_no);
 		
 		
+		
+		
 		model.addAttribute("emp", empDTO);
 		
 	
@@ -344,9 +356,22 @@ public class EmpController {
 	@ResponseBody
 	public Map<String, Object> writeSalary(EmpDTO empDTO) {
 		logger.info("급여명세서 작성");
-		logger.info("급여명세서 작성 대상 : " + empDTO.getSal_emp_no());
+		logger.info("급여명세서 작성 대상 : " + empDTO.getSal_emp_no()+empDTO.getCurrMonth());
+		
+		String filePath = uploadDir + "/"+ empDTO.getSal_emp_no() +"사원" + empDTO.getCurrMonth()+".pdf";
+		
+		pdfGen.generateItinerary(empDTO, filePath);
+		
+		String email = empDTO.getEmp_email();
+		String currMonth = empDTO.getCurrMonth();
+		String empName = empDTO.getEmp_name();
+		
+		logger.info(email);
+		emailUtil.sendSal(email, filePath, currMonth, empName);
 
 		boolean isSuccess = service.writeSalary(empDTO);
+		
+		
 
 		return Map.of("isSuccess", isSuccess);
 
@@ -448,6 +473,8 @@ public class EmpController {
 		return Map.of("isSuccess", isSuccess);
 
 	}
+	
+	
 	
 
 }

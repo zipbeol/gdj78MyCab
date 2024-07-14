@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Main</title>
+    <title>기안서 작성</title>
     <!-- Meta -->
     <meta name="description" content="Marketplace for Bootstrap Admin Dashboards">
     <meta name="author" content="Bootstrap Gallery">
@@ -82,10 +82,6 @@
     }
     .highlight {
         background-color: #e0ffe0;
-    }
-    a {
-        color: #007BFF;
-        text-decoration: none;
     }
     a:hover {
         text-decoration: underline;
@@ -234,7 +230,7 @@
                         <!-- 여기에 경로 추가 -->
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="/approval/approvalWriteForm" class="approvalWriteForm">기안서 작성</a>
+                        <a href="/approval/approvalWriteForm.go" class="approvalWriteForm">기안서 작성</a>
                         <!-- 여기에 경로 추가 -->
                     </li>
                 </ol>
@@ -452,7 +448,6 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" id="saveButton">저장/결재</button>
-                    <button type="button" class="btn btn-secondary" id="saveTempButton">임시 저장</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">닫기</button>
                 </div>
             </div>
@@ -522,8 +517,7 @@
 					    </select>
 					</div>
                     <div class="form-group text-center">
-                        <button type="button" class="btn btn-primary mr-2" id="addLineButton">신규(F2)</button>
-                        <button type="button" class="btn btn-secondary mr-2" id="editLineButton">수정</button>
+                        <button type="button" class="btn btn-primary mr-2" id="addLineButton">선택</button>
                         <button type="button" class="btn btn-danger" data-dismiss="modal">닫기</button>
                     </div>
                 </div>

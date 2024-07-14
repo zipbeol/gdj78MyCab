@@ -123,10 +123,12 @@ public class ApprovalService {
     public String getSignaturePath(String fileName) {
         return apprDAO.getSignaturePath(fileName);
     }
-
-	public List<ApprovalDocDTO> getFilteredApprovalData(String loginId) {
-		return apprDAO.getFilteredApprovalData(loginId);
+    
+    // 내 결재 문서 리스트업
+	public List<ApprovalDocDTO> getFilteredApprovalData(Map<String, Object> params) {
+		return apprDAO.getFilteredApprovalData(params);
 	}
+	
 	// 다시시작
 	public String getUserType(Map<String, Object> params) {
 	    try {
@@ -148,9 +150,47 @@ public class ApprovalService {
 	public String getUserTitleById(String loginId) {
 	    return apprDAO.getUserTitleById(loginId);
 	}
+	// 결재 상태 업데이트 요청 Service 
+	public boolean updateApprovalStatus(String approvalDocIdx, int approvalState, String approvalDate) {
+		  return apprDAO.updateApprovalStatus(approvalDocIdx, approvalState, approvalDate) > 0;
+	}
+	
+	// 결재 통합 관리 결재문서 전체 리스트
+
+	public List<com.my.cab.dto.ApprovalDocDTO> getApprovalDocData(Map<String, Object> params) {
+		return apprDAO.getApprovalDocData(params);
+	}
+
+	public int getApprovalDocCount(Map<String, Object> params) {
+		return apprDAO.getApprovalDocCount(params);
+	}
 
 	
+	public List<ApprovalDocDTO> getAllApprovalDocData(Map<String, Object> params) {
+	    return apprDAO.getAllApprovalDocData(params);
+	}
 
+	public int getAllApprovalDocCount(Map<String, Object> params) {
+	    return apprDAO.getAllApprovalDocCount(params);
+	}
+
+    // 결재 문서 삭제 기능
+	// 결재 문서 삭제 기능
+    @Transactional
+    public boolean deleteApprovalDocs(List<String> docs) {
+        try {
+            for (String doc : docs) {
+                // tb_approval 테이블에서 관련 데이터 삭제
+                apprDAO.deleteApprovalByDocPath(doc);
+                // tb_approval_doc 테이블에서 문서 삭제
+                apprDAO.deleteByPath(doc);
+            }
+            return true;
+        } catch (Exception e) {
+            LoggerFactory.getLogger(getClass()).error("Error deleting approval documents", e);
+            return false;
+        }
+    }
 
 
 

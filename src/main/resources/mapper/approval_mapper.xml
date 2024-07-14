@@ -105,27 +105,37 @@
         WHERE appr_file_name = #{fileName}
     </select>
     
-    <!-- 결재 리스트 필터링 값 불러오기( 나랑 연관된 문서들만 ) -->
-    <select id="getFilteredApprovalData" parameterType="string" resultType="com.my.cab.dto.ApprovalDocDTO">
-        SELECT ad.*, 
-               a.appr_midapprover,
-               a.appr_finalapprover
-        FROM tb_approval_doc ad
-        JOIN tb_approval a ON ad.approval_doc_idx = a.approval_doc_idx
-        WHERE ad.approval_doc_id = #{loginId}
-        OR a.appr_midapprover = (
-            SELECT CONCAT(e.emp_name, ' ', t.title_name)
-            FROM employee e
-            JOIN title t ON e.title_no = t.title_no
-            WHERE e.emp_no = #{loginId}
-        ) 
-        OR a.appr_finalapprover = (
-            SELECT CONCAT(e.emp_name, ' ', t.title_name)
-            FROM employee e
-            JOIN title t ON e.title_no = t.title_no
-            WHERE e.emp_no = #{loginId}
-        )
-    </select>
+<!-- 결재 리스트 필터링 값 불러오기( 나랑 연관된 문서들만 ) -->
+<select id="getFilteredApprovalData" parameterType="map" resultType="com.my.cab.dto.ApprovalDocDTO">
+    SELECT ad.*, 
+           a.appr_midapprover,
+           a.appr_finalapprover
+    FROM tb_approval_doc ad
+    JOIN tb_approval a ON ad.approval_doc_idx = a.approval_doc_idx
+    WHERE (ad.approval_doc_id = #{loginId}
+    OR a.appr_midapprover = (
+        SELECT CONCAT(e.emp_name, ' ', t.title_name)
+        FROM employee e
+        JOIN title t ON e.title_no = t.title_no
+        WHERE e.emp_no = #{loginId}
+    ) 
+    OR a.appr_finalapprover = (
+        SELECT CONCAT(e.emp_name, ' ', t.title_name)
+        FROM employee e
+        JOIN title t ON e.title_no = t.title_no
+        WHERE e.emp_no = #{loginId}
+    ))
+    AND (ad.approval_doc_title LIKE CONCAT('%', #{query}, '%')
+    OR ad.approval_doc_id LIKE CONCAT('%', #{query}, '%')
+    OR a.appr_midapprover LIKE CONCAT('%', #{query}, '%')
+    OR a.appr_finalapprover LIKE CONCAT('%', #{query}, '%')
+    OR ad.approval_doc_write_date LIKE CONCAT('%', #{query}, '%'))
+    <if test="status != ''">
+        AND ad.approval_doc__state = #{status}
+    </if>
+    ORDER BY ad.approval_doc_write_date DESC
+    LIMIT #{start}, #{pageSize}
+</select>
     
     <!-- 사용자 이름을 가져오는 쿼리 -->
 <select id="getUserNameById" parameterType="string" resultType="string">
@@ -153,6 +163,118 @@
     WHERE appr_midapprover = CONCAT(#{userName}, ' ', #{userTitle})
        OR appr_finalapprover = CONCAT(#{userName}, ' ', #{userTitle});
 </select>
+
+    <!-- 결재 상태와 결재일 업데이트 -->
+    <update id="updateApprovalStatus">
+        UPDATE tb_approval_doc
+        SET approval_doc__state = #{approvalState},
+            approval_doc_udt_dt = #{approvalDate}
+        WHERE approval_doc_idx = #{approvalDocIdx}
+    </update>
+    
+    
+<!-- 결재 통합 관리 결재 문서 리스트업 (검색, 필터링) -->
+<select id="getApprovalDocData" parameterType="map" resultType="com.my.cab.dto.ApprovalDocDTO">
+    SELECT 
+        d.approval_doc_idx,
+        d.approval_doc_write_date,
+        d.approval_doc_title,
+        d.approval_doc_id,
+        a.appr_midapprover,
+        a.appr_finalapprover,
+        a.appr_mngr_updt,
+        d.approval_doc__state,
+        d.approval_doc_path
+    FROM 
+        tb_approval a
+    JOIN 
+        tb_approval_doc d ON a.approval_doc_idx = d.approval_doc_idx
+    WHERE 
+        (d.approval_doc_title LIKE CONCAT('%', #{query}, '%')
+        OR d.approval_doc_id LIKE CONCAT('%', #{query}, '%')
+        OR a.appr_midapprover LIKE CONCAT('%', #{query}, '%')
+        OR a.appr_finalapprover LIKE CONCAT('%', #{query}, '%')
+        OR d.approval_doc_write_date LIKE CONCAT('%', #{query}, '%'))
+        <if test="status != ''">
+            AND d.approval_doc__state = #{status}
+        </if>
+    ORDER BY d.approval_doc_write_date DESC
+    LIMIT #{start}, #{pageSize}
+</select>
+
+<!-- 결재 통합 관리 페이징 처리 -->
+<select id="getApprovalDocCount" parameterType="map" resultType="int">
+    SELECT COUNT(*)
+    FROM tb_approval_doc ad
+    JOIN tb_approval a ON ad.approval_doc_idx = a.approval_doc_idx
+    WHERE (ad.approval_doc_id = #{loginId}
+    OR a.appr_midapprover = (
+        SELECT CONCAT(e.emp_name, ' ', t.title_name)
+        FROM employee e
+        JOIN title t ON e.title_no = t.title_no
+        WHERE e.emp_no = #{loginId}
+    ) 
+    OR a.appr_finalapprover = (
+        SELECT CONCAT(e.emp_name, ' ', t.title_name)
+        FROM employee e
+        JOIN title t ON e.title_no = t.title_no
+        WHERE e.emp_no = #{loginId}
+    ))
+    AND (ad.approval_doc_title LIKE CONCAT('%', #{query}, '%')
+    OR ad.approval_doc_id LIKE CONCAT('%', #{query}, '%')
+    OR a.appr_midapprover LIKE CONCAT('%', #{query}, '%')
+    OR a.appr_finalapprover LIKE CONCAT('%', #{query}, '%')
+    OR ad.approval_doc_write_date LIKE CONCAT('%', #{query}, '%'))
+    <if test="status != ''">
+        AND ad.approval_doc__state = #{status}
+    </if>
+</select>
+
+<!-- 모든 결재 문서 가져오기 (검색, 필터링, 페이징 적용) -->
+<select id="getAllApprovalDocData" parameterType="map" resultType="com.my.cab.dto.ApprovalDocDTO">
+    SELECT ad.*, 
+           a.appr_midapprover,
+           a.appr_finalapprover
+    FROM tb_approval_doc ad
+    JOIN tb_approval a ON ad.approval_doc_idx = a.approval_doc_idx
+    WHERE (ad.approval_doc_title LIKE CONCAT('%', #{query}, '%')
+    OR ad.approval_doc_id LIKE CONCAT('%', #{query}, '%')
+    OR a.appr_midapprover LIKE CONCAT('%', #{query}, '%')
+    OR a.appr_finalapprover LIKE CONCAT('%', #{query}, '%')
+    OR ad.approval_doc_write_date LIKE CONCAT('%', #{query}, '%'))
+    <if test="status != ''">
+        AND ad.approval_doc__state = #{status}
+    </if>
+    ORDER BY ad.approval_doc_write_date DESC
+    LIMIT #{start}, #{pageSize}
+</select>
+
+<!-- 전체 결재 문서 수 세기 (검색, 필터링 적용) -->
+<select id="getAllApprovalDocCount" parameterType="map" resultType="int">
+    SELECT COUNT(*)
+    FROM tb_approval_doc ad
+    JOIN tb_approval a ON ad.approval_doc_idx = a.approval_doc_idx
+    WHERE (ad.approval_doc_title LIKE CONCAT('%', #{query}, '%')
+    OR ad.approval_doc_id LIKE CONCAT('%', #{query}, '%')
+    OR a.appr_midapprover LIKE CONCAT('%', #{query}, '%')
+    OR a.appr_finalapprover LIKE CONCAT('%', #{query}, '%')
+    OR ad.approval_doc_write_date LIKE CONCAT('%', #{query}, '%'))
+    <if test="status != ''">
+        AND ad.approval_doc__state = #{status}
+    </if>
+</select>
+
+    <!-- 결재 문서 삭제 -->
+    <delete id="deleteByPath" parameterType="string">
+        DELETE FROM tb_approval_doc WHERE approval_doc_path = #{doc}
+    </delete>
+    
+        <!-- 관련된 tb_approval 데이터 삭제 -->
+    <delete id="deleteApprovalByDocPath" parameterType="string">
+        DELETE a FROM tb_approval a
+        JOIN tb_approval_doc d ON a.approval_doc_idx = d.approval_doc_idx
+        WHERE d.approval_doc_path = #{doc}
+    </delete>
 
 
 </mapper>

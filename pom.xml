@@ -111,6 +111,43 @@
 		    <artifactId>jackson-databind</artifactId>
 		</dependency>
 
+
+	<!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
+	<!-- pdf 생성  -->
+	<dependency>
+		<groupId>com.itextpdf</groupId>
+		<artifactId>itextpdf</artifactId>
+		<version>5.5.13.1</version>
+	</dependency>
+	<!-- https://mvnrepository.com/artifact/com.itextpdf.tool/xmlworker -->
+		<dependency>
+			<groupId>com.itextpdf.tool</groupId>
+			<artifactId>xmlworker</artifactId>
+			<version>5.5.13.1</version>
+		</dependency>
+		
+		<!-- 이메일 보내기 -->
+		 <dependency>
+		        <groupId>org.springframework.boot</groupId>
+		        <artifactId>spring-boot-starter-mail</artifactId>
+		    </dependency>
+		    
+		    <dependency>
+    		<groupId>javax.mail</groupId>
+    		<artifactId>mail</artifactId>
+    		<version>1.4.7</version>
+			</dependency>
+			
+			
+			<!-- jsoup -->
+	<!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
+	<dependency>
+		<groupId>org.jsoup</groupId>
+		<artifactId>jsoup</artifactId>
+		<version>1.15.3</version>
+	</dependency>
+		
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>

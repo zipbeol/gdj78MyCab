@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -15,14 +17,19 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.my.cab.dao.MainDAO;
+import com.my.cab.dto.MainDTO;
 
 
 @Service
 public class MainService {
 	
 	Logger logger = LoggerFactory.getLogger(getClass());
+	@Autowired MainDAO mainDAO;
 
 	String driver_id = "webdriver.chrome.driver";
 	String driver_path = "C:/chromedriver-win64/chromedriver.exe";
@@ -42,7 +49,7 @@ public class MainService {
 	public List<Map<String, String>> getElem(Document doc) {
 		
 		Elements newsItems = doc.select("ul#bo_webzine li.list-item");
-		logger.info("News item size: " + newsItems.size());
+		
 
         List<Map<String, String>> newsList = new ArrayList<Map<String,String>>();
         int count = 0;
@@ -124,4 +131,12 @@ public class MainService {
 		return null;
 	}
 
+	public String getAttTime(String emp_no) {
+		
+		
+		
+		return mainDAO.getAttTime(emp_no);
+	}
+
+	
 }

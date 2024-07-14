@@ -6,7 +6,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Main</title>
+<title>메인</title>
 <!-- Meta -->
 <meta name="description"
 	content="Marketplace for Bootstrap Admin Dashboards">
@@ -42,6 +42,11 @@
 	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
 	rel="stylesheet">
 
+<!-- js  -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+
 <!-- 따로 적용한 CSS -->
 <link rel="stylesheet" href="/assets/css/default.css">
 
@@ -49,6 +54,8 @@
 <link rel="stylesheet" href="/assets/vendor/calendar/css/main.min.css">
 <link rel="stylesheet" href="/assets/vendor/calendar/css/custom.css">
     
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style>
 .cardH {
 	min-height: 400px;
@@ -145,6 +152,41 @@
           overflow: hidden;          /* 넘치는 내용을 숨깁니다. */
           text-overflow: ellipsis;   /* 넘치는 텍스트에 "..."을 추가합니다. */
       }
+
+.carousel-inner img {
+	height: 330px;
+}
+
+.time-section {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 20px;
+}
+
+.time-info {
+	text-align: center;
+	flex: 1;
+	font-size: 1.5em; /* 글자 크기 조절 */
+}
+
+.clock {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 2.5em;
+	color: #333;
+	font-weight: bold;
+}
+
+.clock div {
+	margin: 0 5px;
+	padding: 10px;
+	background: #f0f0f0;
+	border-radius: 10px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
 </style>
 </head>
 
@@ -211,8 +253,52 @@
 							<div class="col-md-3">
 								<div class="card mb-3">
 									<div class="card-body cardH">
-										<h2 class="chart-title ">공지</h2>
+										<h2 class="chart-title ">공지사항</h2>
 										<!-- 여기에 공지 내용을 넣으세요 -->
+										<div id="carouselExampleIndicators" class="carousel slide"
+											data-bs-ride="carousel" data-bs-interval="2000">
+											<div class="carousel-indicators">
+												<button type="button"
+													data-bs-target="#carouselExampleIndicators"
+													data-bs-slide-to="0" class="active" aria-current="true"
+													aria-label="Slide 1"></button>
+												<button type="button"
+													data-bs-target="#carouselExampleIndicators"
+													data-bs-slide-to="1" aria-label="Slide 2"></button>
+												<button type="button"
+													data-bs-target="#carouselExampleIndicators"
+													data-bs-slide-to="2" aria-label="Slide 3"></button>
+											</div>
+											<div class="carousel-inner">
+												<div class="carousel-item active">
+													<a href="/notice/detail.go?notice_idx=58"> <img
+														src="/assets/notice1.png" id="img1" class="d-block w-100">
+													</a>
+												</div>
+												<div class="carousel-item">
+													<a href="/notice/detail.go?notice_idx=56"> <img
+														src="/assets/notice2.png" id="img2" class="d-block w-100">
+													</a>
+												</div>
+												<div class="carousel-item">
+													<a href="/notice/detail.go?notice_idx=57"> <img
+														src="/assets/notice3.png" id="img3" class="d-block w-100">
+													</a>
+												</div>
+											</div>
+											<button class="carousel-control-prev" type="button"
+												data-bs-target="#carouselExampleIndicators"
+												data-bs-slide="prev">
+												<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+												<span class="visually-hidden">Previous</span>
+											</button>
+											<button class="carousel-control-next" type="button"
+												data-bs-target="#carouselExampleIndicators"
+												data-bs-slide="next">
+												<span class="carousel-control-next-icon" aria-hidden="true"></span>
+												<span class="visually-hidden">Next</span>
+											</button>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -220,8 +306,8 @@
 							<div class="col-md-3">
 								<div class="card mb-3">
 									<div class="card-body cardH">
-										<h2 class="chart-title ">택시 최신 뉴스</h2>
-										<hr/>
+										<h2 class="chart-title ">택시 뉴스</h2>
+										<hr />
 										<c:if test="${not empty newsList}">
 											<ul class="st">
 												<c:forEach var="news" items="${newsList}">
@@ -243,8 +329,10 @@
 											</ul>
 										</c:if>
 										<div class="moreNews-container">
-											<a class="moreNews" href="http://taxi-news.co.kr/bbs/board.php?bo_table=board_01">뉴스 더보기</a>
-											<a class="moreNews" href="http://taxi-news.co.kr/bbs/board.php?bo_table=board_01" target="_blank">뉴스 더보기</a>
+											<a class="moreNews"
+												href="http://taxi-news.co.kr/bbs/board.php?bo_table=board_01"
+												target="_blank">뉴스 더보기</a>
+
 										</div>
 									</div>
 								</div>
@@ -359,8 +447,36 @@
 							<div class="col-md-6">
 								<div class="card mb-3">
 									<div class="card-body">
-										<h2 class="chart-title">나의 근태 현황</h2>
-										<!-- 여기에 공지 및 이벤트 내용을 넣으세요 -->
+										<h2 class="chart-title"></h2>
+										<div class="time-section">
+											<div class="time-info">
+												<span>오늘의 출근 시간</span>
+												<br/>
+												<div class="clock">
+													<div>${att_hour}</div>
+													시
+													<div>${att_minute}</div>
+													분
+												</div>
+											</div>
+											<div class="time-info">
+												<span>퇴근까지 남은 시간</span>
+												<br/>
+												<div class="clock">
+													<div id="remainingHours">00</div>
+													시
+													<div id="remainingMinutes">00</div>
+													분
+												</div>
+											</div>
+										</div>
+										<hr/>
+										
+										<canvas id="attendanceChart"></canvas>
+										
+										
+										
+										
 									</div>
 								</div>
 							</div>
@@ -591,5 +707,69 @@
     function formatDate(dateTime) {
         return dateTime.split(' ')[0];
     }
+
+    
+    
+	function updateRemainingTime() {
+        var now = new Date();
+        var endTime = new Date();
+        endTime.setHours(18, 0, 0, 0);
+
+        var diff = endTime - now;
+        if (diff > 0) {
+            var hours = Math.floor(diff / (1000 * 60 * 60));
+            var minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+            document.getElementById("remainingHours").innerText = hours.toString().padStart(2, '0');
+            document.getElementById("remainingMinutes").innerText = minutes.toString().padStart(2, '0');
+        } else {
+            document.getElementById("remainingHours").innerText = "00";
+            document.getElementById("remainingMinutes").innerText = "00";
+        }
+    }
+
+    window.onload = updateRemainingTime;
+    setInterval(updateRemainingTime, 60000);
+    
+    
+    
+    // Chart.js 막대 차트 설정
+    var ctx = document.getElementById('attendanceChart').getContext('2d');
+    var attendanceChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels:  ["5월", "6월", "7월"],
+            datasets: [
+                {
+                    label: '지각',
+                    data: ${late},
+                    backgroundColor: '#FF7E9D',
+                    borderColor: 'white',
+                    borderWidth: 1
+                },
+                {
+                    label: '출근',
+                    data: ${present},
+                    backgroundColor: '#3CB4FF',
+                    borderColor: 'white',
+                    borderWidth: 1
+                },
+                {
+                    label: '연차/반차',
+                    data: ${absent},
+                    backgroundColor: '#9696FF',
+                    borderColor: 'white',
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
 </script>
 </html>

@@ -316,7 +316,7 @@
 														<div>
 															<a href="${news.link}" target="_blank"> <c:choose>
 																	<c:when test="${fn:length(news.title) > 8}">
-									                                    ${fn:substring(news.title, 0, 19)}...
+									                                    ${fn:substring(news.title, 0, 25)}...
 									                                </c:when>
 																	<c:otherwise>
 									                                    ${news.title}

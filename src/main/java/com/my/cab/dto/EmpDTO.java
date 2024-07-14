@@ -74,8 +74,65 @@ public class EmpDTO {
     private int sal_idx;
     private int sal_modifier;
     private String sal_modify_date;
+    private String insur1;
+    private String insur2;
+    private String insur3;
+    private String insur4;
+    private String insur5;
+    private String insur6;
+    private String total_ded;
+    private String currMonth;
+    
     
 	
+	public String getCurrMonth() {
+		return currMonth;
+	}
+	public void setCurrMonth(String currMonth) {
+		this.currMonth = currMonth;
+	}
+	public String getTotal_ded() {
+		return total_ded;
+	}
+	public void setTotal_ded(String total_ded) {
+		this.total_ded = total_ded;
+	}
+	public String getInsur1() {
+		return insur1;
+	}
+	public void setInsur1(String insur1) {
+		this.insur1 = insur1;
+	}
+	public String getInsur2() {
+		return insur2;
+	}
+	public void setInsur2(String insur2) {
+		this.insur2 = insur2;
+	}
+	public String getInsur3() {
+		return insur3;
+	}
+	public void setInsur3(String insur3) {
+		this.insur3 = insur3;
+	}
+	public String getInsur4() {
+		return insur4;
+	}
+	public void setInsur4(String insur4) {
+		this.insur4 = insur4;
+	}
+	public String getInsur5() {
+		return insur5;
+	}
+	public void setInsur5(String insur5) {
+		this.insur5 = insur5;
+	}
+	public String getInsur6() {
+		return insur6;
+	}
+	public void setInsur6(String insur6) {
+		this.insur6 = insur6;
+	}
 	public String getSal_modify_date() {
 		return sal_modify_date;
 	}

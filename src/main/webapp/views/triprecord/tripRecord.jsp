@@ -76,6 +76,9 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+        .trip-list-tbody-tr:hover{
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>

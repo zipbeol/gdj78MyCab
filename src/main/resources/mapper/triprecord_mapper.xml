@@ -25,7 +25,8 @@
     </select>
 
     <select id="getTripList" resultType="tripRecord" parameterType="search">
-        SELECT tr.trip_record_idx,
+        SELECT
+        tr.trip_record_idx,
         tr.trip_record_taxi_idx,
         d.driver_name AS trip_record_driver_name,
         tr.trip_record_date,
@@ -33,8 +34,10 @@
         tr.trip_record_end_location,
         tr.trip_record_distance,
         tr.trip_record_fare
-        FROM trip_record tr
-        JOIN driver d ON tr.trip_record_driver_id = d.driver_idx
+        FROM
+        trip_record tr
+        JOIN
+        driver d ON tr.trip_record_driver_id = d.driver_idx
         <where>
             <if test="filterStartDate != null and filterStartDate != ''">
                 AND tr.trip_record_date &gt;= #{filterStartDate}
@@ -65,35 +68,36 @@
             </if>
         </where>
         <choose>
-            <when test="sortColumn != null and sortColumn == 'trip-record-date'">
+            <when test="sortColumn != null and sortColumn == 'trip_record_date'">
                 ORDER BY tr.trip_record_date ${sortOrder}
             </when>
-            <when test="sortColumn != null and sortColumn == 'trip-record-idx'">
+            <when test="sortColumn != null and sortColumn == 'trip_record_idx'">
                 ORDER BY tr.trip_record_idx ${sortOrder}
             </when>
-            <when test="sortColumn != null and sortColumn == 'trip-record-driver-name'">
+            <when test="sortColumn != null and sortColumn == 'trip_record_driver_name'">
                 ORDER BY d.driver_name ${sortOrder}
             </when>
-            <when test="sortColumn != null and sortColumn == 'trip-record-start-location'">
+            <when test="sortColumn != null and sortColumn == 'trip_record_start_location'">
                 ORDER BY tr.trip_record_start_location ${sortOrder}
             </when>
-            <when test="sortColumn != null and sortColumn == 'trip-record-end-location'">
+            <when test="sortColumn != null and sortColumn == 'trip_record_end_location'">
                 ORDER BY tr.trip_record_end_location ${sortOrder}
             </when>
-            <when test="sortColumn != null and sortColumn == 'trip-record-distance'">
+            <when test="sortColumn != null and sortColumn == 'trip_record_distance'">
                 ORDER BY tr.trip_record_distance ${sortOrder}
             </when>
-            <when test="sortColumn != null and sortColumn == 'trip-record-fare'">
+            <when test="sortColumn != null and sortColumn == 'trip_record_fare'">
                 ORDER BY tr.trip_record_fare ${sortOrder}
             </when>
             <otherwise>
                 ORDER BY tr.trip_record_date DESC
             </otherwise>
         </choose>
-        <if test="page != null">
+        <if test="page != null and pageSize != null">
             LIMIT #{pageSize} OFFSET #{page}
         </if>
     </select>
+
     <select id="getTripRecordCount" parameterType="search" resultType="int">
         SELECT COUNT(tr.trip_record_idx)
         FROM trip_record tr

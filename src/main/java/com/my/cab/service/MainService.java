@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -19,10 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.my.cab.dao.MainDAO;
-import com.my.cab.dto.MainDTO;
 
 
 @Service
@@ -32,7 +28,7 @@ public class MainService {
 	@Autowired MainDAO mainDAO;
 
 	String driver_id = "webdriver.chrome.driver";
-	String driver_path = "C:/chromedriver-win64/chromedriver.exe";
+	String driver_path = "C:/chromedriver.exe";
 	
 	WebDriver driver = null; // 커넥션하고 비슷한거 이게 있어야 접속이 된다.
 	ChromeOptions options = null;

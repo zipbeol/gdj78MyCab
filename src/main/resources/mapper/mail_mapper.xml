@@ -3,7 +3,11 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd"
 >
 
-<mapper namespace="com.my.cab.dao.">
+<mapper namespace="com.my.cab.dao.MailDAO">
 
+	<insert id="mailDBInsert" parameterType="mail">
+        INSERT INTO email(email_emp_no, email_subject, email_content, email_recipients)
+        VALUES (#{sender}, #{subject}, #{body}, #{recipient})
+    </insert>
 
 </mapper>

@@ -209,14 +209,14 @@
                                                     <dt class="col-6">기사 사진</dt>
                                                     <dt class="col-6">면허 사진</dt>
                                                     <dd class="col-6 d-flex">
-                                                        <img src="/upload/${driverInfo.driver_photo}"
+                                                        <img src="/api/imgView/${driverInfo.driver_photo}"
                                                              style="width: 150px; height: 150px;" id="driver-photo">
                                                         <input type="file" id="driver-photo-input"
                                                                data-value="driver-photo" style="display: none;"
                                                                class="form-control">
                                                     </dd>
                                                     <dd class="col-6 d-flex">
-                                                        <img src="/upload/${driverInfo.driver_taxi_license_photo}"
+                                                        <img src="/api/imgView/${driverInfo.driver_taxi_license_photo}"
                                                              style="width: 200px; height: 150px;"
                                                              id="driver-taxi-license-photo">
                                                         <input type="file" id="license-photo-input"

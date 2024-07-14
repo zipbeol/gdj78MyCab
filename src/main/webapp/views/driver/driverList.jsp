@@ -700,25 +700,24 @@
 
     // 이미지 미리보기
     function previewImage() {
-        var $fileInput = $('#register-driver-photo');
-        var $previewImage = $('#preview-image');
+        var $fileInput = document.getElementById('register-driver-photo');
+        var $previewImage = document.getElementById('preview-image');
 
-        var file = $fileInput[0].files[0];
+        var file = $fileInput.files[0];
         var reader = new FileReader();
 
-        reader.onload = function (e) {
-            $previewImage.attr('src', e.target.result);
-            $previewImage.show();
+        reader.onload = function(e) {
+            $previewImage.src = e.target.result;
+            $previewImage.style.display = 'block';
         };
 
         if (file) {
             reader.readAsDataURL(file);
         } else {
-            $previewImage.attr('src', '');
-            $previewImage.hide();
+            $previewImage.src = '';
+            $previewImage.style.display = 'none';
         }
     }
-
     // 이미지 파일만 등록 가능하게
     function validateImageFile() {
         isModalAlert = true;

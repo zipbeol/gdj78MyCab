@@ -53,9 +53,25 @@
         .table tbody tr:hover { background-color: #f1f1f1; }
         .date-range { text-align: right; margin-bottom: 10px; }
         .btn-container { display: flex; justify-content: flex-start; margin-top: 10px; }
-        .pagination { justify-content: center; }
-        .pagination .page-link { color: #343a40; }
-        .pagination .page-item.active .page-link { background-color: #343a40; border-color: #343a40; }
+.pagination { 
+    justify-content: center; 
+    margin-top: 20px; 
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #343a40;
+    border-color: #343a40;
+    color: white;
+}
+
+.pagination .page-link {
+    color: #343a40;
+}
+
+.pagination .page-link:hover {
+    background-color: #ddd;
+    color: #343a40;
+}
         .form-inline label { margin-right: 10px; }
         .status-btn { margin-right: 10px; }
         .top-buttons { display: flex; align-items: center; justify-content: space-between; }
@@ -449,7 +465,7 @@ $(document).ready(function() {
                         value: item.approval_doc_path
                     })).append(' ' + item.approval_doc_write_date);
                     const titleCell = $('<td></td>').text(item.approval_doc_title);
-                    const idCell = $('<td></td>').text(item.approval_doc_id);
+                    const idCell = $('<td></td>').text(item.emp_name + ' ' + item.title_name);  // 이름과 직책
                     const midApproverCell = $('<td></td>').text(item.appr_midapprover);
                     const finalApproverCell = $('<td></td>').text(item.appr_finalapprover);
                     const appr_mngr_updt = $('<td></td>').text(item.approval_doc_udt_dt);
@@ -476,33 +492,31 @@ $(document).ready(function() {
     }
 
     // 페이징 처리
-    function renderPagination(totalPages, currentPage) {
-        const pagination = $('.pagination');
-        pagination.empty();
+   function renderPagination(totalPages, currentPage) {
+    const pagination = $('.pagination');
+    pagination.empty();
 
-        const createPageItem = (page, label) => {
-            const li = $('<li></li>').addClass('page-item').toggleClass('active', page === currentPage);
-            const a = $('<a></a>').addClass('page-link').attr('href', '#').text(label);
+    const createPageItem = (page, label, disabled = false) => {
+        const li = $('<li></li>').addClass('page-item').toggleClass('active', page === currentPage).toggleClass('disabled', disabled);
+        const a = $('<a></a>').addClass('page-link').attr('href', '#').text(label);
+        if (!disabled) {
             a.on('click', function(e) {
                 e.preventDefault();
                 loadApprovalData(page);
             });
-            li.append(a);
-            return li;
-        };
-
-        if (currentPage > 1) {
-            pagination.append(createPageItem(currentPage - 1, 'Previous'));
         }
+        li.append(a);
+        return li;
+    };
 
-        for (let i = 1; i <= totalPages; i++) {
-            pagination.append(createPageItem(i, i));
-        }
-
-        if (currentPage < totalPages) {
-            pagination.append(createPageItem(currentPage + 1, 'Next'));
-        }
+    pagination.append(createPageItem(currentPage - 1, 'Previous', currentPage === 1));
+    
+    for (let i = 1; i <= totalPages; i++) {
+        pagination.append(createPageItem(i, i));
     }
+
+    pagination.append(createPageItem(currentPage + 1, 'Next', currentPage === totalPages));
+}
 
     // 결재 상태 텍스트 변환
     function getApprovalStateText(state) {

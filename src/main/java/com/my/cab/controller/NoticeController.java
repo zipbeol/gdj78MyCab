@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,38 +70,49 @@ public class NoticeController {
 	@PostMapping("/register.ajax")
 	@ResponseBody
 	public Map<String, Object> registerNotice(NoticeDTO noticeDTO,
-			@RequestParam(value = "fileAttachment", required = false) MultipartFile[] files) throws IOException {
-		logger.info("공지사항 작성페이지 - AJAX 요청");
-		logger.info("DTO" + noticeDTO.getNotice_title());
-		logger.info("DTO" + noticeDTO.getNotice_field());
-		logger.info("DTO" + noticeDTO.getNotice_content());
-		logger.info("DTO" + noticeDTO.getNotice_imp());
+	        @RequestParam(value = "fileAttachment", required = false) MultipartFile[] files,
+	        HttpSession session) throws IOException {
+	    logger.info("공지사항 작성페이지 - AJAX 요청");
 
-		Map<String, Object> response = new HashMap<>();
-		int result = noticeService.registerNotice(noticeDTO);
+	    // 세션에서 로그인한 사용자의 이름 가져오기
+	    String empName = (String) session.getAttribute("emp_name");
+	    if (empName == null) {
+	        Map<String, Object> response = new HashMap<>();
+	        response.put("status", "error");
+	        response.put("message", "로그인이 필요합니다.");
+	        return response;
+	    }
 
-		if (result == -1) {
-			response.put("status", "error");
-			response.put("message", "중요 공지는 최대 3개까지만 등록할 수 있습니다.");
-			return response;
-		}
-		if (files != null) {
-			for (MultipartFile file : files) {
-				logger.info("fileName:{}", file.getOriginalFilename());
-				if (!file.isEmpty()) {
-					noticeService.uploadAttachment(noticeDTO, file);
-					try {
-						Thread.sleep(1);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-		response.put("status", "success");
-		response.put("message", "등록이 성공적으로 완료되었습니다.");
-		return response;
+	    // 작성자 이름을 사용해 서비스에서 emp_no를 설정
+	    noticeDTO.setNotice_writer_name(empName);  // NoticeDTO에 새로운 필드 추가
+
+	    Map<String, Object> response = new HashMap<>();
+	    int result = noticeService.registerNotice(noticeDTO);
+
+	    if (result == -1) {
+	        response.put("status", "error");
+	        response.put("message", "중요 공지는 최대 3개까지만 등록할 수 있습니다.");
+	        return response;
+	    }
+	    if (files != null) {
+	        for (MultipartFile file : files) {
+	            logger.info("fileName:{}", file.getOriginalFilename());
+	            if (!file.isEmpty()) {
+	                noticeService.uploadAttachment(noticeDTO, file);
+	                try {
+	                    Thread.sleep(1);
+	                } catch (InterruptedException e) {
+	                    e.printStackTrace();
+	                }
+	            }
+	        }
+	    }
+	    response.put("status", "success");
+	    response.put("message", "등록이 성공적으로 완료되었습니다.");
+	    return response;
 	}
+
+
 
 	// 비활성화
 	@PostMapping("/inactivate.ajax")

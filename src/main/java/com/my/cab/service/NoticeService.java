@@ -65,6 +65,14 @@ public class NoticeService {
             return -1; // 중요 공지가 3개 이상인 경우
         }
 
+        // 작성자 이름으로 emp_no 가져오기
+        String empName = noticeDTO.getNotice_writer_name();
+        Integer empNo = noticeDAO.getEmpNoByEmpName(empName);
+        if (empNo == null) {
+            throw new IllegalArgumentException("유효하지 않은 작성자 이름입니다.");
+        }
+        noticeDTO.setNotice_writer(empNo);
+
         noticeDAO.insertNotice(noticeDTO);
         return noticeDTO.getNotice_idx();
     }

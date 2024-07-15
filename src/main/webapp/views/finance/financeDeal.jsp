@@ -495,7 +495,7 @@
         function displayNoDealMessage() {
             var tbody = $('#dealTableBody');
             tbody.empty(); // 테이블 본문을 비웁니다.
-            var row = '<tr><td colspan="4" class="text-center">거래 내역을 선택해 주세요.</td></tr>';
+            var row = '<tr><td colspan="4" class="text-center">거래 종류를 선택해 주세요.</td></tr>';
             tbody.html(row);
         }
 

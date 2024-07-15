@@ -715,6 +715,7 @@ $(document).ready(function(){
             for (item of list) {
             	console.log(item.att_time);
             	console.log(toKoreanTime(item.att_time));
+            	var att_result = item.att_result === null ? '처리중' : item.att_result;
               
                 content += '<tr class="total-att-list-tbody-tr" id="' + item.emp_no + '">'
                 	+ '<td class="text-center">' + item.emp_no+ '</td>'
@@ -723,7 +724,7 @@ $(document).ready(function(){
                 	+ '<td class="text-center">' + item.dept_name+ '</td>'
                 	+ '<td class="text-center">' + toKoreanTime(item.att_time)+ '</td>'
                     + '<td class="text-center">' + toKoreanTime(item.leave_time)  + '</td>'
-                    + '<td class="text-center">' + item.att_result + '</td>'
+                    + '<td class="text-center">' + att_result + '</td>'
                     + '</tr>';
             }
         } else {

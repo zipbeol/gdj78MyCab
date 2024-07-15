@@ -209,7 +209,7 @@
 
     <!-- Custom JS files -->
     <script src="/assets/js/custom.js"></script>
-    <script src="/assets/js/LocalStorage.js"></script>
+    <script src="/assets/js/localStorage.js"></script>
     <!-- 페이지네이션 -->
     <script src="/assets/js/jquery.twbsPagination.min.js"></script>
     <!-- Chart.js -->

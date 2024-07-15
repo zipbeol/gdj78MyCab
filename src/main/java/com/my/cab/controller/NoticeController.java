@@ -47,16 +47,9 @@ public class NoticeController {
 	// 공지사항 리스트
 	@PostMapping("/list.ajax")
 	@ResponseBody
-	public Map<String, Object> getNoticeList(@RequestParam Map<String, Object> param) {
-		SearchDTO searchDTO = new SearchDTO();
-		searchDTO.setCategory((String) param.get("category"));
-		searchDTO.setFilterStartDate((String) param.get("filterStartDate"));
-		searchDTO.setFilterEndDate((String) param.get("filterEndDate"));
-		searchDTO.setNoticeWriter((String) param.get("noticeWriter"));
-		searchDTO.setNoticeTitle((String) param.get("noticeTitle"));
-		searchDTO.setPage(Integer.parseInt((String) param.get("page")));
+	public Map<String, Object> getNoticeList(SearchDTO searchDTO) {
 		logger.info("공지사항 리스트 - AJAX 요청");
-		return noticeService.getNoticeList(param, searchDTO);
+		return noticeService.getNoticeList(searchDTO);
 	}
 
 	@RequestMapping("/register.go")

@@ -407,10 +407,10 @@ td:hover {
                 '<td>' + importance + '</td>' +
                 '<td>' + koreanField + '</td>' + // 한글 변환된 값을 사용
                 '<td>' + item.notice_title + '</td>' +
-                '<td>' + item.notice_writer + '</td>' +
+                '<td>' + item.notice_writer_name + '</td>' + // 여기에서 notice_writer 대신 notice_writer_name 사용
                 '<td>' + item.notice_date + '</td>' +
                 '</tr>';
-            if (importance === '중요' && importanceCount < 3) {
+            if (importance === '★ 중요 ★' && importanceCount < 3) {
                 row = noticeRow + row; // 중요 공지사항은 상단에 추가
                 importanceCount++;
             } else {
@@ -421,7 +421,7 @@ td:hover {
         tbody.html(row);
 
         // 각 행에 클릭 이벤트 추가
-        $(document).on('click','.clickable-row', function (event) {
+        $(document).on('click', '.clickable-row', function (event) {
             if (isInactiveMode) {
                 // 비활성화 모드일 경우 체크박스를 체크하거나 체크 해제
                 var checkbox = $(this).find('.inactive-checkbox');
@@ -437,7 +437,6 @@ td:hover {
             event.stopPropagation();
         });
     }
-
 
 
     $('#toggleInactiveButton').click(function () {
@@ -483,6 +482,7 @@ td:hover {
 
  // 공지사항 리스트 갱신 함수
     function refreshNoticeList() {
+	 console.log(currentPage);
         $.ajax({
             type: 'POST',
             url: '/notice/list.ajax',
@@ -502,6 +502,7 @@ td:hover {
             }
         });
     }
+
 
 
 	

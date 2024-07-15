@@ -322,12 +322,14 @@
             $('#startDate').on('change', function () {
                 currentPage = 1;
                 getTotalPages();
+                fetchTotalAmounts();
                 refreshDealList();
             });
 
             $('#endDate').on('change', function () {
                 currentPage = 1;
                 getTotalPages();
+                fetchTotalAmounts();
                 refreshDealList();
             });
         });

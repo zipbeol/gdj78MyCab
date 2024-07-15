@@ -130,8 +130,8 @@ public class FinanceService {
 	    String startYearMonth = (String) param.get("startYearMonth");
 	    String endYearMonth = (String) param.get("endYearMonth");
 
-	    List<Integer> revenueData = financeDAO.getRevenueData(startYearMonth, endYearMonth);
-	    List<Integer> expenseData = financeDAO.getExpenseData(startYearMonth, endYearMonth);
+	    List<Map<String, Object>> revenueData = financeDAO.getRevenueData(startYearMonth, endYearMonth);
+	    List<Map<String, Object>> expenseData = financeDAO.getExpenseData(startYearMonth, endYearMonth);
 
 	    result.put("revenueData", revenueData);
 	    result.put("expenseData", expenseData);
@@ -146,5 +146,5 @@ public class FinanceService {
 	public List<Integer> getExpensePieData(Map<String, Object> param) {
 	    return financeDAO.getExpensePieData(param);
 	}
-	
+
 }

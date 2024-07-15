@@ -442,6 +442,8 @@
     var selectedEmployeeNames = new Set();
     var myId = '${sessionScope.loginId}';
     var myName = '${sessionScope.emp_name}';
+    var myDeptName = '${sessionScope.dept_name}';
+    var myTitleName = '${sessionScope.title_name}';
 
     var roomInfo = [];
     var empNameMapping = {};

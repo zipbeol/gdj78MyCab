@@ -1,7 +1,5 @@
 package com.my.cab.controller;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -161,31 +159,20 @@ public class FinanceController {
     @RequestMapping("/dash.go")
     public String financeDash(Model model) {
         logger.info("재무관리 대시보드");
-
         return "finance/financeDash";
+    
     }
     
     @GetMapping("/dash/initialData.ajax")
     @ResponseBody
-    public Map<String, Object> getInitialData() {
+    public Map<String, Object> getInitialData(@RequestParam Map<String, Object> map) {
         logger.info("Fetching initial dashboard data");
 
-        LocalDate now = LocalDate.now();
-        LocalDate oneYearAgo = now.minusYears(1).withDayOfMonth(1);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
-
-        String startYearMonth = oneYearAgo.format(formatter); 
-        String endYearMonth = now.format(formatter);
-
-        Map<String, Object> param = new HashMap<>();
-        param.put("startYearMonth", startYearMonth);
-        param.put("endYearMonth", endYearMonth);
-
-        Map<String, Object> result = financeService.getFilteredDashboardData(param);
+        Map<String, Object> result = financeService.getFilteredDashboardData(map);
 
         // 각 카테고리별 수익과 지출 데이터 추가
-        result.put("revenuePieData", financeService.getRevenuePieData(param));
-        result.put("expensePieData", financeService.getExpensePieData(param));
+        result.put("revenuePieData", financeService.getRevenuePieData(map));
+        result.put("expensePieData", financeService.getExpensePieData(map));
 
         return result;
     }

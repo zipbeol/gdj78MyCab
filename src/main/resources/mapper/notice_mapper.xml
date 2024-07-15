@@ -6,22 +6,25 @@
 <mapper namespace="com.my.cab.dao.NoticeDAO">
 
 	<!-- 공지사항 등록 쿼리 -->
-<select id="getEmpNoByEmpName" parameterType="string" resultType="int">
-    SELECT emp_no
-    FROM employee
-    WHERE emp_name = #{emp_name}
-</select>
+	<select id="getEmpNoByEmpName" parameterType="string"
+		resultType="int">
+		SELECT emp_no
+		FROM employee
+		WHERE emp_name = #{emp_name}
+	</select>
 
-<insert id="insertNotice" parameterType="map"
-        useGeneratedKeys="true" keyColumn="notice_idx"
-        keyProperty="notice_idx">
-    INSERT INTO notice (notice_writer, notice_field,
-                        notice_imp, notice_stat,
-                        notice_title, notice_content)
-    VALUES (#{notice_writer},
-            #{notice_field}, #{notice_imp}, '공개', #{notice_title},
-            #{notice_content})
-</insert>
+	<insert id="insertNotice" parameterType="map"
+		useGeneratedKeys="true" keyColumn="notice_idx"
+		keyProperty="notice_idx">
+		INSERT INTO notice (notice_writer, notice_field,
+		notice_imp, notice_stat,
+		notice_title, notice_content)
+		VALUES
+		(#{notice_writer},
+		#{notice_field}, #{notice_imp}, '공개',
+		#{notice_title},
+		#{notice_content})
+	</insert>
 
 	<select id="countImportantNotices" resultType="int">
 		SELECT COUNT(*)
@@ -41,7 +44,9 @@
 		resultType="notice">
 		SELECT
 		n.notice_idx,
-		e.emp_name AS notice_writer,
+		n.notice_writer,
+		e.emp_name AS
+		notice_writer_name,
 		n.notice_field,
 		n.notice_imp,
 		n.notice_stat,
@@ -54,10 +59,6 @@
 		WHERE
 		n.notice_stat !=
 		'비활성화'
-		<if test="category != null and category != ''">
-			AND (n.notice_field = 'all' OR n.notice_field =
-			#{category})
-		</if>
 		<if test="filterStartDate != null and filterStartDate != ''">
 			AND n.notice_date <![CDATA[>=]]>
 			#{filterStartDate}
@@ -84,6 +85,8 @@
 		LIMIT #{pageSize} OFFSET
 		#{page}
 	</select>
+
+
 
 
 	<!-- 비활성화 -->
@@ -131,8 +134,8 @@
 	<select id="getDetail" resultType="notice">
 		SELECT
 		n.notice_idx,
-		e.emp_name
-		AS notice_writer,
+		n.notice_writer,
+		e.emp_name AS notice_writer_name,
 		n.notice_title,
 		n.notice_content,
 		n.notice_date,
@@ -142,11 +145,11 @@
 		FROM
 		notice n
 		JOIN
-		employee e ON
-		n.notice_writer = e.emp_no
+		employee e ON n.notice_writer = e.emp_no
 		WHERE
-		n.notice_idx = #{param1}
+		n.notice_idx = #{notice_idx}
 	</select>
+
 
 
 	<select id="getList" resultType="notice">

@@ -95,7 +95,7 @@
                             <div class="col-md-3">
                                 <label for="filterYear" class="form-label">연도</label>
                                 <select id="filterYear" class="form-control">
-                                    <!-- 연도 옵션은 JavaScript에서 동적으로 추가 -->
+                                    <option value="2024">2024년</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
@@ -218,7 +218,7 @@
     <script>
     
     $(document).ready(function() {
-    	$('#startMonth option:selected').val().change(function() {
+    	$('#startMonth option:selected').change(function() {
             var selectedValue = $(this).val();
         });
     });
@@ -230,22 +230,30 @@
             return now.getFullYear();
         }
 
-        // 1년 전 연도를 계산하는 함수
-        function getOneYearAgoYear() {
-            const now = new Date();
-            return now.getFullYear() - 1;
+        // 연도 옵션 추가
+        function populateYearOptions(years) {
+            $('#filterYear').empty();
+            years.forEach(year => {
+                $('#filterYear').append(`<option value="${year}">${year}</option>`);
+            });
         }
 
-        // 연도 옵션 추가
-        function populateYearOptions() {
-            const currentYear = getCurrentYear();
-            const oneYearAgoYear = getOneYearAgoYear();
-            $('#filterYear').append(`<option value="${oneYearAgoYear}">${oneYearAgoYear}</option>`);
-            $('#filterYear').append(`<option value="${currentYear}" selected>${currentYear}</option>`);
+        // 연도 데이터를 가져오는 AJAX 요청
+        function loadYearOptions() {
+            $.ajax({
+                url: '/finance/dash/getYears.ajax',
+                method: 'GET',
+                success: function(response) {
+                    populateYearOptions(response.years);
+                },
+                error: function(error) {
+                    console.error('연도 데이터 가져오기 오류', error);
+                }
+            });
         }
 
         // 초기 설정
-        populateYearOptions();
+        loadYearOptions();
         const currentMonth = (new Date().getMonth() + 1).toString().padStart(2, '0'); // 현재 월
 
         // 필터의 초기 값을 설정
@@ -266,50 +274,95 @@
 
         // 초기 데이터 로딩 함수
         function loadInitialData() {
-            const filterYear = $('#filterYear').val();
+            var filterYear = $('#filterYear').val();
+            filterYear = 2024; // 연도를 2024로 고정
             const startMonth = $('#startMonth option:selected').val();
             const endMonth = $('#endMonth option:selected').val();
+            console.log(filterYear, startMonth, endMonth);
 
             $.ajax({
                 url: '/finance/dash/initialData.ajax',
                 method: 'GET',
                 data: {
-                    startYearMonth: `${filterYear}-${startMonth}`,
-                    endYearMonth: `${filterYear}-${endMonth}`
+                    startYearMonth: filterYear + '-' + startMonth,
+                    endYearMonth: filterYear + '-' + endMonth
                 },
                 success: function(response) {
-                    var revenueData = response.revenueData;
-                    var expenseData = response.expenseData;
-                    var profitData = revenueData.map((revenue, index) => revenue - expenseData[index]);
+                    console.log(response);
+                    var revenueData = [];
+                    var expenseData = [];
+                    for (let item of response.revenueData) {
+                        revenueData.push(
+                            { totalCash: item.totalCash, date: item.date }
+                        );
+                    }
+                    for (let item of response.expenseData) {
+                    	expenseData.push(
+                            { totalCash: item.totalCash, date: item.date }
+                        );
+                    }
+
+                    for (var i = parseInt(startMonth); i <= parseInt(endMonth); i++) {
+                        let month = i < 10 ? '0' + i : i.toString(); // 두 자리의 월 형식 보장
+                        let found = false;
+                        for (let item of revenueData) {
+                            if (filterYear + '-' + month == item.date) {
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found) {
+                            revenueData.push({ totalCash: 0, date: filterYear + '-' + month });
+                        }
+                    }
+                    for (var i = parseInt(startMonth); i <= parseInt(endMonth); i++) {
+                        let month = i < 10 ? '0' + i : i.toString(); // 두 자리의 월 형식 보장
+                        let found = false;
+                        for (let item of expenseData) {
+                            if (filterYear + '-' + month == item.date) {
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found) {
+                        	expenseData.push({ totalCash: 0, date: filterYear + '-' + month });
+                        }
+                    }
+
+                    // revenueData를 날짜 순으로 정렬하여 올바른 순서 보장
+                    revenueData.sort((a, b) => new Date(a.date) - new Date(b.date));
+                    expenseData.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+                    console.log(revenueData.map(data => `날짜: ${data.date}, 총 현금: ${data.totalCash}`));
+
+                    var revenueTotalCash = revenueData.map(data => data.totalCash);
+                    var expenseTotalCash = expenseData.map(data => data.totalCash);
+
+                    var profitData = revenueTotalCash.map((revenue, index) => revenue - expenseTotalCash[index]);
                     var revenuePieData = response.revenuePieData;
                     var expensePieData = response.expensePieData;
 
-                    // 차트 데이터 설정 및 업데이트
-                    updateCharts(revenueData, expenseData, profitData, revenuePieData, expensePieData);
+                    // 차트를 데이터로 업데이트
+                    updateCharts(revenueTotalCash, expenseTotalCash, profitData, revenuePieData, expensePieData);
                 },
                 error: function(error) {
-                    console.error('Error fetching initial data', error);
+                    console.error('초기 데이터 가져오기 오류', error);
                 }
             });
         }
-        
+
         // 라벨 생성 함수
         function generateLabels() {
-            const filterYear = $('#filterYear').val();
             const startMonth = parseInt($('#startMonth').val());
             const endMonth = parseInt($('#endMonth').val());
             const labels = [];
-
-            if (startMonth <= endMonth) {
-                for (let month = startMonth; month <= endMonth; month++) {
-                    labels.push(`${month.toString().padStart(2, '0')}월`);
-                }
+            console.log(startMonth);
+            console.log(endMonth);
+            if (startMonth == endMonth) {
+                labels.push(startMonth + `월`);
             } else {
-                for (let month = startMonth; month <= 12; month++) {
-                    labels.push(`${month.toString().padStart(2, '0')}월`);
-                }
-                for (let month = 1; month <= endMonth; month++) {
-                    labels.push(`${month.toString().padStart(2, '0')}월`);
+                for (var i = startMonth; i <= endMonth; i++) {
+                    labels.push(i + `월`);
                 }
             }
 

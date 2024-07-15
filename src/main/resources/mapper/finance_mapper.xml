@@ -362,9 +362,9 @@
 	</select>
 
 
-	<select id="getRevenueData" resultType="int">
+	<select id="getRevenueData" resultType="map">
 		SELECT
-		IFNULL(SUM(pro_cash), 0)
+		SUM(pro_cash) as totalCash ,DATE_FORMAT(pro_actual_date, '%Y-%m') as date
 		FROM
 		profit
 		WHERE
@@ -374,9 +374,9 @@
 		DATE_FORMAT(pro_actual_date, '%Y-%m')
 	</select>
 
-	<select id="getExpenseData" resultType="int">
+	<select id="getExpenseData" resultType="map">
 		SELECT
-		IFNULL(SUM(exp_cash), 0)
+		SUM(exp_cash) as totalCash ,DATE_FORMAT(exp_actual_date, '%Y-%m') as date
 		FROM
 		expenses
 		WHERE
@@ -409,6 +409,7 @@
 		GROUP BY
 		exp_category
 	</select>
+	
 
 
 </mapper>

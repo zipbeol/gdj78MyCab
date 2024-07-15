@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.my.cab.dao.NoticeDAO;
 import com.my.cab.dto.NoticeDTO;
 import com.my.cab.dto.SearchDTO;
+import com.my.cab.util.PageCalc;
 
 @Service
 public class NoticeService {
@@ -39,9 +40,9 @@ public class NoticeService {
     @Autowired
     NoticeDAO noticeDAO;
 
-    public Map<String, Object> getNoticeList(Map<String, Object> param, SearchDTO searchDTO) {
+    public Map<String, Object> getNoticeList(SearchDTO searchDTO) {
         Map<String, Object> map = new HashMap<>();
-        int page = (searchDTO.getPage() - 1) * PAGE_SIZE;
+        int page = PageCalc.calculatePageOffset(searchDTO.getPage(), PAGE_SIZE);
         searchDTO.setPage(page);
         searchDTO.setPageSize(PAGE_SIZE);
 

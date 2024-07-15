@@ -142,7 +142,7 @@
                                                         <tr>
                                                             <td class="detail-label" style="width: 15%">작성자</td>
                                                             <td class="detail-content" style="width: 85%">
-                                                                <input type="text" name="notice_writer" value="${noticeModi.notice_writer}" class="form-control" readonly/>
+                                                                <input type="text" name="notice_writer_name" value="${noticeModi.notice_writer_name}" class="form-control" readonly/>
                                                             </td>
                                                         </tr>
                                                         <tr>

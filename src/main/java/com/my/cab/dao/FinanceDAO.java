@@ -1,7 +1,10 @@
 package com.my.cab.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -32,9 +35,9 @@ public interface FinanceDAO {
 	
 	FinanceDTO getTotalAmounts(Map<String, Object> financeDTO);
 
-    List<Integer> getRevenueData(@Param("startYearMonth") String startYearMonth, @Param("endYearMonth") String endYearMonth);
+    List<Map<String, Object>> getRevenueData(@Param("startYearMonth") String startYearMonth, @Param("endYearMonth") String endYearMonth);
 
-    List<Integer> getExpenseData(@Param("startYearMonth") String startYearMonth, @Param("endYearMonth") String endYearMonth);
+    List<Map<String, Object>> getExpenseData(@Param("startYearMonth") String startYearMonth, @Param("endYearMonth") String endYearMonth);
 
 	List<Integer> getRevenuePieData(Map<String, Object> param);
 

@@ -135,16 +135,16 @@
                                                 <tbody>
                                                     <tr>
                                                         <td class="detail-label" style="width: 15%">작성자</td>
-                                                        <td class="detail-content" style="width: 35%">${noticeDetail.notice_writer}</td>
-														<td class="detail-label" style="width: 15%">공지사항 대상</td>
-														<td class="detail-content" style="width: 35%" id="noticeField">${noticeDetail.notice_field}</td>
+                                                        <td class="detail-content" style="width: 35%">${noticeDetail.notice_writer_name}</td>
+                                                        <td class="detail-label" style="width: 15%">공지사항 대상</td>
+                                                        <td class="detail-content" style="width: 35%" id="noticeField">${noticeDetail.notice_field}</td>
                                                     </tr>
                                                     <tr>
                                                         <td class="detail-label">첨부 파일</td>
                                                         <td class="detail-content" colspan="3">
                                                             <c:if test="${list.size()>0 }">
                                                                 <c:forEach items="${list}" var="path">
-                                                                    <a href="download/${path.notice_attach_file}">${path.notice_attach_file} 다운로드</a>
+                                                                    <a href="/api/download/${path.notice_attach_file}/${path.notice_attach_file}">${path.notice_attach_file} 다운로드</a>
                                                                 </c:forEach>
                                                             </c:if>
                                                         </td>

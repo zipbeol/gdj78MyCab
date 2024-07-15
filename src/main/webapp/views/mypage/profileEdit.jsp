@@ -184,7 +184,7 @@
                                     <div>
                                         <c:choose>
                                             <c:when test="${not empty empDetail.profile_new}">
-                                                <img src="/photo/${empDetail.profile_new}" class="profile-pic" id="emp-photo">
+                                                <img src="/api/imgView/${empDetail.profile_new}" class="profile-pic" id="emp-photo">
                                             </c:when>
                                             <c:otherwise>
                                                 <img src="/assets/user.png" class="profile-pic" id="emp-photo">

@@ -44,6 +44,7 @@ public class MailConfig {
 	        Properties properties = javaMailSender.getJavaMailProperties();
 	        properties.put(MAIL_SMTP_AUTH, auth);
 	        properties.put(MAIL_SMTP_STARTTLS_ENABLE, startTlsEnable);
+	        properties.put("mail.smtp.ssl.protocols", "TLSv1.2"); // 추가된 부분
 
 	        javaMailSender.setJavaMailProperties(properties);
 	        javaMailSender.setDefaultEncoding("UTF-8");

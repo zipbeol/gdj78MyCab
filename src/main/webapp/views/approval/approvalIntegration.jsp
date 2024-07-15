@@ -225,8 +225,6 @@
                         </table>
                         <div class="btn-container">
                             <button class="btn btn-outline-primary">삭제</button>
-                            <button class="btn btn-outline-danger">결재</button>
-                            <button class="btn btn-outline-warning">PDF 다운로드</button>
                         </div>
                         <nav aria-label="Page navigation">
                             <ul class="pagination"></ul>
@@ -334,52 +332,56 @@ $(document).ready(function() {
     });
 
     // 데이터 가져오기
-    function loadApprovalData(page = 1, query = '', status = '') {
-        $.ajax({
-            url: '/getApprovalDocData.ajax',
-            type: 'POST',
-            data: {
-                page: page,
-                query: query,
-                status: status
-            },
-            dataType: 'json',
-            success: function(response) {
-                $('#approvalDataBody').empty();
+function loadApprovalData(page = 1, query = '', status = '') {
+    $.ajax({
+        url: '/getApprovalData.ajax',
+        type: 'POST',
+        data: {
+            page: page,
+            query: query,
+            status: status
+        },
+        dataType: 'json',
+        success: function(response) {
+            $('#approvalDataBody').empty();
 
-                response.data.forEach(function(item) {
-                    const row = $('<tr></tr>');
-                    const writeDateCell = $('<td></td>').append($('<input>', {
-                        type: 'checkbox',
-                        class: 'approval-checkbox',
-                        value: item.approval_doc_path
-                    })).append(' ' + item.approval_doc_write_date);
-                    const titleCell = $('<td></td>').text(item.approval_doc_title);
-                    const idCell = $('<td></td>').text(item.emp_name + ' ' + item.title_name);  // 이름과 직책
-                    const midApproverCell = $('<td></td>').text(item.appr_midapprover);
-                    const finalApproverCell = $('<td></td>').text(item.appr_finalapprover);
-                    const appr_mngr_updt = $('<td></td>').text(item.approval_doc_udt_dt);
-                    const stateCell = $('<td></td>').text(getApprovalStateText(item.approval_doc__state));
-                    const buttonCell = $('<td></td>').append($('<button>', {
-                        class: 'btn btn-primary',
-                        text: '결재',
-                        click: function() {
-                            window.location.href = '/approval/viewFile/' + btoa(item.approval_doc_path) + '/' + item.approval_doc_idx;
-                        }
-                    }));
+            response.data.forEach(function(item) {
+                const row = $('<tr></tr>');
+                const writeDateCell = $('<td></td>').append($('<input>', {
+                    type: 'checkbox',
+                    class: 'approval-checkbox',
+                    value: item.approval_doc_path
+                })).append(' ' + item.approval_doc_write_date);
+                const titleCell = $('<td></td>').text(item.approval_doc_title);
+                const idCell = $('<td></td>').text(item.emp_name + ' ' + item.title_name);  // 이름과 직책
+                const midApproverCell = $('<td></td>').text(item.appr_midapprover);
+                const finalApproverCell = $('<td></td>').text(item.appr_finalapprover);
+                const appr_mngr_updt = $('<td></td>').text(item.approval_doc_udt_dt);
+                const stateCell = $('<td></td>').text(getApprovalStateText(item.approval_doc__state));
 
-                    row.append(writeDateCell, titleCell, idCell, midApproverCell, finalApproverCell, appr_mngr_updt, stateCell, buttonCell);
-                    $('#approvalDataBody').append(row);
-                });
+                const buttonClass = item.approval_doc__state === 2 ? 'btn btn-success' : 'btn btn-primary';
+                const buttonText = item.approval_doc__state === 2 ? '보기' : '결재';
 
-                // 페이징 처리
-                renderPagination(response.totalPages, page);
-            },
-            error: function(xhr, status, error) {
-                console.error('데이터를 가져오는 중 오류 발생:', error);
-            }
-        });
-    }
+                const buttonCell = $('<td></td>').append($('<button>', {
+                    class: buttonClass,
+                    text: buttonText,
+                    click: function() {
+                        window.location.href = '/approval/viewFile/' + btoa(item.approval_doc_path) + '/' + item.approval_doc_idx;
+                    }
+                }));
+
+                row.append(writeDateCell, titleCell, idCell, midApproverCell, finalApproverCell, appr_mngr_updt, stateCell, buttonCell);
+                $('#approvalDataBody').append(row);
+            });
+
+            // 페이징 처리
+            renderPagination(response.totalPages, page);
+        },
+        error: function(xhr, status, error) {
+            console.error('데이터를 가져오는 중 오류 발생:', error);
+        }
+    });
+}
 
     // 페이징 처리
   function renderPagination(totalPages, currentPage) {

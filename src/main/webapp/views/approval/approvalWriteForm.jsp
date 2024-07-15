@@ -88,12 +88,11 @@ a:hover {
 }
 
 .modal-dialog {
-    max-width: none;
-    width: 60%;
+    max-width: 50%; /* 모달창 크기 줄이기 */
 }
 
 .modal-content {
-    border-radius: 15px;
+    border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
@@ -116,7 +115,7 @@ a:hover {
 }
 
 .modal-body {
-    padding: 40px;
+    padding: 20px; /* 패딩 조정 */
 }
 
 .form-group input[type="text"],
@@ -126,16 +125,29 @@ a:hover {
     border-radius: 10px;
     border: 1px solid #ced4da;
     padding: 10px;
+    width: auto; /* 너비를 자동으로 조정 */
+    min-width: 100%; /* 최소 너비를 100%로 설정 */
+    box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.1);
+    height: auto; /* 높이를 자동으로 설정 */
+    line-height: normal; /* 줄 높이를 기본값으로 설정 */
+}
+
+#approverLineModal .form-group select {
+    border-radius: 10px;
+    border: 1px solid #ced4da;
+    padding: 10px;
     width: 100%;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    white-space: normal; /* 텍스트 줄바꿈 허용 */
+    overflow-wrap: break-word; /* 단어를 나눔 */
 }
 
 .employee-item {
     cursor: pointer;
-    padding: 10px;
+    padding: 8px; /* 패딩 조정 */
     border: 1px solid #ddd;
-    border-radius: 10px;
-    margin-bottom: 10px;
+    border-radius: 5px; /* 반경 축소 */
+    margin-bottom: 0; /* 마진 제거 */
     transition: background-color 0.3s, color 0.3s;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -155,7 +167,7 @@ a:hover {
 }
 
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 10px; /* 마진 축소 */
 }
 
 .btn-group {
@@ -191,7 +203,7 @@ label {
 .form-group {
     flex: 1;
     min-width: 200px;
-    margin-right: 20px;
+    margin-right: 10px; /* 마진 축소 */
 }
 
 .form-group:last-child {
@@ -199,7 +211,7 @@ label {
 }
 
 .card {
-    margin-bottom: 1rem;
+    margin-bottom: 0; /* 마진 제거 */
     width: 100%;
 }
 
@@ -213,7 +225,6 @@ label {
 
 .employee-item {
     cursor: pointer;
-    margin-bottom: 2px;
     padding-bottom: 2px;
     border-bottom: 1px solid #e0e0e0;
 }
@@ -223,6 +234,108 @@ label {
     color: white;
     border-radius: 5px;
 }
+
+#employeeList {
+    max-height: 300px; /* 최대 높이 설정 */
+    overflow-y: auto; /* 스크롤 추가 */
+    padding: 0; /* 패딩 제거 */
+}
+.department-title {
+    font-weight: bold;
+    margin: 0; /* 마진 제거 */
+    padding: 5px 10px; /* 패딩 추가 */
+    background-color: #f8f8f8; /* 배경색 추가 */
+    border: 1px solid #ddd; /* 경계선 추가 */
+    border-top: none; /* 위쪽 경계선 제거 */
+}
+.department {
+    margin-bottom: 0; /* 각 부서 섹션 간격 제거 */
+    padding: 0; /* 각 부서 섹션 패딩 제거 */
+    border-bottom: none; /* 아래쪽 경계선 제거 */
+}
+/* 결재자 모달창 UI 개선 */
+#approverSelectModal .modal-dialog {
+    max-width: 700px;
+    margin: 30px auto;
+}
+
+#approverSelectModal .modal-header {
+    background-color: #007bff;
+    color: white;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 15px 20px;
+}
+
+#approverSelectModal .modal-title {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+#approverSelectModal .modal-body {
+    max-height: 60vh;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+#approverSelectModal .modal-footer {
+    border-top: none;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+
+#approverSelectModal #employeeList .card {
+    border: none;
+    background-color: #f8f9fa;
+    margin-bottom: 0;
+}
+
+#approverSelectModal .department-title {
+    background-color: #e9ecef;
+    border-bottom: 1px solid #dee2e6;
+    padding: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #495057;
+    margin-bottom: 0;
+}
+
+#approverSelectModal .employee-item {
+    padding: 10px 15px;
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#approverSelectModal .employee-item:hover {
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+}
+
+#approverSelectModal .employee-item.selected {
+    background-color: #007bff;
+    color: white;
+}
+
+#approverSelectModal #employeeList {
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 0;
+    margin-top: 0;
+}
+
+#approverSelectModal .card-body {
+    padding: 0;
+}
+
+#approverSelectModal .department {
+    border-bottom: none;
+}'.'
+
     </style>
 </head>
 
@@ -317,16 +430,6 @@ label {
                             <tbody>
                                 <tr>
                                     <th>1</th>
-                                    <th><a href="#" data-toggle="modal" data-target="#approvalModal" data-doc-name="연차신청서" style="color: #007bff; text-decoration: none; font-weight: bold;">000님의 연차신청서 입니다</a></th>
-                                    <th>연차신청서</th>
-                                    <th>
-                                        <button class="btn btn-outline-danger btn-sm">
-                                            전자결재문서
-                                        </button>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>2</th>
                                     <th><a href="#" data-toggle="modal" data-target="#approvalModal" data-doc-name="휴가신청서" style="color: #007bff; text-decoration: none; font-weight: bold;">000님의 휴가신청서 입니다</a></th>
                                     <th>휴가신청서</th>
                                     <th>
@@ -336,7 +439,7 @@ label {
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th>3</th>
+                                    <th>2</th>
                                     <th><a href="#" data-toggle="modal" data-target="#approvalModal" data-doc-name="출장보고서" style="color: #007bff; text-decoration: none; font-weight: bold;">000님의 출장보고서 입니다</a></th>
                                     <th>출장보고서</th>
                                     <th>
@@ -346,7 +449,7 @@ label {
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th>4</th>
+                                    <th>3</th>
                                     <th><a href="#" data-toggle="modal" data-target="#approvalModal" data-doc-name="지출결의서" style="color: #007bff; text-decoration: none; font-weight: bold;">000님의 지출결의서 입니다</a></th>
                                     <th>지출결의서</th>
                                     <th>
@@ -356,7 +459,7 @@ label {
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th>5</th>
+                                    <th>4</th>
                                     <th><a href="#" data-toggle="modal" data-target="#approvalModal" data-doc-name="사고경위서" style="color: #007bff; text-decoration: none; font-weight: bold;">000님의 사고경위서 입니다</a></th>
                                     <th>사고경위서</th>
                                     <th>
@@ -822,7 +925,7 @@ function setApproverType(type) {
     $('#approverSelectModal').data('approverType', type); // 결재자 유형을 설정
 }
 
-// 직원 목록을 불러오는 함수
+//직원 목록을 불러오는 함수
 function loadEmployees(search) {
     $.ajax({
         url: '/approvalList.ajax',
@@ -843,9 +946,9 @@ function loadEmployees(search) {
 
             // 부서별로 그룹화된 데이터를 출력
             departmentMap.forEach((employees, deptName) => {
-                const deptCard = $('<div class="card mb-1 shadow-sm" style="width: 100%;"></div>');
+                const deptCard = $('<div class="card mb-0 shadow-sm department" style="width: 100%;"></div>');
                 const deptCardBody = $('<div class="card-body p-2"></div>');
-                const deptCardTitle = $('<h6 class="card-title"></h6>').text(deptName);
+                const deptCardTitle = $('<h6 class="card-title department-title"></h6>').text(deptName);
 
                 deptCardBody.append(deptCardTitle);
                 employees.forEach(employee => {

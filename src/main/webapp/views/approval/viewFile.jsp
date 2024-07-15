@@ -42,6 +42,7 @@
             border: 1px solid #dee2e6;
             border-collapse: collapse;
             margin-bottom: 20px;
+            margin-top: 0px;
         }
         .approval-line-table th, .approval-line-table td {
             border: 1px solid #dee2e6;
@@ -84,6 +85,14 @@
         .button-container .btn-secondary:hover {
             background-color: #5a6268;
             border-color: #4e555b;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start; /* 추가 */
+        }
+        .card-title {
+            margin-bottom: 0; /* 추가 */
         }
     </style>
 </head>
@@ -161,12 +170,10 @@
         <th>최종결재자</th>
     </tr>
     <tr>
-
         <td id="midApproverSignature">&nbsp;</td>
         <td id="finalApproverSignature">&nbsp;</td>
     </tr>
     <tr>
-
         <td id="midApproverSignatureDate">&nbsp;</td>
         <td id="finalApproverSignatureDate">&nbsp;</td>
     </tr>
@@ -240,28 +247,26 @@
 </body>
 
 <script>
-    // 페이지 로드 시 로컬 스토리지에서 해당 페이지의 서명 정보 불러오기
-    $(document).ready(function() {
-        const currentPage = window.location.pathname; // 현재 페이지 경로
-        const midApproverSignature = localStorage.getItem(currentPage + '-midApproverSignature');
-        const finalApproverSignature = localStorage.getItem(currentPage + '-finalApproverSignature');
-        const midApproverSignatureDate = localStorage.getItem(currentPage + '-midApproverSignatureDate');
-        const finalApproverSignatureDate = localStorage.getItem(currentPage + '-finalApproverSignatureDate');
+//페이지 로드 시 로컬 스토리지에서 해당 페이지의 서명 정보 불러오기
+$(document).ready(function() {
+    const currentPage = window.location.pathname; // 현재 페이지 경로
+    const midApproverSignature = localStorage.getItem(currentPage + '-midApproverSignature');
+    const finalApproverSignature = localStorage.getItem(currentPage + '-finalApproverSignature');
+    const midApproverSignatureDate = localStorage.getItem(currentPage + '-midApproverSignatureDate');
+    const finalApproverSignatureDate = localStorage.getItem(currentPage + '-finalApproverSignatureDate');
 
+    if (midApproverSignature) {
+        $('#midApproverSignature').html('<img src="' + midApproverSignature + '" style="width: 100px; height: auto;">');
+        $('#midApproverSignatureDate').text(midApproverSignatureDate);
+    }
 
-        if (midApproverSignature) {
-            $('.approval-line-table tr:nth-child(2) td:nth-child(2)').html('<img src="' + midApproverSignature + '" style="width: 100px; height: auto;">');
-            $('.approval-line-table tr:nth-child(3) td:nth-child(2)').text(midApproverSignatureDate);
-        }
+    if (finalApproverSignature) {
+        $('#finalApproverSignature').html('<img src="' + finalApproverSignature + '" style="width: 100px; height: auto;">');
+        $('#finalApproverSignatureDate').text(finalApproverSignatureDate);
+    }
+});
 
-        if (finalApproverSignature) {
-            $('.approval-line-table tr:nth-child(2) td:nth-child(3)').html('<img src="' + finalApproverSignature + '" style="width: 100px; height: auto;">');
-            $('.approval-line-table tr:nth-child(3) td:nth-child(3)').text(finalApproverSignatureDate);
-        }
-
-    });
-
-    // 결재 버튼 클릭 시 서명 추가 및 로컬 스토리지에 저장
+ // 결재 버튼 클릭 시 서명 추가 및 로컬 스토리지에 저장
     $('#approve-button').on('click', function() {
         $.ajax({
             url: '/getUserType',
@@ -269,7 +274,7 @@
             success: function(response) {
                 const userType = response;
                 const currentPage = window.location.pathname; // 현재 페이지 경로
-				
+
                 $.ajax({
                     url: '/getSignature',
                     type: 'GET',
@@ -279,15 +284,15 @@
                             const currentDate = new Date().toISOString().split('T')[0];
 
                             if (userType === 'midApprover') {
-                                $('.approval-line-table tr:nth-child(2) td:nth-child(2)').html('<img src="' + signatureImageSrc + '" style="width: 100px; height: auto;">');
-                                $('.approval-line-table tr:nth-child(3) td:nth-child(2)').text(currentDate);
+                                $('#midApproverSignature').html('<img src="' + signatureImageSrc + '" style="width: 100px; height: auto;">');
+                                $('#midApproverSignatureDate').text(currentDate);
 
                                 // 로컬 스토리지에 저장
                                 localStorage.setItem(currentPage + '-midApproverSignature', signatureImageSrc);
                                 localStorage.setItem(currentPage + '-midApproverSignatureDate', currentDate);
                             } else if (userType === 'finalApprover') {
-                                $('.approval-line-table tr:nth-child(2) td:nth-child(3)').html('<img src="' + signatureImageSrc + '" style="width: 100px; height: auto;">');
-                                $('.approval-line-table tr:nth-child(3) td:nth-child(3)').text(currentDate);
+                                $('#finalApproverSignature').html('<img src="' + signatureImageSrc + '" style="width: 100px; height: auto;">');
+                                $('#finalApproverSignatureDate').text(currentDate);
 
                                 // 로컬 스토리지에 저장
                                 localStorage.setItem(currentPage + '-finalApproverSignature', signatureImageSrc);

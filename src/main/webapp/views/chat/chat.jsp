@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Main</title>
+    <title>My Cab - 채팅</title>
     <!-- Meta -->
     <meta name="description" content="Marketplace for Bootstrap Admin Dashboards">
     <meta name="author" content="Bootstrap Gallery">
@@ -32,6 +32,9 @@
     <link rel="stylesheet" href="/assets/css/default.css">
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- Emoji Button CSS and JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@latest/dist/index.min.css">
+
     <style>
         .chat-container {
             height: 500px;
@@ -109,10 +112,14 @@
             padding: 10px;
             background-color: #f8f9fa;
             border-top: 1px solid #dee2e6;
+            display: flex;
+            align-items: center;
         }
 
         .input-group {
             display: flex;
+            align-items: center;
+            width: 100%;
         }
 
         .input-group input {
@@ -123,67 +130,22 @@
             border-radius: 4px 0 0 4px;
         }
 
-        .input-group button {
-            padding: 10px;
-            border: 1px solid #dee2e6;
-            border-left: none;
-            border-radius: 0 4px 4px 0;
-            background-color: #007bff;
-            color: white;
-        }
-
-        .chat-date {
-            text-align: center;
-            font-size: 0.9em;
-            color: #999;
-            margin: 10px 0;
-        }
-
-        .chat-date.sent {
-            text-align: right;
-        }
-
-        .chat-date.received {
-            text-align: left;
-        }
-
-        /* Initially hide chat window */
-        .chat-window {
-            display: none;
-        }
-
-        /* Show chat window when a chat room is selected */
-        .chat-window.active {
-            display: block;
-        }
-
-        .search-result, .selected-employees {
-            margin-top: 15px;
-        }
-
-        .employee-list {
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        .employee-item {
-            cursor: pointer;
-        }
-
-        .employee-item:hover {
-            background-color: #f8f9fa;
-        }
-
-        .selected-item {
+        .input-group-append {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 5px 0;
         }
 
         .file-input-wrapper {
             position: relative;
             overflow: hidden;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0;
+            border-left: none;
+            border-right: none;
+            margin-right: 5px;
         }
 
         .file-input {
@@ -221,12 +183,66 @@
             display: none;
         }
 
-
         .deleted-message {
             color: #999;
             font-style: italic;
         }
 
+        .chat-date {
+            text-align: center;
+            font-size: 0.9em;
+            color: #999;
+            margin: 10px 0;
+        }
+
+        .chat-date.sent {
+            text-align: right;
+        }
+
+        .chat-date.received {
+            text-align: left;
+        }
+
+        .chat-window {
+            display: none;
+        }
+
+        .chat-window.active {
+            display: block;
+        }
+
+        .search-result, .selected-employees {
+            margin-top: 15px;
+        }
+
+        .employee-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .employee-item {
+            cursor: pointer;
+        }
+
+        .employee-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .selected-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+        }
+
+        .chat-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .file-input-wrapper, #emojiPickerButton {
+            margin-right: 0px;
+        }
     </style>
 </head>
 <body>
@@ -273,7 +289,8 @@
                                             <button class="btn btn-success btn-block mb-3" data-toggle="modal"
                                                     data-target="#newChatModal">새로 만들기
                                             </button>
-                                            <input type="text" class="form-control mb-3" placeholder="메시지방, 메시지 검색">
+                                            <input type="text" class="form-control mb-3" id="searchChatRoom"
+                                                   placeholder="채팅방, 최근 메시지 검색">
                                             <div class="list-group">
                                                 <c:choose>
                                                     <c:when test="${chatRoomList.size() > 0}">
@@ -327,6 +344,7 @@
                                                         참여합니다.
                                                     </div>
                                                 </div>
+
                                                 <div class="message-input p-3">
                                                     <div class="input-group">
                                                         <input type="text" class="form-control" id="messageInput"
@@ -336,12 +354,17 @@
                                                                 파일 선택
                                                                 <input type="file" id="fileInput" class="file-input">
                                                             </div>
+                                                            <!-- Emoji Picker Button -->
+                                                            <button class="btn btn-secondary" type="button"
+                                                                    id="emojiPickerButton">
+                                                                <i class="fas fa-smile"></i>
+                                                            </button>
                                                             <button class="btn btn-primary" type="button"
                                                                     onclick="sendMessage()">전송
                                                             </button>
                                                         </div>
-                                                        <div id="fileName" class="file-name"></div>
                                                     </div>
+                                                    <div id="fileName" class="file-name"></div>
                                                 </div>
                                             </div>
                                             <div class="text-center p-5" id="selectChatRoomMessage">
@@ -385,7 +408,7 @@
                 </div>
                 <div class="row selected-employees">
                     <div class="col-md-12">
-                        <h6>Selected Employees:</h6>
+                        <h6>선택된 멤버:</h6>
                         <div id="selectedEmployees">
                         </div>
                     </div>
@@ -410,42 +433,68 @@
 <script src="/assets/js/custom.js"></script>
 <script src="/assets/js/LocalStorage.js"></script>
 <script src="/assets/js/showAlert.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@latest/dist/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.0.3/dist/index.min.js"></script>
 <script>
-    var wsChat = null;
+    var wsChat = chatWebSocketConnect(wsChat);
     var selectedRoomId = null;
     var selectedEmployeeIds = new Set();
     var selectedEmployeeNames = new Set();
     var myId = '${sessionScope.loginId}';
     var myName = '${sessionScope.emp_name}';
+    var myDeptName = '${sessionScope.dept_name}';
+    var myTitleName = '${sessionScope.title_name}';
 
     var roomInfo = [];
     var empNameMapping = {};
 
-    initializeRoomInfo();
+    getRoomList();
     populateChatRoomList();
     bindEvents();
-    
-    function initializeRoomInfo() {
-        <c:forEach items="${chatRoomList}" var="room">
-        var empList = [];
-        <c:forEach items="${room.empList}" var="emp">
-        empList.push({
-            empNo: '${emp.emp_no}',
-            empName: '${emp.emp_name}',
-            empPhoto: '${emp.profile_new}'
+
+    function getRoomList() {
+        $.ajax({
+            url: '/chat/getChatRoomList.ajax',
+            type: 'GET',
+            data: {'emp_no': '${sessionScope.loginId}'},
+            dataType: 'JSON',
+            success: function (data) {
+                console.log(data.list);
+                roomInfo = data.list.map(room => ({
+                    roomIdx: room.roomIdx,
+                    roomName: room.roomName,
+                    roomLastMessage: room.roomLastMessage,
+                    roomLastMessageDate: room.roomLastMessageDate,
+                    roomUserCount: room.roomMemberCount,
+                    empList: room.empList.map(emp => ({
+                        empNo: emp.emp_no,
+                        empName: emp.emp_name,
+                        empPhoto: emp.profile_new,
+                        empDeptName: emp.dept_name,
+                        empTitleName: emp.title_name
+                    }))
+                }));
+                empNameMapping = {};
+                data.list.forEach(room => {
+                    room.empList.forEach(emp => {
+                        empNameMapping[emp.emp_no] = {
+                            empName: emp.emp_name,
+                            empPhoto: emp.profile_new,
+                            empDeptName: emp.dept_name,
+                            empTitleName: emp.title_name
+                        };
+                    });
+                });
+                populateChatRoomList();
+            },
+            error: function (error) {
+                console.log(error);
+            },
         });
-        empNameMapping['${emp.emp_no}'] = '${emp.emp_name}';
-        </c:forEach>
-        roomInfo.push({
-            roomIdx: '${room.roomIdx}',
-            roomName: '${room.roomName}',
-            roomLastMessage: '${room.roomLastMessage}',
-            roomLastMessageDate: '${room.roomLastMessageDate}',
-            roomUserCount: '${room.roomMemberCount}',
-            empList: empList
-        });
-        </c:forEach>
-        console.log(roomInfo);
+    }
+
+    function escapeQuotes(message) {
+        return message.replace(/'/g, "\\'").replace(/"/g, '\\"');
     }
 
     function populateChatRoomList() {
@@ -464,11 +513,16 @@
                 roomHeader.append('<h5 class="mb-1">' + room.roomName + '</h5>');
 
                 var roomLastMessage = room.roomLastMessage ? room.roomLastMessage : '메세지가 없습니다.';
-                var roomMessagePreview = $('<small></small>').text(roomLastMessage.length > 7 ? roomLastMessage.substring(0, 7) + '...' : roomLastMessage);
+                var roomMessagePreview = $('<small></small>').text(roomLastMessage.length > 30 ? roomLastMessage.substring(0, 30) + '...' : roomLastMessage);
 
                 roomItem.append(roomHeader);
                 roomItem.append(roomMessagePreview);
                 chatRoomListContainer.append(roomItem);
+
+                // 현재 선택된 채팅방 유지
+                if (room.roomIdx == selectedRoomId) {
+                    roomItem.addClass('active');
+                }
             });
         } else {
             chatRoomListContainer.append('채팅방을 만들어 주세요');
@@ -484,6 +538,41 @@
         $('.modal-footer .btn-primary').on('click', createChatRoom);
         $('#newChatModal').on('show.bs.modal', fetchEmployeeList);
         $('#newChatModal').on('hidden.bs.modal', resetModal);
+        $('#searchChatRoom').on('keyup', function () {
+            var searchValue = $(this).val().toLowerCase();
+            $('.chat-room-list').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(searchValue) > -1);
+            });
+        });
+        $(document).on('click', '.employee-item', function () {
+            var employeeId = $(this).data('employee-id');
+            var employeeName = $(this).data('employee-name');
+            var employeeDeptName = $(this).data('employee-dept-name');
+            var employeeTitleName = $(this).data('employee-title-name');
+
+            selectedEmployeeIds.add(employeeId);
+            selectedEmployeeNames.add(employeeName + " (" + employeeTitleName + ", " + employeeDeptName + ")");
+
+            var selectedEmployeesContainer = $('#selectedEmployees');
+            var selectedEmployeeItem = $('<div class="selected-item list-group-item"></div>');
+            selectedEmployeeItem.text(employeeName + " (" + employeeTitleName + ", " + employeeDeptName + ")");
+            selectedEmployeeItem.data('employee-id', employeeId);
+            selectedEmployeeItem.data('employee-name', employeeName);
+            selectedEmployeeItem.data('employee-dept-name', employeeDeptName);
+            selectedEmployeeItem.data('employee-title-name', employeeTitleName);
+
+            var removeButton = $('<button class="btn btn-danger btn-sm ml-2">Remove</button>');
+            removeButton.on('click', function () {
+                selectedEmployeeItem.remove();
+                selectedEmployeeIds.delete(employeeId);
+                selectedEmployeeNames.delete(employeeName + " (" + employeeTitleName + ", " + employeeDeptName + ")");
+                fetchEmployeeList();
+            });
+
+            selectedEmployeeItem.append(removeButton);
+            selectedEmployeesContainer.append(selectedEmployeeItem);
+            $(this).remove();
+        });
     }
 
     function handleRoomSelection() {
@@ -504,7 +593,7 @@
     }
 
     function handleMessageInput(event) {
-        if (event.key === "Enter" && $(this).val() !== '') {
+        if (event.key === "Enter" && $('#messageInput').val() !== '') {
             sendMessage();
         }
     }
@@ -534,7 +623,6 @@
                 if (data && data.messages && Array.isArray(data.messages)) {
                     data.messages.forEach(handleIncomingMessage);
                     chatMessages.scrollTop(chatMessages[0].scrollHeight);
-                    wsChat = chatWebSocketConnect(wsChat);
                 } else {
                     console.error('Invalid messages data:', data);
                 }
@@ -550,10 +638,17 @@
             ws.close();
         }
         ws = new WebSocket("ws://" + window.location.host + "/chat/" + selectedRoomId);
+        ws.onopen = function () {
+            var roomIdxList = roomInfo.map(room => room.roomIdx);
+            ws.send(JSON.stringify({type: 'joinRooms', roomIdxList: roomIdxList}));
+        };
         ws.onmessage = function (event) {
             var chatMessage = JSON.parse(event.data);
             console.log("chatMessage: {}", chatMessage);
-            handleIncomingMessage(chatMessage);
+            if (selectedRoomId != null && chatMessage.room == selectedRoomId) {
+                handleIncomingMessage(chatMessage);
+            }
+            getRoomList();
         };
         return ws;
     }
@@ -566,9 +661,12 @@
             messageElement.addClass('received');
         }
 
-        var profilePic = $('<img>').attr('src', 'profile.png').addClass('profile-pic');
+        // 동적으로 empPhoto 경로 설정
+        var empInfo = empNameMapping[chatMessage.sender];
+        var profilePicUrl = empInfo.empPhoto;
+        var profilePic = $('<img>').attr('src', '/api/imgView/' + profilePicUrl).addClass('profile-pic');
         var messageContent = $('<div>').addClass('message-content');
-        var senderName = $('<span>').addClass('sender-name').text(empNameMapping[chatMessage.sender]);
+        var senderName = $('<span>').addClass('sender-name').text(empInfo.empName + ' (' + empInfo.empDeptName + ' ' + empInfo.empTitleName + ')');
         var timestamp = $('<div>').addClass('timestamp').text(new Date().toLocaleTimeString());
 
         messageContent.append(senderName);
@@ -597,15 +695,21 @@
     function appendMessageContent(messageContent, chatMessage) {
         if (chatMessage.type === 'file' && chatMessage.attachments && chatMessage.attachments.length > 0) {
             var file = chatMessage.attachments[0];
+            var fileContainer = $('<div>').addClass('file-container');
+
             if (file.fileType.startsWith('image')) {
-                var imagePreview = $('<img>').attr('src', '/src/main/resources/static/upload/' + file.fileName).css('max-width', '100%');
-                messageContent.append(imagePreview);
+                var imagePreview = $('<img>').attr('src', '/api/imgView/' + file.fileName).css('max-width', '100%');
+                fileContainer.append(imagePreview);
+            } else {
+                var fileIcon = $('<i>').addClass('fas fa-file-alt').css('font-size', '24px'); // 파일 이모티콘
+                var fileLink = $('<a>')
+                    .attr('href', '/api/download/' + file.fileName + '/' + file.oriFileName)
+                    .attr('download', file.oriFileName)
+                    .text(' ' + file.oriFileName);
+                fileContainer.append(fileIcon).append(fileLink);
             }
-            var fileLink = $('<a>')
-                .attr('href', '/api/download/' + file.fileName)
-                .attr('download', file.fileName)
-                .text('Download ' + file.fileName);
-            messageContent.append(fileLink);
+
+            messageContent.append(fileContainer);
         } else {
             var messageText = $('<div>')
                 .addClass('chat-messages-div')
@@ -692,7 +796,7 @@
     function fileSend(fileName, fileType, oriFileName) {
         var chatMessage = {
             type: 'file',
-            message: '',
+            message: oriFileName,
             sender: myId,
             room: selectedRoomId,
             attachments: [
@@ -722,7 +826,7 @@
                 data: {
                     roomIdx: selectedRoomId,
                     roomEmpIdx: myId,
-                    roomName: updatedRoomName 
+                    roomName: updatedRoomName
                 },
                 success: function (data) {
                     if (data.result) {
@@ -766,9 +870,11 @@
             data.forEach(function (employee) {
                 if (!selectedEmployeeIds.has(employee.emp_no) && employee.emp_no != myId) {
                     var employeeItem = $('<div class="employee-item list-group-item"></div>');
-                    employeeItem.text(employee.emp_name + " (" + employee.emp_no + ")");
+                    employeeItem.text(employee.emp_name + " (" + employee.title_name + ", " + employee.dept_name + ")");
                     employeeItem.data('employee-id', employee.emp_no);
                     employeeItem.data('employee-name', employee.emp_name);
+                    employeeItem.data('employee-dept-name', employee.dept_name);
+                    employeeItem.data('employee-title-name', employee.title_name);
                     employeeListContainer.append(employeeItem);
                 }
             });
@@ -777,35 +883,9 @@
         }
     }
 
-    $(document).on('click', '.employee-item', function () {
-        var employeeId = $(this).data('employee-id');
-        var employeeName = $(this).data('employee-name');
-
-        selectedEmployeeIds.add(employeeId);
-        selectedEmployeeNames.add(employeeName);
-
-        var selectedEmployeesContainer = $('#selectedEmployees');
-        var selectedEmployeeItem = $('<div class="selected-item list-group-item"></div>');
-        selectedEmployeeItem.text(employeeName);
-        selectedEmployeeItem.data('employee-id', employeeId);
-        selectedEmployeeItem.data('employee-name', employeeName);
-
-        var removeButton = $('<button class="btn btn-danger btn-sm ml-2">Remove</button>');
-        removeButton.on('click', function () {
-            selectedEmployeeItem.remove();
-            selectedEmployeeIds.delete(employeeId);
-            selectedEmployeeNames.delete(employeeName); // Also remove from the name set
-            fetchEmployeeList();
-        });
-
-        selectedEmployeeItem.append(removeButton);
-        selectedEmployeesContainer.append(selectedEmployeeItem);
-        $(this).remove();
-    });
-
     function resetModal() {
         selectedEmployeeIds.clear();
-        selectedEmployeeNames.clear(); // Clear the name set as well
+        selectedEmployeeNames.clear();
         $('#selectedEmployees').empty();
     }
 
@@ -814,12 +894,12 @@
             alert('채팅방에 추가할 멤버를 선택해 주세요.');
             return;
         }
-        var selectedEmployeeNoArray = Array.from(selectedEmployeeIds).map(id => ({ emp_no: id }));
+        var selectedEmployeeNoArray = Array.from(selectedEmployeeIds).map(id => ({emp_no: id}));
         var selectedEmployeeNameArray = Array.from(selectedEmployeeNames);
         selectedEmployeeNameArray.push(myName); // Add the current user's name
 
         selectedEmployeeIds.add(Number(myId));
-        selectedEmployeeNoArray.push({ emp_no: myId });
+        selectedEmployeeNoArray.push({emp_no: myId});
 
         var roomName = selectedEmployeeNameArray.join(', ');
 
@@ -834,6 +914,7 @@
                 roomEmpIdx: myId
             }),
             success: function (response) {
+                console.log(response.roomIdx);
                 if (response.result) {
                     $('#newChatModal').modal('hide');
                     alert('채팅방이 생성되었습니다.');
@@ -848,6 +929,19 @@
             }
         });
     }
+    const button = document.querySelector("#emojiPickerButton");
+    const picker = new EmojiButton({
+        position: 'bottom-start'
+    });
+
+    button.addEventListener('click', () => {
+        picker.togglePicker(button);
+    });
+
+    picker.on('emoji', emoji => {
+        const text_box = document.querySelector('#messageInput');
+        text_box.value += emoji;
+    });
 </script>
 
 </html>

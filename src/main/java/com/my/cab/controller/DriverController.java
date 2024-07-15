@@ -7,6 +7,7 @@ import com.my.cab.service.AccidentService;
 import com.my.cab.service.DriverService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,11 @@ public class DriverController {
     private final AccidentService accidentService;
     Logger logger = LoggerFactory.getLogger(getClass());
 
+    @Value("${spring.servlet.multipart.location}")
+    private String uploadDir;
+
     public DriverController(DriverService driverService, AccidentService accidentService) {
+
         this.driverService = driverService;
         this.accidentService = accidentService;
     }
@@ -69,6 +74,7 @@ public class DriverController {
         DriverDTO driverInfo = driverService.getDriverInfo(driver_idx);
         model.addAttribute("driverInfo", driverInfo);
         model.addAttribute("accidentFirstRegDate", accidentService.getDriverFirstAccidentDate(driver_idx));
+        model.addAttribute("uploadDir", uploadDir);
         return "driver/driverInfo";
     }
 

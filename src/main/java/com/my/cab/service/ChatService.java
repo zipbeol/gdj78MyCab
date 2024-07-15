@@ -7,6 +7,7 @@ import com.my.cab.dto.ChatRoomDTO;
 import com.my.cab.dto.EmpDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +20,9 @@ import java.util.List;
 
 @Service
 public class ChatService {
+
+    @Value("${spring.servlet.multipart.location}")
+    private String uploadDir;
 
     private final ChatDAO chatDAO;
 
@@ -56,9 +60,7 @@ public class ChatService {
     }
 
     public String uploadFile(MultipartFile file) {
-        /////////////////// 나중에 수정해야함///////////////////
-        String uploadDir = "src/main/resources/static/upload";
-        ////////////////////////////////////////////////////
+
 
         String uploadFileName = "chat_" + System.currentTimeMillis()
                 + file.getOriginalFilename()
@@ -90,13 +92,21 @@ public class ChatService {
     @Transactional
     public boolean createChatRoom(ChatRoomDTO chatRoomDTO) {
         boolean createChatRoom = chatDAO.createChatRoom(chatRoomDTO);
-        boolean flag = true;
+        return createChatRoom && insertChatRoomMembers(chatRoomDTO);
+    }
+
+    public boolean inviteMembers(ChatRoomDTO chatRoomDTO) {
+        return insertChatRoomMembers(chatRoomDTO);
+    }
+
+    public boolean insertChatRoomMembers(ChatRoomDTO chatRoomDTO) {
+        boolean result = true;
         for (EmpDTO dto : chatRoomDTO.getEmpList()) {
             chatRoomDTO.setRoomEmpIdx(dto.getEmp_no());
             if (!chatDAO.joinMember(chatRoomDTO)) {
-                flag = false;
+                result = false;
             }
         }
-        return createChatRoom && flag;
+        return result;
     }
 }

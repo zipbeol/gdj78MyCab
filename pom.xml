@@ -72,7 +72,11 @@
             <artifactId>tomcat-jasper</artifactId>
             <version>9.0.86</version>
         </dependency>
-
+        <!-- mail -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
 
         <!-- spring security -->
         <dependency>
@@ -112,12 +116,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
-        
+
         <!-- jacksonbind -->
         <dependency>
-		    <groupId>com.fasterxml.jackson.core</groupId>
-		    <artifactId>jackson-databind</artifactId>
-		</dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
 
 
 	<!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->

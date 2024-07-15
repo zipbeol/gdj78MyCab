@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Main</title>
+    <title>My Cab - 기사 정보</title>
     <!-- Meta -->
     <meta name="description" content="Marketplace for Bootstrap Admin Dashboards">
     <meta name="author" content="Bootstrap Gallery">
@@ -100,6 +100,7 @@
             content: '\f0dd'; /* FontAwesome sort down 아이콘 */
             opacity: 1;
         }
+
         /* 새로 추가할 스타일 */
         #accident-detail-description {
             resize: none;
@@ -208,14 +209,14 @@
                                                     <dt class="col-6">기사 사진</dt>
                                                     <dt class="col-6">면허 사진</dt>
                                                     <dd class="col-6 d-flex">
-                                                        <img src="/upload/${driverInfo.driver_photo}"
+                                                        <img src="/api/imgView/${driverInfo.driver_photo}"
                                                              style="width: 150px; height: 150px;" id="driver-photo">
                                                         <input type="file" id="driver-photo-input"
                                                                data-value="driver-photo" style="display: none;"
                                                                class="form-control">
                                                     </dd>
                                                     <dd class="col-6 d-flex">
-                                                        <img src="/upload/${driverInfo.driver_taxi_license_photo}"
+                                                        <img src="/api/imgView/${driverInfo.driver_taxi_license_photo}"
                                                              style="width: 200px; height: 150px;"
                                                              id="driver-taxi-license-photo">
                                                         <input type="file" id="license-photo-input"
@@ -537,7 +538,8 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                 <button type="button" class="btn btn-primary" id="edit-accident-btn">수정</button>
-                <button type="button" class="btn btn-success" id="save-accident-detail-btn" style="display: none;">저장</button>
+                <button type="button" class="btn btn-success" id="save-accident-detail-btn" style="display: none;">저장
+                </button>
                 <input type="hidden" id="accident-detail-id">
             </div>
         </div>
@@ -615,7 +617,7 @@
                 $('#accident-detail-location').val(data.info.accident_history_location);
                 $('#accident-detail-description').val(data.info.accident_history_description);
                 $('#accident-detail-driver').val(data.info.accident_history_driver_name);
-                $('#accident-detail-fault').val(data.info.accident_history_is_at_fault ? "true" : "false"); // 값 설정
+                $('#accident-detail-fault').val(data.info.accident_history_is_at_fault ? "Y" : "N"); // 값 설정
                 $('#accident-detail-license-plate').val(data.info.accident_history_taxi_license_plate);
                 $('#accident-detail-id').val(data.info.accident_history_idx);
                 $('#accidentDetailModal').modal('show');
@@ -1025,6 +1027,7 @@
         getSearchValue();
         accidentListAjax();
     }
+
     function accidentListAjax() {
         console.log(filterStartDate);
         console.log(filterEndDate);
@@ -1059,6 +1062,7 @@
         getSearchValue();
         accidentTotalPagesAjax();
     }
+
     function accidentTotalPagesAjax() {
         $.ajax({
             url: '/accident/getTotalPages.ajax',
@@ -1124,7 +1128,7 @@
                     + '<td class="">' + item.accident_history_accident_date + '</td>'
                     + '<td class="">' + item.accident_history_location + '</td>'
                     + '<td class="ellipsis">' + item.accident_history_description + '</td>'
-                    + '<td class="">' + item.accident_history_is_at_fault + '</td>'
+                    + '<td class="">' + (item.accident_history_is_at_fault == true ? 'Y' : 'N') + '</td>'
                     + '</tr>';
             }
         } else {

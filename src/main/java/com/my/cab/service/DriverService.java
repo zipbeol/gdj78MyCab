@@ -106,10 +106,6 @@ public class DriverService {
      * @return
      */
     private Map<String, Object> fileUpload(Map.Entry<String, MultipartFile> file, int driverIdx, boolean result) {
-        /////////////////// 나중에 수정해야함///////////////////
-        uploadDir = "src/main/resources/static/upload";
-        ////////////////////////////////////////////////////
-
         String uploadFileName = file.getKey() + "_" + driverIdx
                 + file.getValue()
                 .getOriginalFilename()

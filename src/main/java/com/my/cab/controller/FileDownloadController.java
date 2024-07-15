@@ -24,23 +24,22 @@ import java.nio.file.Paths;
 @RequestMapping("/api")
 public class FileDownloadController {
 
-    private final Path fileStorageLocation = Paths.get("src/main/resources/static/upload").toAbsolutePath().normalize();
-    Logger logger = LoggerFactory.getLogger(FileDownloadController.class);
-    
     @Value("${spring.servlet.multipart.location}")
     private String uploadDir;
 
-    @GetMapping("/download/{fileName}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName) {
-        logger.info(fileName);
+    Logger logger = LoggerFactory.getLogger(FileDownloadController.class);
 
+    @GetMapping("/download/{fileName}/{oriFileName}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, @PathVariable String oriFileName) {
+        logger.info(fileName);
+        Path fileStorageLocation = Paths.get(uploadDir).toAbsolutePath().normalize();
         try {
             Path filePath = fileStorageLocation.resolve(fileName).normalize();
             Resource resource = new UrlResource(filePath.toUri());
 
             if (resource.exists() || resource.isReadable()) {
                 return ResponseEntity.ok()
-                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + oriFileName + "\"")
                         .body(resource);
             } else {
                 throw new RuntimeException("File not found " + fileName);
@@ -49,23 +48,40 @@ public class FileDownloadController {
             throw new RuntimeException("Error: " + e.getMessage());
         }
     }
-    
+
+    @GetMapping("/imgView/{fileName}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName) {
+        // 1. 특정 경로에서 파일읖 읽어와 Resource 로 만든다.
+        Resource resource = new FileSystemResource(uploadDir + "/" + fileName);
+        // 2. 보내질 파일의 형태를 지정 (헤더에)
+        HttpHeaders headers = new HttpHeaders();
+        try {
+            // 경로를 주면 파일의 mime-type 알아낸다.
+            String type = Files.probeContentType(Paths.get(uploadDir + "/" + fileName));
+            headers.add("content-type", type);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // ResponseEntity<Resource>(보낼 내용, 헤더,HTTP 상태)
+        return new ResponseEntity<Resource>(resource, headers, HttpStatus.OK);
+    }
+
     // 대현
     @GetMapping("/document/{filePath}")
     public ResponseEntity<Resource> loadDocument(@PathVariable String filePath) {
         logger.info(filePath);
-        Resource resource = new FileSystemResource(uploadDir + "/startApprover/" +filePath);
+        Resource resource = new FileSystemResource(uploadDir + "/startApprover/" + filePath);
         // 2. 보내질 파일의 형태를 지정해준다
         // 헤더에 보내질 파일의 형태를 지정해준다
         HttpHeaders header = new HttpHeaders();
 
-        try {          
-           String type = Files.probeContentType(Paths.get(uploadDir + "/startApprover/" + filePath)); // 경로를 주면 해당 파일의 mime-type 을 알아낸다
-           header.add("content-type", type);
-         } catch (IOException e) {
+        try {
+            String type = Files.probeContentType(Paths.get(uploadDir + "/startApprover/" + filePath)); // 경로를 주면 해당 파일의 mime-type 을 알아낸다
+            header.add("content-type", type);
+        } catch (IOException e) {
             e.getStackTrace();
-         }
-         // 클라이언트에게 보낼 내용(데이터), 헤더, 상태(200 또는 HttpStatus.OK 는 정상이라는 의미이다)
+        }
+        // 클라이언트에게 보낼 내용(데이터), 헤더, 상태(200 또는 HttpStatus.OK 는 정상이라는 의미이다)
         return new ResponseEntity<Resource>(resource, header, HttpStatus.OK);
     }
 }

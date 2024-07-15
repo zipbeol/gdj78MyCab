@@ -1,522 +1,530 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <html lang="ko">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Main</title>
-    <!-- Meta -->
-    <meta name="description" content="Marketplace for Bootstrap Admin Dashboards">
-    <meta name="author" content="Bootstrap Gallery">
-    <link rel="canonical" href="https://www.bootstrap.gallery/">
-    <meta property="og:url" content="https://www.bootstrap.gallery">
-    <meta property="og:title" content="Admin Templates - Dashboard Templates | Bootstrap Gallery">
-    <meta property="og:description" content="Marketplace for Bootstrap Admin Dashboards">
-    <meta property="og:type" content="Website">
-    <meta property="og:site_name" content="Bootstrap Gallery">
-    <link rel="shortcut icon" href="/assets/images/favicon.svg">
-    <!-- *************
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>근태 관리</title>
+<!-- Meta -->
+<meta name="description"
+	content="Marketplace for Bootstrap Admin Dashboards">
+<meta name="author" content="Bootstrap Gallery">
+<link rel="canonical" href="https://www.bootstrap.gallery/">
+<meta property="og:url" content="https://www.bootstrap.gallery">
+<meta property="og:title"
+	content="Admin Templates - Dashboard Templates | Bootstrap Gallery">
+<meta property="og:description"
+	content="Marketplace for Bootstrap Admin Dashboards">
+<meta property="og:type" content="Website">
+<meta property="og:site_name" content="Bootstrap Gallery">
+<link rel="shortcut icon" href="/assets/images/favicon.svg">
+<!-- *************
             ************ CSS Files *************
         ************* -->
-    <link rel="stylesheet" href="/assets/fonts/bootstrap/bootstrap-icons.css">
-    <link rel="stylesheet" href="/assets/css/main.min.css">
+<link rel="stylesheet"
+	href="/assets/fonts/bootstrap/bootstrap-icons.css">
+<link rel="stylesheet" href="/assets/css/main.min.css">
 
-    <!-- *************
+<!-- *************
             ************ Vendor Css Files *************
         ************ -->
 
-    <!-- Scrollbar CSS -->
-    <link rel="stylesheet" href="/assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
-    
-     <!-- Calendar CSS -->
-    <link rel="stylesheet" href="/assets/vendor/calendar/css/main.min.css">
-    <link rel="stylesheet" href="/assets/vendor/calendar/css/custom.css">
+<!-- Scrollbar CSS -->
+<link rel="stylesheet"
+	href="/assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
 
-    <!-- 폰트 -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+<!-- Calendar CSS -->
+<link rel="stylesheet" href="/assets/vendor/calendar/css/main.min.css">
+<link rel="stylesheet" href="/assets/vendor/calendar/css/custom.css">
 
-    <!-- Date Range CSS -->
-    <link rel="stylesheet" href="/assets/vendor/daterange/daterange.css">
-    <!-- 따로 적용한 CSS -->
-    <link rel="stylesheet" href="/assets/css/default.css">
-    <!-- FontAwesome 추가 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- 폰트 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
+	rel="stylesheet">
 
-    <style>
-       
+<!-- Date Range CSS -->
+<link rel="stylesheet" href="/assets/vendor/daterange/daterange.css">
+<!-- 따로 적용한 CSS -->
+<link rel="stylesheet" href="/assets/css/default.css">
+<!-- FontAwesome 추가 -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
-        .alert-placeholder {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1050;
-            margin: 0;
-            padding: 10px;
-            text-align: center;
-        }
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-        .info-label {
-            font-weight: bold; /* Optionally make labels bold */
-        }
+<style>
+.alert-placeholder {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 1050;
+	margin: 0;
+	padding: 10px;
+	text-align: center;
+}
 
-        .info-value {
-            font-size: 16px; /* Adjust font size as needed */
-        }
+.info-label {
+	font-weight: bold; /* Optionally make labels bold */
+}
 
-      
-     
-    </style>
+.info-value {
+	font-size: 16px; /* Adjust font size as needed */
+}
+</style>
 
 </head>
 
 <body>
-<!-- Page wrapper start -->
-<div class="page-wrapper">
+	<!-- Page wrapper start -->
+	<div class="page-wrapper">
 
-    <!-- Main container start -->
-    <div class="main-container">
+		<!-- Main container start -->
+		<div class="main-container">
 
-        <!-- Sidebar wrapper start -->
-        <jsp:include page="../sidebar.jsp"/>
-        <!-- Sidebar wrapper end -->
+			<!-- Sidebar wrapper start -->
+			<jsp:include page="../sidebar.jsp" />
+			<!-- Sidebar wrapper end -->
 
-        <!-- App container starts -->
-        <div class="app-container">
+			<!-- App container starts -->
+			<div class="app-container">
 
-            <!-- App header starts -->
-            <div class="app-header d-flex align-items-center">
+				<!-- App header starts -->
+				<div class="app-header d-flex align-items-center">
 
-                <!-- Toggle buttons start -->
-                <div class="d-flex">
-                    <button class="btn btn-outline-primary me-2 toggle-sidebar" id="toggle-sidebar">
-                        <i class="bi bi-list fs-5"></i>
-                    </button>
-                    <button class="btn btn-outline-primary me-2 pin-sidebar" id="pin-sidebar">
-                        <i class="bi bi-list fs-5"></i>
-                    </button>
-                </div>
-                <!-- Toggle buttons end -->
+					<!-- Toggle buttons start -->
+					<div class="d-flex">
+						<button class="btn btn-outline-primary me-2 toggle-sidebar"
+							id="toggle-sidebar">
+							<i class="bi bi-list fs-5"></i>
+						</button>
+						<button class="btn btn-outline-primary me-2 pin-sidebar"
+							id="pin-sidebar">
+							<i class="bi bi-list fs-5"></i>
+						</button>
+					</div>
+					<!-- Toggle buttons end -->
 
-                <!-- App brand sm start -->
-                <div class="app-brand-sm d-lg-none d-sm-block">
-                    <a href="/">
-                        <img src="/assets/images/logo-sm.svg" class="logo" alt="Bootstrap Gallery">
-                    </a>
-                </div>
-                <!-- App brand sm end -->
+					<!-- App brand sm start -->
+					<div class="app-brand-sm d-lg-none d-sm-block">
+						<a href="/"> <img src="/assets/images/logo-sm.svg"
+							class="logo" alt="Bootstrap Gallery">
+						</a>
+					</div>
+					<!-- App brand sm end -->
 
-                <!-- Breadcrumb start -->
-                <ol class="breadcrumb d-none d-lg-flex ms-3">
-                    <li class="breadcrumb-item">
-                        <a href="/"><i class="bi bi-house lh-1"></i></a>
-                        <a href="/" class="text-decoration-none">메인</a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a href="#" class="text-decoration-none">인사 관리</a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a href="/attendance/attendance/list.go" class="text-decoration-none">근태 관리</a>
-                    </li>
-                </ol>
-                <!-- Breadcrumb end -->
+					<!-- Breadcrumb start -->
+					<ol class="breadcrumb d-none d-lg-flex ms-3">
+						<li class="breadcrumb-item"><a href="/"><i
+								class="bi bi-house lh-1"></i></a> <a href="/"
+							class="text-decoration-none">메인</a></li>
+						<li class="breadcrumb-item"><a href="#"
+							class="text-decoration-none">인사 관리</a></li>
+						<li class="breadcrumb-item"><a
+							href="/attendance/attendance/list.go"
+							class="text-decoration-none">근태 관리</a></li>
+					</ol>
+					<!-- Breadcrumb end -->
 
-                <!-- App header actions start -->
-                <jsp:include page="../appHeader.jsp"/>
-                <!-- App header actions end -->
+					<!-- App header actions start -->
+					<jsp:include page="../appHeader.jsp" />
+					<!-- App header actions end -->
 
-            </div>
-            <!-- App header ends -->
+				</div>
+				<!-- App header ends -->
 
-            <!-- App body starts -->
-            <div class="app-body">
+				<!-- App body starts -->
+				<div class="app-body">
 
-                <!-- Container starts -->
-                <div class="container-fluid">
+					<!-- Container starts -->
+					<div class="container-fluid">
 
-                    <!-- Alert placeholder start -->
-                    <div id="alertPlaceholder" class="alert-placeholder"></div>
-                    <!-- Alert placeholder end -->
+						<!-- Alert placeholder start -->
+						<div id="alertPlaceholder" class="alert-placeholder"></div>
+						<!-- Alert placeholder end -->
 						<!-- Row start -->
-<div class="row">
-    <div class="col-12">
-        <div class="card mb-3">
-            <div class="card-header">
-                <ul class="nav nav-tabs card-header-tabs" id="taxiTabs" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="taxi-detail-tab" data-bs-toggle="tab"
-                                data-bs-target="#taxi-detail-content" type="button" role="tab"
-                                aria-controls="taxi-detail-content" aria-selected="true">전체 근태 내역
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="taxi-schedule-tab" data-bs-toggle="tab"
-                                data-bs-target="#taxi-schedule-content" type="button" role="tab"
-                                aria-controls="taxi-schedule-content" aria-selected="false">수정 요청 내역
-                        </button>
-                    </li>
-                </ul>
-            </div>
-            <div class="card-body tab-content" id="newTabsContent">
-                <div class="tab-pane fade show active" id="taxi-detail-content" role="tabpanel"
-                     aria-labelledby="taxi-detail-tab">
-                    <!-- 전체 근태 내역 -->
-                    <h2>전체 근태 내역</h2>
-                    <div class="text-end mb-1">
-                    </div>
-                    <!-- 검색창 시작 -->
-                    <div class="search-filter-container border border-2 p-3 rounded mb-3">
-                        <div class="row mb-3">
-                            <div class="col-md-8 offset-md-4">
-                            <canvas id="myDonutChart" style="max-width: 300px; max-height: 300px;"></canvas>
-                            </div>
-                            
-                        </div>
-                        <div class="row">
-                        <div class="col-12 text-end d-md-flex justify-content-md-end gap-2">
-                        <input type="button" class="btn btn-secondary" onclick="filterReset()"
-                                       value="초기화">
-                                       </div></div>
-                        <div class="row">
-                        <div class="col-2">
-                                                                <label for="filter-maintenance-reg-date"
-                                                                       class="form-label">근무일
-                                                                    </label>
-                                                            </div>
-                                                            <div class="col-2">
-                                                            </div>
-                                                            <div class="col-2">
-                                                                <label for="search-category-maintenance"
-                                                                       class="form-label">카테고리</label>
-                                                            </div>
-                                                            <div class="col-4">
-                                                                <label for="search-text-maintenance"
-                                                                       class="form-label">검색</label>
-                                                            </div>
-                                                            <div class="col-2">
-                                                                <label for="search-text-maintenance"
-                                                                       class="form-label">근태 결과</label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row mb-3">
-                                                            <div class="col-2">
-                                                                <div class="input-group"
-                                                                     id="filter-maintenance-reg-date-div">
-                                                                    <input type="text"
-                                                                           class="form-control datepicker maintenance-search-filter"
-                                                                           id="filter-att-date">
-                                                                    <span class="input-group-text"><i
-                                                                            class="bi bi-calendar2-range"></i></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-2">
-                                                            </div>
-                                                            <div class="col-2 d-flex">
-                                                                <select class="form-select maintenance-search-filter"
-                                                                        id="filterforsearch">
-                                                                    <option value="emp_no">사번</option>
-																	<option value="emp_name">이름</option>
-																	<option value="title_name">직급</option>
-																	<option value="dept_name">부서</option>
-                                                                </select>
-                                                            </div>
-                                                            <div class="col-4">
-                                                                <input type="text"
-                                                                       class="form-control maintenance-search-filter"
-                                                                       id="search-emp"
-                                                                       placeholder="검색어를 입력해 주세요.">
-                                                            </div>
-                                                            <div class="col-2 d-flex">
-                                                                <select class="form-select maintenance-search-filter"
-                                                                        id="filter-att-result">
-                                                                    <option value="">근태 결과</option>
-                                                                    <option value="근무">근무</option>
-																	<option value="지각">지각</option>
-																	<option value="결근">결근</option>
-																	<option value="연차">연차</option>
-																	<option value="반차">반차</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- 검색창 종료 -->
-                            
-                    <!-- 리스트 테이블 시작 -->
-                    <div class="table-outer">
-                        <div class="table-responsive">
-                            <table class="table align-middle table-hover m-0">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center" id="th-emp-no"
-																style="width: 20%;">사번</th>
-															<th class="text-center sortable" id="th-emp-name"
-																style="width: 20%;" >이름</th>
-															<th class="text-center sortable" id="th-title-name"
-																style="width: 10%;" >직급</th>
-															<th class="text-center sortable" id="th-dept-name"
-																style="width: 20%;" >부서</th>
-															<th class="text-center" id="th-att-time"
-																style="width: 10%;" >출근
-																</th>
-																<th class="text-center" id="th-leave-time"
-																style="width: 10%;" >퇴근
-																</th>
-																<th class="text-center" id="th-att-result"
-																style="width: 10%;" >근태 결과
-																</th>
-                                                                </tr>
-                                                                </thead>
-                                                                <tbody id="total-att-list">
-                                    
-                                    <!-- 테이블 내용 정의 -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <!-- 리스트 테이블 종료 -->
-                    <!-- 페이지 네이션 시작 -->
-                    <nav aria-label="Page navigation example" class="mt-3">
-                        <ul class="pagination justify-content-center" id="pagination"></ul>
-                    </nav>
-                    <!-- 페이지 네이션 종료 -->
-                </div>
-                <div class="tab-pane fade" id="taxi-schedule-content" role="tabpanel"
-                     aria-labelledby="taxi-schedule-tab">
-                    <!-- 수정 요청 내역 -->
-                    <h2>수정 요청 내역</h2>
-                    <div class="mt-3"></div>
-                    <div class="search-filter-container border border-2 p-3 rounded mb-3">
-                        <div class="row mb-3">
-                            <div class="col-md-8 offset-md-4">
-                            
-                            </div>
-                            
-                        </div>
-                        <div class="row">
-                        <div class="col-12 text-end d-md-flex justify-content-md-end gap-2">
-                        <input type="button" class="btn btn-secondary" onclick="EditfilterReset()"
-                                       value="초기화">
-                                       </div></div>
-                        <div class="row">
-                        <div class="col-2">
-                                                                <label for="filter-maintenance-reg-date"
-                                                                       class="form-label">신청일
-                                                                    </label>
-                                                            </div>
-                                                            <div class="col-2">
-                                                            </div>
-                                                            <div class="col-2">
-                                                                
-                                                            </div>
-                                                            <div class="col-4">
-                                                                <label for="search-text-maintenance"
-                                                                       class="form-label">검색</label>
-                                                            </div>
-                                                            <div class="col-2">
-                                                                <label for="search-text-maintenance"
-                                                                       class="form-label">처리 필터</label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row mb-3">
-                                                            <div class="col-2">
-                                                                <div class="input-group"
-                                                                     id="filter-maintenance-reg-date-div">
-                                                                    <input type="text"
-                                                                           class="form-control datepicker maintenance-search-filter"
-                                                                           id="filter-edit-date">
-                                                                    <span class="input-group-text"><i
-                                                                            class="bi bi-calendar2-range"></i></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-2">
-                                                            </div>
-                                                            <div class="col-2 d-flex">
-                                                                
-                                                            </div>
-                                                            <div class="col-4">
-                                                                <input type="text"
-                                                                       class="form-control maintenance-search-filter"
-                                                                       id="search-edit"
-                                                                       placeholder="검색어를 입력해 주세요.">
-                                                            </div>
-                                                            <div class="col-2 d-flex">
-                                                                <select class="form-select maintenance-search-filter"
-                                                                        id="filter-edit-result">
-                                                                   <option value="">처리 필터</option>
-   																	<option value="true">처리</option>
-    																<option value="false">미처리</option>
-    																<option value="수정 승인">수정 승인</option>
-   																	<option value="수정 거부">수정 거부</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- 검색창 종료 -->
-                    <!-- 수정 요청 내용을 표시할 부분 -->
-                    <div class="table-outer">
-											<div class="table-responsive">
-												<table class="table align-middle table-hover m-0">
-													<thead>
-														<tr>
-															<th class="text-center" id="th-emp-no"
-																style="width: 10%;" data-value="emp-no">No</th>
-																<th class="text-center" id="th-emp-no"
-																style="width: 20%;" data-value="emp-no">이름</th>
-															<th class="text-center" id="th-emp-name"
-																style="width: 20%;" >신청일</th>
-															<th class="text-center" id="th-dept-name"
-																style="width: 20%;">승인 여부</th>
-																<th class="text-center" id="th-dept-name"
-																style="width: 20%;">처리 여부</th>
-														</tr>
-													</thead>
-													<tbody id="att-Edit-list">
-													</tbody>
-												</table>
+						<div class="row">
+							<div class="col-12">
+								<div class="card mb-3">
+									<div class="card-header">
+										<ul class="nav nav-tabs card-header-tabs" id="taxiTabs"
+											role="tablist">
+											<li class="nav-item" role="presentation">
+												<button class="nav-link active" id="taxi-detail-tab"
+													data-bs-toggle="tab" data-bs-target="#taxi-detail-content"
+													type="button" role="tab"
+													aria-controls="taxi-detail-content" aria-selected="true">전체
+													근태 내역</button>
+											</li>
+											<li class="nav-item" role="presentation">
+												<button class="nav-link" id="taxi-schedule-tab"
+													data-bs-toggle="tab"
+													data-bs-target="#taxi-schedule-content" type="button"
+													role="tab" aria-controls="taxi-schedule-content"
+													aria-selected="false">수정 요청 내역</button>
+											</li>
+										</ul>
+									</div>
+									<div class="card-body tab-content" id="newTabsContent">
+										<div class="tab-pane fade show active"
+											id="taxi-detail-content" role="tabpanel"
+											aria-labelledby="taxi-detail-tab">
+											<!-- 전체 근태 내역 -->
+											<h2>전체 근태 내역</h2>
+											<div class="text-end mb-1"></div>
+											<!-- 검색창 시작 -->
+											<div class="d-flex mb-3">
+												<div
+													class="flex-fill border border-2 p-3 rounded me-2 d-flex justify-content-center align-items-center"
+													style="flex: 1;">
+													<canvas id="myDonutChart"
+														style="max-width: 300px; max-height: 300px;"></canvas>
+												</div>
+												<div class="flex-fill border border-2 p-3 rounded"
+													style="flex: 1;">
+													<div class="row">
+														<div
+															class="col-12 text-end d-md-flex justify-content-md-end gap-2">
+															<input type="button" class="btn btn-secondary"
+																onclick="filterReset()" value="초기화">
+														</div>
+													</div>
+													<div class="row mt-3">
+														<div class="col-6">
+															<label for="filter-maintenance-reg-date"
+																class="form-label">근무일</label>
+															<div class="input-group"
+																id="filter-maintenance-reg-date-div">
+																<input type="text"
+																	class="form-control datepicker maintenance-search-filter"
+																	id="filter-att-date"> <span
+																	class="input-group-text"><i
+																	class="bi bi-calendar2-range"></i></span>
+															</div>
+														</div>
+														<div class="col-6">
+															<label for="search-text-maintenance" class="form-label">근태
+																결과</label> <select class="form-select maintenance-search-filter"
+																id="filter-att-result">
+																<option value="">근태 결과</option>
+																<option value="근무">근무</option>
+																<option value="지각">지각</option>
+																<option value="결근">결근</option>
+																<option value="연차">연차</option>
+																<option value="반차">반차</option>
+															</select>
+														</div>
+													</div>
+													<div class="row mt-3">
+														<div class="col-6">
+															<label for="search-category-maintenance"
+																class="form-label">카테고리</label> <select
+																class="form-select maintenance-search-filter"
+																id="filterforsearch">
+																<option value="emp_no">사번</option>
+																<option value="emp_name">이름</option>
+																<option value="title_name">직급</option>
+																<option value="dept_name">부서</option>
+															</select>
+														</div>
+														<div class="col-6">
+															<label for="search-text-maintenance" class="form-label">검색</label>
+															<input type="text"
+																class="form-control maintenance-search-filter"
+																id="search-emp" placeholder="검색어를 입력해 주세요.">
+														</div>
+													</div>
+												</div>
 											</div>
+											<!-- 검색창 종료 -->
+
+
+											<!-- 리스트 테이블 시작 -->
+											<div class="table-outer">
+												<div class="table-responsive">
+													<table class="table align-middle table-hover m-0">
+														<thead>
+															<tr>
+																<th class="text-center" id="th-emp-no"
+																	style="width: 20%;">사번</th>
+																<th class="text-center sortable" id="th-emp-name"
+																	style="width: 20%;">이름</th>
+																<th class="text-center sortable" id="th-title-name"
+																	style="width: 10%;">직급</th>
+																<th class="text-center sortable" id="th-dept-name"
+																	style="width: 20%;">부서</th>
+																<th class="text-center" id="th-att-time"
+																	style="width: 10%;">출근</th>
+																<th class="text-center" id="th-leave-time"
+																	style="width: 10%;">퇴근</th>
+																<th class="text-center" id="th-att-result"
+																	style="width: 10%;">근태 결과</th>
+															</tr>
+														</thead>
+														<tbody id="total-att-list">
+
+															<!-- 테이블 내용 정의 -->
+														</tbody>
+													</table>
+												</div>
+											</div>
+											<!-- 리스트 테이블 종료 -->
+											<!-- 페이지 네이션 시작 -->
+											<nav aria-label="Page navigation example" class="mt-3">
+												<ul class="pagination justify-content-center"
+													id="pagination"></ul>
+											</nav>
+											<!-- 페이지 네이션 종료 -->
 										</div>
-                    
-										<!-- 리스트 테이블 종료 -->
-										<!-- 페이지 네이션 시작 -->
-										<nav aria-label="Page navigation example" class="mt-3">
-											<ul class="pagination justify-content-center" id="pagination2"></ul>
-							
-										</nav>
-						
-					</div>					<!-- 페이지 네이션 종료 -->
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Row end -->
-                    
-            </div>
-            <!-- App body ends -->
+										<div class="tab-pane fade" id="taxi-schedule-content"
+											role="tabpanel" aria-labelledby="taxi-schedule-tab">
+											<!-- 수정 요청 내역 -->
+											<h2>수정 요청 내역</h2>
+											<div class="mt-3"></div>
+											<div
+												class="search-filter-container border border-2 p-3 rounded mb-3">
+												<div class="row mb-3">
+													<div class="col-md-8 offset-md-4"></div>
 
-            <!-- App footer start -->
-            <div class="app-footer">
-                <span>GDJ78FINALPROJECTMYCAB</span>
-            </div>
-            <!-- App footer end -->
+												</div>
+												<div class="row">
+													<div
+														class="col-12 text-end d-md-flex justify-content-md-end gap-2">
+														<input type="button" class="btn btn-secondary"
+															onclick="EditfilterReset()" value="초기화">
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-2">
+														<label for="filter-maintenance-reg-date"
+															class="form-label">신청일 </label>
+													</div>
+													<div class="col-2"></div>
+													<div class="col-2"></div>
+													<div class="col-4">
+														<label for="search-text-maintenance" class="form-label">검색</label>
+													</div>
+													<div class="col-2">
+														<label for="search-text-maintenance" class="form-label">처리
+															필터</label>
+													</div>
+												</div>
+												<div class="row mb-3">
+													<div class="col-2">
+														<div class="input-group"
+															id="filter-maintenance-reg-date-div">
+															<input type="text"
+																class="form-control datepicker maintenance-search-filter"
+																id="filter-edit-date"> <span
+																class="input-group-text"><i
+																class="bi bi-calendar2-range"></i></span>
+														</div>
+													</div>
+													<div class="col-2"></div>
+													<div class="col-2 d-flex"></div>
+													<div class="col-4">
+														<input type="text"
+															class="form-control maintenance-search-filter"
+															id="search-edit" placeholder="검색어를 입력해 주세요.">
+													</div>
+													<div class="col-2 d-flex">
+														<select class="form-select maintenance-search-filter"
+															id="filter-edit-result">
+															<option value="">처리 필터</option>
+															<option value="true">처리</option>
+															<option value="false">미처리</option>
+															<option value="수정 승인">수정 승인</option>
+															<option value="수정 거부">수정 거부</option>
+														</select>
+													</div>
+												</div>
+											</div>
+											<!-- 검색창 종료 -->
+											<!-- 수정 요청 내용을 표시할 부분 -->
+											<div class="table-outer">
+												<div class="table-responsive">
+													<table class="table align-middle table-hover m-0">
+														<thead>
+															<tr>
+																<th class="text-center" id="th-emp-no"
+																	style="width: 10%;" data-value="emp-no">No</th>
+																<th class="text-center" id="th-emp-no"
+																	style="width: 20%;" data-value="emp-no">이름</th>
+																<th class="text-center" id="th-emp-name"
+																	style="width: 20%;">신청일</th>
+																<th class="text-center" id="th-dept-name"
+																	style="width: 20%;">승인 여부</th>
+																<th class="text-center" id="th-dept-name"
+																	style="width: 20%;">처리 여부</th>
+															</tr>
+														</thead>
+														<tbody id="att-Edit-list">
+														</tbody>
+													</table>
+												</div>
+											</div>
 
-        </div>
-        <!-- App container ends -->
+											<!-- 리스트 테이블 종료 -->
+											<!-- 페이지 네이션 시작 -->
+											<nav aria-label="Page navigation example" class="mt-3">
+												<ul class="pagination justify-content-center"
+													id="pagination2"></ul>
 
-    </div>
-    <!-- Main container end -->
+											</nav>
 
-</div>
-<!-- Page wrapper end -->
+										</div>
+										<!-- 페이지 네이션 종료 -->
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Row end -->
+
+				</div>
+				<!-- App body ends -->
+
+				<!-- App footer start -->
+				<div class="app-footer">
+					<span>GDJ78FINALPROJECTMYCAB</span>
+				</div>
+				<!-- App footer end -->
+
+			</div>
+			<!-- App container ends -->
+
+		</div>
+		<!-- Main container end -->
+
+	</div>
+	<!-- Page wrapper end -->
 
 
 
 
 
-<!-- 근태 수정 내역 모달 시작 -->
-	<div class="modal fade" id="attApplyModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title h4" id="exampleModalLgLabel">근태 수정 요청 내역</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row mb-3">
-                    <div class="col-6">
-                        <div class="input-group">
-                            <label class="input-group-text" for="detail-no">사번</label>
-                            <input type="text" class="form-control" id="ddetail-no" name="emp_no" readonly>
-                            <input type="hidden" class="form-control" id="ddetail-idx" name="emp_no" readonly>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="input-group">
-                            <label class="input-group-text" for="detail-name">이름</label>
-                            <input type="text" class="form-control" id="ddetail-name" name="emp_name" readonly>
-                        </div>
-                    </div>
-                </div>
-                <div class="input-group mb-3">
-                    <label class="input-group-text" for="detail-workday">날짜</label>
-                    <input type="text" class="form-control" id="ddetail-workday" name="work_day" readonly>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-6">
-                        <div class="input-group">
-                            <label class="input-group-text" for="detail-att-time">출근</label>
-                            <input type="text" class="form-control" id="ddetail-att-time" name="att_time" readonly>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="input-group">
-                            <label class="input-group-text" for="detail-leave-time">퇴근</label>
-                            <input type="text" class="form-control" id="ddetail-leave-time" name="leave_time" readonly>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-6">
-                        <div class="input-group">
-                            <label class="input-group-text" for="detail-before-att">수정 전 근태 결과</label>
-                            <input type="text" class="form-control" id="ddetail-before-att" name="before_att_time" readonly>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="input-group">
-                            <label class="input-group-text" for="detail-after-att">수정 요청 근태 결과</label>
-                            <input type="text" class="form-control" id="ddetail-after-att" name="after_att_time" readonly>
-                        </div>
-                    </div>
-                </div>
-                <div class="input-group mb-3">
-                    <label class="input-group-text" for="detail-reason">수정 신청 사유</label>
-                    <textarea class="form-control" id="ddetail-reason" name="att_reason" rows="3" style="height: 245px; resize: none;"readonly></textarea>
-                </div>
-                <div class="input-group mb-3" id="attApproval" style="display: none;">
-                    <label class="input-group-text" for="detail-reason">수정 승인 여부</label>
-                    <select class="form-select" id="ddetail-approval">
-		    			<option value="">승인 여부</option>
- 						<option value="true">승인</option>
-  						<option value="false">거부</option>
-                   </select>
-                </div>
-                <div class="input-group mb-3" id="ddetail-reject-reason" >
-                    <label class="input-group-text" for="detail-rejection-reason">수정 거부 사유</label>
-                    <input type="text" class="form-control" id="ddetail-rejection-reason" placeholder="수정 거부 사유를 입력해주세요." name="rejection_reason">
-                </div>
-                <div class="row mb-3">
-                    <div class="col-6">
-                        <div class="input-group">
-                            <label class="input-group-text" for="detail-handler">담당자</label>
-                            <input type="text" class="form-control" id="ddetail-handler" name="handler" value="${sessionScope.loginId}" readonly>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="input-group">
-                            <label class="input-group-text" for="detail-process-date">처리일</label>
-                            <input type="text" class="form-control" id="ddetail-process-date" name="process_date" readonly>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="edit-att-btn" onclick="attEdit()">등록</button>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
+	<!-- 근태 수정 내역 모달 시작 -->
+	<div class="modal fade" id="attApplyModal" tabindex="-1"
+		aria-labelledby="registerModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title h4" id="exampleModalLgLabel">근태 수정 요청
+						내역</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="row mb-3">
+						<div class="col-6">
+							<div class="input-group">
+								<label class="input-group-text" for="detail-no">사번</label> <input
+									type="text" class="form-control" id="ddetail-no" name="emp_no"
+									readonly> <input type="hidden" class="form-control"
+									id="ddetail-idx" name="emp_no" readonly>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="input-group">
+								<label class="input-group-text" for="detail-name">이름</label> <input
+									type="text" class="form-control" id="ddetail-name"
+									name="emp_name" readonly>
+							</div>
+						</div>
+					</div>
+					<div class="input-group mb-3">
+						<label class="input-group-text" for="detail-workday">날짜</label> <input
+							type="text" class="form-control" id="ddetail-workday"
+							name="work_day" readonly>
+					</div>
+					<div class="row mb-3">
+						<div class="col-6">
+							<div class="input-group">
+								<label class="input-group-text" for="detail-att-time">출근</label>
+								<input type="text" class="form-control" id="ddetail-att-time"
+									name="att_time" readonly>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="input-group">
+								<label class="input-group-text" for="detail-leave-time">퇴근</label>
+								<input type="text" class="form-control" id="ddetail-leave-time"
+									name="leave_time" readonly>
+							</div>
+						</div>
+					</div>
+					<div class="row mb-3">
+						<div class="col-6">
+							<div class="input-group">
+								<label class="input-group-text" for="detail-before-att">수정
+									전 근태 결과</label> <input type="text" class="form-control"
+									id="ddetail-before-att" name="before_att_time" readonly>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="input-group">
+								<label class="input-group-text" for="detail-after-att">수정
+									요청 근태 결과</label> <input type="text" class="form-control"
+									id="ddetail-after-att" name="after_att_time" readonly>
+							</div>
+						</div>
+					</div>
+					<div class="input-group mb-3">
+						<label class="input-group-text" for="detail-reason">수정 신청
+							사유</label>
+						<textarea class="form-control" id="ddetail-reason"
+							name="att_reason" rows="3" style="height: 245px; resize: none;"
+							readonly></textarea>
+					</div>
+					<div class="input-group mb-3" id="attApproval"
+						style="display: none;">
+						<label class="input-group-text" for="detail-reason">수정 승인
+							여부</label> <select class="form-select" id="ddetail-approval">
+							<option value="">승인 여부</option>
+							<option value="true">승인</option>
+							<option value="false">거부</option>
+						</select>
+					</div>
+					<div class="input-group mb-3" id="ddetail-reject-reason">
+						<label class="input-group-text" for="detail-rejection-reason">수정
+							거부 사유</label> <input type="text" class="form-control"
+							id="ddetail-rejection-reason" placeholder="수정 거부 사유를 입력해주세요."
+							name="rejection_reason">
+					</div>
+					<div class="row mb-3">
+						<div class="col-6">
+							<div class="input-group">
+								<label class="input-group-text" for="detail-handler">담당자</label>
+								<input type="text" class="form-control" id="ddetail-handler"
+									name="handler" value="${sessionScope.loginId}" readonly>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="input-group">
+								<label class="input-group-text" for="detail-process-date">처리일</label>
+								<input type="text" class="form-control"
+									id="ddetail-process-date" name="process_date" readonly>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" id="edit-att-btn"
+						onclick="attEdit()">등록</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
 
-<!-- 근태 수정 내역 모달 끝 -->
+	<!-- 근태 수정 내역 모달 끝 -->
 
-			
-						
+
+
 
 </body>
 <!-- *************
@@ -533,7 +541,8 @@
  -->
 
 <!-- Overlay Scroll JS -->
-<script src="/assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
+<script
+	src="/assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
 <script src="/assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
 <!-- Moment JS -->
 <script src="/assets/js/moment.min.js"></script>
@@ -987,8 +996,8 @@ $(document).ready(function(){
             if (data.att.att_modifier == '0') {
                 // 수정자 정보가 0이면 처리 전
                 $('#attApproval').show();
-                
                 $('#edit-att-btn').show();
+                $('#ddetail-rejection-reason').prop('readonly', false);
             } else {
                 // 이미 처리된 경우
                 $('#attApproval').hide();
@@ -1030,83 +1039,80 @@ $(document).ready(function(){
         }
     });
     
- function attEdit(){
-    	
-    	var no = document.getElementById('ddetail-handler').value;
-    	var idx = document.getElementById('ddetail-idx').value;
-    	var previousResult = document.getElementById('ddetail-before-att').value;
-    	var modifyResult = document.getElementById('ddetail-after-att').value;
-    	var rejectReason = document.getElementById('ddetail-rejection-reason').value;
-    	var approval = document.getElementById('ddetail-approval').value;
-    	var isApproved = (approval === 'true');
-    	
-    	if (approval === false) {
-    		if (rejectReason === '' || rejectReason.trim() === '') {
-        		alert('수정 거부 사유를 입력해주세요!');
-    			
-    		}else{
-        	
-        	$.ajax({
-    	        type: "GET",
-    	        url: "/approvalReject.ajax",
-    	        data: {
-    	        	'att_management_idx': idx,
-    	        	'att_modifier': no,
-    	        	'att_modify_attresult': modifyResult,
-    	        	'att_modify_reject': rejectReason,
-    	        	'att_apply_status':isApproved
-    	        },
-    	        dataType: "json",
-    			success: function(data) {
-    				if (data.isSuccess) {
-    					$('#attApplyModal').modal('hide');
-                        showAlert('success', '근태 수정 거부가 완료되었습니다.');
-                       
-                    } else {
-                    	$('#attApplyModal').modal('hide');
-                        showAlert('danger', '근태 수정 거부에 실패했습니다.');
-                    }  
-    	        },
-    	        error: function(xhr, status, error) {
-    	            // 에러 처리
-    	            $("#result").html("<p>There was an error: " + error + "</p>");
-    	        }
-    	    });
-    		}
-			
-		}else{
-			
-			$.ajax({
-    	        type: "GET",
-    	        url: "/approvalPermit.ajax",
-    	        data: {
-    	        	'att_management_idx': idx,
-    	        	'att_modifier': no,
-    	        	'att_modify_attresult': modifyResult,
-    	        	'att_apply_status':isApproved
-    	        },
-    	        dataType: "json",
-    			success: function(data) {
-    				if (data.isSuccess) {
-    					$('#attApplyModal').modal('hide');
+    function attEdit() {
+        var no = document.getElementById('ddetail-handler').value;
+        var idx = document.getElementById('ddetail-idx').value;
+        var previousResult = document.getElementById('ddetail-before-att').value;
+        var modifyResult = document.getElementById('ddetail-after-att').value;
+        var rejectReason = document.getElementById('ddetail-rejection-reason').value;
+        var approval = document.getElementById('ddetail-approval').value;
+        
+        console.log('왜 뭔데?' + rejectReason);
+        console.log('자고싶다'+approval);
+        
+        if (approval === 'false') {
+            if (rejectReason === '' || rejectReason.trim() === '') {
+                alert('수정 거부 사유를 입력해주세요!');
+            } else {
+                $.ajax({
+                    type: "GET",
+                    url: "/approvalReject.ajax",
+                    data: {
+                        'att_management_idx': idx,
+                        'att_modifier': no,
+                        'att_modify_attresult': modifyResult,
+                        'att_modify_reject': rejectReason,
+                        'att_apply_status': approval
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        if (data.isSuccess) {
+                            $('#attApplyModal').modal('hide');
+                            showAlert('success', '근태 수정 거부가 완료되었습니다.');
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+                        } else {
+                            $('#attApplyModal').modal('hide');
+                            showAlert('danger', '근태 수정 거부에 실패했습니다.');
+                        }  
+                    },
+                    error: function(xhr, status, error) {
+                        // 에러 처리
+                        $("#result").html("<p>There was an error: " + error + "</p>");
+                    }
+                });  
+            }
+        } else {
+            $.ajax({
+                type: "GET",
+                url: "/approvalPermit.ajax",
+                data: {
+                    'att_management_idx': idx,
+                    'att_modifier': no,
+                    'att_modify_attresult': modifyResult,
+                    'att_apply_status': approval
+                },
+                dataType: "json",
+                success: function(data) {
+                    if (data.isSuccess) {
+                        $('#attApplyModal').modal('hide');
                         showAlert('success', '근태 수정 승인이 완료되었습니다.');
-                       
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000);
                     } else {
-                    	$('#attApplyModal').modal('hide');
+                        $('#attApplyModal').modal('hide');
                         showAlert('danger', '근태 수정 승인에 실패했습니다.');
                     }  
-    	        },
-    	        error: function(xhr, status, error) {
-    	            // 에러 처리
-    	            $("#result").html("<p>There was an error: " + error + "</p>");
-    	        }
-    	    });
-			
-			
-		}
-    	
+                },
+                error: function(xhr, status, error) {
+                    // 에러 처리
+                    $("#result").html("<p>There was an error: " + error + "</p>");
+                }
+            });
+        }
     }
-    
 
 
         

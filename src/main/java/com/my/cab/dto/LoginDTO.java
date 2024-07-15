@@ -15,9 +15,15 @@ public class LoginDTO {
 	private String emp_name;
 	private String dept_name;
 	private String title_name;
+	private String emp_email;
 	
 	
-	
+	public String getEmp_email() {
+		return emp_email;
+	}
+	public void setEmp_email(String emp_email) {
+		this.emp_email = emp_email;
+	}
 	public String getDept_name() {
 		return dept_name;
 	}

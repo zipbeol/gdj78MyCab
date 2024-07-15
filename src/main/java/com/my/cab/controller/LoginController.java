@@ -49,6 +49,7 @@ public class LoginController {
 			session.setAttribute("emp_name", loginDTO.getEmp_name());
 			session.setAttribute("title_name", loginDTO.getTitle_name());
 			session.setAttribute("dept_name", loginDTO.getDept_name());
+			session.setAttribute("email", loginDTO.getEmp_email());
 			
 		} else if (row == 2) {//로그인 성공, 최초 로그인시
 			page = "redirect:/login/pwFirstChange.go";

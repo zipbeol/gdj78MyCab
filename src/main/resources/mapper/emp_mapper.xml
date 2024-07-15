@@ -576,6 +576,7 @@
     	SELECT 
     e.emp_no,
     e.emp_name,
+    e.emp_email,
     t.title_name,
     d.dept_name,
     tp.title_pay_idx,

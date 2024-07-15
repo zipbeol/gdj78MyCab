@@ -551,7 +551,7 @@
             var employeeTitleName = $(this).data('employee-title-name');
 
             selectedEmployeeIds.add(employeeId);
-            selectedEmployeeNames.add(employeeName + " (" + employeeTitleName + ", " + employeeDeptName + ")");
+            selectedEmployeeNames.add(employeeName);
 
             var selectedEmployeesContainer = $('#selectedEmployees');
             var selectedEmployeeItem = $('<div class="selected-item list-group-item"></div>');
@@ -565,7 +565,7 @@
             removeButton.on('click', function () {
                 selectedEmployeeItem.remove();
                 selectedEmployeeIds.delete(employeeId);
-                selectedEmployeeNames.delete(employeeName + " (" + employeeTitleName + ", " + employeeDeptName + ")");
+                selectedEmployeeNames.delete(employeeName);
                 fetchEmployeeList();
             });
 

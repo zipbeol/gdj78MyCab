@@ -17,6 +17,7 @@ import com.my.cab.dao.EmpDAO;
 import com.my.cab.dto.EmpDTO;
 import com.my.cab.dto.MyPageDTO;
 import com.my.cab.dto.SearchDTO;
+import com.my.cab.util.PDFgen;
 
 
 @Service
@@ -32,6 +33,7 @@ public class EmpService {
     EmpDAO dao;
     @Autowired
     PasswordEncoder encoder;
+    
 
     private static final int PAGE_SIZE = 10;
 
@@ -374,8 +376,12 @@ public class EmpService {
 
 	public EmpDTO salaryWrite(String emp_no) {
 		
+		
 		return dao.salaryWrite(emp_no);
 	}
+	
+	
+	
 
 
 	public Map<String, Object> calculateDeductions(Map<String, Object> params) {

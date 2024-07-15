@@ -139,9 +139,6 @@
                         <a id="menu-emp-5" href="/emp/vac/finalList.go">연차 승인 및 반려</a>
                     </li>
                     <li>
-                        <a id="menu-emp-6" href="/emp/dept/list.go">부서 관리</a>
-                    </li>
-                    <li>
                         <a id="menu-emp-7" href="/emp/sal/list.go">급여 관리</a>
                     </li>
                     <li>

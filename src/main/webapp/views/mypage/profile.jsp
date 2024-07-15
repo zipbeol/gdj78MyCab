@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Main</title>
+    <title>프로필</title>
     <!-- Meta -->
     <meta name="description" content="Marketplace for Bootstrap Admin Dashboards">
     <meta name="author" content="Bootstrap Gallery">
@@ -269,7 +269,7 @@
 									<div class="modal-body">
 											<div class="mb-3">
 												<label for="emp-pw" class="form-label">비밀번호 (비밀번호 일치시 수정 페이지로 이동합니다.)</label>
-												<input type="password" class="form-control" id="emp-pw" name="emp_password" onchange="passChk()">
+												<input type="password" class="form-control" id="emp-pw" name="emp_password" oninput="passChk()">
 												<div id="pwChk"></div>
 											</div>
 									</div>

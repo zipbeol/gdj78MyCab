@@ -62,20 +62,26 @@
 	
 	<!-- 결재자들 데이터 불러오기 -->
 	    <select id="getApprovalData" resultType="com.my.cab.dto.ApprovalDocDTO">
-        SELECT 
-            d.approval_doc_idx,
-            d.approval_doc_write_date,
-            d.approval_doc_title,
-            d.approval_doc_id,
-            a.appr_midapprover,
-            a.appr_finalapprover,
-            a.appr_mngr_updt,
-            d.approval_doc__state,
-            d.approval_doc_path
-        FROM 
-            tb_approval a
-        JOIN 
-            tb_approval_doc d ON a.approval_doc_idx = d.approval_doc_idx;
+    SELECT 
+        d.approval_doc_idx,
+        d.approval_doc_write_date,
+        d.approval_doc_title,
+        d.approval_doc_id,
+        a.appr_midapprover,
+        a.appr_finalapprover,
+        a.appr_mngr_updt,
+        d.approval_doc__state,
+        d.approval_doc_path,
+        e.emp_name,         -- 기안자의 이름
+        t.title_name        -- 기안자의 직책
+    FROM 
+        tb_approval a
+    JOIN 
+        tb_approval_doc d ON a.approval_doc_idx = d.approval_doc_idx
+    JOIN 
+        employee e ON d.approval_doc_id = e.emp_no 
+    JOIN 
+        title t ON e.title_no = t.title_no
     </select>
     
     <!-- 서명 이미지 경로 저장 -->
@@ -109,9 +115,13 @@
 <select id="getFilteredApprovalData" parameterType="map" resultType="com.my.cab.dto.ApprovalDocDTO">
     SELECT ad.*, 
            a.appr_midapprover,
-           a.appr_finalapprover
+           a.appr_finalapprover,
+           e.emp_name,
+           t.title_name
     FROM tb_approval_doc ad
     JOIN tb_approval a ON ad.approval_doc_idx = a.approval_doc_idx
+    JOIN employee e ON ad.approval_doc_id = e.emp_no
+    JOIN title t ON e.title_no = t.title_no
     WHERE (ad.approval_doc_id = #{loginId}
     OR a.appr_midapprover = (
         SELECT CONCAT(e.emp_name, ' ', t.title_name)
@@ -136,6 +146,7 @@
     ORDER BY ad.approval_doc_write_date DESC
     LIMIT #{start}, #{pageSize}
 </select>
+
     
     <!-- 사용자 이름을 가져오는 쿼리 -->
 <select id="getUserNameById" parameterType="string" resultType="string">
@@ -232,11 +243,15 @@
 
 <!-- 모든 결재 문서 가져오기 (검색, 필터링, 페이징 적용) -->
 <select id="getAllApprovalDocData" parameterType="map" resultType="com.my.cab.dto.ApprovalDocDTO">
-    SELECT ad.*, 
+ SELECT ad.*, 
            a.appr_midapprover,
-           a.appr_finalapprover
+           a.appr_finalapprover,
+           e.emp_name,
+           t.title_name
     FROM tb_approval_doc ad
     JOIN tb_approval a ON ad.approval_doc_idx = a.approval_doc_idx
+    JOIN employee e ON ad.approval_doc_id = e.emp_no
+    JOIN title t ON e.title_no = t.title_no
     WHERE (ad.approval_doc_title LIKE CONCAT('%', #{query}, '%')
     OR ad.approval_doc_id LIKE CONCAT('%', #{query}, '%')
     OR a.appr_midapprover LIKE CONCAT('%', #{query}, '%')

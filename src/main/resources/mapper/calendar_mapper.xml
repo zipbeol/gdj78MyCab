@@ -109,7 +109,7 @@
 		LEFT JOIN share_calendar sc ON c.calendar_idx = sc.share_cal_idx 
 		WHERE sc.shared_emp_no = #{param1}
 		GROUP BY c.calendar_idx
-		;
+		
 	</select>
 	
 	<insert id="createShareSchedule">

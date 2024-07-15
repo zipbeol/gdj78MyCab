@@ -47,14 +47,13 @@
 		WHERE r.resource_category = '회의실' 
 		 	AND r.resoruce_del = false
 		<![CDATA[
-			AND	(rr.resource_idx IS NULL OR NOT EXISTS (
-		    SELECT 1 
-		    FROM resource_reservation rr2 
-		    WHERE rr2.resource_reserve_start_date < #{resSearchEndTime}
-		    AND rr2.resource_reserve_end_date > #{resSearchStartTime}
-		    AND rr2.resource_reserve_del = '0'
-		))
-			]]>
+		AND 0<=(SELECT COUNT(rr2.resource_idx) 
+		FROM resource_reservation rr2 WHERE rr2.resource_idx = r.resource_idx 
+		and  rr2.resource_reserve_start_date > #{resSearchEndTime} 
+		and rr2.resource_reserve_end_date < #{resSearchStartTime}
+		and rr2.resource_reserve_del = '0'
+		)
+		]]>
 		<if test='resOption != ""'>
 			<![CDATA[
 				AND rmr.meeting_room_capacity >= #{resOption}
@@ -71,13 +70,12 @@
 		WHERE r.resource_category = '회의실'
 			AND r.resoruce_del = false
 		<![CDATA[
-			AND	(rr.resource_idx IS NULL OR NOT EXISTS (
-		    SELECT 1 
-		    FROM resource_reservation rr2 
-		    WHERE rr2.resource_reserve_start_date < #{resSearchEndTime}
-		    AND rr2.resource_reserve_end_date > #{resSearchStartTime}
-		    AND rr2.resource_reserve_del = '0'
-			))
+		AND 0<=(SELECT COUNT(rr2.resource_idx) 
+		FROM resource_reservation rr2 WHERE rr2.resource_idx = r.resource_idx 
+		and  rr2.resource_reserve_start_date > #{resSearchEndTime} 
+		and rr2.resource_reserve_end_date < #{resSearchStartTime}
+		and rr2.resource_reserve_del = '0'
+		)
 		]]>
 		<if test='resOption != ""'>
 			<![CDATA[
@@ -95,13 +93,12 @@
 		WHERE r.resource_category = '차량'
 			AND r.resoruce_del = false 
 		<![CDATA[
-			AND	(rr.resource_idx IS NULL OR NOT EXISTS (
-		    SELECT 1 
-		    FROM resource_reservation rr2 
-		    WHERE rr2.resource_reserve_start_date < #{resSearchEndTime}
-		    AND rr2.resource_reserve_end_date > #{resSearchStartTime}
-		    AND rr2.resource_reserve_del = '0'
-			))
+		AND 0<=(SELECT COUNT(rr2.resource_idx) 
+		FROM resource_reservation rr2 WHERE rr2.resource_idx = r.resource_idx 
+		and rr2.resource_reserve_start_date > #{resSearchEndTime} 
+		and rr2.resource_reserve_end_date < #{resSearchStartTime}
+		and rr2.resource_reserve_del = '0'
+		)
 		]]>
 		<if test='resOption != ""'>
 			<![CDATA[
@@ -119,13 +116,12 @@
 		WHERE r.resource_category = '차량'
 			AND r.resoruce_del = false
 		<![CDATA[
-			AND	(rr.resource_idx IS NULL OR NOT EXISTS (
-		    SELECT 1 
-		    FROM resource_reservation rr2 
-		    WHERE rr2.resource_reserve_start_date < #{resSearchEndTime}
-		    AND rr2.resource_reserve_end_date > #{resSearchStartTime}
-		    AND rr2.resource_reserve_del = '0'
-			))
+		AND 0<=(SELECT COUNT(rr2.resource_idx) 
+		FROM resource_reservation rr2 WHERE rr2.resource_idx = r.resource_idx 
+		and rr2.resource_reserve_start_date > #{resSearchEndTime} 
+		and rr2.resource_reserve_end_date < #{resSearchStartTime}
+		and rr2.resource_reserve_del = '0'
+		)
 		]]>
 		<if test='resOption != ""'>
 			<![CDATA[
@@ -143,13 +139,12 @@
 		WHERE r.resource_category = '비품'
 			AND r.resoruce_del = false
 		<![CDATA[
-			AND	(rr.resource_idx IS NULL OR NOT EXISTS (
-		    SELECT 1 
-		    FROM resource_reservation rr2 
-		    WHERE rr2.resource_reserve_start_date < #{resSearchEndTime}
-		    AND rr2.resource_reserve_end_date > #{resSearchStartTime}
-		    AND rr2.resource_reserve_del = '0'
-			))
+		AND 0<=(SELECT COUNT(rr2.resource_idx) 
+		FROM resource_reservation rr2 WHERE rr2.resource_idx = r.resource_idx 
+		and rr2.resource_reserve_start_date > #{resSearchEndTime} 
+		and rr2.resource_reserve_end_date < #{resSearchStartTime}
+		and rr2.resource_reserve_del = '0'
+		)
 		]]>
 		<if test='resOption != ""'>
 				AND e2.resource_equipment_category = #{resOption}
@@ -165,13 +160,12 @@
 		WHERE r.resource_category = '비품'
 			AND r.resoruce_del = false
 		<![CDATA[
-			AND	(rr.resource_idx IS NULL OR NOT EXISTS (
-		    SELECT 1 
-		    FROM resource_reservation rr2 
-		    WHERE rr2.resource_reserve_start_date < #{resSearchEndTime}
-		    AND rr2.resource_reserve_end_date > #{resSearchStartTime}
-		    AND rr2.resource_reserve_del = '0'
-			))
+		AND 0<=(SELECT COUNT(rr2.resource_idx) 
+		FROM resource_reservation rr2 WHERE rr2.resource_idx = r.resource_idx 
+		and rr2.resource_reserve_start_date > #{resSearchEndTime} 
+		and rr2.resource_reserve_end_date < #{resSearchStartTime}
+		and rr2.resource_reserve_del = '0'
+		)
 		]]>
 		<if test='resOption != ""'>
 				AND e2.resource_equipment_category = #{resOption}
@@ -245,11 +239,12 @@
 		LEFT JOIN resource_management rm ON  rr.resource_idx = rm.resource_idx
 		left join resource_photo rp  on rr.resource_idx = rp.res_management_idx  
 		WHERE rr.resource_reservation_emp_no = #{empNo}
-		AND (rr.resource_idx IS NULL OR NOT EXISTS (
+		AND  EXISTS (
 	        SELECT 1 
 	        FROM resource_reservation rr2 
-	        WHERE rr2.resource_reserve_del = 1
-	    ))
+	        WHERE rr2.resource_reserve_del = 0
+	        AND rr.resource_reservation_idx = rr2.resource_reservation_idx
+	    )
 	   	<if test="resSerachCategory != ''">
 	    	 and rm.resource_category =#{resSerachCategory}
 	    </if>
@@ -261,11 +256,12 @@
 		FROM resource_reservation rr 
 		LEFT JOIN resource_management rm ON  rr.resource_idx = rm.resource_idx 
 		WHERE resource_reservation_emp_no = #{empNo}
-		AND (rr.resource_idx IS NULL OR NOT EXISTS (
+		AND  EXISTS (
 	        SELECT 1 
 	        FROM resource_reservation rr2 
-	        WHERE rr2.resource_reserve_del = 1
-	    ))
+	        WHERE rr2.resource_reserve_del = 0
+	        AND rr.resource_reservation_idx = rr2.resource_reservation_idx
+	    )
 	    <if test="resSerachCategory != ''">
 	    	 and rm.resource_category =#{resSerachCategory}
 	    </if>

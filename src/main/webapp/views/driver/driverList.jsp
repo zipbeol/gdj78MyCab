@@ -414,7 +414,7 @@
     var currentPage = 1; // 현재 페이지 번호
     var sortOrder = 'asc';
     var sortColumn = 'default';
-    var uploadDir = '/upload/';
+    var uploadDir = '/usr/local/tomcat/webapps/upload/';
 
     $('#filter-driver-reg-date').val(filterAllDay);
 

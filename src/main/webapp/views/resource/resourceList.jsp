@@ -796,7 +796,7 @@ $(document).ready(function(){
              	if (item.new_file_name ==null) {
              		content += '<td class="text-center"><img src = "/assets/images/free-icon-no-image-11573069.png" class = "table-img"></td>'					
 				}else{
-					content +='<td class="text-center"><img src = "/photo/'+item.new_file_name+'" class = "table-img"></td>'	
+					content +='<td class="text-center"><img src = "/usr/local/tomcat/webapps/upload/'+item.new_file_name+'" class = "table-img"></td>'	
 				}
              
              content += '<td class="text-center">' + item.resource_name+ '</td>'
@@ -827,7 +827,7 @@ $(document).ready(function(){
           		if (item.new_file_name ==null) {
           			content += '<td class="text-center"><img src = "/assets/images/free-icon-no-image-11573069.png" class = "table-img"></td>'					
 				}else{
-					content +='<td class="text-center"><img src = "/photo/'+item.new_file_name+'" class = "table-img"></td>'
+					content +='<td class="text-center"><img src = "/usr/local/tomcat/webapps/upload/'+item.new_file_name+'" class = "table-img"></td>'
 				}
              content += '<td class="text-center">' + item.resource_name+ '</td>'
              	+ '<td class="text-center">' + item.company_car_category+ '</td>'
@@ -858,7 +858,7 @@ $(document).ready(function(){
           		if (item.new_file_name ==null) {
           			content += '<td class="text-center"><img src = "/assets/images/free-icon-no-image-11573069.png" class = "table-img"></td>'					
 				}else{
-					content += '<td class="text-center"><img src = "/photo/'+item.new_file_name+'" class = "table-img"></td>'
+					content += '<td class="text-center"><img src = "/usr/local/tomcat/webapps/upload/'+item.new_file_name+'" class = "table-img"></td>'
 				}
              content += '<td class="text-center">' + item.resource_name+ '</td>'
              	+ '<td class="text-center">' + item.resource_equipment_category+ '</td>'

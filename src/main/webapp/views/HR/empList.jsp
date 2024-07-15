@@ -545,7 +545,7 @@ function showModal(emp_no){
 	var fileName = employee.profile_new;
 	
 	if (fileName) {
-        $('#preview-image').attr('src', '/photo/' + fileName).show();
+        $('#preview-image').attr('src', '/usr/local/tomcat/webapps/upload/' + fileName).show();
     } else {
         
     	$('#preview-image').attr('src', '/assets/user.png').show(); // 아이콘으로 대체

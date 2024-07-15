@@ -908,7 +908,7 @@
                         }
                     });
                     if (data.driver_photo) {
-                        $('#driver-photo').attr('src', '/upload/' + data.driver_photo);
+                        $('#driver-photo').attr('src', '/usr/local/tomcat/webapps/upload/' + data.driver_photo);
                     }
                     if (data.license_photo) {
                         $('#driver-taxi-license-photo').attr('src', '/upload/' + data.license_photo);

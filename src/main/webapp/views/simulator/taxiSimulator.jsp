@@ -307,7 +307,7 @@
                         <c:forEach var="driver" items="${drivers}">
                             <li class="list-group-item driver-item d-flex align-items-center"
                                 data-driver-id="${driver.driver_idx}">
-                                <img src="/usr/local/tomcat/webapps/upload/${driver.driver_photo}" alt="${driver.driver_name}"
+                                <img src="/api/imgView/${driver.driver_photo}" alt="${driver.driver_name}"
                                      class="rounded-circle me-2" style="width: 40px; height: 40px;">
                                 <span>${driver.driver_name}</span>
                             </li>

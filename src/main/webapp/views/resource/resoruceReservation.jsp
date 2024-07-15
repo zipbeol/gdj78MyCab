@@ -499,7 +499,7 @@
 	        		        <dl class="row info-item">
 	        		            <dt class="col-2 info-label">배치도:</dt>
 	        		            <dd class="col-6 info-value mb-3">
-	        		                <img src="/usr/local/tomcat/webapps/upload/${photoName}" alt="배치도 이미지" class="layout-image">
+	        		                <img src="/api/imgView/${photoName}" alt="배치도 이미지" class="layout-image">
 	        		            </dd>
 	        		        </dl>
 	        		    </div>
@@ -532,7 +532,7 @@
 	        		        <dl class="row info-item">
 	        		            <dt class="col-2 info-label">차량사진</dt>
 	        		            <dd class="col-6 info-value mb-3">
-	        		                <img src="/usr/local/tomcat/webapps/upload/${photoName}" alt="배치도 이미지" class="layout-image">
+	        		                <img src="/api/imgView/${photoName}" alt="배치도 이미지" class="layout-image">
 	        		            </dd>
 	        		        </dl>
 	        		    </div>
@@ -561,7 +561,7 @@
 	        		        <dl class="row info-item">
 	        		            <dt class="col-2 info-label">사진:</dt>
 	        		            <dd class="col-6 info-value mb-3">
-	        		                <img src="/usr/local/tomcat/webapps/upload/${photoName}" alt="배치도 이미지" class="layout-image">
+	        		                <img src="/api/imgView/${photoName}" alt="배치도 이미지" class="layout-image">
 	        		            </dd>
 	        		        </dl>
 	        		    </div>

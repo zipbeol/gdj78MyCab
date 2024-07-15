@@ -629,7 +629,7 @@ th.sortable.desc::after {
     		var fileName = employee.profile_new;
     		
     		if (fileName) {
-                $('#preview-image').attr('src', '/usr/local/tomcat/webapps/upload/' + fileName).show();
+                $('#preview-image').attr('src', '/api/imgView/' + fileName).show();
             } else {
                 $('#preview-image').hide();
                 $('#preview-image').attr('src', ''); // 이미지 소스 비우기

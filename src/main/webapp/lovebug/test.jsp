@@ -152,7 +152,7 @@
 
 <!-- Custom JS files -->
 <script src="/assets/js/custom.js"></script>
-<script src="/assets/js/LocalStorage.js"></script>
+<script src="/assets/js/localStorage.js"></script>
 </body>
 <script>
     // 스크립트

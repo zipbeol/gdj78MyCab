@@ -273,7 +273,7 @@
 
 <!-- Custom JS files -->
 <script src="/assets/js/custom.js"></script>
-<script src="/assets/js/LocalStorage.js"></script>
+<script src="/assets/js/localStorage.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 </body>

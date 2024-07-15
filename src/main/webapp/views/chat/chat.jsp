@@ -431,7 +431,7 @@
 <script src="/assets/vendor/daterange/daterange.js"></script>
 <script src="/assets/vendor/daterange/custom-daterange.js"></script>
 <script src="/assets/js/custom.js"></script>
-<script src="/assets/js/LocalStorage.js"></script>
+<script src="/assets/js/localStorage.js"></script>
 <script src="/assets/js/showAlert.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@latest/dist/index.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.0.3/dist/index.min.js"></script>

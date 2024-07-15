@@ -5,7 +5,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Main</title>
+<title>연차 관리</title>
 <!-- Meta -->
 <meta name="description"
 	content="Marketplace for Bootstrap Admin Dashboards">
@@ -78,23 +78,25 @@ th.sortable.desc::after {
 	content: '\f0dd'; /* FontAwesome sort down 아이콘 */
 	opacity: 1;
 }
- .alert-placeholder {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1050;
-            margin: 0;
-            padding: 10px;
-            text-align: center;
-        }
-.button-position{
-	margin-left: 346px;
-}
-.chk{
-	margin-bottom: 4px;
+
+.alert-placeholder {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 1050;
+	margin: 0;
+	padding: 10px;
+	text-align: center;
 }
 
+.button-position {
+	margin-left: 346px;
+}
+
+.chk {
+	margin-bottom: 4px;
+}
 </style>
 
 
@@ -177,157 +179,167 @@ th.sortable.desc::after {
 									<div class="card-body">
 										<!-- 여기에 코딩 -->
 										<!-- 검색창 시작 -->
-										<div class="search-filter-container border border-2 p-3 rounded mb-3">
-										 <div class="row mb-3">
-                                            <div class="col-10">
-                                            </div>
-                                            <div class="col-2 text-end d-md-flex justify-content-md-end gap-2">
-													<input type="button" class="btn btn-secondary resetPosition"
+										<div
+											class="search-filter-container border border-2 p-3 rounded mb-3">
+											<div class="row mb-3">
+												<div class="col-10"></div>
+												<div
+													class="col-2 text-end d-md-flex justify-content-md-end gap-2">
+													<input type="button"
+														class="btn btn-secondary resetPosition"
 														onclick="filterReset()" value="초기화"> <input
 														type="button" class="btn btn-primary" onclick="getList()"
 														value="검색" style="display: none">
 												</div>
-											<div class="row">
-												<div class="col-4"></div>
-												<div class="col-2"></div>
-												<div class="col-2">
-												
-													<label for="filter-emp" class="form-label">사원 검색</label>
-												</div>
-												<div class="col-2"></div>
-												<div class="col-1">
-													
-														
-												</div>
-											</div>
-											<div class="row mb-3">
-												<div class="col-6"></div>
-												<div class="col-1">
-													<select id="filterforsearch"
-														class="form-select emp-search-filter">
-														<option value="emp_no">사번</option>
-														<option value="emp_name">이름</option>
-													</select>
-												</div>
-												<div class="col-3 text-end">
-													<input type="text"
-														class="form-control emp-search-filter bg-" id="search-emp"
-														placeholder="검색어를 입력해주세요.">
-												</div>
-												<div class="col-2">
-													<input type="button" class="btn btn-primary resetPosition"  id="add"
-														 value="연차 지급">
-														<input type="button" class="btn btn-secondary resetPosition"
-														id="edit" value="연차 수정"> 
-												</div>
-											</div>
-										</div>
-										<!-- 검색창 종료 -->
-										<!-- 리스트 테이블 시작 -->
-										<div class="table-outer">
-											<div class="table-responsive">
-												<table class="table align-middle table-hover m-0">
-													<thead>
-														<tr>
-														<th class="text-center" id="th-emp-no"
-																style="width: 10%;" ><input class="form-check-input chk" type="checkbox"  id="allCheck"></th>
-															<th class="text-center" id="th-emp-no"
-																style="width: 10%;" >사번</th>
-																<th class="text-center" id="th-emp-no"
-																style="width: 10%;" >이름</th>
-															<th class="text-center" id="th-emp-name"
-																style="width: 10%;" >근속년수</th>
-															<th class="text-center" id="th-title-name"
-																style="width: 20%;" >지급 연차</th>
-															<th class="text-center" id="th-dept-name"
-																style="width: 20%;" >잔여 연차</th>
-														</tr>
-													</thead>
-													<tbody id="vac-list">
-													</tbody>
-												</table>
-											</div>
-										</div>
+												<div class="row">
+													<div class="col-4"></div>
+													<div class="col-2"></div>
+													<div class="col-2">
 
-										<!-- 리스트 테이블 종료 -->
-										<!-- 페이지 네이션 시작 -->
-										<nav aria-label="Page navigation example" class="mt-3">
-											<ul class="pagination justify-content-center" id="pagination"></ul>
-										</nav>
-										<!-- 페이지 네이션 종료 -->
+														<label for="filter-emp" class="form-label">사원 검색</label>
+													</div>
+													<div class="col-2"></div>
+													<div class="col-1"></div>
+												</div>
+												<div class="row mb-3">
+													<div class="col-6"></div>
+													<div class="col-1">
+														<select id="filterforsearch"
+															class="form-select emp-search-filter">
+															<option value="emp_no">사번</option>
+															<option value="emp_name">이름</option>
+														</select>
+													</div>
+													<div class="col-3 text-end">
+														<input type="text"
+															class="form-control emp-search-filter bg-"
+															id="search-emp" placeholder="검색어를 입력해주세요.">
+													</div>
+													<div class="col-2">
+														<input type="button" class="btn btn-primary resetPosition"
+															id="add" value="연차 지급"> <input type="button"
+															class="btn btn-secondary resetPosition" id="edit"
+															value="연차 수정">
+													</div>
+												</div>
+											</div>
+											<!-- 검색창 종료 -->
+											<!-- 리스트 테이블 시작 -->
+											<div class="table-outer">
+												<div class="table-responsive">
+													<table class="table align-middle table-hover m-0">
+														<thead>
+															<tr>
+																<th class="text-center" id="th-emp-no"
+																	style="width: 10%;"><input
+																	class="form-check-input chk" type="checkbox"
+																	id="allCheck"></th>
+																<th class="text-center" id="th-emp-no"
+																	style="width: 10%;">사번</th>
+																<th class="text-center" id="th-emp-no"
+																	style="width: 10%;">이름</th>
+																<th class="text-center" id="th-emp-name"
+																	style="width: 10%;">근속년수</th>
+																<th class="text-center" id="th-title-name"
+																	style="width: 20%;">지급 연차</th>
+																<th class="text-center" id="th-dept-name"
+																	style="width: 20%;">잔여 연차</th>
+															</tr>
+														</thead>
+														<tbody id="vac-list">
+														</tbody>
+													</table>
+												</div>
+											</div>
+
+											<!-- 리스트 테이블 종료 -->
+											<!-- 페이지 네이션 시작 -->
+											<nav aria-label="Page navigation example" class="mt-3">
+												<ul class="pagination justify-content-center"
+													id="pagination"></ul>
+											</nav>
+											<!-- 페이지 네이션 종료 -->
+										</div>
 									</div>
 								</div>
 							</div>
+
+
 						</div>
-						
+						<!-- Container ends -->
 
 					</div>
-					<!-- Container ends -->
+					<!-- App body ends -->
+
+					<!-- App footer start -->
+					<div class="app-footer">
+						<span>GDJ78FINALPROJECTMYCAB</span>
+					</div>
+					<!-- App footer end -->
 
 				</div>
-				<!-- App body ends -->
-
-				<!-- App footer start -->
-				<div class="app-footer">
-					<span>GDJ78FINALPROJECTMYCAB</span>
-				</div>
-				<!-- App footer end -->
-
+				<!-- App container ends -->
 			</div>
-			<!-- App container ends -->
+			<!-- Main container end -->
 
 		</div>
-		<!-- Main container end -->
 
+
+
+
+		<!-- 연차 수정 모달 시작 -->
+		<div class="modal fade" id="vacEditModal" tabindex="-1"
+			aria-labelledby="registerModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title h4" id="exampleModalLgLabel">연차 수정</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"
+							aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<div class="row mb-3">
+							<div class="col-6">
+								<div class="input-group">
+									<label class="input-group-text" for="detail-no">사번</label> <input
+										type="text" class="form-control" id="empNo" value="" readonly>
+								</div>
+							</div>
+							<div class="col-6">
+								<div class="input-group">
+									<label class="input-group-text" for="detail-name">이름</label> <input
+										type="text" class="form-control" id="empName" value=""
+										readonly>
+								</div>
+							</div>
+						</div>
+						<div class="input-group mb-3">
+							<label class="input-group-text" for="detail-reason">연차 수정</label>
+							<div class="input-group-prepend">
+								<button class="btn btn-outline-secondary" type="button"
+									id="minus">-</button>
+							</div>
+							<input type="text" class="form-control  text-center" id="vacLeft"
+								value="" readonly>
+							<div class="input-group-append">
+								<button class="btn btn-outline-secondary" type="button"
+									id="plus">+</button>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-primary" id="vacEdit">수정</button>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
 	</div>
-	
-	
-	
-	
-	<!-- 연차 수정 모달 시작 -->
-	<div class="modal fade" id="vacEditModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title h4" id="exampleModalLgLabel">연차 수정</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row mb-3">
-                    <div class="col-6">
-                        <div class="input-group">
-                            <label class="input-group-text" for="detail-no">사번</label>
-                            <input type="text" class="form-control" id="empNo" value="" readonly>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="input-group">
-                            <label class="input-group-text" for="detail-name">이름</label>
-                            <input type="text" class="form-control" id="empName" value="" readonly>
-                        </div>
-                    </div>
-                </div>
-                <div class="input-group mb-3">
-                    <label class="input-group-text" for="detail-reason">연차 수정</label>
-                    <div class="input-group-prepend">
-                		<button class="btn btn-outline-secondary" type="button" id="minus">-</button>
-            		</div>
-                    	<input type="text" class="form-control  text-center" id="vacLeft" value="" readonly>
-                     <div class="input-group-append">
-               			 <button class="btn btn-outline-secondary" type="button" id="plus">+</button>
-            		</div>
-                </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="vacEdit" >수정</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- 연차 수정 모달 끝 -->
-	
-	
-	
-	
+	<!-- 연차 수정 모달 끝 -->
+
+
+
+
 
 </body>
 <!-- *************

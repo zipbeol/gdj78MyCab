@@ -8,7 +8,7 @@
 <meta name="format-detection" content="telephone=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   
-<title>Main</title>
+<title>조직도</title>
 <!-- Meta -->
 <meta name="description"
 	content="Marketplace for Bootstrap Admin Dashboards">

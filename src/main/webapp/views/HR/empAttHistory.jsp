@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Main</title>
+    <title>사원 근태 상세보기</title>
     <!-- Meta -->
     <meta name="description" content="Marketplace for Bootstrap Admin Dashboards">
     <meta name="author" content="Bootstrap Gallery">
@@ -183,7 +183,7 @@
                         <a href="#" class="text-decoration-none">인사관리</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="/attendance/myAttendance/list.go" class="text-decoration-none">근태 관리</a>
+                        <a href="/attendance/attendance/list.go" class="text-decoration-none">근태 관리</a>
                     </li>
                     <li class="breadcrumb-item">
                         <a href="#" class="text-decoration-none">사원 근태 상세보기</a>

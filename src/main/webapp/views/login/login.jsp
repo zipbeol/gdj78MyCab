@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap Gallery - My Cab Bootstrap 5 Dashboard</title>
+    <title>로그인</title>
 
     <!-- Meta -->
     <meta name="description" content="Marketplace for Bootstrap Admin Dashboards">
@@ -35,6 +35,7 @@
 	<!-- FontAwesome 추가 -->
 	<link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<style>
 	video {
     -o-object-fit: cover;
@@ -68,6 +69,7 @@
   border: 1px;
   background-color:transparent;
   font-size: 16px;
+  
   color: black;
 }
 .incss::placeholder {
@@ -84,52 +86,105 @@
         <source src="/assets/taxi.mp4" type="video/mp4">
   </video>
     <!-- Container start -->
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-xl-4 col-lg-5 col-sm-6 col-12">
-          <form class="my-5" action="/emp/login.do" method="post">
-            <div class="rounded-2 p-4 mt-5">
-              <div class="login-form">
-                <a href="!#" class="mb-4 d-flex">
-                  <img src="/assets/images/logo.svg" class="img-fluid login-logo" alt="Cab Admin Dashboard">
-                </a>
-                <h5 class="fw-bold mb-5">로그인이 필요합니다.</h5>
-                <div class="mb-3">
-                  <label class="form-label">사번</label>
-                  <input type="text" class="incss form-control" placeholder="사번을 입력해주세요." name="emp_no">
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">비밀번호</label>
-                  <input type="password" class="incss form-control" placeholder="비밀번호를 입력해주세요." name="emp_password">
-                </div>
-                <div class="d-flex align-items-center justify-content-between">
-                  <a href="pwFind.go" class="text-blue text-decoration-underline">비밀번호 찾기</a>
-                </div>
-                <div class="d-grid py-3 mt-4">
-                  <button type="submit" class="btn btn-lg btn-primary">
-                    로그인 및 출근
-                  </button>
-                </div>
-                <div class="text-center pt-4">
-                  <span>등록 문의: 070-1234-1234 (인사부)</span>
-                </div>
-              </div>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-xl-4 col-lg-5 col-sm-6 col-12">
+      <form class="my-5" action="/emp/login.do" method="post">
+        <div class="rounded-2 p-4 mt-5">
+          <div class="login-form">
+            <a href="!#" class="mb-4 d-flex">
+              <img src="/assets/images/logo.svg" class="img-fluid login-logo" alt="Cab Admin Dashboard">
+            </a>
+            <h5 class="fw-bold mb-5">로그인이 필요합니다.</h5>
+            <div class="mb-3">
+              <label class="form-label">사번</label>
+              <input type="text" class="incss form-control" placeholder="사번을 입력해주세요." name="emp_no" id="emp_no">
             </div>
-          </form>
+            <div class="mb-3">
+              <label class="form-label">비밀번호</label>
+              <input type="password" class="incss form-control" placeholder="비밀번호를 입력해주세요." name="emp_password">
+            </div>
+            <div class="mb-4">
+              <label for="idSaveCheck">아이디 저장:</label>
+              <input type="checkbox" id="idSaveCheck">
+            </div>
+            
+            <div class="d-grid py-3 mt-4">
+              <button type="submit" class="btn btn-lg btn-primary">
+                로그인 및 출근
+              </button>
+            </div>
+            <div class="text-center pt-4">
+              <span>등록 문의: 070-1234-1234 (인사부)</span>
+            </div>
+          </div>
         </div>
-      </div>
+      </form>
     </div>
-    <!-- Container end -->
-  </body>
-  <script>
-    // 스크립트
+  </div>
+</div>
+<!-- Container end -->
+</body>
+<script>
+  // 스크립트
 
+  var message = "${message}";
+  if (message) {
+      alert(message);
+  }
+  
+  $(document).ready(function(){
+    var key = getCookie("idChk"); //user1
+    if(key!=""){
+      $("#emp_no").val(key); 
+    }
     
-     var message = "${message}";
-        if (message) {
-            alert(message);
-        }
-
+    if($("#emp_no").val() != ""){ 
+      $("#idSaveCheck").attr("checked", true); 
+    }
+    
+    $("#idSaveCheck").change(function(){ 
+      if($("#idSaveCheck").is(":checked")){ 
+        setCookie("idChk", $("#emp_no").val(), 7); 
+      }else{ 
+        deleteCookie("idChk");
+      }
+    });
+    
+    $("#emp_no").keyup(function(){ 
+      if($("#idSaveCheck").is(":checked")){
+        setCookie("idChk", $("#emp_no").val(), 7); 
+      }
+    });
+  });
+  
+  function setCookie(cookieName, value, exdays){
+      var exdate = new Date();
+      exdate.setDate(exdate.getDate() + exdays);
+      var cookieValue = escape(value) + ((exdays==null) ? "" : "; expires=" + exdate.toGMTString());
+      document.cookie = cookieName + "=" + cookieValue;
+  }
+  
+  function deleteCookie(cookieName){
+    var expireDate = new Date();
+    expireDate.setDate(expireDate.getDate() - 1);
+    document.cookie = cookieName + "= " + "; expires=" + expireDate.toGMTString();
+  }
+  
+  function getCookie(cookieName) {
+    cookieName = cookieName + '=';
+    var cookieData = document.cookie;
+    var start = cookieData.indexOf(cookieName);
+    var cookieValue = '';
+    if(start != -1){
+      start += cookieName.length;
+      var end = cookieData.indexOf(';', start);
+      if(end == -1)end = cookieData.length;
+      cookieValue = cookieData.substring(start, end);
+    }
+    return unescape(cookieValue);
+  }
 </script>
+    
 
 </html>

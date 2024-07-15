@@ -161,7 +161,7 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	margin-top: 20px;
+	margin-top: 10px;
 }
 
 .time-info {
@@ -303,40 +303,30 @@
 								</div>
 							</div>
 							<!-- 왼쪽 상단 뉴스 -->
+							<!--  시작 -->
 							<div class="col-md-3">
 								<div class="card mb-3">
 									<div class="card-body cardH">
-										<h2 class="chart-title ">택시 뉴스</h2>
-										<hr />
-										<c:if test="${not empty newsList}">
-											<ul class="st">
-												<c:forEach var="news" items="${newsList}">
-													<li class="news-item"><img src="${news.image}"
-														alt="${news.title}">
-														<div>
-															<a href="${news.link}" target="_blank"> <c:choose>
-																	<c:when test="${fn:length(news.title) > 8}">
-									                                    ${fn:substring(news.title, 0, 25)}...
-									                                </c:when>
-																	<c:otherwise>
-									                                    ${news.title}
-									                                </c:otherwise>
-																</c:choose>
-															</a>
-															<p>${news.date}</p>
-														</div></li>
-												</c:forEach>
-											</ul>
-										</c:if>
-										<div class="moreNews-container">
-											<a class="moreNews"
-												href="http://taxi-news.co.kr/bbs/board.php?bo_table=board_01"
-												target="_blank">뉴스 더보기</a>
-
-										</div>
+										<h2 class="chart-title ">내 결재현황</h2>
+				                        <table class="table appTable">
+				                            <thead>
+				                                <tr>
+				                                    <th>기안일자</th>
+				                                    <th>제목</th>
+				                                    <th>기안자</th>
+				                                    <th>결재일</th>
+				                                    <th>결재상태</th>
+				                                </tr>
+				                            </thead>
+				                                <tbody id="approvalDataBody">
+				        						<!-- 데이터가 동적으로 추가될 부분 -->
+				   								</tbody>
+				                        </table>
 									</div>
 								</div>
 							</div>
+							<!-- 끝 -->
+							
 							<!-- 오른쪽 상단 월 별 수익 -->
 							<div class="col-md-3">
 								<div class="card mb-3">
@@ -420,27 +410,42 @@
 								</div>
 							</div>
 							<!-- 오른쪽 상단 월 별 지출 -->
-							<div class="col-md-3">
+								<div class="col-md-3">
 								<div class="card mb-3">
 									<div class="card-body cardH">
-										<h2 class="chart-title ">내 결재현황</h2>
-				                        <table class="table appTable">
-				                            <thead>
-				                                <tr>
-				                                    <th>기안일자</th>
-				                                    <th>제목</th>
-				                                    <th>기안자</th>
-				                                    <th>결재일</th>
-				                                    <th>결재상태</th>
-				                                </tr>
-				                            </thead>
-				                                <tbody id="approvalDataBody">
-				        						<!-- 데이터가 동적으로 추가될 부분 -->
-				   								</tbody>
-				                        </table>
+										<h2 class="chart-title ">택시 뉴스</h2>
+										<hr />
+										<c:if test="${not empty newsList}">
+											<ul class="st">
+												<c:forEach var="news" items="${newsList}">
+													<li class="news-item"><img src="${news.image}"
+														alt="${news.title}">
+														<div>
+															<a href="${news.link}" target="_blank"> <c:choose>
+																	<c:when test="${fn:length(news.title) > 8}">
+
+                                    ${fn:substring(news.title, 0, 25)}...
+                                </c:when>
+																	<c:otherwise>
+									                                    ${news.title}
+									                                </c:otherwise>
+																</c:choose>
+															</a>
+															<p>${news.date}</p>
+														</div></li>
+												</c:forEach>
+											</ul>
+										</c:if>
+										<div class="moreNews-container">
+											<a class="moreNews"
+												href="http://taxi-news.co.kr/bbs/board.php?bo_table=board_01"
+												target="_blank">뉴스 더보기</a>
+
+										</div>
 									</div>
 								</div>
 							</div>
+							<!-- 끝 -->
 						</div>
 						<div class="row">
 							<!-- 왼쪽 하단 공지 및 이벤트 -->
@@ -451,7 +456,6 @@
 										<div class="time-section">
 											<div class="time-info">
 												<span>오늘의 출근 시간</span>
-												<br/>
 												<div class="clock">
 													<div>${att_hour}</div>
 													시
@@ -461,7 +465,6 @@
 											</div>
 											<div class="time-info">
 												<span>퇴근까지 남은 시간</span>
-												<br/>
 												<div class="clock">
 													<div id="remainingHours">00</div>
 													시
@@ -471,12 +474,7 @@
 											</div>
 										</div>
 										<hr/>
-										
 										<canvas id="attendanceChart"></canvas>
-										
-										
-										
-										
 									</div>
 								</div>
 							</div>

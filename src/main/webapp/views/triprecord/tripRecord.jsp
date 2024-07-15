@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Main</title>
+    <title>My Cab - 운행 조회</title>
     <!-- Meta -->
     <meta name="description" content="Marketplace for Bootstrap Admin Dashboards">
     <meta name="author" content="Bootstrap Gallery">
@@ -75,6 +75,9 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+        }
+        .trip-list-tbody-tr:hover{
+            cursor: pointer;
         }
     </style>
 </head>
@@ -290,7 +293,7 @@
 <script src="/assets/vendor/daterange/custom-daterange.js"></script>
 <!-- Custom JS files -->
 <script src="/assets/js/custom.js"></script>
-<script src="/assets/js/LocalStorage.js"></script>
+<script src="/assets/js/localStorage.js"></script>
 <script src="/assets/js/showAlert.js"></script>
 <!-- 페이지네이션 -->
 <script src="/assets/js/jquery.twbsPagination.min.js"></script>

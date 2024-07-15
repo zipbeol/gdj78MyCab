@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Main</title>
+    <title>My Cab - 운행 상세</title>
     <!-- Meta -->
     <meta name="description" content="Marketplace for Bootstrap Admin Dashboards">
     <meta name="author" content="Bootstrap Gallery">
@@ -180,7 +180,7 @@
 <script src="/assets/vendor/daterange/custom-daterange.js"></script>
 <!-- Custom JS files -->
 <script src="/assets/js/custom.js"></script>
-<script src="/assets/js/LocalStorage.js"></script>
+<script src="/assets/js/localStorage.js"></script>
 <script src="/assets/js/showAlert.js"></script>
 <!-- 페이지네이션 -->
 <script src="/assets/js/jquery.twbsPagination.min.js"></script>
@@ -190,6 +190,40 @@
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6a9392fb6c3d719802f976bbff4678eb&libraries=services"></script>
 
 <script>
+    // Dynamic Time Warping class definition
+    class DynamicTimeWarping {
+        constructor(ts1, ts2, distFunc) {
+            this.ts1 = ts1;
+            this.ts2 = ts2;
+            this.distFunc = distFunc;
+
+            // Initialize the accumulated cost matrix with large numbers
+            this.cost = Array(ts1.length).fill().map(() => Array(ts2.length).fill(Number.POSITIVE_INFINITY));
+            this.cost[0][0] = distFunc(ts1[0], ts2[0]);
+
+            // Compute the accumulated cost matrix
+            for (let i = 1; i < ts1.length; i++) {
+                this.cost[i][0] = this.cost[i - 1][0] + distFunc(ts1[i], ts2[0]);
+            }
+            for (let j = 1; j < ts2.length; j++) {
+                this.cost[0][j] = this.cost[0][j - 1] + distFunc(ts1[0], ts2[j]);
+            }
+            for (let i = 1; i < ts1.length; i++) {
+                for (let j = 1; j < ts2.length; j++) {
+                    this.cost[i][j] = Math.min(
+                        this.cost[i - 1][j],    // Insertion
+                        this.cost[i][j - 1],    // Deletion
+                        this.cost[i - 1][j - 1] // Match
+                    ) + distFunc(ts1[i], ts2[j]);
+                }
+            }
+        }
+
+        getDistance() {
+            return this.cost[this.ts1.length - 1][this.ts2.length - 1];
+        }
+    }
+
     var tripLocationData = [];
     var tripDistance = '${info.trip_record_distance}';
 
@@ -276,41 +310,23 @@
             polylineNavi.setMap(naviMap); // 네비게이션 경로 지도에 표시
 
             // 경로 유사성 계산
-            var frechetDistance = calculateFrechetDistance(tripLocationData, naviLocationData);
-            $('#routeSimilarity').text(frechetDistance.toFixed(2));
+            calculateRouteSimilarity(tripLocationData, naviLocationData);
         },
         error: function (error) {
             console.log(error);
         }
     });
 
-    function euclideanDistance(point1, point2) {
-        return Math.sqrt(Math.pow(point1.lat - point2.lat, 2) + Math.pow(point1.lng - point2.lng, 2));
-    }
+    function calculateRouteSimilarity(route1, route2) {
+        var dtw = new DynamicTimeWarping(route1, route2, function(a, b) {
+            var dx = a.lat - b.lat;
+            var dy = a.lng - b.lng;
+            return Math.sqrt(dx * dx + dy * dy);
+        });
 
-    function calculateFrechetDistance(P, Q) {
-        let ca = Array.from({length: P.length}, () => Array(Q.length).fill(-1));
-
-        function c(i, j) {
-            if (ca[i][j] > -1) {
-                return ca[i][j];
-            } else if (i === 0 && j === 0) {
-                ca[i][j] = euclideanDistance(P[0], Q[0]);
-            } else if (i > 0 && j === 0) {
-                ca[i][j] = Math.max(c(i - 1, 0), euclideanDistance(P[i], Q[0]));
-            } else if (i === 0 && j > 0) {
-                ca[i][j] = Math.max(c(0, j - 1), euclideanDistance(P[0], Q[j]));
-            } else if (i > 0 && j > 0) {
-                ca[i][j] = Math.max(Math.min(c(i - 1, j), c(i - 1, j - 1), c(i, j - 1)), euclideanDistance(P[i], Q[j]));
-            } else {
-                ca[i][j] = Infinity;
-            }
-            return ca[i][j];
-        }
-
-        return c(P.length - 1, Q.length - 1);
+        var distance = dtw.getDistance();
+        console.log('DTW Distance:', distance);
+        document.getElementById('routeSimilarity').textContent = distance.toFixed(2);
     }
 </script>
-
-
 </html>

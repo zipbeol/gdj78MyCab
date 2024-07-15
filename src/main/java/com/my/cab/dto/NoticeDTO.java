@@ -8,30 +8,29 @@ import org.apache.ibatis.type.Alias;
 public class NoticeDTO {
 
 	private int notice_idx;
-	private String notice_writer;
+	private int notice_writer;
 	private String notice_field;
 	private String notice_imp;
 	private String notice_stat;
 	private String notice_title;
 	private String notice_content;
 	private Date notice_date;
-	
+	private String notice_writer_name; 
 	private int emp_no;
 	private String emp_name;
 	private int notice_attach_file_idx;
 	private String notice_file_name;
 	private String notice_attach_file;
-	
 	public int getNotice_idx() {
 		return notice_idx;
 	}
 	public void setNotice_idx(int notice_idx) {
 		this.notice_idx = notice_idx;
 	}
-	public String getNotice_writer() {
+	public int getNotice_writer() {
 		return notice_writer;
 	}
-	public void setNotice_writer(String notice_writer) {
+	public void setNotice_writer(int notice_writer) {
 		this.notice_writer = notice_writer;
 	}
 	public String getNotice_field() {
@@ -70,6 +69,18 @@ public class NoticeDTO {
 	public void setNotice_date(Date notice_date) {
 		this.notice_date = notice_date;
 	}
+	public int getEmp_no() {
+		return emp_no;
+	}
+	public void setEmp_no(int emp_no) {
+		this.emp_no = emp_no;
+	}
+	public String getEmp_name() {
+		return emp_name;
+	}
+	public void setEmp_name(String emp_name) {
+		this.emp_name = emp_name;
+	}
 	public int getNotice_attach_file_idx() {
 		return notice_attach_file_idx;
 	}
@@ -88,17 +99,14 @@ public class NoticeDTO {
 	public void setNotice_attach_file(String notice_attach_file) {
 		this.notice_attach_file = notice_attach_file;
 	}
-	public int getEmp_no() {
-		return emp_no;
+	public String getNotice_writer_name() {
+		return notice_writer_name;
 	}
-	public void setEmp_no(int emp_no) {
-		this.emp_no = emp_no;
+	public void setNotice_writer_name(String notice_writer_name) {
+		this.notice_writer_name = notice_writer_name;
 	}
-	public String getEmp_name() {
-		return emp_name;
-	}
-	public void setEmp_name(String emp_name) {
-		this.emp_name = emp_name;
-	}
+  
+	
+	
 	
 }

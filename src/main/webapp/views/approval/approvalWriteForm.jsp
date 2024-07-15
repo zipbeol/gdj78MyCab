@@ -41,142 +41,188 @@
     <!-- 따로 적용한 CSS -->
     <link rel="stylesheet" href="/assets/css/default.css">
     <style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
-        margin: 0;
-        padding: 0;
-    }
-    .container {
-        max-width: 1200px;
-        margin: 50px auto;
-        padding: 20px;
-        background-color: #fff;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-    }
-    h1 {
-        text-align: center;
-        color: #333;
-        margin-bottom: 40px;
-    }
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 20px;
-    }
-    th, td {
-        border: 1px solid #ddd;
-        padding: 12px;
-        text-align: left;
-    }
-    th {
-        background-color: #007BFF;
-        color: white;
-    }
-    tr:nth-child(even) {
-        background-color: #f9f9f9;
-    }
-    tr:hover {
-        background-color: #f1f1f1;
-    }
-    .highlight {
-        background-color: #e0ffe0;
-    }
-    a:hover {
-        text-decoration: underline;
-    }
+body {
+    font-family: 'Noto Sans KR', Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 40px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+th {
+    background-color: #007BFF;
+    color: white;
+}
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+tr:hover {
+    background-color: #f1f1f1;
+}
+.highlight {
+    background-color: #e0ffe0;
+}
+a:hover {
+    text-decoration: underline;
+}
 
-    .modal-dialog {
-        max-width: none; /* 기본 최대 너비 제거 */
-        width: 50%; /* 원하는 너비로 설정 */
-    }
-    .table-bordered th, .table-bordered td {
-        border: 1px solid #dee2e6 !important;
-    }
+.modal-dialog {
+    max-width: none;
+    width: 60%;
+}
 
-    /* 새로운 스타일 */
-    .modal-content {
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    .modal-header {
-        background-color: #007bff;
-        color: #fff;
-        border-bottom: none;
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-    }
-    .modal-title {
-        font-weight: bold;
-    }
-    .close {
-        color: #fff;
-        opacity: 1;
-    }
-    .modal-body {
-        padding: 30px;
-    }
-    .form-check {
-        margin-bottom: 15px;
-    }
-    .form-group {
-        margin-bottom: 20px;
-    }
-    .btn-group {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-    }
-    .btn {
-        border-radius: 5px;
-        padding: 10px 20px;
-    }
-    #searchLine {
-        margin-bottom: 20px;
-    }
-    label {
-        font-weight: bold;
-        margin-bottom: 5px;
-    }
+.modal-content {
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
 
-    .input-group-append .btn {
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-    }
+.modal-header {
+    background-color: #007bff;
+    color: #fff;
+    border-bottom: none;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    padding: 15px 30px;
+}
 
-    .form-row {
-        display: flex;
-        flex-wrap: wrap;
-    }
+.modal-title {
+    font-weight: bold;
+}
 
-    .form-group {
-        flex: 1;
-        min-width: 200px;
-        margin-right: 20px;
-    }
+.close {
+    color: #fff;
+    opacity: 1;
+}
 
-    .form-group:last-child {
-        margin-right: 0;
-    }
-        .card {
-        margin-bottom: 1rem; /* 카드 사이의 여백 최소화 */
-        width: 100%; /* 카드가 가로로 꽉 차도록 설정 */
-    }
-    .card-body {
-        padding: 0.5rem; /* 카드 내부의 패딩 최소화 */
-    }
-    .card-title {
-        margin-bottom: 0.5rem; /* 제목 아래의 여백 최소화 */
-    }
-    .employee-item {
-        cursor: pointer;
-        margin-bottom: 2px; /* 직원 항목 사이의 여백 최소화 */
-        padding-bottom: 2px;
-        border-bottom: 1px solid #e0e0e0; /* 항목 간 구분선 */
-    }
-    
-    
+.modal-body {
+    padding: 40px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="datetime-local"],
+.form-group input[type="file"],
+.form-group select {
+    border-radius: 10px;
+    border: 1px solid #ced4da;
+    padding: 10px;
+    width: 100%;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.employee-item {
+    cursor: pointer;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    transition: background-color 0.3s, color 0.3s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.employee-item:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.employee-item.selected {
+    background-color: #007bff;
+    color: white;
+}
+
+.form-check {
+    margin-bottom: 15px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.btn-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn {
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+#searchLine {
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.input-group-append .btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.form-group {
+    flex: 1;
+    min-width: 200px;
+    margin-right: 20px;
+}
+
+.form-group:last-child {
+    margin-right: 0;
+}
+
+.card {
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+.card-body {
+    padding: 0.5rem;
+}
+
+.card-title {
+    margin-bottom: 0.5rem;
+}
+
+.employee-item {
+    cursor: pointer;
+    margin-bottom: 2px;
+    padding-bottom: 2px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.employee-item.selected {
+    background-color: #007BFF;
+    color: white;
+    border-radius: 5px;
+}
     </style>
 </head>
 
@@ -262,8 +308,7 @@
                           <table class="table align-middle custom-table m-0">
                             <thead>
                               <tr>
-                                <th></th>
-                                <th>정렬순서</th>
+                                <th>순서</th>
                                 <th>양식명</th>
                                 <th>구 분</th>
                                 <th style="min-width: 120px;">결재문서</th>
@@ -271,10 +316,9 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <th></th>
                                     <th>1</th>
-                                    <th><a href="#" data-toggle="modal" data-target="#approvalModal" data-doc-name="연차신청서">연차신청서</a></th>
-                                    <th>1</th>
+                                    <th><a href="#" data-toggle="modal" data-target="#approvalModal" data-doc-name="연차신청서" style="color: #007bff; text-decoration: none; font-weight: bold;">000님의 연차신청서 입니다</a></th>
+                                    <th>연차신청서</th>
                                     <th>
                                         <button class="btn btn-outline-danger btn-sm">
                                             전자결재문서
@@ -282,10 +326,9 @@
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th></th>
                                     <th>2</th>
-                                    <th><a href="#" data-toggle="modal" data-target="#approvalModal" data-doc-name="휴가신청서">휴가신청서</a></th>
-                                    <th>2</th>
+                                    <th><a href="#" data-toggle="modal" data-target="#approvalModal" data-doc-name="휴가신청서" style="color: #007bff; text-decoration: none; font-weight: bold;">000님의 휴가신청서 입니다</a></th>
+                                    <th>휴가신청서</th>
                                     <th>
                                         <button class="btn btn-outline-danger btn-sm">
                                             전자결재문서
@@ -293,10 +336,9 @@
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th></th>
                                     <th>3</th>
-                                    <th><a href="#" data-toggle="modal" data-target="#approvalModal" data-doc-name="출장보고서">출장보고서</a></th>
-                                    <th>3</th>
+                                    <th><a href="#" data-toggle="modal" data-target="#approvalModal" data-doc-name="출장보고서" style="color: #007bff; text-decoration: none; font-weight: bold;">000님의 출장보고서 입니다</a></th>
+                                    <th>출장보고서</th>
                                     <th>
                                         <button class="btn btn-outline-danger btn-sm">
                                             전자결재문서
@@ -304,10 +346,9 @@
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th></th>
                                     <th>4</th>
-                                    <th><a href="#" data-toggle="modal" data-target="#approvalModal" data-doc-name="지출결의서">지출결의서</a></th>
-                                    <th>4</th>
+                                    <th><a href="#" data-toggle="modal" data-target="#approvalModal" data-doc-name="지출결의서" style="color: #007bff; text-decoration: none; font-weight: bold;">000님의 지출결의서 입니다</a></th>
+                                    <th>지출결의서</th>
                                     <th>
                                         <button class="btn btn-outline-danger btn-sm">
                                             전자결재문서
@@ -315,10 +356,9 @@
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th></th>
                                     <th>5</th>
-                                    <th><a href="#" data-toggle="modal" data-target="#approvalModal" data-doc-name="사고경위서">사고경위서</a></th>
-                                    <th>5</th>
+                                    <th><a href="#" data-toggle="modal" data-target="#approvalModal" data-doc-name="사고경위서" style="color: #007bff; text-decoration: none; font-weight: bold;">000님의 사고경위서 입니다</a></th>
+                                    <th>사고경위서</th>
                                     <th>
                                         <button class="btn btn-outline-danger btn-sm">
                                             전자결재문서
@@ -375,7 +415,7 @@
 
 <!-- Custom JS files -->
 <script src="/assets/js/custom.js"></script>
-<script src="/assets/js/LocalStorage.js"></script>
+<script src="/assets/js/localStorage.js"></script>
 
     <!-- 양식 모달창 -->
     <div class="modal fade" id="approvalModal" tabindex="-1" role="dialog" aria-labelledby="approvalModalLabel" aria-hidden="true">
@@ -402,7 +442,7 @@
                             <label for="approverline">결재라인:</label>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="d-flex align-items-center">
-                                    <button type="button" class="btn btn-secondary approver-select-btn" id="approverLineButton" data-toggle="modal" data-target="#approverLineModal" onclick="setApproverType('line')">결재라인 선택</button>
+                                    <button type="button" class="btn btn-secondary approver-select-btn" id="approverLineButton" data-toggle="modal" data-target="#approverLineModal" onclick="setApproverType('line')"> 결재라인 </button>
                                     <span id="approverLineName" class="ml-3"></span>
                                     <input type="hidden" id="approverLine" name="approverline">
                                 </div>
@@ -412,7 +452,7 @@
                             <label class="approver-label">중간결재자:</label>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="d-flex align-items-center">
-                                    <button type="button" class="btn btn-secondary approver-select-btn" id="midApproverButton" data-toggle="modal" data-target="#approverSelectModal" onclick="setApproverType('mid')">중간결재자 선택</button>
+                                    <button type="button" class="btn btn-secondary approver-select-btn" id="midApproverButton" data-toggle="modal" data-target="#approverSelectModal" onclick="setApproverType('mid')">중간결재자</button>
                                     <span id="midApproverName" class="ml-3"></span>
                                     <input type="hidden" id="midApprover" name="midApprover">
                                 </div>
@@ -422,7 +462,7 @@
                             <label class="approver-label">최종결재자:</label>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="d-flex align-items-center">
-                                    <button type="button" class="btn btn-secondary approver-select-btn" id="finalApproverButton" data-toggle="modal" data-target="#approverSelectModal" onclick="setApproverType('final')">최종결재자 선택</button>
+                                    <button type="button" class="btn btn-secondary approver-select-btn" id="finalApproverButton" data-toggle="modal" data-target="#approverSelectModal" onclick="setApproverType('final')">최종결재자</button>
                                     <span id="finalApproverName" class="ml-3"></span>
                                     <input type="hidden" id="finalApprover" name="finalApprover">
                                 </div>
@@ -432,7 +472,7 @@
 						    <label for="participator">참조자:</label>
 						    <div class="d-flex justify-content-between align-items-center">
 						        <div class="d-flex align-items-center">
-						            <button type="button" class="btn btn-secondary approver-select-btn" id="participatorButton" data-toggle="modal" data-target="#approverSelectModal" onclick="setApproverType('participator')">참조자 선택</button>
+						            <button type="button" class="btn btn-secondary approver-select-btn" id="participatorButton" data-toggle="modal" data-target="#approverSelectModal" onclick="setApproverType('participator')">  참조자  </button>
 						            <div id="participatorNames" class="ml-3"></div>
 						            <input type="hidden" id="participator" name="participator">
 						        </div>
@@ -467,7 +507,7 @@
             </div>
             <div class="modal-body">
                 <div class="container">
-                    <h2>사용자 검색</h2>
+                    <h2>결재자 검색</h2>
                     <div class="form-group">
                         <label for="search">검색:</label>
                         <input type="text" id="search" name="search" class="form-control" placeholder="검색">
@@ -477,7 +517,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">선택</button>
             </div>
         </div>
     </div>
@@ -517,8 +557,7 @@
 					    </select>
 					</div>
                     <div class="form-group text-center">
-                        <button type="button" class="btn btn-primary mr-2" id="addLineButton">선택</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">닫기</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">선택</button>
                     </div>
                 </div>
             </div>
@@ -649,19 +688,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 var filePath = ''; // 파일 경로 변수 초기화
                 // docName에 따라 파일 경로 설정
                 switch(docName) {
-                    case '연차신청서':
+                    case '000님의 연차신청서 입니다':
                         filePath = '/연차신청서.html';
                         break;
-                    case '휴가신청서':
+                    case '000님의 휴가신청서 입니다':
                         filePath = '/휴가신청서.html';
                         break;
-                    case '출장보고서':
+                    case '000님의 출장보고서 입니다':
                         filePath = '/출장보고서.html';
                         break;
-                    case '지출결의서':
+                    case '000님의 지출결의서 입니다':
                         filePath = '/지출결의서.html';
                         break;
-                    case '사고경위서':
+                    case '000님의 사고경위서 입니다':
                         filePath = '/사고경위서.html';
                         break;
                 }
@@ -681,16 +720,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('approverLineName').textContent = selectedLine; // 선택된 라인의 이름을 설정
         document.getElementById('approverLine').value = selectedLine; // 선택된 라인의 값을 설정
     });
-
-    // 신규 버튼 클릭 시 이벤트 핸들러
-    document.getElementById('addLineButton').addEventListener('click', function() {
-        alert('신규 결재라인을 추가합니다.');
-    });
-
-    // 수정 버튼 클릭 시 이벤트 핸들러
-    document.getElementById('editLineButton').addEventListener('click', function() {
-        alert('선택된 결재라인을 수정합니다.');
-    });
 });
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -702,83 +731,91 @@ document.addEventListener('DOMContentLoaded', function() {
         sendHtmlToServer(false);
     });
 
-// 서버로 기안서 작성 내용 데이터 전송
-function sendHtmlToServer(isFinal) {
-    const iframe = document.getElementById('documentFrame');
-    const doc = iframe.contentDocument || iframe.contentWindow.document;
+ // 서버로 기안서 작성 내용 데이터 전송
+    function sendHtmlToServer(isFinal) {
+        const iframe = document.getElementById('documentFrame');
+        const doc = iframe.contentDocument || iframe.contentWindow.document;
 
-    // 모든 input 요소의 값을 설정
-    const inputs = doc.querySelectorAll('input');
-    inputs.forEach(input => {
-        if (input.type === 'checkbox' || input.type === 'radio') {
-            if (input.checked) {
-                input.setAttribute('checked', 'checked');
+        // 모든 input 요소의 값을 설정
+        const inputs = doc.querySelectorAll('input');
+        inputs.forEach(input => {
+            if (input.type === 'checkbox' || input.type === 'radio') {
+                if (input.checked) {
+                    input.setAttribute('checked', 'checked');
+                } else {
+                    input.removeAttribute('checked');
+                }
             } else {
-                input.removeAttribute('checked');
-            }
-        } else {
-            input.setAttribute('value', input.value);
-        }
-    });
-
-    // 모든 textarea 요소의 값을 설정
-    const textareas = doc.querySelectorAll('textarea');
-    textareas.forEach(textarea => {
-        textarea.textContent = textarea.value;
-    });
-
-    // 모든 select 요소의 값을 설정
-    const selects = doc.querySelectorAll('select');
-    selects.forEach(select => {
-        const options = select.querySelectorAll('option');
-        options.forEach(option => {
-            if (option.selected) {
-                option.setAttribute('selected', 'selected');
-            } else {
-                option.removeAttribute('selected');
+                input.setAttribute('value', input.value);
             }
         });
-    });
 
-    const htmlContent = doc.documentElement.outerHTML; // 최종 HTML 콘텐츠 가져오기
-    console.log(htmlContent); // HTML 콘텐츠를 콘솔에 출력
+        // 모든 textarea 요소의 값을 설정
+        const textareas = doc.querySelectorAll('textarea');
+        textareas.forEach(textarea => {
+            textarea.textContent = textarea.value;
+        });
 
-    const formData = new FormData();
-   
+        // 모든 select 요소의 값을 설정
+        const selects = doc.querySelectorAll('select');
+        selects.forEach(select => {
+            const options = select.querySelectorAll('option');
+            options.forEach(option => {
+                if (option.selected) {
+                    option.setAttribute('selected', 'selected');
+                } else {
+                    option.removeAttribute('selected');
+                }
+            });
+        });
 
-    // 모달의 다른 입력 요소 값을 추가
-    formData.append('date', document.getElementById('date').value);
-    formData.append('title', document.getElementById('title').value);
-    formData.append('approverline', document.getElementById('approverLine').value);
-    formData.append('midApprover', document.getElementById('midApprover').value);
-    formData.append('finalApprover', document.getElementById('finalApprover').value);
-    formData.append('participator', document.getElementById('participator').value);
-    formData.append('htmlContent', htmlContent); // FormData 객체에 HTML 콘텐츠 추가
-    
-    // 파일 입력 값 추가
-    const fileInput = document.getElementById('file');
-    
-    if (fileInput.files.length > 0) {
-        formData.append('file', fileInput.files[0]);
+        const htmlContent = doc.documentElement.outerHTML; // 최종 HTML 콘텐츠 가져오기
+        const formData = new FormData();
+
+        // 모달의 다른 입력 요소 값을 추가
+        formData.append('date', document.getElementById('date').value);
+        formData.append('title', document.getElementById('title').value);
+        formData.append('approverline', document.getElementById('approverLine').value);
+        formData.append('midApprover', document.getElementById('midApprover').value);
+        formData.append('finalApprover', document.getElementById('finalApprover').value);
+        formData.append('participator', document.getElementById('participator').value);
+        formData.append('htmlContent', htmlContent); // FormData 객체에 HTML 콘텐츠 추가
+        
+        // 파일 입력 값 추가
+        const fileInput = document.getElementById('file');
+        
+        if (fileInput.files.length > 0) {
+            formData.append('file', fileInput.files[0]);
+        }
+
+        // 전송 타입 추가
+        formData.append('isFinal', isFinal);
+
+        fetch('/approval/save-html.fetch', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(result => {
+            alert('결재 문서 등록 되었습니다.');
+            $('#approvalModal').modal('hide'); // 모달 창 닫기
+            window.location.href = 'http://localhost/approval/myapproval.go'; // 페이지 이동
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
     }
-
-    // 전송 타입 추가
-    formData.append('isFinal', isFinal);
-
-    fetch('/approval/save-html.fetch', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.text())
-    .then(result => {
-        alert('결재 문서 등록 되었습니다.');
-        $('#approvalModal').modal('hide'); // 모달 창 닫기
-    })
-    .catch(error => {
-        console.error('Error:', error);
     });
-}
-});
+
+    $(document).ready(function() {
+        document.querySelector('#saveButton').addEventListener('click', function() {
+            sendHtmlToServer(true);
+        });
+
+        document.querySelector('#saveTempButton').addEventListener('click', function() {
+            sendHtmlToServer(false);
+        });
+    });
 
 // 결재자 유형을 설정하는 함수
 function setApproverType(type) {

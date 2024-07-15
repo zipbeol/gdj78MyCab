@@ -336,7 +336,7 @@ td:hover {
 
 	<!-- Custom JS files -->
 	<script src="/assets/js/custom.js"></script>
-	<script src="/assets/js/LocalStorage.js"></script>
+	<script src="/assets/js/localStorage.js"></script>
 	<!-- 페이지네이션 -->
 	<script src="/assets/js/jquery.twbsPagination.min.js"></script>
 	<!-- AJAX 및 모달 스크립트 -->
@@ -550,7 +550,6 @@ td:hover {
 
 
 
-        // 토탈 페이지 호출
         function getTotalPages() {
             $.ajax({
                 url: './getTotalPages.ajax',
@@ -564,10 +563,21 @@ td:hover {
                 },
                 dataType: 'JSON',
                 success: function (data) {
-                    console.log(data);
+                    console.log('Total Pages:', data); // 총 페이지 수 로그 출력
+
+                    var totalPages = parseInt(data.totalPages, 10); // 문자열로 반환될 수 있으므로 정수로 변환
+                    if (isNaN(totalPages) || totalPages < 1) {
+                        console.error('Invalid total pages:', totalPages);
+                        return;
+                    }
+
+                    if (currentPage < 1 || currentPage > totalPages) {
+                        currentPage = 1; // currentPage 값이 유효 범위를 벗어나면 1로 초기화
+                    }
+
                     $('#pagination').twbsPagination('destroy');
                     $('#pagination').twbsPagination({
-                        totalPages: data.totalPages, // 서버에서 받은 총 페이지 수
+                        totalPages: totalPages, // 서버에서 받은 총 페이지 수
                         visiblePages: 5,
                         startPage: currentPage,
                         paginationClass: 'pagination align-items-center',
@@ -578,7 +588,7 @@ td:hover {
                     });
                 },
                 error: function (error) {
-                    console.log(error);
+                    console.log('Total Pages Error:', error); // 오류 로그 출력
                 }
             });
         }

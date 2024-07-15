@@ -3,6 +3,7 @@ package com.my.cab.dto;
 import org.apache.ibatis.type.Alias;
 
 import java.util.List;
+import java.util.Set;
 
 @Alias("chat")
 public class ChatDTO {
@@ -15,6 +16,15 @@ public class ChatDTO {
     private Integer room;
     private List<AttachmentDTO> attachments;
     private boolean messageIsDelete;
+    private Set<Integer> roomIdxList;
+
+    public Set<Integer> getRoomIdxList() {
+        return roomIdxList;
+    }
+
+    public void setRoomIdxList(Set<Integer> roomIdxList) {
+        this.roomIdxList = roomIdxList;
+    }
 
     public boolean isMessageIsDelete() {
         return messageIsDelete;

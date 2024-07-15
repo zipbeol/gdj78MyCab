@@ -83,7 +83,8 @@ public class ApprovalService {
         System.out.println("Saving document: " + doc);
         apprDAO.saveDocument(doc);
     }
-
+    
+    // 결재라인 등 데이터베이스에 저장
     public void saveApproval(ApprovalDTO approval) {
         System.out.println("Saving approval: " + approval);
         apprDAO.saveApproval(approval);
@@ -142,11 +143,11 @@ public class ApprovalService {
 	        return null;
 	    }
 	}
-
+	// 사용자 이름 가져오기
 	public String getUserNameById(String loginId) {
 	    return apprDAO.getUserNameById(loginId);
 	}
-
+	// 사용자 직책 가져오기
 	public String getUserTitleById(String loginId) {
 	    return apprDAO.getUserTitleById(loginId);
 	}
@@ -155,26 +156,24 @@ public class ApprovalService {
 		  return apprDAO.updateApprovalStatus(approvalDocIdx, approvalState, approvalDate) > 0;
 	}
 	
-	// 결재 통합 관리 결재문서 전체 리스트
-
+	// 내 결재문서 전체 리스트
 	public List<com.my.cab.dto.ApprovalDocDTO> getApprovalDocData(Map<String, Object> params) {
 		return apprDAO.getApprovalDocData(params);
 	}
-
+	// 내 결재 관리 페이징
 	public int getApprovalDocCount(Map<String, Object> params) {
 		return apprDAO.getApprovalDocCount(params);
 	}
 
-	
+	// 결재 통합 관리 페이지 리스트 가져오기
 	public List<ApprovalDocDTO> getAllApprovalDocData(Map<String, Object> params) {
 	    return apprDAO.getAllApprovalDocData(params);
 	}
-
+	// 결재 통합 관리 페이지 페이징
 	public int getAllApprovalDocCount(Map<String, Object> params) {
 	    return apprDAO.getAllApprovalDocCount(params);
 	}
 
-    // 결재 문서 삭제 기능
 	// 결재 문서 삭제 기능
     @Transactional
     public boolean deleteApprovalDocs(List<String> docs) {

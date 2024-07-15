@@ -38,4 +38,7 @@ public interface NoticeDAO {
 
 	List<String> getExistingFileNames(int notice_idx);
 
+	Integer getEmpNoByEmpName(String empName);
+
+
 }

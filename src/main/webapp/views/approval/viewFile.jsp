@@ -157,17 +157,16 @@
                                    <table class="approval-line-table" style="margin-left: 20px; margin-top: 20px;">
     <tr>
         <th rowspan="3">결재</th>
-        <th>&nbsp;&nbsp;기안자&nbsp;&nbsp;</th>
         <th>중간결재자</th>
         <th>최종결재자</th>
     </tr>
     <tr>
-        <td>&nbsp;</td>
+
         <td id="midApproverSignature">&nbsp;</td>
         <td id="finalApproverSignature">&nbsp;</td>
     </tr>
     <tr>
-        <td>&nbsp;</td>
+
         <td id="midApproverSignatureDate">&nbsp;</td>
         <td id="finalApproverSignatureDate">&nbsp;</td>
     </tr>
@@ -192,7 +191,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- Row end -->
             </div>
             
@@ -242,119 +240,120 @@
 </body>
 
 <script>
-//페이지 로드 시 로컬 스토리지에서 해당 페이지의 서명 정보 불러오기
-$(document).ready(function() {
-    const currentPage = window.location.pathname; // 현재 페이지 경로
-    const midApproverSignature = localStorage.getItem(currentPage + '-midApproverSignature');
-    const finalApproverSignature = localStorage.getItem(currentPage + '-finalApproverSignature');
-    const midApproverSignatureDate = localStorage.getItem(currentPage + '-midApproverSignatureDate');
-    const finalApproverSignatureDate = localStorage.getItem(currentPage + '-finalApproverSignatureDate');
+    // 페이지 로드 시 로컬 스토리지에서 해당 페이지의 서명 정보 불러오기
+    $(document).ready(function() {
+        const currentPage = window.location.pathname; // 현재 페이지 경로
+        const midApproverSignature = localStorage.getItem(currentPage + '-midApproverSignature');
+        const finalApproverSignature = localStorage.getItem(currentPage + '-finalApproverSignature');
+        const midApproverSignatureDate = localStorage.getItem(currentPage + '-midApproverSignatureDate');
+        const finalApproverSignatureDate = localStorage.getItem(currentPage + '-finalApproverSignatureDate');
 
 
-    if (midApproverSignature) {
-        $('.approval-line-table tr:nth-child(2) td:nth-child(2)').html('<img src="' + midApproverSignature + '" style="width: 100px; height: auto;">');
-        $('.approval-line-table tr:nth-child(3) td:nth-child(2)').text(midApproverSignatureDate);
-    }
+        if (midApproverSignature) {
+            $('.approval-line-table tr:nth-child(2) td:nth-child(2)').html('<img src="' + midApproverSignature + '" style="width: 100px; height: auto;">');
+            $('.approval-line-table tr:nth-child(3) td:nth-child(2)').text(midApproverSignatureDate);
+        }
 
-    if (finalApproverSignature) {
-        $('.approval-line-table tr:nth-child(2) td:nth-child(3)').html('<img src="' + finalApproverSignature + '" style="width: 100px; height: auto;">');
-        $('.approval-line-table tr:nth-child(3) td:nth-child(3)').text(finalApproverSignatureDate);
-    }
+        if (finalApproverSignature) {
+            $('.approval-line-table tr:nth-child(2) td:nth-child(3)').html('<img src="' + finalApproverSignature + '" style="width: 100px; height: auto;">');
+            $('.approval-line-table tr:nth-child(3) td:nth-child(3)').text(finalApproverSignatureDate);
+        }
 
-});
+    });
 
-// 결재 버튼 클릭 시 서명 추가 및 로컬 스토리지에 저장
-$('#approve-button').on('click', function() {
-    $.ajax({
-        url: '/getUserType',
-        type: 'GET',
-        success: function(response) {
-            const userType = response;
-            const currentPage = window.location.pathname; // 현재 페이지 경로
-			
-            $.ajax({
-                url: '/getSignature',
-                type: 'GET',
-                success: function(response) {
-                    if (response) {
-                        const signatureImageSrc = 'data:image/png;base64,' + response;
-                        const currentDate = new Date().toISOString().split('T')[0];
+    // 결재 버튼 클릭 시 서명 추가 및 로컬 스토리지에 저장
+    $('#approve-button').on('click', function() {
+        $.ajax({
+            url: '/getUserType',
+            type: 'GET',
+            success: function(response) {
+                const userType = response;
+                const currentPage = window.location.pathname; // 현재 페이지 경로
+				
+                $.ajax({
+                    url: '/getSignature',
+                    type: 'GET',
+                    success: function(response) {
+                        if (response) {
+                            const signatureImageSrc = 'data:image/png;base64,' + response;
+                            const currentDate = new Date().toISOString().split('T')[0];
 
-                        if (userType === 'midApprover') {
-                            $('.approval-line-table tr:nth-child(2) td:nth-child(2)').html('<img src="' + signatureImageSrc + '" style="width: 100px; height: auto;">');
-                            $('.approval-line-table tr:nth-child(3) td:nth-child(2)').text(currentDate);
+                            if (userType === 'midApprover') {
+                                $('.approval-line-table tr:nth-child(2) td:nth-child(2)').html('<img src="' + signatureImageSrc + '" style="width: 100px; height: auto;">');
+                                $('.approval-line-table tr:nth-child(3) td:nth-child(2)').text(currentDate);
 
-                            // 로컬 스토리지에 저장
-                            localStorage.setItem(currentPage + '-midApproverSignature', signatureImageSrc);
-                            localStorage.setItem(currentPage + '-midApproverSignatureDate', currentDate);
-                        } else if (userType === 'finalApprover') {
-                            $('.approval-line-table tr:nth-child(2) td:nth-child(3)').html('<img src="' + signatureImageSrc + '" style="width: 100px; height: auto;">');
-                            $('.approval-line-table tr:nth-child(3) td:nth-child(3)').text(currentDate);
+                                // 로컬 스토리지에 저장
+                                localStorage.setItem(currentPage + '-midApproverSignature', signatureImageSrc);
+                                localStorage.setItem(currentPage + '-midApproverSignatureDate', currentDate);
+                            } else if (userType === 'finalApprover') {
+                                $('.approval-line-table tr:nth-child(2) td:nth-child(3)').html('<img src="' + signatureImageSrc + '" style="width: 100px; height: auto;">');
+                                $('.approval-line-table tr:nth-child(3) td:nth-child(3)').text(currentDate);
 
-                            // 로컬 스토리지에 저장
-                            localStorage.setItem(currentPage + '-finalApproverSignature', signatureImageSrc);
-                            localStorage.setItem(currentPage + '-finalApproverSignatureDate', currentDate);
-                        }
+                                // 로컬 스토리지에 저장
+                                localStorage.setItem(currentPage + '-finalApproverSignature', signatureImageSrc);
+                                localStorage.setItem(currentPage + '-finalApproverSignatureDate', currentDate);
+                            }
 
-                        // 결재 상태 업데이트
-                        $.ajax({
-                            url: '/updateApprovalStatus',
-                            type: 'POST',
-                            contentType: 'application/json',
-                            data: JSON.stringify({
-                                approvalDocIdx: '${approval_doc_idx}',
-                                userType: userType,
-                                approvalDate: currentDate
-                            }),
-                            success: function(response) {
-                                if (response === 'success') {
-                                    alert('결재가 완료되었습니다.');
-                                } else {
+                            // 결재 상태 업데이트
+                            $.ajax({
+                                url: '/updateApprovalStatus',
+                                type: 'POST',
+                                contentType: 'application/json',
+                                data: JSON.stringify({
+                                    approvalDocIdx: '${approval_doc_idx}',
+                                    userType: userType,
+                                    approvalDate: currentDate
+                                }),
+                                success: function(response) {
+                                    if (response === 'success') {
+                                        alert('결재가 완료되었습니다.');
+                                        window.location.href = 'http://localhost/approval/myapproval.go'; // 페이지 이동
+                                    } else {
+                                        alert('결재 상태 업데이트 중 오류가 발생했습니다.');
+                                    }
+                                },
+                                error: function() {
                                     alert('결재 상태 업데이트 중 오류가 발생했습니다.');
                                 }
-                            },
-                            error: function() {
-                                alert('결재 상태 업데이트 중 오류가 발생했습니다.');
-                            }
-                        });
+                            });
 
-                    } else {
+                        } else {
+                            alert('서명 이미지를 불러오는 중 오류가 발생했습니다.');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('서명 이미지를 불러오는 중 오류 발생:', error);
                         alert('서명 이미지를 불러오는 중 오류가 발생했습니다.');
                     }
-                },
-                error: function(xhr, status, error) {
-                    console.error('서명 이미지를 불러오는 중 오류 발생:', error);
-                    alert('서명 이미지를 불러오는 중 오류가 발생했습니다.');
-                }
-            });
-        },
-        error: function(xhr, status, error) {
-            console.error('결재자 유형을 확인하는 중 오류 발생:', error);
-            alert('결재자 유형을 확인하는 중 오류가 발생했습니다.');
-        }
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error('결재자 유형을 확인하는 중 오류 발생:', error);
+                alert('결재자 유형을 확인하는 중 오류가 발생했습니다.');
+            }
+        });
     });
-});
 
-function downloadPDF() {
-    const element = document.getElementById('iframe-document'); // PDF로 변환하고자 하는 HTML 요소를 선택합니다. 예: document.getElementById('your-element-id')
-   console.log(element);
-    
-   const iframeDocument = element.contentDocument || element.contentWindow.document;
-    
-   const content = iframeDocument.body; 
-   
-     html2canvas(content, { scale: 2 }).then(canvas => {
-         const imgData = canvas.toDataURL('image/png');
-         const { jsPDF } = window.jspdf;
-         const pdf = new jsPDF('p', 'mm', 'a4');
+    function downloadPDF() {
+        const element = document.getElementById('iframe-document'); // PDF로 변환하고자 하는 HTML 요소를 선택합니다. 예: document.getElementById('your-element-id')
+        console.log(element);
 
-         const imgProps = pdf.getImageProperties(imgData);
-         const pdfWidth = pdf.internal.pageSize.getWidth();
-         const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        const iframeDocument = element.contentDocument || element.contentWindow.document;
 
-         pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-         pdf.save('document.pdf');
-     });
-}
+        const content = iframeDocument.body; 
+
+        html2canvas(content, { scale: 2 }).then(canvas => {
+            const imgData = canvas.toDataURL('image/png');
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4');
+
+            const imgProps = pdf.getImageProperties(imgData);
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            pdf.save('document.pdf');
+        });
+    }
 </script>
 </html>

@@ -232,7 +232,7 @@
     <script src="/assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
     <script src="/assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
     <script src="/assets/js/custom.js"></script>
-    <script src="/assets/js/LocalStorage.js"></script>
+    <script src="/assets/js/localStorage.js"></script>
     <script src="/assets/js/jquery.twbsPagination.min.js"></script>
     <script>
     $(document).ready(function() {

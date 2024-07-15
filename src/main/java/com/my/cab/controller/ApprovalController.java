@@ -81,7 +81,7 @@ public class ApprovalController {
 		return "approval/approvalWriteForm";
 	}
 	
-	  // 기안서 데이터 DB 저장
+	// 기안서 데이터 DB 저장
     @PostMapping("approval/save-html.fetch")
     public String saveHtmlFile(
             @RequestParam("htmlContent") String htmlContent,
@@ -399,6 +399,9 @@ public class ApprovalController {
     }
     
     
+    
+    
+ // 결재 통합 관리 페이지 종료 //
 }
 	
 

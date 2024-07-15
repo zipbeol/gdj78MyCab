@@ -274,7 +274,7 @@
 
     <!-- Custom JS files -->
     <script src="/assets/js/custom.js"></script>
-    <script src="/assets/js/LocalStorage.js"></script>
+    <script src="/assets/js/localStorage.js"></script>
     <!-- 페이지네이션 -->
     <script src="/assets/js/jquery.twbsPagination.min.js"></script>
     <!-- AJAX 및 모달 스크립트 -->
@@ -322,13 +322,13 @@
             $('#startDate').on('change', function () {
                 currentPage = 1;
                 getTotalPages();
-                refreshExpensesList();
+                refreshDealList();
             });
 
             $('#endDate').on('change', function () {
                 currentPage = 1;
                 getTotalPages();
-                refreshExpensesList();
+                refreshDealList();
             });
         });
 
@@ -367,6 +367,7 @@
             }, 500);
         }
 
+        // 시작 날짜와 종료 날짜 관계 설정
         document.getElementById('startDate').addEventListener('change', function () {
             var startDate = this.value;
             var endDateInput = document.getElementById('endDate');
@@ -411,8 +412,13 @@
         function displayDealList(dealList) {
             var tbody = $('#dealTableBody');
             tbody.empty(); // 테이블 본문을 비웁니다.
+            if (dealList.length === 0) {
+                tbody.html('<tr><td colspan="4" class="text-center">거래 종류를 선택해주세요.</td></tr>');
+                return;
+            }
+
             var row = '';
-            for (item of dealList) {
+            for (var item of dealList) {
                 var cashClass = item.deal_category === '수익' ? 'profit' : '';
                 row += '<tr class="clickable-row">' +
                     '<td>' + item.deal_actual_date + '</td>' +
@@ -449,19 +455,24 @@
         function refreshDealList() {
             var categories = [];
             if ($('#flexCheckProfit').is(':checked')) {
-                fetchTotalAmounts();
                 categories.push('수익');
             }
             if ($('#flexCheckExpense').is(':checked')) {
-                fetchTotalAmounts();
                 categories.push('지출');
+            }
+
+            if (categories.length === 0) {
+                displayNoDealMessage();
+                resetPagination();
+                resetTotalAmounts();
+                return;
             }
 
             $.ajax({
                 type: 'POST',
                 url: '/finance/deal/list.ajax',
                 data: {
-                    'category': categories.join(','), 
+                    'category': categories.join(','),
                     'filterStartDate': $('#startDate').val(),
                     'filterEndDate': $('#endDate').val(),
                     'deal_filter': $('#filter').val(),
@@ -478,6 +489,21 @@
             });
         }
 
+        // 거래 리스트가 비어있을 때 메시지를 표시하는 함수
+        function displayNoDealMessage() {
+            var tbody = $('#dealTableBody');
+            tbody.empty(); // 테이블 본문을 비웁니다.
+            var row = '<tr><td colspan="4" class="text-center">거래 내역을 선택해 주세요.</td></tr>';
+            tbody.html(row);
+        }
+
+        // 총 수익, 총 지출, 총 순수익을 0으로 초기화하는 함수
+        function resetTotalAmounts() {
+            $('#totalProfit').html('0');
+            $('#totalExpense').html('0');
+            $('#netProfit').html('0');
+        }
+
         // 총 수익, 총 지출, 총 순수익 가져오기
         function fetchTotalAmounts() {
             // 카테고리 값 수집
@@ -488,7 +514,11 @@
             if ($('#flexCheckExpense').is(':checked')) {
                 categories.push('지출');
             }
-            var value = $('#startDate').val();
+
+            if (categories.length === 0) {
+                resetTotalAmounts();
+                return;
+            }
 
             $.ajax({
                 type: 'GET',
@@ -506,9 +536,7 @@
                         $('#totalExpense').html(formatNumberWithCommas(data.dto.total_expense));
                         $('#netProfit').html(formatNumberWithCommas(data.dto.net_profit));
                     } else {
-                        $('#totalProfit').html('0');
-                        $('#totalExpense').html('0');
-                        $('#netProfit').html('0');
+                        resetTotalAmounts();
                     }
                 },
                 error: function (error) {
@@ -527,6 +555,12 @@
             if ($('#flexCheckExpense').is(':checked')) {
                 categories.push('지출');
             }
+
+            if (categories.length === 0) {
+                $('#pagination').twbsPagination('destroy');
+                return;
+            }
+
             $.ajax({
                 url: './getTotalPages.ajax',
                 type: 'GET',

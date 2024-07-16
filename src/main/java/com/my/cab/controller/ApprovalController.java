@@ -1,6 +1,7 @@
 package com.my.cab.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -46,7 +47,9 @@ public class ApprovalController {
 	@Autowired ApprovalService apprservice;
 	
 	// 파일 저장 디렉토리 설정 시작
-	
+    @Value("${spring.servlet.multipart.location}")
+    private String uploadDir;
+    
 	// 결재문서 저장 디렉토리
     private static final String APPROVAL_UPLOAD_DIR = "/usr/local/tomcat/webapps/upload/startApprover";
     // 서명 이미지 저장 디렉토리
@@ -99,7 +102,7 @@ public class ApprovalController {
             // HTML 내용 저장
             String timeStamp = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date(System.currentTimeMillis()));
             String fileName = "approval_file_" + timeStamp + ".html";
-            String filePath = APPROVAL_UPLOAD_DIR + File.separator + fileName;
+            String filePath = uploadDir + "/startApprover/" + fileName;
 
             String drafterId = (String) session.getAttribute("loginId");
             logger.info("아이디 추가 확인 : " + drafterId);
@@ -112,7 +115,7 @@ public class ApprovalController {
 
             // 수정한 HTML의 파일 경로를 데이터베이스에 저장
             ApprovalDocDTO approvalDoc = new ApprovalDocDTO();
-            approvalDoc.setApproval_doc_path(filePath);
+            approvalDoc.setApproval_doc_path("/startApprover/" + fileName);
             approvalDoc.setApproval_doc_write_date(date);
             approvalDoc.setApproval_doc_title(title);
             approvalDoc.setApproval_doc_assist_user(participator);
@@ -123,15 +126,15 @@ public class ApprovalController {
             // 첨부 파일 저장
             if (file != null && !file.isEmpty()) {
                 String originalFilename = file.getOriginalFilename();
-                String uploadFilePath = DOC_FILE_UPLOAD_DIR + File.separator + originalFilename;
+                String uploadFilePath = uploadDir + "/doc_file/" + originalFilename;
                 File uploadedFile = new File(uploadFilePath);
                 file.transferTo(uploadedFile);
                 logger.info("Uploaded file saved at: " + uploadFilePath);
 
                 // 첨부 파일 경로를 데이터베이스에 저장
                 DocumentDTO docItemFileDTO = new DocumentDTO();
-                docItemFileDTO.setAppr_file_path(uploadFilePath);
-                apprservice.saveAttachedFilePath(uploadFilePath);
+                docItemFileDTO.setAppr_file_path("/doc_file/" + originalFilename);
+                apprservice.saveAttachedFilePath("/doc_file/" + originalFilename);
             }
 
             // 결재라인 등 데이터베이스에 저장
@@ -221,7 +224,7 @@ public class ApprovalController {
         try {
         	session.setAttribute("approval_doc_idx", approval_doc_idx);
             String filename = new String(Base64.getDecoder().decode(encodedFilename));
-            Path file = Paths.get("/usr/local/tomcat/webapps/upload").resolve(filename).normalize();
+            Path file = Paths.get(uploadDir).resolve(filename).normalize();
             System.out.println("Serving file: " + file.toString()); // 디버깅용 출력
 
             if (Files.exists(file) && Files.isReadable(file)) {

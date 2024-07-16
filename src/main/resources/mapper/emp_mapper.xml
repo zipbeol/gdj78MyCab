@@ -37,10 +37,7 @@
         VALUES (#{acc_no}, #{emp_no}, #{bank_name}, #{acc_name})
     </insert>
 
-    <insert id="vacJojn" parameterType="emp">
-        INSERT INTO vacation(emp_no, vac_left, vac_add)
-        VALUES (#{emp_no}, 0, 0)
-    </insert>
+  
 
     <select id="overlay" resultType="int">
         select count(emp_email)

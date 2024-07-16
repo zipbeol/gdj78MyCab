@@ -216,8 +216,8 @@
                                                 <select id="filter-taxi-is-active"
                                                         class="form-select taxi-search-filter">
                                                     <option value="">폐차 여부</option>
-                                                    <option value="1">폐차아님</option>
-                                                    <option value="0">폐차</option>
+                                                    <option value="1">N</option>
+                                                    <option value="0">Y</option>
                                                 </select>
                                             </div>
                                             <div class="col-1"></div>
@@ -526,7 +526,7 @@
         var content = '';
         if (list.length > 0) {
             for (item of list) {
-                var taxi_is_active = item.taxi_is_active === 1 ? '폐차' : '폐차아님';
+                var taxi_is_active = item.taxi_is_active === 1 ? 'Y' : 'N';
                 content += '<tr class="taxi-list-tbody-tr" id="' + item.taxi_idx + '">'
                     + '<td class="text-center">' + item.taxi_license_plate + '</td>'
                     + '<td class="text-center">' + item.taxi_model + '</td>'

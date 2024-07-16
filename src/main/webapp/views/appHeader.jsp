@@ -103,8 +103,9 @@
         </div>
     </div>
 </div>
-
 <script>
+
+var profile = '${sessionScope.profile}';
 
 
 	function getOff(){
@@ -121,3 +122,4 @@
 
 
 </script>
+</html>

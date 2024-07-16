@@ -316,7 +316,7 @@
     var sortColumn = 'default';
 
     // 초기 필터 값 설정
-    $('#filter-trip-end-date').val(today);
+    $('#filter-trip-end-date').val('');
     $('#filter-trip-start-date').val('');
 
     getTotalPages();

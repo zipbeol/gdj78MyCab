@@ -181,7 +181,7 @@
                                 </div>
                                 <div class="card-body">
                                     <c:if test="${not empty fileContent}">
-                                        <iframe id="iframe-document" src="/api/document/${fileContent}" width="100%" height="700px"></iframe>
+                                        <iframe id="iframe-document" src="/api/document${fileContent}" width="100%" height="700px"></iframe>
                                     </c:if>
                                     <c:if test="${not empty errorMessage}">
                                         <p style="color: red;">${errorMessage}</p>
@@ -312,7 +312,7 @@ $(document).ready(function() {
                                 success: function(response) {
                                     if (response === 'success') {
                                         alert('결재가 완료되었습니다.');
-                                        window.location.href = 'http://localhost/approval/myapproval.go'; // 페이지 이동
+                                        window.location.href = '/approval/myapproval.go'; // 페이지 이동
                                     } else {
                                         alert('결재 상태 업데이트 중 오류가 발생했습니다.');
                                     }

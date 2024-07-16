@@ -137,7 +137,16 @@
 		SELECT * FROM schedule s 
 		INNER JOIN share_calendar sc  ON sc.share_cal_idx = s.schedule_cal_idx
 		INNER JOIN calendar cal ON cal.calendar_idx = s.schedule_cal_idx 
-		WHERE sc.shared_emp_no = #{param1}
+		WHERE sc.shared_emp_no = #{param1} and schedule_del = 0
+	</select>
+	
+	<select id="getMyInfo" resultType="emp">
+		select emp_no, 
+			dept_no,title_no,
+			emp_name,
+			emp_level 
+		from employee e 
+		where e.emp_no =#{param1}
 	</select>
 
 </mapper>

@@ -248,4 +248,15 @@ public class ResourceService {
 		return map;
 	}
 
+	public Map<String, Object> delRsv(List<Integer> param) {
+		int row = 0;
+		for (Integer idx : param) {
+			resourceDao.delRsv(idx);			
+			row++;
+		}
+		Map<String, Object>map = new HashMap<String, Object>();
+		map.put("success", row);
+		return map;
+	}
+
 }

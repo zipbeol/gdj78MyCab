@@ -166,7 +166,7 @@
            href="#!" role="button" data-bs-toggle="dropdown" aria-expanded="false">
            <c:choose>
           <c:when test="${not empty sessionScope.profile}">
-          	<img src="/photo/${sessionScope.profile}" class="rounded-2 img-3x" alt="user">
+          	<img src="/api/imgView/${sessionScope.profile}" class="rounded-2 img-3x" alt="user">
           </c:when>
           <c:when test="${empty sessionScope.profile}">
           	<img src="/assets/user.png" class="rounded-2 img-3x" alt="user">

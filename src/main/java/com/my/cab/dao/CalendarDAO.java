@@ -38,4 +38,6 @@ public interface CalendarDAO {
 
 	List<Map<String, Object>> shareCalListCall(String schedule_editor);
 
+	EmpDTO getMyInfo(String loginId);
+
 }

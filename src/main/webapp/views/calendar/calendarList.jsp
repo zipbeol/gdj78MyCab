@@ -131,6 +131,9 @@
     		margin-bottom: 15px;
     		margin-left: 14px;
     		cursor: pointer;
+    		overflow: hidden;   
+    		text-overflow: ellipsis;
+    		
     	}
     	.util-box1{
     		background-color: #ffec63;
@@ -178,6 +181,8 @@
 		    margin: 0px;
 		    top: -9px;
 		    position: relative;	
+		    max-width: 84%;
+		    text-overflow: ellipsis;
 		}
 		 .slide-toggle {
             overflow: hidden;
@@ -373,8 +378,14 @@
                     <label class="input-group-text" for="create-category">일정 범위</label>
                     <select class="form-select" id="create-category" onchange="changeCategoryColor(this)">
                         <option value="개인" style="color: #ffec63;">개인</option>
-                        <option value="부서" style="color: #28b9ff;">부서</option>
-                        <option value="전사" style="color: #71f371;">전사</option>
+                    	<c:choose>
+                    		<c:when test="${myInfo.title_no <=3 }">
+	                        	<option value="부서" style="color: #28b9ff;">부서</option>                   		
+                    		</c:when>
+                    		<c:when test="${myInfo.title_no <=1 }">
+	                        	<option value="전사" style="color: #71f371;">전사</option>                    		
+                    		</c:when>
+                    	</c:choose>
                         <option  disabled="disabled"> 공유 캘린더</option>
                         <c:if test="${shareCalList.size()>0}">
                         	<c:forEach items="${shareCalList}" varStatus="status" var="item">
@@ -383,8 +394,6 @@
                         	</c:forEach>
                         </c:if>
                     </select>
-                    <label class="input-group-text" for="create-share">공유 상대</label>
-                    <input type="text" id="Shared-partner" onclick="shareModalOpen()">
                     
                 </div>
                 <div class="input-group mb-3">
@@ -449,8 +458,22 @@
 	                        <label class="input-group-text" for="detail-category">일정범위</label>
 	                        <select class="form-select" id="detail-category" disabled onchange="changeCategoryColor(this)">
 	                            <option value="개인" style="color: #ffec63">개인</option>
-	                            <option value="부서" style="color: #28b9ff">부서</option>
-	                            <option value="전사" style="color: #71f371">전사</option>
+			                         <c:choose>
+			                    		<c:when test="${myInfo.title_no <=3 }">
+				                        	<option value="부서" style="color: #28b9ff;">부서</option>                   		
+			                    		</c:when>
+			                    		<c:otherwise>
+			                    			<option value="부서" style="color: #28b9ff;" disabled="disabled">부서</option>   
+			                    		</c:otherwise>
+			                    	</c:choose>
+			                    	<c:choose>			                    		
+			                    		<c:when test="${myInfo.title_no <=1 }">
+				                        	<option value="전사" style="color: #71f371;">전사</option>                    		
+			                    		</c:when>
+			                    		<c:otherwise>
+			                    			<option value="전사" style="color: #71f371;" disabled="disabled">전사</option>   
+			                    		</c:otherwise>
+			                    	</c:choose>
 	                            <c:forEach items="${shareCalList}" varStatus="status" var="item">
                         	 		<option value="${item.calendar_name}" style="color: ${item.calendar_color};" data-idx ="${item.calendar_idx}" data-type ="공유일정">공유일정${item.calendar_name}</option>                       	 	
                         		</c:forEach>
@@ -1149,8 +1172,11 @@
 	    // 캘린더 생성 버튼 클릭 시
 	    function createSharedCalendar() {
 	    	console.log(selectedEmployees);
+	    	/* var chkstr = document.getElementById('create-share-title').value;
+	    	chkStringLength(chkstr); */
 	    	if(selectedEmployees.length<=0){
 	    		showAlert('success', '최소한 한명이상을 선택 해주세요.');
+	    		
 	    	}else{
 	    		var infoList = {};
 	    		selectedEmployees.push({empNo : loginId});
@@ -1306,6 +1332,14 @@
 				document.getElementById("detail-end-date").value = document.getElementById("detail-start-date").value;
 			};
 		});
+		
+		// 글자 사이즈 체크
+		function chkStringLength(str){
+			if(srt.length>20){
+				alert("글자 크기가 20글자가 넘어갑니다 다시 입력해 주세요.")
+				location.reload();
+			}
+		}
 </script>
 <script src="/assets/js/showAlert.js"></script>
 

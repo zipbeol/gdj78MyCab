@@ -256,7 +256,7 @@
                             <div class="modal-body">
                             
 	                            <div class="row">
-	            					<div class="col-8">
+	            					<div class="col-9">
 	            						<div id="selectableCalendar" class=""></div>
 	            					</div>
 			            			<div class="col-3">
@@ -265,8 +265,8 @@
 			             						<h2 id="rsvBoxTitle">예약일정</h2>
 			             					</div>
 			             				<div class="col-auto ml-auto">
-			             					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
-				                        	일정추가
+			             					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenter" onclick="delRsv()">
+				                        	일정 삭제
 				                    		</button>
 			            				</div>
 			            				</div>												                    		
@@ -279,7 +279,7 @@
 									            		 style="background-color: lightblue" data-share-idx="${item.calendar_idx}" data-time="${timeString}">
 											            <label class="form-check-label" for="thirdCheckbox">${timeString}</label>
 											            <input class="form-check-input me-1 chk-no-${status.index}" type="checkbox" 
-											            value="" id="thirdCheckbox" onchange="changeChkBox(this)" data-chkbox="${status.index}">
+											            value="" id="thirdCheckbox" onchange="changeChkBox(this)" data-chkbox="${status.index}" disabled="disabled">
 									           		</div>
 											    </c:forEach>
 											</div>
@@ -422,7 +422,7 @@
 	          		if (item.new_file_name ==null) {
 	          			content += '<td class="text-center"><img src = "/assets/images/free-icon-no-image-11573069.png" class = "table-img"></td>'					
 					}else{
-						content += '<td class="text-center"><img src = "/photo/'+item.new_file_name+'" class = "table-img"></td>'
+						content += '<td class="text-center"><img src = "/api/imgView/'+item.new_file_name+'" class = "table-img"></td>'
 					}
 	             content += '<td class="text-center">' + item.resource_name+ '</td>'
 	             	+ '<td class="text-center">' + item.resource_category+ '</td>'
@@ -461,6 +461,7 @@
 						selectable: true,
 						selectMirror: true,
 						select: function (arg) {
+							console.log("sdagdgassad",arg);
 							getSelectRsvDate(arg.startStr,idx);
 						},
 						dateClick: false,
@@ -491,11 +492,13 @@
 								).done(function(response) {
 									console.log("요청 끝났지롱");
 								    var events = [];
-								    
+								    var stampDate = null;
+								    var date = null;
 								    // 첫 번째 AJAX 호출의 응답 처리
 								    var listResponse = response.revList; // response1[0]에 실제 응답 데이터가 들어 있습니다.
 								    for (var i = 0; i < listResponse.length; i++) {
 								        var res = listResponse[i];
+								        console.log("resresresres : " ,res);
 								        var event = {
 								            id: res.resource_reservation_idx,
 								            title: "예약",
@@ -503,9 +506,24 @@
 								            start: res.resource_reserve_start_date,
 								            end: res.resource_reserve_end_date,
 								            color: "lightcoral",
-								            category: res.resource_category
+								            category: res.resource_category,
+								            reserveId: res.resource_reservation_emp_no
 								        };
 								        events.push(event);
+								        date = res.resource_reserve_start_date.split('T')[0] 
+								        if(date != stampDate && res.resource_reservation_emp_no ==loginId){
+								        	stampDate = date;
+								        	var event = {
+								        			title : "내 예약",
+								        			start: date,
+								        			color: "lightcoral",
+								        			allDay: true,
+								        	}
+								        events.push(event);
+								        	
+								        }
+								        
+								        
 								    }
 		
 								    console.log('Events:', events);
@@ -518,9 +536,24 @@
 					});
 				
 					calendar.render();
+					var currdate = getCurrentDateTime();
 			});
 		};
 		
+		function getCurrentDateTime(){
+			  var now = new Date();
+			  var year = now.getFullYear();
+	          var month = String(now.getMonth() + 1).padStart(2, '0');
+	          var day = String(now.getDate()).padStart(2, '0');
+	          var hours = String(now.getHours()).padStart(2, '0');
+	          var minutes = String(now.getMinutes()).padStart(2, '0');
+	          var seconds = String(now.getSeconds()).padStart(2, '0');
+	          
+	          var curTime = year+'-'+month+'-'+day;
+	          console.log(curTime);
+			   
+			return curTime;
+		};
 		
 		// 날짜로 해당일자 예약정보 가져오기 0000-00-00
 	    var selectRsvInfo = [];
@@ -543,7 +576,8 @@
 	 					console.log(dayInfo.resource_reserve_start_date);
 	 					var rsvInfo ={
 	 							date : dayInfo.resource_reserve_start_date,
-	 							empNo : dayInfo.resource_reservation_emp_no
+	 							empNo : dayInfo.resource_reservation_emp_no,
+	 							resIdx : dayInfo.resource_reservation_idx
 	 					};
 	 					console.log("info의 값이다 임마 : " ,rsvInfo );
 	 					selectRsvDateInfo.push(rsvInfo);
@@ -558,28 +592,36 @@
 	 	        }
 	 	    }); 
 	    }
-	     
+	     var rsvIdxList = [];
 	     function updateTimeSlots(date) {
+	    	 rsvIdxList = [];
 	    	    var container = document.getElementById("timeSlotsContainer");
 	    	    var slots = container.getElementsByClassName("util-box-category");
 	    	    document.getElementById("rsvBoxTitle").innerHTML = date;
+	    	    var events = calendar.getEvents();
+                console.log("qr21452152151",events); // 이벤트들을 콘솔에 출력
 	    	    for (let slot of slots) {
 	    	        let timeString = slot.dataset.time;
 	    	        console.log("Comparing timeString:", timeString);
 	    	        console.log("Current reservations:", selectRsvDateInfo);
 
-	    	        if(selectRsvDateInfo.length == 0){
+	    	        if(selectRsvDateInfo.length <= 0){
+	    	        	console.log("하나도 없는디 ")
 	    	        	let checkboxes = slot.querySelectorAll('input[type="checkbox"]');
 	    	        	slot.style.backgroundColor = "lightblue";
-	    	        	checkboxes.disabled = false;
-	    	        	checkboxes.checked = false;
+	    	            for (let i = 0; i < checkboxes.length; i++) {
+	    	                checkboxes[i].disabled = true;
+	    	                checkboxes[i].checked = false;
+	    	            }
 	    	        }
 	    	       
 	    	        for (let i = 0; i < selectRsvDateInfo.length; i++) {
 					    let getInfo = selectRsvDateInfo[i];
 					    var dateString = getInfo.date;
 					    var getempNo = getInfo.empNo;
+					    var rsvIdx = getInfo.resIdx;
 					    console.log(getempNo);
+					    console.log("getInfogetInfogetInfo" , getInfo);
 					    
 					    let date = new Date(dateString);
 					    console.log("시간" + date);
@@ -595,9 +637,11 @@
 					    	if(getempNo === loginId){
 				    	        slot.style.backgroundColor = "violet"	
 				    	        //checkbox = slot.querySelector('input[type="checkbox"]');
-				    	        checkbox.disabled = false;
+				    	        checkbox.disabled = true;
 				    	        checkbox.checked = true;
 				    	        console.log("내가예약한거");
+				    	        rsvIdxList.push(rsvIdx);
+				    	        console.log("rsvIdxListrsvIdxListrsvIdxList"+rsvIdxList);
 				    	        break;
 					    	}else{
 				    	        slot.style.backgroundColor = "lightcoral"	
@@ -611,7 +655,7 @@
 					    }else{
 			    	        slot.style.backgroundColor = "lightblue";
 			    	        //checkbox = slot.querySelector('input[type="checkbox"]');
-			    	        checkbox.disabled = false;
+			    	        checkbox.disabled = true;
 			    	        checkbox.checked = false;
 			    	        console.log("예약안된거");
 			    	        
@@ -622,6 +666,37 @@
 	    	        
 	   		}
 	    }
+	     function delRsv(){
+             	if(rsvIdxList.length >0){
+	    	 	var isConfirmed = confirm('정말 해당일자 예약을 삭제하시겠습니까?');
+             		
+	            	if (isConfirmed) {
+		           		var jsonData = JSON.stringify(rsvIdxList);
+		           		$.ajax({
+		                    type: "POST",
+		                    url: "/resource/delRsv.ajax",
+		                    contentType: "application/json",
+		                    data: jsonData,
+		                    contentType:'application/json; charset=utf-8',
+		                    success: function(response) {
+		                   	 if(response.success >0){
+		                   		 alert("예약 삭제가 완료 되었습니다.");
+		                   		 location.reload();
+		                   	 }else{
+		                   		 alert("예약 삭제를 실패 했습니다..");
+		                   		 location.reload();
+		                   	 }
+		                        console.log("Success:", response);
+		                    },
+		                    error: function(error) {
+		                        console.error("Error:", error);
+		                    }
+		                });
+		            }
+             	}else{
+             		alert("삭제할 일정이 없습니다.");
+             	}
+	     }
 </script>
 
 </html>

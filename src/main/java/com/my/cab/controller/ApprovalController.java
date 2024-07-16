@@ -230,7 +230,7 @@ public class ApprovalController {
             if (Files.exists(file) && Files.isReadable(file)) {
                 byte[] fileContent = Files.readAllBytes(file);
                 String encodedString = Base64.getEncoder().encodeToString(fileContent);
-                model.addAttribute("fileContent", filename.substring(filename.indexOf("\\") + 1, filename.length()));
+                model.addAttribute("fileContent", filename);
                 return "approval/viewFile";
             } else {
                 model.addAttribute("errorMessage", "파일을 읽을 수 없습니다.");

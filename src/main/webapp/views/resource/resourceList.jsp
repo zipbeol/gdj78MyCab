@@ -213,7 +213,7 @@
 					                            <div class="col-1">
 					                                <div class="input-group" >
 					                                    <select id=search-mr-capacity name="search-mr-capacity">
-						                                	<option value="">날짜선택</option>
+						                                	<option value="">인원수 선택</option>
 						                                	<option value="1">1명</option>
 						                                	<option value="2">2명</option>
 						                                	<option value="3">3명</option>
@@ -267,7 +267,6 @@
 					                                        <th class="text-center" id="resorce_name" style="width: 20%;">회의실</th>
 					                                        <th class="text-center sortable" id="meeting_room_capacity" style="width: 15%;">인원</th>
 					                                        <th class="text-center sortable" id="resource_location" style="width: 10%;">위치</th>
-					                                        <th class="text-center" id="resource_meeting_content" style="width: 10%;">비고</th>
 					                                        <th class="text-center sortable" id="resource_state" style="width: 10%;">가능여부</th>
 					                                    </tr>
 					                                </thead>
@@ -328,8 +327,8 @@
 					                                    <select id= "search-car-category" class="form-control">
 					                                    	<option value="">전체</option>
 					                                    	<option value="소형">소형</option>
-					                                    	<option value="소형">중형</option>
-					                                    	<option value="소형">대형</option>
+					                                    	<option value="중형">중형</option>
+					                                    	<option value="대형">대형</option>
 					                                    </select> 
 					                            </div>
 					                            <div class="col-2 d-flex">
@@ -374,7 +373,6 @@
 					                                        <th class="text-center sortable" id="th-emp-name" style="width: 10%;">차종</th>
 					                                        <th class="text-center sortable" id="th-emp-name" style="width: 10%;">번호판</th>
 					                                        <th class="text-center sortable" id="th-title-name" style="width: 10%;">위치</th>
-					                                        <th class="text-center sortable" id="th-dept-name" style="width: 10%;">비고</th>
 					                                        <th class="text-center sortable" id="th-dept-name" style="width: 10%;">가능여부</th>
 					                                    </tr>
 					                                </thead>
@@ -431,7 +429,7 @@
 					                        </div>
 					                        <div class="row mb-3">
 					                            <div class="col-1">
-					                                    <input type="number" class="form-control " id="search-eq-category" name="search-eq-category" min="0"> 
+					                                    <input type="text" class="form-control " id="search-eq-category" name="search-eq-category" > 
 					                            </div>
 					                            <div class="col-2 d-flex">
 					                                <input type="text" class="form-control datePicker" id = "search-eq-date">
@@ -472,7 +470,6 @@
 					                                        <th class="text-center" id="resorce_idx" style="width: 20%;">비품</th>
 					                                        <th class="text-center sortable" id="th-emp-name" style="width: 10%;">분류</th>
 					                                        <th class="text-center sortable" id="th-title-name" style="width: 10%;">위치</th>
-					                                        <th class="text-center sortable" id="th-dept-name" style="width: 10%;">비고</th>
 					                                        <th class="text-center sortable" id="th-dept-name" style="width: 10%;">가능여부</th>
 					                                    </tr>
 					                                </thead>
@@ -570,58 +567,80 @@
     var currentPage = 1; // 현재 페이지 번호
 	var today = moment().format('YYYY/MM/DD');
 	var showPage =1;
-
- 
-$(document).ready(function(){
-	$('#pagination').twbsPagination('destroy');
-	getMrList(currentPage);	
 	
-});
- 
- // 탭 클릭 
- // 회의실
- $('#meetroom-list-tab').on('click', function(e) {
-	//카테고리 설정
-	resSerachCategory = "회의실"
-	filterStartDate = today
-	
-	$('#pagination').twbsPagination('destroy');
-	getMrList(currentPage);
-});
- 
-// 차량
- $('#car-list-tab').on('click', function(e) {
-	//카테고리 설정
-	resSerachCategory = "차량"
-	filterStartDate = today
-	$('#pagination').twbsPagination('destroy');
-    getCarList(currentPage);
-});
+	function resetVal(){
+		resSearchDate = '';
+ 		var startTime = '';
+ 		var endTime= '';
+ 		resStatus = '';
+ 		resOption = '';
+ 		resSearchStartTime = '';
+ 		resSearchEndTime = '';
+	}
 
-// 비품
- $('#equipment-list-tab').on('click', function(e) {
-	//카테고리 설정
-	resSerachCategory = "비품"
-	filterStartDate = today
-	$('#pagination').twbsPagination('destroy');
-	 getEqList(currentPage);
-});
-
-	function mrListSearch(){
+ 
+	$(document).ready(function(){
+		$('#mr-pagination').twbsPagination('destroy');
+		getMrList(currentPage);	
+		
+	});
+	 
+	 // 탭 클릭 
+	 // 회의실
+	 $('#meetroom-list-tab').on('click', function(e) {
+		 resetVal()
+		//카테고리 설정
 		resSerachCategory = "회의실"
 		filterStartDate = today
+		
+		$('#mr-pagination').twbsPagination('destroy');
+		currentPage = 1;
+		getMrList(currentPage);
+	});
+	 
+	// 차량
+	 $('#car-list-tab').on('click', function(e) {
+		 resetVal()
+		//카테고리 설정
+		resSerachCategory = "차량"
+		filterStartDate = today
+		$('#car-pagination').twbsPagination('destroy');
+		currentPage = 1;
+	    getCarList(currentPage);
+	});
+	
+	// 비품
+	 $('#equipment-list-tab').on('click', function(e) {
+		 resetVal()
+		//카테고리 설정
+		resSerachCategory = "비품"
+		filterStartDate = today
+		$('#eq-pagination').twbsPagination('destroy');
+		currentPage = 1;
+		 getEqList(currentPage);
+	});
+
+	function mrListSearch(){
+		$('#mr-pagination').twbsPagination('destroy');
+		resSerachCategory = "회의실"
+		filterStartDate = today
+		currentPage = 1;
 		getMrList(currentPage);
 	}
 	function carListSearch(){
+		$('#car-pagination').twbsPagination('destroy');
 		resSerachCategory = "차량"
 		filterStartDate = today
+		currentPage = 1;
 	    getCarList(currentPage);
 	}
 
 	function eqListSearch(){
-		resSerachCategory = "차량"
+		$('#eq-pagination').twbsPagination('destroy');
+		resSerachCategory = "비품"
 		filterStartDate = today
-	    getCarList(currentPage);
+		currentPage = 1;
+	    getEqList(currentPage);
 	}
 
 
@@ -633,8 +652,8 @@ $(document).ready(function(){
  		var endTime= document.getElementById("search-mr-end-time").value;
  		resStatus = document.getElementById("search-mr-status").value;
  		resOption = document.getElementById("search-mr-capacity").value;
- 		resSearchStartTime = setDateTimeFormat(resSearchDate,startTime)
- 		resSearchEndTime = setDateTimeFormat(resSearchDate,endTime)
+ 		resSearchStartTime = setDateTimeFormat(resSearchDate,startTime);
+ 		resSearchEndTime = setDateTimeFormat(resSearchDate,endTime);
  		
  	}else if(resSerachCategory == '차량'){
  		resSearchDate = document.getElementById("search-car-date").value;
@@ -642,17 +661,17 @@ $(document).ready(function(){
  		var endTime= document.getElementById("search-car-end-time").value;
  		resStatus = document.getElementById("search-car-status").value;
  		resOption = document.getElementById("search-car-category").value;
- 		resSearchStartTime = setDateTimeFormat(resSearchDate,startTime)
- 		resSearchEndTime = setDateTimeFormat(resSearchDate,endTime)
+ 		resSearchStartTime = setDateTimeFormat(resSearchDate,startTime);
+ 		resSearchEndTime = setDateTimeFormat(resSearchDate,endTime);
  	}else if(resSerachCategory == '비품'){
  		resSearchDate = document.getElementById("search-eq-date").value;
  		var startTime = document.getElementById("search-eq-start-time").value;
  		var endTime= document.getElementById("search-eq-end-time").value;
  		resStatus = document.getElementById("search-eq-status").value;
  		resOption = document.getElementById("search-eq-category").value;
- 		resSearchStartTime = setDateTimeFormat(resSearchDate,startTime)
+ 		resSearchStartTime = setDateTimeFormat(resSearchDate,startTime);
  		resSearchEndTime = setDateTimeFormat(resSearchDate,endTime)
- 	}
+ 	};
  	
  }
  
@@ -802,7 +821,6 @@ $(document).ready(function(){
              content += '<td class="text-center">' + item.resource_name+ '</td>'
              	+ '<td class="text-center">' + item.meeting_room_capacity+ '</td>'
              	+ '<td class="text-center">' + item.resource_location+ '</td>'
-             	+ '<td class="text-center">' + item.resource_meeting_content+ '</td>'
              	+ '<td class="text-center">' + item.resource_state+ '</td>'
                 + '</tr>';
          }
@@ -833,7 +851,6 @@ $(document).ready(function(){
              	+ '<td class="text-center">' + item.company_car_category+ '</td>'
              	+ '<td class="text-center">' + item.company_car_license_plate+ '</td>'
              	+ '<td class="text-center">' + item.resource_location+ '</td>'
-             	+ '<td class="text-center">' + item.resource_meeting_content+ '</td>'
              	+ '<td class="text-center">' + item.resource_state+ '</td>'
                 + '</tr>';
          }
@@ -863,7 +880,6 @@ $(document).ready(function(){
              content += '<td class="text-center">' + item.resource_name+ '</td>'
              	+ '<td class="text-center">' + item.resource_equipment_category+ '</td>'
              	+ '<td class="text-center">' + item.resource_location+ '</td>'
-             	+ '<td class="text-center">' + item.resource_meeting_content+ '</td>'
              	+ '<td class="text-center">' + item.resource_state+ '</td>'
                 + '</tr>';
          }

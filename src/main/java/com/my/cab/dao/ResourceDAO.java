@@ -56,4 +56,6 @@ public interface ResourceDAO {
 
 	int getmyReservationListPage(Map<String, Object> param);
 
+	int delRsv(Integer idx);
+
 }

@@ -141,4 +141,11 @@ public class ResourceController {
 		logger.info("내 예약 리스트"+param.get("empNo"));
 		return resourceService.myReservationList(param);
 	}
+	
+	@RequestMapping(value = "resource/delRsv.ajax")
+	@ResponseBody
+	public Map<String, Object> delRsv(@RequestBody List<Integer> param){
+		logger.info("삭제" + param);
+		return resourceService.delRsv(param);
+	}
 }

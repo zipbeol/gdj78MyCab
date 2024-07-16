@@ -37,6 +37,7 @@ public class CalendarController {
 	@RequestMapping(value = "calendar/calendar.go")
 	public String calendarGo(Model model, HttpSession session) {
 		String loginId = (String) session.getAttribute("loginId");
+		EmpDTO myInfo = calendarService.getMyInfo(loginId);
 		List<EmpDTO> empList = calendarService.getEmpInfo();
 		List<String> deptList = calendarService.getDeptInfo(); 
 		List<CalendarDTO> shareCalList = calendarService.getShareCalInfo(loginId);
@@ -48,6 +49,7 @@ public class CalendarController {
 		model.addAttribute("empList",empList);
 		model.addAttribute("deptList",deptList);
 		model.addAttribute("shareCalList",shareCalList);
+		model.addAttribute("myInfo",myInfo);
 		
 		logger.info("일정관리 메인페이지 진입");
 		

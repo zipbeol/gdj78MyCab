@@ -187,20 +187,6 @@
                     
                 </ul>
             </li>
-            <li id="menu-log" class="treeview">
-                <a href="#!">
-                    <i class="bi bi-terminal"></i>
-                    <span class="menu-text">로그 관리</span>
-                </a>
-                <ul class="treeview-menu">
-                    <li>
-                        <a id="menu-log-1" href="/mail/admin/list.go">메일 로그</a>
-                    </li>
-                    <li>
-                        <a id="menu-log-2" href="/chat/admin/list.go">채팅 로그</a>
-                    </li>
-                </ul>
-            </li>
         </ul>
     </div>
 

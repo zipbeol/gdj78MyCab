@@ -67,16 +67,15 @@ public class FileDownloadController {
     }
 
     // 대현
-    @GetMapping("/document/{filePath}")
-    public ResponseEntity<Resource> loadDocument(@PathVariable String filePath) {
-        logger.info(filePath);
-        Resource resource = new FileSystemResource(uploadDir + "/startApprover/" + filePath);
+    @GetMapping("/document/{folder}/{fileName}")
+    public ResponseEntity<Resource> loadDocument(@PathVariable String folder, @PathVariable String fileName) {
+        Resource resource = new FileSystemResource(uploadDir + "/" + folder + "/" + fileName);
         // 2. 보내질 파일의 형태를 지정해준다
         // 헤더에 보내질 파일의 형태를 지정해준다
         HttpHeaders header = new HttpHeaders();
 
         try {
-            String type = Files.probeContentType(Paths.get(uploadDir + "/startApprover/" + filePath)); // 경로를 주면 해당 파일의 mime-type 을 알아낸다
+            String type = Files.probeContentType(Paths.get(uploadDir + "/" + folder + "/" + fileName)); // 경로를 주면 해당 파일의 mime-type 을 알아낸다
             header.add("content-type", type);
         } catch (IOException e) {
             e.getStackTrace();

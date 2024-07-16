@@ -32,8 +32,9 @@ public class MainService {
     private String uploadDir;
 
 	String driver_id = "webdriver.chrome.driver";
+
 	String driver_path = uploadDir+"/chromedriver.exe";
-	
+
 	WebDriver driver = null; // 커넥션하고 비슷한거 이게 있어야 접속이 된다.
 	ChromeOptions options = null;
 	

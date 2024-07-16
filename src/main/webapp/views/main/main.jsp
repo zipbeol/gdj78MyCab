@@ -337,71 +337,71 @@
 											    <div class="main_map" id="all_img_map">
 												    <div class="data-point Seoul up" id="m_11" style="top: 11%; left: 25%;">
 							                            <span class="title">서울</span>
-							                            <span class="price" id="SIDO01_AVG_P">loading</span>
+							                            <span class="price" id="SIDO01_AVG_P">1781</span>
 							                        </div>
 							                        <div class="data-point Incheon up" id="m_28" style="top: 12%; left: 12%;">
 							                            <span class="title">인천</span>
-							                            <span class="price" id="SIDO15_AVG_P">loading</span>
+							                            <span class="price" id="SIDO15_AVG_P">1717</span>
 							                        </div>
 							                        <div class="data-point Gyeonggi up" id="m_41" style="top: 6%; left: 36%;">
 							                            <span class="title">경기</span>
-							                            <span class="price" id="SIDO02_AVG_P">loading</span>
+							                            <span class="price" id="SIDO02_AVG_P">1719</span>
 							                        </div>
 							                        <div class="data-point Gangwon up" id="m_42" style="top: 10%; left: 60%;">
 							                            <span class="title">강원</span>
-							                            <span class="price" id="SIDO03_AVG_P">loading</span>
+							                            <span class="price" id="SIDO03_AVG_P">1718</span>
 							                        </div>
 							                        <div class="data-point Chungbug up" id="m_43" style="top: 26%; left: 47%;">
 							                            <span class="title">충북</span>
-							                            <span class="price" id="SIDO04_AVG_P">loading</span>
+							                            <span class="price" id="SIDO04_AVG_P">1716</span>
 							                        </div>
 							                        <div class="data-point Chungnam down" id="m_44" style="top: 32%; left: 19%;">
 							                            <span class="title">충남</span>
-							                            <span class="price" id="SIDO05_AVG_P">loading</span>
+							                            <span class="price" id="SIDO05_AVG_P">1712</span>
 							                        </div>
 							                        <div class="data-point Jeonbuk down" id="m_45" style="top: 49%; left: 21%;">
 							                            <span class="title">전북</span>
-							                            <span class="price" id="SIDO06_AVG_P">loading</span>
+							                            <span class="price" id="SIDO06_AVG_P">1702</span>
 							                        </div>
 							                        <div class="data-point Jeonam down" id="m_46" style="top: 71%; left: 12%;">
 							                            <span class="title">전남</span>
-							                            <span class="price" id="SIDO07_AVG_P">loading</span>
+							                            <span class="price" id="SIDO07_AVG_P">1713</span>
 							                        </div>
 							                        <div class="data-point Gyeongbuk down" id="m_47" style="top: 34%; left: 74%;">
 							                            <span class="title">경북</span>
-							                            <span class="price" id="SIDO08_AVG_P">loading</span>
+							                            <span class="price" id="SIDO08_AVG_P">1702</span>
 							                        </div>
 							                        <div class="data-point Gyeongnam down" id="m_48" style="top: 59%; left: 53%;">
 							                            <span class="title">경남</span>
-							                            <span class="price" id="SIDO09_AVG_P">loading</span>
+							                            <span class="price" id="SIDO09_AVG_P">1697</span>
 							                        </div>
 							                        <div class="data-point Jeju up" id="m_50" style="top: 88%; left: 17%;">
 							                            <span class="title">제주</span>
-							                            <span class="price" id="SIDO11_AVG_P">loading</span>
+							                            <span class="price" id="SIDO11_AVG_P">1761</span>
 							                        </div>
 							                        <div class="data-point Busan down" id="m_26" style="top: 60%; left: 77%;">
 							                            <span class="title">부산</span>
-							                            <span class="price" id="SIDO10_AVG_P">loading</span>
+							                            <span class="price" id="SIDO10_AVG_P">1701</span>
 							                        </div>
 							                        <div class="data-point Daegu down" id="m_27" style="top: 46%; left: 71%;">
 							                            <span class="title">대구</span>
-							                            <span class="price" id="SIDO14_AVG_P">loading</span>
+							                            <span class="price" id="SIDO14_AVG_P">1694</span>
 							                        </div>
 							                        <div class="data-point Gwangju down" id="m_29" style="top: 60%; left: 19%;">
 							                            <span class="title">광주</span>
-							                            <span class="price" id="SIDO16_AVG_P">loading</span>
+							                            <span class="price" id="SIDO16_AVG_P">1697</span>
 							                        </div>
 							                        <div class="data-point Daejeon up" id="m_30" style="top: 39%; left: 36%;">
 							                            <span class="title">대전</span>
-							                            <span class="price" id="SIDO17_AVG_P">loading</span>
+							                            <span class="price" id="SIDO17_AVG_P">1721</span>
 							                        </div>
 							                        <div class="data-point Ulsan down" id="m_31" style="top: 50%; left: 88%;">
 							                            <span class="title">울산</span>
-							                            <span class="price" id="SIDO18_AVG_P">loading</span>
+							                            <span class="price" id="SIDO18_AVG_P">1691</span>
 							                        </div>
 							                        <div class="data-point Saison up" id="m_36" style="top: 28%; left: 32%;">
 							                            <span class="title">세종</span>
-							                            <span class="price" id="SIDO19_AVG_P">loading</span>
+							                            <span class="price" id="SIDO19_AVG_P">1716</span>
 							                        </div>
 												</div>
 											</div>
@@ -544,7 +544,7 @@
 	}
 	
 	$(document).ready(function(){
-		getFuelInfo();
+		//getFuelInfo();
 		getCalendar();
 		getMyappList();
 			

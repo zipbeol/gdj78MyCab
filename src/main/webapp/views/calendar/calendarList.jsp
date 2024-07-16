@@ -205,9 +205,6 @@
   <body>
     <!-- Page wrapper start -->
     
-    <div>
-    	<input type="text" id="test11">
-    </div>
 	<div class="page-wrapper">
 
 		<!-- Main container start -->
@@ -596,7 +593,7 @@
     <script src="/assets/vendor/calendar/js/main.min.js"></script>
     <script src="/assets/vendor/calendar/custom/mycab-cal.js"></script>
 
-    
+    <script src="/assets/js/localStorage.js"></script>
     
     <!-- 모멘트 -->
     <script src="/assets/js/moment.min.js"></script>

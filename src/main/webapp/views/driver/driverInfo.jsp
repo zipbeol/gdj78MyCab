@@ -105,10 +105,6 @@
         #accident-detail-description {
             resize: none;
         }
-        .info-value{
-            font-size: 15px;
-            white-space: nowrap;
-        }
     </style>
 
 </head>
@@ -196,8 +192,10 @@
                                                 <h1>기사 정보</h1>
                                             </div>
                                             <div class="col-4 text-end">
-                                                <input type="button" class="btn btn-primary" value="수정" id="edit-button">
-                                                <input type="button" class="btn btn-success" value="저장" id="save-button" style="display: none;">
+                                                <input type="button" class="btn btn-primary" value="수정"
+                                                       id="edit-button">
+                                                <input type="button" class="btn btn-success" value="저장" id="save-button"
+                                                       style="display: none;">
                                             </div>
                                         </div>
                                         <div class="row">
@@ -205,66 +203,63 @@
                                         </div>
                                         <div class="row">
                                             <div class="col">
-                                                <div class="row">
-                                                    <div class="col-12 mb-3">기사 입사일: ${driverInfo.driver_registration_date}</div>
-
-                                                    <!-- 사진 섹션 -->
-                                                    <div class="col-3">
-                                                        <div class="col-6">기사 사진</div>
-                                                        <img src="/api/imgView/${driverInfo.driver_photo}" style="width: 300px; height: 300px;" id="driver-photo">
-                                                        <input type="file" id="driver-photo-input" data-value="driver-photo" style="display: none;" class="form-control">
-                                                    </div>
-
-                                                    <div class="col-4">
-                                                        <br><br><br><br>
-                                                        <div class="row">
-                                                            <div class="col-3">기사 이름:</div>
-                                                            <div class="col-3 info-value mb-3" id="driver-name" data-value="${driverInfo.driver_name}">${driverInfo.driver_name}</div>
+                                                <dl class="row">
+                                                    <dt class="col-12 mb-3">기사
+                                                        입사일: ${driverInfo.driver_registration_date}</dt>
+                                                    <dt class="col-6">기사 사진</dt>
+                                                    <dt class="col-6">면허 사진</dt>
+                                                    <dd class="col-6 d-flex">
+                                                        <img src="/api/imgView/${driverInfo.driver_photo}"
+                                                             style="width: 150px; height: 150px;" id="driver-photo">
+                                                        <input type="file" id="driver-photo-input"
+                                                               data-value="driver-photo" style="display: none;"
+                                                               class="form-control">
+                                                    </dd>
+                                                    <dd class="col-6 d-flex">
+                                                        <img src="/api/imgView/${driverInfo.driver_taxi_license_photo}"
+                                                             style="width: 200px; height: 150px;"
+                                                             id="driver-taxi-license-photo">
+                                                        <input type="file" id="license-photo-input"
+                                                               data-value="driver-taxi-license-photo"
+                                                               style="display: none;" class="form-control">
+                                                    </dd>
+                                                    <dt class="col-4">기사 이름:</dt>
+                                                    <dt class="col-4">기사 재직 여부:</dt>
+                                                    <dt class="col-4">기사 연락처:</dt>
+                                                    <dd class="col-4 info-value mb-3" id="driver-name"
+                                                        data-value="${driverInfo.driver_name}">${driverInfo.driver_name}</dd>
+                                                    <dd class="col-4 info-value mb-3" id="driver-is-retired"
+                                                        data-value="${driverInfo.driver_is_retired}">
+                                                        <c:choose>
+                                                            <c:when test="${driverInfo.driver_is_retired == 0}">
+                                                                재직중
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                퇴사
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </dd>
+                                                    <dd class="col-4 info-value mb-3" id="driver-phone"
+                                                        data-value="${driverInfo.driver_phone}">
+                                                        ${fn:substring(driverInfo.driver_phone, 0, 3)}-${fn:substring(driverInfo.driver_phone, 3, 7)}-${fn:substring(driverInfo.driver_phone, 7, 11)}
+                                                    </dd>
+                                                    <dt class="col-6">기사 주소:</dt>
+                                                    <dt class="col-6">기사 상세 주소:</dt>
+                                                    <dd class="col-6">
+                                                        <div class="col-6">
+                                                            <span class="info-value" id="driver-address"
+                                                                  data-value="${driverInfo.driver_address}">${driverInfo.driver_address}</span>
                                                         </div>
-                                                        <div class="row">
-                                                            <div class="col-3">기사 재직 여부:</div>
-                                                            <div class="col-3 info-value mb-3" id="driver-is-retired" data-value="${driverInfo.driver_is_retired}">
-                                                                <c:choose>
-                                                                    <c:when test="${driverInfo.driver_is_retired == 0}">
-                                                                        재직중
-                                                                    </c:when>
-                                                                    <c:otherwise>
-                                                                        퇴사
-                                                                    </c:otherwise>
-                                                                </c:choose>
-                                                            </div>
+                                                    </dd>
+                                                    <dd class="col-6">
+                                                        <div class="col-6">
+                                                            <span class="info-value" id="driver-address-detail"
+                                                                  data-value="${driverInfo.driver_address_detail}">${driverInfo.driver_address_detail}</span>
                                                         </div>
-                                                        <div class="row">
-                                                            <div class="col-3">기사 연락처:</div>
-                                                            <div class="col-3 info-value mb-3" id="driver-phone" data-value="${driverInfo.driver_phone}">
-                                                                ${fn:substring(driverInfo.driver_phone, 0, 3)}-${fn:substring(driverInfo.driver_phone, 3, 7)}-${fn:substring(driverInfo.driver_phone, 7, 11)}
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-3">기사 주소:</div>
-                                                            <div class="col-3 mb-3">
-                                                                <span class="info-value" id="driver-address" data-value="${driverInfo.driver_address}">${driverInfo.driver_address}</span>
-
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-3">기사 상세 주소:</div>
-                                                            <div class="col-3 mb-3">
-                                                                <span class="info-value" id="driver-address-detail" data-value="${driverInfo.driver_address_detail}">${driverInfo.driver_address_detail}</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- 면허 사진 -->
-                                                    <div class="col-4">
-                                                        <div class="col-6">면허 사진</div>
-                                                        <img src="/api/imgView/${driverInfo.driver_taxi_license_photo}" style="width: 500px; height: 300px;" id="driver-taxi-license-photo">
-                                                        <input type="file" id="license-photo-input" data-value="driver-taxi-license-photo" style="display: none;" class="form-control">
-                                                    </div>
-                                                </div>
+                                                    </dd>
+                                                </dl>
                                             </div>
                                         </div>
-
                                         <hr/>
                                         <div class="row d-flex">
                                             <div class="col-10 mb-2">
@@ -272,7 +267,9 @@
                                             </div>
                                             <div class="col-2 text-end">
                                                 <!-- 사고 이력 등록 버튼 -->
-                                                <input type="button" value="등록" class="btn btn-primary" onclick="getTaxiList()" data-bs-toggle="modal" data-bs-target="#accidentModal">
+                                                <input type="button" value="등록" class="btn btn-primary"
+                                                       onclick="getTaxiList()" data-bs-toggle="modal"
+                                                       data-bs-target="#accidentModal">
                                             </div>
                                             <!-- 검색창 시작 -->
                                             <div class="search-filter-container border border-2 p-3 rounded mb-3">
@@ -280,47 +277,68 @@
                                                     <div class="col-10">
                                                     </div>
                                                     <div class="col-2 text-end d-md-flex justify-content-md-end gap-2">
-                                                        <input type="button" class="btn btn-secondary" onclick="filterReset()" value="초기화">
+                                                        <input type="button" class="btn btn-secondary"
+                                                               onclick="filterReset()"
+                                                               value="초기화">
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-4">
-                                                        <label for="filter-accident-reg-date" class="form-label">사고일 필터</label>
+                                                        <label for="filter-accident-reg-date"
+                                                               class="form-label">사고일 필터</label>
                                                     </div>
                                                     <div class="col-2">
-                                                        <label for="filter-accident-is-driver-fault" class="form-label">기사책임 필터</label>
+                                                        <label for="filter-accident-is-driver-fault"
+                                                               class="form-label">기사책임 필터</label>
                                                     </div>
                                                     <div class="col-2">
-                                                        <label for="search-category-accident" class="form-label">검색 카테고리</label>
+                                                        <label for="search-category-accident"
+                                                               class="form-label">검색 카테고리</label>
                                                     </div>
                                                     <div class="col-4">
-                                                        <label for="search-text-accident" class="form-label">검색</label>
+                                                        <label for="search-text-accident"
+                                                               class="form-label">검색</label>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <div class="col-4">
-                                                        <div class="input-group" id="filter-accident-reg-date-div">
-                                                            <input type="text" class="form-control datepicker-range accident-search-filter" id="filter-accident-reg-date">
-                                                            <span class="input-group-text"><i class="bi bi-calendar2-range"></i></span>
+                                                        <div class="input-group"
+                                                             id="filter-accident-reg-date-div">
+                                                            <input type="text"
+                                                                   class="form-control datepicker-range accident-search-filter"
+                                                                   id="filter-accident-reg-date">
+                                                            <span class="input-group-text"><i
+                                                                    class="bi bi-calendar2-range"></i></span>
                                                         </div>
                                                     </div>
                                                     <div class="col-2">
-                                                        <select class="form-select accident-is-driver-fault accident-search-filter" id="filter-accident-is-driver-fault">
+                                                        <select class="form-select accident-is-driver-fault accident-search-filter"
+                                                                id="filter-accident-is-driver-fault">
                                                             <option value="">기사책임 여부</option>
                                                             <option value="1">예</option>
                                                             <option value="0">아니오</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-2 d-flex">
-                                                        <select class="form-select accident-search-filter" id="search-category-accident">
+                                                        <select class="form-select accident-search-filter"
+                                                                id="search-category-accident">
                                                             <option value="">카테고리</option>
-                                                            <option value="accident_history_taxi_license_plate">사고 번호판</option>
-                                                            <option value="accident_history_location">사고 장소</option>
-                                                            <option value="accident_history_description">사고 내용</option>
+                                                            <option value="accident_history_taxi_license_plate">
+                                                                사고 번호판
+                                                            </option>
+                                                            <option value="accident_history_location">
+                                                                사고 장소
+                                                            </option>
+                                                            <option value="accident_history_description">
+                                                                사고 내용
+                                                            </option>
                                                         </select>
                                                     </div>
                                                     <div class="col-4">
-                                                        <input type="text" class="form-control accident-search-filter" id="search-text-accident" placeholder="검색 단어를 입력해 주세요.">
+                                                        <input type="text"
+                                                               class="form-control accident-search-filter"
+                                                               id="search-text-accident"
+                                                               placeholder="검색 단어를 입력해 주세요.">
                                                     </div>
                                                 </div>
                                             </div>
@@ -331,11 +349,34 @@
                                                     <table class="table align-middle table-hover m-0">
                                                         <thead>
                                                         <tr>
-                                                            <th class="sortable" id="th-accident-history-license-plate" style="width: 20%;" data-value="accident-history-license-plate">사고 택시</th>
-                                                            <th class="sortable" id="th-accident-history-reg-date" style="width: 15%;" data-value="accident-history-reg-date">사고일</th>
-                                                            <th class="sortable" id="th-accident-history-location" style="width: 25%;" data-value="accident-history-location">사고 장소</th>
-                                                            <th class="sortable" id="th-accident-history-description" style="width: 30%;" data-value="accident-history-description">사고 내용</th>
-                                                            <th class="sortable" id="th-accident-history-is-driver-fault" style="width: 10%;" data-value="accident-history-is-driver-fault">기사 책임</th>
+                                                            <th class="sortable"
+                                                                id="th-accident-history-license-plate"
+                                                                style="width: 20%;"
+                                                                data-value="accident-history-license-plate">사고 택시
+                                                            </th>
+                                                            <th class="sortable"
+                                                                id="th-accident-history-reg-date"
+                                                                style="width: 15%;"
+                                                                data-value="accident-history-reg-date">
+                                                                사고일
+                                                            </th>
+                                                            <th class="sortable"
+                                                                id="th-accident-history-location"
+                                                                style="width: 25%;"
+                                                                data-value="accident-history-location">
+                                                                사고 장소
+                                                            </th>
+                                                            <th class="sortable"
+                                                                id="th-accident-history-description"
+                                                                style="width: 30%;"
+                                                                data-value="accident-history-description">
+                                                                사고 내용
+                                                            </th>
+                                                            <th class="sortable"
+                                                                id="th-accident-history-is-driver-fault"
+                                                                style="width: 10%;"
+                                                                data-value="accident-history-is-driver-fault">기사 책임
+                                                            </th>
                                                         </tr>
                                                         </thead>
                                                         <tbody id="accident-list">
@@ -347,7 +388,8 @@
 
                                             <!-- 페이지 네이션 시작 -->
                                             <nav aria-label="Page navigation example" class="mt-3">
-                                                <ul class="pagination justify-content-center" id="pagination"></ul>
+                                                <ul class="pagination justify-content-center"
+                                                    id="pagination"></ul>
                                             </nav>
                                             <!-- 페이지 네이션 종료 -->
                                         </div>
@@ -745,11 +787,8 @@
         $('.info-value').each(function () {
             var value = $(this).data('value') + '';
             var id = $(this).attr('id');
-            console.log(id);
             if (id === 'driver-address') {
-                console.log("인포");
-                var pp = $(this).html('<input type="text" class="form-control" id="' + id + '" value="' + value + '" onclick="searchAddress()" tabindex="-1" readonly>');
-                console.log(pp);
+                $(this).html('<input type="text" class="form-control" id="' + id + '" value="' + value + '" onclick="searchAddress()" tabindex="-1" readonly>');
             } else if (id === 'driver-is-retired') {
                 var selectHtml = '<select class="form-select" id="' + id + '">'
                     + '<option value="1"' + (value == 1 ? ' selected' : '') + '>퇴사</option>'

@@ -5,7 +5,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>My Cab - Finance Profit</title>
+<title>My Cab - 대시 보드</title>
 <!-- Meta -->
 <meta name="description" content="Marketplace for Bootstrap Admin Dashboards">
 <meta name="author" content="Bootstrap Gallery">
@@ -87,7 +87,7 @@
                     <ol class="breadcrumb d-none d-lg-flex ms-3">
                         <li class="breadcrumb-item"><a href="/"><i class="bi bi-house lh-1"></i></a> <a href="/" class="text-decoration-none">메인</a></li>
                         <li class="breadcrumb-item"><a href="#!" class="text-decoration-none">재무 관리</a></li>
-                        <li class="breadcrumb-item"><a href="/finance/profit/list.go" class="text-decoration-none">수익</a></li>
+                        <li class="breadcrumb-item"><a href="/finance/profit/list.go" class="text-decoration-none">대시 보드</a></li>
                     </ol>
                     <!-- Breadcrumb end -->
 
@@ -222,7 +222,7 @@
 
     <!-- Custom JS files -->
     <script src="/assets/js/custom.js"></script>
-    <script src="/assets/js/LocalStorage.js"></script>
+    <script src="/assets/js/localStorage.js"></script>
     <!-- 페이지네이션 -->
     <script src="/assets/js/jquery.twbsPagination.min.js"></script>
     <!-- Chart.js -->

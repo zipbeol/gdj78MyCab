@@ -33,6 +33,18 @@
 <link rel="stylesheet" href="/assets/css/default.css">
 <style>
 /* 기존 CSS 스타일 */
+.chart-container {
+    position: relative;
+}
+#revenueChart, #expenseChart {
+    height: 300px; /* Adjusted height for the bar charts */
+}
+#profitChart {
+    height: 400px; /* Increased height for the profit chart */
+}
+#revenuePieChart, #expensePieChart {
+    height: 250px; /* Decreased height for the pie charts */
+}
 </style>
 </head>
 
@@ -95,6 +107,7 @@
                             <div class="col-md-3">
                                 <label for="filterYear" class="form-label">연도</label>
                                 <select id="filterYear" class="form-control">
+                                    <!-- 연도 옵션은 JavaScript에서 동적으로 추가 -->
                                     <option value="2024">2024년</option>
                                 </select>
                             </div>
@@ -153,19 +166,19 @@
                                                     <canvas id="expenseChart"></canvas>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
                                                 <div class="chart-container">
                                                     <h2 class="chart-title">월 별 손익</h2>
                                                     <canvas id="profitChart"></canvas>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-3">
                                                 <div class="chart-container">
                                                     <h2 class="chart-title">수익</h2>
                                                     <canvas id="revenuePieChart"></canvas>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-3">
                                                 <div class="chart-container">
                                                     <h2 class="chart-title">지출</h2>
                                                     <canvas id="expensePieChart"></canvas>
@@ -209,14 +222,39 @@
 
     <!-- Custom JS files -->
     <script src="/assets/js/custom.js"></script>
-    <script src="/assets/js/localStorage.js"></script>
+    <script src="/assets/js/LocalStorage.js"></script>
     <!-- 페이지네이션 -->
     <script src="/assets/js/jquery.twbsPagination.min.js"></script>
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- AJAX 및 모달 스크립트 -->
     <script>
-    
+    $(document).ready(function() {
+        function updateEndMonthOptions() {
+            const startMonth = parseInt($('#startMonth').val());
+            $('#endMonth option').each(function() {
+                const optionValue = parseInt($(this).val());
+                if (optionValue < startMonth) {
+                    $(this).attr('disabled', true);
+                } else {
+                    $(this).attr('disabled', false);
+                }
+            });
+
+            // If the currently selected endMonth is less than the startMonth, reset it to the startMonth
+            const endMonth = parseInt($('#endMonth').val());
+            if (endMonth < startMonth) {
+                $('#endMonth').val(startMonth);
+            }
+        }
+
+        $('#startMonth').change(function() {
+            updateEndMonthOptions();
+        });
+
+        // Initial update
+        updateEndMonthOptions();
+    });
     $(document).ready(function() {
     	$('#startMonth option:selected').change(function() {
             var selectedValue = $(this).val();

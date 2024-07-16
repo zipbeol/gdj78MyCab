@@ -310,42 +310,6 @@
 									                </div>
 									            </div>
 									        </div>
-									        <div class="row mt-5">
-									            <div class="col-12">
-									                <div class="card">
-									                    <div class="card-header">
-									                        <h4 class="card-title">예약된 자원 목록</h4>
-									                    </div>
-									                    <div class="card-body">
-									                        <table class="table table-bordered">
-									                            <thead>
-									                                <tr>
-									                                    <th>자원 타입</th>
-									                                    <th>자원 이름</th>
-									                                    <th>예약 날짜</th>
-									                                    <th>시작 시간</th>
-									                                    <th>종료 시간</th>
-									                                    <th>수정</th>
-									                                    <th>삭제</th>
-									                                </tr>
-									                            </thead>
-									                            <tbody>
-									                                <tr>
-									                                    <td>회의실</td>
-									                                    <td>회의실 A</td>
-									                                    <td>2024-07-06</td>
-									                                    <td>10:00</td>
-									                                    <td>12:00</td>
-									                                    <td><button class="btn btn-warning btn-sm">수정</button></td>
-									                                    <td><button class="btn btn-danger btn-sm">삭제</button></td>
-									                                </tr>
-									                                <!-- 예약된 자원 데이터가 여기에 추가됩니다 -->
-									                            </tbody>
-									                        </table>
-									                    </div>
-									                </div>
-									            </div>
-									        </div>
 									    </div>
 										</div>
 										<!-- 기본 정보 -->

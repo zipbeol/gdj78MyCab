@@ -102,7 +102,7 @@
 		]]>
 		<if test='resOption != ""'>
 			<![CDATA[
-				AND rcc.company_car_category = #{resOption}
+				AND rcc.company_car_category  LIKE CONCAT('%', #{resOption}, '%')
 			]]>
 		</if>
 		group by r.resource_idx ORDER BY r.resource_idx DESC LIMIT	#{start},#{pagePerCnt}	
@@ -125,7 +125,7 @@
 		]]>
 		<if test='resOption != ""'>
 			<![CDATA[
-				AND rcc.company_car_capacity >= #{resOption}
+				AND rcc.company_car_category  LIKE CONCAT('%', #{resOption}, '%')
 			]]>
 		</if>
 	</select>
@@ -147,7 +147,7 @@
 		)
 		]]>
 		<if test='resOption != ""'>
-				AND e2.resource_equipment_category = #{resOption}
+				AND e2.resource_equipment_category  LIKE CONCAT('%', #{resOption}, '%')
 		</if>
 		group by r.resource_idx ORDER BY r.resource_idx DESC LIMIT	#{start},#{pagePerCnt}
 	</select>
@@ -168,7 +168,7 @@
 		)
 		]]>
 		<if test='resOption != ""'>
-				AND e2.resource_equipment_category = #{resOption}
+				AND e2.resource_equipment_category  LIKE CONCAT('%', #{resOption}, '%')
 		</if>
 	</select>
 	
@@ -266,4 +266,10 @@
 	    	 and rm.resource_category =#{resSerachCategory}
 	    </if>
 	</select>
+	
+	<update id="delRsv" parameterType="int">
+		    UPDATE resource_reservation
+		    SET resource_reserve_del = true
+		    WHERE resource_reservation_idx = #{idx}
+	</update>
 </mapper>

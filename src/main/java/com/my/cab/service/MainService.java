@@ -28,7 +28,7 @@ public class MainService {
 	@Autowired MainDAO mainDAO;
 
 	String driver_id = "webdriver.chrome.driver";
-	String driver_path = "C:/chromedriver.exe";
+	String driver_path = "C:/chromedriver-win64/chromedriver.exe";
 	
 	WebDriver driver = null; // 커넥션하고 비슷한거 이게 있어야 접속이 된다.
 	ChromeOptions options = null;

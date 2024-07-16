@@ -211,5 +211,10 @@ public class CalendarService {
 		return shareCalList;
 	}
 
+	public EmpDTO getMyInfo(String loginId) {
+		
+		return calendarDao.getMyInfo(loginId);
+	}
+
 
 }

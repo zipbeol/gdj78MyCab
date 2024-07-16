@@ -300,7 +300,11 @@
 	                    </div>
 	                    <div class="col-md-2 form-group">
 	                        <label for="CarType">차종</label>
-	                        <input type="text" class="form-control" id="carType" name="company_car_category" required>
+	                        <select class="form-control" id="carType" name="company_car_category" required>
+		                        <option value="소형">소형</option>
+		                        <option value="중형">중형</option>
+		                        <option value="대형">대형</option>		            
+                    		</select>
 	                    </div>
 	                    <div class="col-md-2 form-group">
 	                        <label for="seatCount">좌석 수</label>

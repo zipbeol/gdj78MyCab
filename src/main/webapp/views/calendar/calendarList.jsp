@@ -205,9 +205,6 @@
   <body>
     <!-- Page wrapper start -->
     
-    <div>
-    	<input type="text" id="test11">
-    </div>
 	<div class="page-wrapper">
 
 		<!-- Main container start -->

@@ -91,7 +91,7 @@ public class MypageService {
             myPageDAO.saveProfile(emp_no, originalFileName, fileName);
 
             response.put("message", "You successfully uploaded '" + fileName + "'");
-            response.put("filePath", "/photo/" + fileName);
+            response.put("filePath", upload + fileName);
             
         } catch (Exception e) {
             e.printStackTrace();

@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,7 +93,8 @@ public class MypageService {
             myPageDAO.saveProfile(emp_no, originalFileName, fileName);
 
             response.put("message", "You successfully uploaded '" + fileName + "'");
-            response.put("filePath", upload + fileName);
+            response.put("filePath", upload +"/" + fileName);
+            response.put("fileName", fileName);
             
         } catch (Exception e) {
             e.printStackTrace();

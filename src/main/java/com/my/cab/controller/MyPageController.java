@@ -94,9 +94,11 @@ public class MyPageController {
 	public Map<String, String> profileUpload(@RequestParam("file") MultipartFile file, HttpSession session){
 		logger.info("사진 수정 요청");
 		String emp_no = (String)session.getAttribute("loginId");
+		Map<String, String> map = myPageService.profileUpload(file, emp_no);
+		String profile = map.get("fileName");
+		session.setAttribute("profile", profile);
 		
-		
-		return myPageService.profileUpload(file, emp_no);
+		return map;
 	}
 	
 	

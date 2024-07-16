@@ -67,8 +67,8 @@ public class FileDownloadController {
     }
 
     // 대현
-    @GetMapping("/document/{filePath}")
-    public ResponseEntity<Resource> loadDocument(@PathVariable String filePath) {
+    @GetMapping("/document")
+    public ResponseEntity<Resource> loadDocument(String filePath) {
         logger.info(filePath);
         Resource resource = new FileSystemResource(uploadDir + "/startApprover/" + filePath);
         // 2. 보내질 파일의 형태를 지정해준다

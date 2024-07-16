@@ -16,6 +16,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.my.cab.dao.MainDAO;
@@ -26,10 +27,14 @@ public class MainService {
 	
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired MainDAO mainDAO;
+	
+	@Value("${spring.servlet.multipart.location}")
+    private String uploadDir;
 
 	String driver_id = "webdriver.chrome.driver";
-	String driver_path = "/usr/local/tomcat/webapps/upload/chromedriver.exe";
-	
+
+	String driver_path = uploadDir+"/chromedriver.exe";
+
 	WebDriver driver = null; // 커넥션하고 비슷한거 이게 있어야 접속이 된다.
 	ChromeOptions options = null;
 	

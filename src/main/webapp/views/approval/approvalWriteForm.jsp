@@ -851,18 +851,12 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 input.setAttribute('value', input.value);
             }
-            input.setAttribute('readonly', 'readonly'); // input 요소를 읽기 전용으로 설정
-            input.style.border = 'none'; // 테두리 제거
-            input.style.backgroundColor = 'transparent'; // 배경색 제거
         });
 
         // 모든 textarea 요소의 값을 설정
         const textareas = doc.querySelectorAll('textarea');
         textareas.forEach(textarea => {
             textarea.textContent = textarea.value;
-            textarea.setAttribute('readonly', 'readonly'); // textarea 요소를 읽기 전용으로 설정
-            textarea.style.border = 'none'; // 테두리 제거
-            textarea.style.backgroundColor = 'transparent'; // 배경색 제거
         });
 
         // 모든 select 요소의 값을 설정
@@ -876,9 +870,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     option.removeAttribute('selected');
                 }
             });
-            select.setAttribute('disabled', 'disabled'); // select 요소를 비활성화
-            select.style.border = 'none'; // 테두리 제거
-            select.style.backgroundColor = 'transparent'; // 배경색 제거
         });
 
         const htmlContent = doc.documentElement.outerHTML; // 최종 HTML 콘텐츠 가져오기

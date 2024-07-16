@@ -312,7 +312,7 @@ $(document).ready(function() {
                                 success: function(response) {
                                     if (response === 'success') {
                                         alert('결재가 완료되었습니다.');
-                                        window.location.href = 'http://localhost/approval/myapproval.go'; // 페이지 이동
+                                        window.location.href = '/approval/myapproval.go'; // 페이지 이동
                                     } else {
                                         alert('결재 상태 업데이트 중 오류가 발생했습니다.');
                                     }

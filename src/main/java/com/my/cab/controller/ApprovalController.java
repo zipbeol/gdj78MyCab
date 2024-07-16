@@ -48,11 +48,11 @@ public class ApprovalController {
 	// 파일 저장 디렉토리 설정 시작
 	
 	// 결재문서 저장 디렉토리
-    private static final String APPROVAL_UPLOAD_DIR = "C:/upload/startApprover";
+    private static final String APPROVAL_UPLOAD_DIR = "/usr/local/tomcat/webapps/upload/startApprover";
     // 서명 이미지 저장 디렉토리
-    private static final String SIGNATURE_UPLOAD_DIR = "C:/upload/signatures";
+    private static final String SIGNATURE_UPLOAD_DIR = "/usr/local/tomcat/webapps/upload/signatures";
     // 첨부파일 저장 디렉토리
-    private static final String DOC_FILE_UPLOAD_DIR = "C:/upload/doc_file";
+    private static final String DOC_FILE_UPLOAD_DIR = "/usr/local/tomcat/webapps/upload/doc_file";
 
     // 애플리케이션 시작 시 디렉토리 생성
     static {

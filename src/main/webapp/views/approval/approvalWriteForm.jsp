@@ -902,7 +902,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(result => {
             alert('결재 문서 등록 되었습니다.');
             $('#approvalModal').modal('hide'); // 모달 창 닫기
-            window.location.href = 'http://localhost/approval/myapproval.go'; // 페이지 이동
+            window.location.href = '/approval/myapproval.go'; // 페이지 이동
         })
         .catch(error => {
             console.error('Error:', error);

@@ -106,7 +106,7 @@
                     <li>
                         <a id="menu-approval-2" href="/approval/myapproval.go">내 결재 관리</a>
                     </li>
-                    <c:if test="${sessionScope.loginId == 30002}"> <!-- 나중에 변경할 예정 ( 대현 ) -->
+                    <c:if test="${sessionScope.loginId == 20002}"> <!-- 나중에 변경할 예정 ( 대현 ) -->
                         <li>
                             <a id="menu-approval-3" href="/approval/approvalIntegration.go">결재 통합 관리</a>
                         </li>

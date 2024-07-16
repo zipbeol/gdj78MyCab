@@ -334,7 +334,7 @@ $(document).ready(function() {
     // 데이터 가져오기
 function loadApprovalData(page = 1, query = '', status = '') {
     $.ajax({
-        url: '/getApprovalData.ajax',
+        url: '/getApprovalDocData.ajax',
         type: 'POST',
         data: {
             page: page,

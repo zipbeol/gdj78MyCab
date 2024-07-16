@@ -224,7 +224,7 @@ public class ApprovalController {
         try {
         	session.setAttribute("approval_doc_idx", approval_doc_idx);
             String filename = new String(Base64.getDecoder().decode(encodedFilename));
-            Path file = Paths.get(uploadDir).resolve(filename).normalize();
+            Path file = Paths.get(uploadDir + filename);
             System.out.println("Serving file: " + file.toString()); // 디버깅용 출력
 
             if (Files.exists(file) && Files.isReadable(file)) {
@@ -234,11 +234,11 @@ public class ApprovalController {
                 return "approval/viewFile";
             } else {
                 model.addAttribute("errorMessage", "파일을 읽을 수 없습니다.");
-                return "approval/error";
+                return "error/500";
             }
         } catch (Exception e) {
             model.addAttribute("errorMessage", "파일을 읽는 중 오류가 발생했습니다.");
-            return "approval/error";
+            return "error/500";
         }
     }
     

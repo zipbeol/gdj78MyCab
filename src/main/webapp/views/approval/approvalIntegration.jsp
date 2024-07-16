@@ -224,7 +224,7 @@
    								</tbody>
                         </table>
                         <div class="btn-container">
-                            <button class="btn btn-outline-primary">삭제</button>
+                            <button class="btn btn-outline-primary delete-btn">삭제</button>
                         </div>
                         <nav aria-label="Page navigation">
                             <ul class="pagination"></ul>
@@ -299,7 +299,7 @@ $(document).ready(function() {
     });
     
     // 삭제 기능
-    $('.btn-outline-primary').on('click', function() {
+    $('.delete-btn').on('click', function() {
         const selectedDocs = $('.approval-checkbox:checked').map(function() {
             return $(this).val();
         }).get();
@@ -334,7 +334,7 @@ $(document).ready(function() {
     // 데이터 가져오기
 function loadApprovalData(page = 1, query = '', status = '') {
     $.ajax({
-        url: '/getApprovalData.ajax',
+        url: '/getApprovalDocData.ajax',
         type: 'POST',
         data: {
             page: page,

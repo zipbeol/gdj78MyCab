@@ -166,7 +166,7 @@ public Map<String, Object> getEditTotalPages(SearchDTO searchDTO){
 		return Map.of("isSuccess", isSuccess);
 	}
 	
-	@Scheduled(cron = "0 12 11 * * MON-FRI", zone = "Asia/Seoul")
+	@Scheduled(cron = "0 05 18 * * MON-FRI", zone = "Asia/Seoul")
 	public void checkAtt() {
 		logger.info("출석 체크");
 		

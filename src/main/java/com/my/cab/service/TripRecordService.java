@@ -78,7 +78,7 @@ public class TripRecordService {
 
     public Map<String, Object> totalPageTripRecord(SearchDTO searchDTO) {
         int totalCount = tripRecordDAO.getTripRecordCount(searchDTO);
-        return Map.of("totalCount", PageCalc.calculateTotalPages(totalCount, PAGE_SIZE));
+        return Map.of("totalPages", PageCalc.calculateTotalPages(totalCount, PAGE_SIZE));
     }
 
     public TripRecordDTO getTripInfo(String tripRecordIdx) {

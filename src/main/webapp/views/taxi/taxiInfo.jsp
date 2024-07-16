@@ -247,10 +247,10 @@
                                                         data-value="${taxiDTO.taxi_is_active}">
                                                         <c:choose>
                                                             <c:when test="${taxiDTO.taxi_is_active == 1}">
-                                                                폐차 아님
+                                                                N
                                                             </c:when>
                                                             <c:otherwise>
-                                                                폐차
+                                                                Y
                                                             </c:otherwise>
                                                         </c:choose>
                                                     </dd>

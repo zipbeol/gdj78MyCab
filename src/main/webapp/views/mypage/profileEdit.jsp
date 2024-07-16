@@ -562,8 +562,10 @@ $('#overlay').click(function overlay(){//이메일 중복 체크
                  success: function (data) {
                      $('#cropModal').modal('hide');
                      document.getElementById('emp-photo').src = data.filePath;
-                     showAlert('success', '사진 변경이 성공적으로 처리되었습니다.');
                      
+                     setTimeout(function() {
+                         location.reload();
+                     }, 500);
                  },
                  error: function (error) {
                      console.error(error);

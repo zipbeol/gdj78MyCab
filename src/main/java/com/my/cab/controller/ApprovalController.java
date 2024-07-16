@@ -221,7 +221,7 @@ public class ApprovalController {
         try {
         	session.setAttribute("approval_doc_idx", approval_doc_idx);
             String filename = new String(Base64.getDecoder().decode(encodedFilename));
-            Path file = Paths.get("C:/upload").resolve(filename).normalize();
+            Path file = Paths.get("/usr/local/tomcat/webapps/upload").resolve(filename).normalize();
             System.out.println("Serving file: " + file.toString()); // 디버깅용 출력
 
             if (Files.exists(file) && Files.isReadable(file)) {

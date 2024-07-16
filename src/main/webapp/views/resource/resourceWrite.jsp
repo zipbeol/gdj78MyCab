@@ -249,7 +249,7 @@
     <script src="/assets/vendor/calendar/custom/mycab-cal.js"></script>
 
     
-    
+    <script src="/assets/js/localStorage.js"></script>
     <!-- 모멘트 -->
     <script src="/assets/js/moment.min.js"></script>
     

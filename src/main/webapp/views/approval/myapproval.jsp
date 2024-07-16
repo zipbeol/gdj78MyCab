@@ -481,7 +481,7 @@ function loadApprovalData(page = 1, query = '', status = '') {
                     class: buttonClass,
                     text: buttonText,
                     click: function() {
-                        window.location.href = '/approval/viewFile/' + btoa(item.approval_doc_path) + '/' + item.approval_doc_idx;
+                        window.location.href = '/  /viewFile/' + btoa(item.approval_doc_path) + '/' + item.approval_doc_idx;
                     }
                 }));
 

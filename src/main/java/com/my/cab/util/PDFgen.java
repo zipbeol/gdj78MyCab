@@ -32,7 +32,7 @@ public class PDFgen {
 
 			document.open();
 
-			BaseFont baseFont = BaseFont.createFont("c:/windows/fonts/malgun.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+			BaseFont baseFont = BaseFont.createFont("/usr/local/tomcat/webapps/upload/malgun.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 			Font font = new Font(baseFont, 12);
 
 			document.add(generateTable(empDTO, font));

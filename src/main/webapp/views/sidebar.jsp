@@ -38,18 +38,15 @@
                         <a id="menu-mypage-1" href="/mypage/profile.go">프로필</a>
                     </li>
                     <li>
+                        <a id="menu-mypage-4" href="/attendance/myAttendance/list.go">근태 관리</a>
+                    </li>
+                    <li>
                         <a id="menu-mypage-2" href="/mypage/vac/list.go">연차 관리</a>
                     </li>
                     <li>
                         <a id="menu-mypage-3" href="/mypage/vacApply/list.go">연차 승인 및 반려</a>
                     </li>
-                    <li>
-                        <a id="menu-mypage-4" href="/attendance/myAttendance/list.go">근태 관리</a>
-                    </li>
-                    <li>
-                        <a id="menu-mypage-5" href="/mypage/alarm/list.go">알림</a>
-                    </li>
-
+                    
                 </ul>
             </li>
             <li id="menu-chat">
